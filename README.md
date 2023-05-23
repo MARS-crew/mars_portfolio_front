@@ -1,8 +1,6 @@
 # mars_portfolio_front
 대결프로젝트 개화팀 React-native
 
-### Node version
-
 16.17.0
 
 ### npm version
