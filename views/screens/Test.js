@@ -11,6 +11,7 @@ const callBackAfterSwipe = () => {
 return (
     <View style={styles.container}>
     <CubeNavigationVertical callBackAfterSwipe={callBackAfterSwipe}>
+        
         <Login />
         <View style={[styles.pageContainer, { backgroundColor: '#A3F989' }]}>
         <Text style={styles.text}>Horizontal Page 2</Text>
