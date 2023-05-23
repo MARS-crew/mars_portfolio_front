@@ -17,7 +17,9 @@
     "react-native-3dcube-navigation": "^1.0.5",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-safe-area-context": "^3.3.2",
-    "react-native-screens": "^3.20.0"
+    "react-native-screens": "^3.20.0",
+    "react-native-webview": "^12.1.0",
+    "react-native-youtube-iframe": "^2.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.21.5",

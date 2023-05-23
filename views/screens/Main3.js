@@ -2,13 +2,13 @@ import React from "react";
 import { View, Button ,StyleSheet,Image,Text,TouchableOpacity} from "react-native";
 import people_ex from '../../assets/images/people_ex.png';
 
-function Main() {
+function Main3() {
 
 return (
     <View style={styles.container}>
     <Text style={styles.text1}>로그인</Text>
     <TouchableOpacity style={styles.group_main}>
-    <Text>마스외전 1기를 소개합니다</Text>
+    <Text>마스외전 3기를 소개합니다</Text>
     </TouchableOpacity>
     <Image source={people_ex} style={styles.p_image} />
     </View>
@@ -39,4 +39,4 @@ const styles = StyleSheet.create({
         alignItems: "center"
     }
 })
-export default Main;
+export default Main3;

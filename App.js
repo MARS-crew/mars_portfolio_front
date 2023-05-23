@@ -6,7 +6,11 @@ import { CubeNavigationHorizontal } from 'react-native-3dcube-navigation';
 import Splash from "./views/screens/splash";
 import Main from "./views/screens/Main";
 import Test from "./views/screens/Test";
+import Group from "./views/screens/Group";
+import Member from "./views/screens/Member";
+import Youtube from "./views/screens/Youtube";
 
+//프로토타입 입니다
 const App = () => {
   const callBackAfterSwipe = () => {
     // 스와이프 후의 동작 정의
@@ -15,9 +19,9 @@ const App = () => {
   return (
       <CubeNavigationHorizontal callBackAfterSwipe={callBackAfterSwipe}>
 
-          <Splash />
-          <Main />
-          <Test />
+          <Group />
+          <Member/>
+          <Youtube />
 
       </CubeNavigationHorizontal>
   );
