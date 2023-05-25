@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
+    "lottie-react-native": "^5.1.6",
     "react": "17.0.2",
     "react-native": "0.68.2",
     "react-native-3dcube-navigation": "^1.0.5",

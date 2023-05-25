@@ -1,18 +1,21 @@
 import React from "react";
 import { View, Button ,StyleSheet,Image,Text,TouchableOpacity} from "react-native";
-import people_ex from '../../assets/images/people_ex.png';
+import people1 from '../../assets/images/people1.jpeg';
+import people2 from '../../assets/images/people2.jpg';
+//import people3 from '../../assets/images/people3.jpg';
+import people4 from '../../assets/images/people4.jpg';
 
 function Main3() {
 
 return (
     <View style={styles.container}>
     <View style={styles.con1}>
-    <Image source={people_ex} style={styles.item1} />
-    <Image source={people_ex} style={styles.item2} />
+    <Image source={people1} style={styles.item1} />
+    <Image source={people2} style={styles.item2} />
     </View>
     <View style={styles.con2}>
-    <Image source={people_ex} style={styles.item3} />
-    <Image source={people_ex} style={styles.item4} />
+    <Image source={people4} style={styles.item3} />
+    <Image source={people4} style={styles.item4} />
     </View>
     </View>
 );

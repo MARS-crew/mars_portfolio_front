@@ -5,6 +5,7 @@ import Input from '../components/Input';
 const Login = ({navigation}) => {
 return (
 <View style={styles.container}>
+
     <Input inputType={'id'} placeholder={'아이디'} />
     <Input inputType={'password'} placeholder={'비밀번호'} />
 </View>
@@ -12,9 +13,10 @@ return (
 };
 
 const styles = StyleSheet.create({
-container: {
-backgroundColor: 'white',
-},
+    container:{
+        flex:1,
+        backgroundColor: '#fff'
+    }
 });
 
 export default Login;
