@@ -1,67 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-const numberOfPhotos = 5;
+const numberOfPhotos = 11;
 const photos = [];
 for (let i = 0; i < numberOfPhotos; i++) {
-  photos.push(require(`../../assets/images/camera.png`));
+  photos.push(`https://source.unsplash.com/random?sig=${i}`);
 }
 
-const Album = () => {
-  const [loadedImages, setLoadedImages] = useState([]);
+const AlbumImage = ({ image }) => {
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const loadImages = async () => {
-      const loaded = [];
-      for (let i = 0; i < numberOfPhotos; i++) {
-        loaded.push(photos[i].uri);
-      }
-      setLoadedImages(loaded);
+    const imageObject = Image.prefetch(image);
+    imageObject.then(() => setLoaded(true));
+
+    return () => {
+      // Clean up the image prefetch if needed
     };
+  }, [image]);
 
-    loadImages();
-  }, []);
+  const imageStyle = [
+    styles.image,
+    loaded && styles.loadedImage,
+  ];
 
-  const renderAlbumImage = (image, index) => {
-    const imageStyle = {
-      uri: image,
-      width: '20%',
-      aspectRatio: 1,
-      margin: '2.5%',
-      borderRadius: 3,
-      backgroundColor: '#CCC',
-      opacity: loadedImages.includes(image) ? 1 : 0,
-      transform: [
-        { translateY: loadedImages.includes(image) ? 0 : -5 },
-        { scale: loadedImages.includes(image) ? 1 : 0.7 },
-        { rotateX: loadedImages.includes(image) ? '0deg' : '80deg' },
-      ],
-      transitionProperty: 'opacity, transform',
-      transitionDuration: '0.5s',
-      transitionTimingFunction: 'ease-out',
-    };
-
-    const handleImagePress = () => {
-      // Handle image press if needed
-    };
-
-    return (
-      <TouchableOpacity
-        key={index}
-        style={styles.imageContainer}
-        onPress={handleImagePress}
-      >
-        <Image style={imageStyle} />
-      </TouchableOpacity>
-    );
+  const handleImagePress = () => {
+    // Handle image press if needed
   };
 
+  return (
+    <TouchableOpacity style={styles.imageContainer} onPress={handleImagePress}>
+      <Image source={{ uri: image }} style={imageStyle} />
+    </TouchableOpacity>
+  );
+};
+
+const Album = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Vacation</Text>
       <Text style={styles.subtitle}>{numberOfPhotos} photos</Text>
       <View style={styles.photosContainer}>
-        {photos.map((image, index) => renderAlbumImage(image, index))}
+        {photos.map((image, index) => (
+          <AlbumImage key={index} image={image} />
+        ))}
       </View>
     </View>
   );
@@ -101,12 +83,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    maxWidth: 30,
+    maxWidth: 600,
   },
   imageContainer: {
     width: '20%',
     aspectRatio: 1,
     margin: '2.5%',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 3,
+    backgroundColor: '#CCC',
+    opacity: 0,
+    transform: [
+      { translateY: -5 },
+      { scale: 0.7 },
+      { rotateX: '80deg' },
+    ],
+    transitionProperty: 'opacity, transform',
+    transitionDuration: '0.5s',
+    transitionTimingFunction: 'ease-out',
+  },
+  loadedImage: {
+    opacity: 1,
+    transform: [
+      { translateY: 0 },
+      { scale: 1 },
+      { rotateX: '0deg' },
+    ],
   },
 });
 
