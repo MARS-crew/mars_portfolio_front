@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, Modal, Pressable, Text, View} from 'react-native';
+import {Alert, Modal, TouchableOpacity, Text, View} from 'react-native';
 
 const PortfolioModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -10,16 +10,16 @@ const PortfolioModal = () => {
       transparent={true}
       visible={isModalVisible}
       onRequestClose={() => {
-        isModalVisible(!isModalVisible);
+        setIsModalVisible(!isModalVisible);
         console.log('modal appearance');
       }}>
       <Text>Modal is appearance!</Text>
-      <Pressable
+      <TouchableOpacity
         onPress={() => {
           Alert.alert('Modal', '모달이 나타남...');
         }}>
         <Text>View Alert!</Text>
-      </Pressable>
+      </TouchableOpacity>
     </Modal>
   );
 };
