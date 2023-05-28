@@ -1,45 +1,38 @@
-import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  SafeAreaView,
-  FlatList,
-  Dimensions,
-} from 'react-native';
+import {View, SafeAreaView, FlatList} from 'react-native';
 
 import PortfolioItem from '../components/PortfolioItem';
-import Camera from '../../assets/images/camera.png';
-import Link from '../../assets/images/Link.png';
+
 const DATA = [
   {
-    id: 'Video',
-    title: '(TEST)_영상 데이터 영역',
-    img: require('../../assets/images/camera.png'),
+    id: '1',
+    title: 'Video 데이터 영역',
+    src: require('../../assets/images/camera.png'),
   },
   {
-    id: 'Photo',
-    title: '(TEST)_사진 데이터 영역',
-    img: require('../../assets/images/camera.png'),
+    id: '2',
+    title: 'Photo 데이터 영역',
+    src: require('../../assets/images/camera.png'),
   },
   {
-    id: 'Link',
-    title: '(TEST)_링크 데이터 영역',
-    img: require('../../assets/images/Link.png'),
+    id: '3',
+    title: 'Link 데이터 영역',
+    src: require('../../assets/images/Link.png'),
   },
   {
-    id: 'Project',
-    title: '(TEST)_참여 프로젝트 영역',
-    img: require('../../assets/images/camera.png'),
+    id: '4',
+    title: 'Project 프로젝트 영역',
+    src: require('../../assets/images/project.png'),
   },
   {
-    id: 'More',
-    title: '(TEST)_추가 데이터 영역',
-    img: require('../../assets/images/add.png'),
+    id: '5',
+    title: 'More 추가 데이터 영역',
+    src: require('../../assets/images/add.png'),
   },
 ];
-const Item = ({title}) => (
+
+const Item = ({id, src}) => (
   <View>
-    <PortfolioItem></PortfolioItem>
+    <PortfolioItem id={id} src={src}></PortfolioItem>
   </View>
 );
 
@@ -47,11 +40,11 @@ const Portfolio = () => {
   const numColumns = 2;
   return (
     <View>
-      <SafeAreaView style={{marginTop: 0}}>
+      <SafeAreaView>
         <View>
           <FlatList
             data={DATA}
-            renderItem={({item}) => <Item title={item.title} />}
+            renderItem={({item}) => <Item id={item.id} src={item.src} />}
             keyExtractor={(item, index) => index}
             numColumns={numColumns}
           />
@@ -60,10 +53,5 @@ const Portfolio = () => {
     </View>
   );
 };
-const styles = StyleSheet.create({
-  image: {
-    width: 60,
-    height: 60,
-  },
-});
+
 export default Portfolio;

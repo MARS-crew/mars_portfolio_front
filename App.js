@@ -3,7 +3,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import Splash from './views/screens/splash';
+import Splash from './views/screens/Splash';
 import Main from './views/screens/Main';
 import Login from './views/screens/Login';
 import Portfolio from './views/screens/Portfolio';
