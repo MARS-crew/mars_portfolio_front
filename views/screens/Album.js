@@ -1,79 +1,124 @@
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  SafeAreaView,
-  FlatList,
-  Modal,
-  TouchableWithoutFeedback,
-} from 'react-native';
-const photoImage = require('../../assets/images/camera.png');
+// import React, {useState, useEffect} from 'react';
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   Image,
+//   TouchableOpacity,
+//   SafeAreaView,
+//   ScrollView,
+//   Modal,
+//   TouchableWithoutFeedback,
+//   Dimensions,
+// } from 'react-native';
 
-// const numberOfPhotos = 10;
-// let photos = [];
-// for (let i = 0; i < numberOfPhotos; i++) {
-//   // photos.push(`https://source.unsplash.com/random?sig=${i}`);
-//   photos.push(`file://${photoImage}`);
+// const {width} = Dimensions.get('window');
+// const photoImage = require('../..//assets/images/SplashImg.jpeg');
+// const DATA = [];
+// const imageNumber = 10;
+
+// for (let i = 0; i < imageNumber; i++) {
+//   DATA.push(photoImage);
 // }
 
-// const AlbumImage = ({image}) => {
-//   const [loaded, setLoaded] = useState(false);
-
-//   useEffect(() => {
-//     const imageObject = Image.prefetch(image);
-//     imageObject.then(() => setLoaded(true));
-
-//     return () => {};
-//   }, [image]);
-
-//   const handleImagePress = () => {
-//     // Handle image press if needed
-//   };
-
-//   const imageStyle = [styles.image, loaded && styles.loadedImage];
-
+// const Item = ({image, onPress}) => {
 //   return (
-//     <TouchableOpacity style={styles.imageContainer} onPress={handleImagePress}>
-//       <Image source={image.uri ? {uri: image.uri} : image} style={imageStyle} />
+//     <TouchableOpacity style={styles.imageContainer} onPress={onPress}>
+//       <Image source={image} style={styles.loadedImage} resizeMode="contain" />
 //     </TouchableOpacity>
 //   );
 // };
 
-// // Album component
 // const Album = () => {
-//   // Render function for album images
-//   const renderAlbumImage = ({item}) => <AlbumImage image={item} />;
+//   const [selectedImage, setSelectedImage] = useState(null);
+
+//   const handleImagePress = image => {
+//     setSelectedImage(image);
+//   };
+
+//   const handleCloseModal = () => {
+//     setSelectedImage(null);
+//   };
+
+//   const handleModalPress = () => {
+//     handleCloseModal();
+//   };
 
 //   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Vacation</Text>
-//       <Text style={styles.subtitle}>{numberOfPhotos} photos</Text>
-//       <FlatList
-//         data={photos}
-//         renderItem={renderAlbumImage}
-//         keyExtractor={(item, index) => index.toString()}
-//         numColumns={4}
-//         contentContainerStyle={styles.photosContainer}
-//       />
-//     </View>
+//     <SafeAreaView style={styles.container}>
+//       <ScrollView contentContainerStyle={styles.scrollContentContainer}>
+//         <Text style={styles.title}>2023</Text>
+//         <Text style={styles.subtitle}>{imageNumber} photos</Text>
+//         <View style={styles.flatContainer}>
+//           {DATA.map((item, index) => (
+//             <Item
+//               key={index}
+//               image={item}
+//               onPress={() => handleImagePress(item)}
+//             />
+//           ))}
+//         </View>
+//         <View style={styles.space} />
+//         <Text style={styles.title}>2022</Text>
+//         <Text style={styles.subtitle}>{imageNumber} photos</Text>
+//         <View style={styles.flatContainer}>
+//           {DATA.map((item, index) => (
+//             <Item
+//               key={index}
+//               image={item}
+//               onPress={() => handleImagePress(item)}
+//             />
+//           ))}
+//         </View>
+//       </ScrollView>
+
+//       <Modal visible={!!selectedImage} transparent={true}>
+//         <TouchableWithoutFeedback onPress={handleModalPress}>
+//           <View style={styles.modalContainer}>
+//             <Image
+//               source={selectedImage}
+//               style={styles.selectedImage}
+//               resizeMode="contain"
+//             />
+//             <TouchableOpacity
+//               style={styles.closeButton}
+//               onPress={handleCloseModal}></TouchableOpacity>
+//           </View>
+//         </TouchableWithoutFeedback>
+//       </Modal>
+//     </SafeAreaView>
 //   );
 // };
 
 // const styles = StyleSheet.create({
 //   container: {
 //     flex: 1,
-//     paddingTop: 50,
-//     paddingBottom: 50,
+//     backgroundColor: 'white',
+//   },
+//   scrollContentContainer: {
 //     alignItems: 'center',
-//     backgroundColor: '#F0F5FE',
+//   },
+//   imageContainer: {
+//     width: width * 0.2,
+//     aspectRatio: 3 / 4,
+//     marginHorizontal: width * 0.025,
+//     marginVertical: width * 0.05,
+//   },
+//   flatContainer: {
+//     width: '100%',
+//     flexDirection: 'row',
+//     flexWrap: 'wrap',
+//     justifyContent: 'flex-start',
+//   },
+//   loadedImage: {
+//     width: '100%',
+//     height: '100%',
+//     backgroundColor: 'blue',
 //   },
 //   title: {
-//     // opacity: 0,
 //     fontSize: 18,
-//     marginBottom: 10,
+//     marginVertical: 10,
+//     fontWeight: 'bold',
 //     animationName: 'fadeIn',
 //     animationDuration: '0.5s',
 //     animationDelay: '0s',
@@ -82,7 +127,6 @@ const photoImage = require('../../assets/images/camera.png');
 //     color: '#000',
 //   },
 //   subtitle: {
-//     // opacity: 0,
 //     color: '#888',
 //     fontWeight: '300',
 //     fontSize: 14,
@@ -93,52 +137,76 @@ const photoImage = require('../../assets/images/camera.png');
 //     animationTimingFunction: 'ease-in',
 //     animationFillMode: 'forwards',
 //   },
-//   photosContainer: {
+//   space: {
+//     marginVertical: 20,
+//   },
+//   modalContainer: {
+//     flex: 1,
 //     justifyContent: 'center',
 //     alignItems: 'center',
-//     maxWidth: 600,
+//     backgroundColor: 'rgba(0, 0, 0, 0.7)',
 //   },
-//   imageContainer: {
-//     width: '25%',
+//   selectedImage: {
+//     width: '50%',
+//     height: '50%',
 //     aspectRatio: 1,
-//     margin: 4,
 //   },
-//   image: {
-//     width: '100%',
-//     height: '100%',
-//     borderRadius: 3,
-//     backgroundColor: '#CCC',
-//     // opacity: 0,
-//     transform: [{translateY: -5}, {scale: 0.7}, {rotateX: '80deg'}],
-//     transitionProperty: 'opacity, transform',
-//     transitionDuration: '0.5s',
-//     transitionTimingFunction: 'ease-out',
-//   },
-//   loadedImage: {
-//     opacity: 1,
-//     transform: [{translateY: 0}, {scale: 1}, {rotateX: '0deg'}],
+//   closeButton: {
+//     position: 'absolute',
+//     top: 20,
+//     right: 20,
 //   },
 // });
 
 // export default Album;
 
-const DATA = [];
-const imageNumber = 20;
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+  ScrollView,
+  Modal,
+  TouchableWithoutFeedback,
+  Dimensions,
+} from 'react-native';
 
-for (let i = 0; i < imageNumber; i++) {
-  DATA.push(photoImage);
-}
+const {width} = Dimensions.get('window');
 
 const Item = ({image, onPress}) => {
   return (
     <TouchableOpacity style={styles.imageContainer} onPress={onPress}>
-      <Image source={image} style={styles.loadedImage} resizeMode="contain" />
+      <Image
+        source={{uri: image.url}}
+        style={styles.loadedImage}
+        resizeMode="contain"
+      />
     </TouchableOpacity>
   );
 };
 
 const Album = () => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [imageData, setImageData] = useState([]);
+
+  useEffect(() => {
+    fetchDummyImageData(); // Fetch dummy image data when the component mounts
+  }, []);
+
+  const fetchDummyImageData = async () => {
+    try {
+      const response = await fetch(
+        'https://jsonplaceholder.typicode.com/photos?_limit=10',
+      );
+      const data = await response.json();
+      setImageData(data);
+    } catch (error) {
+      console.error('Error fetching image data:', error);
+    }
+  };
 
   const handleImagePress = image => {
     setSelectedImage(image);
@@ -154,43 +222,47 @@ const Album = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>2023</Text>
-      <Text style={styles.subtitle}>{imageNumber} photos</Text>
-      <FlatList
-        data={DATA}
-        renderItem={({item}) => (
-          <Item image={item} onPress={() => handleImagePress(item)} />
-        )}
-        keyExtracter={(item, index) => index.toString()}
-        numColumns={4}
-        contentContainerStyle={styles.flatContainer}
-      />
-      <View style={styles.space} />
-      <Text style={styles.title}>2022</Text>
-      <Text style={styles.subtitle}>{imageNumber} photos</Text>
-      <FlatList
-        data={DATA}
-        renderItem={({item}) => (
-          <Item image={item} onPress={() => handleImagePress(item)} />
-        )}
-        keyExtracter={(item, index) => index.toString()}
-        numColumns={4}
-        contentContainerStyle={styles.flatContainer}
-      />
+      <ScrollView contentContainerStyle={styles.scrollContentContainer}>
+        <Text style={styles.title}>2023</Text>
+        <Text style={styles.subtitle}>{imageData.length} photos</Text>
+        <View style={styles.flatContainer}>
+          {imageData.map(item => (
+            <Item
+              key={item.id}
+              image={item}
+              onPress={() => handleImagePress(item)}
+            />
+          ))}
+        </View>
+        <View style={styles.space} />
+        <Text style={styles.title}>2022</Text>
+        <Text style={styles.subtitle}>{imageData.length} photos</Text>
+        <View style={styles.flatContainer}>
+          {imageData.map(item => (
+            <Item
+              key={item.id}
+              image={item}
+              onPress={() => handleImagePress(item)}
+            />
+          ))}
+        </View>
+      </ScrollView>
 
       <Modal visible={!!selectedImage} transparent={true}>
-        <TouchableWithoutFeedback onPress={handleModalPress}>
-          <View style={styles.modalContainer}>
-            <Image
-              source={selectedImage}
-              style={styles.selectedImage}
-              resizeMode="contain"
-            />
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={handleCloseModal}></TouchableOpacity>
-          </View>
-        </TouchableWithoutFeedback>
+        {selectedImage && (
+          <TouchableWithoutFeedback onPress={handleModalPress}>
+            <View style={styles.modalContainer}>
+              <Image
+                source={{uri: selectedImage.url}}
+                style={styles.selectedImage}
+                resizeMode="contain"
+              />
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={handleCloseModal}></TouchableOpacity>
+            </View>
+          </TouchableWithoutFeedback>
+        )}
       </Modal>
     </SafeAreaView>
   );
@@ -200,16 +272,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  scrollContentContainer: {
     alignItems: 'center',
   },
   imageContainer: {
-    width: '20%',
+    width: width * 0.2,
     aspectRatio: 3 / 4,
-    marginHorizontal: 10,
-    marginVertical: 20,
+    marginHorizontal: width * 0.025,
+    marginVertical: width * 0.05,
   },
   flatContainer: {
-    maxWidth: 600,
+    width: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start', // Align images to the left
   },
   loadedImage: {
     width: '100%',
@@ -238,9 +315,6 @@ const styles = StyleSheet.create({
     animationTimingFunction: 'ease-in',
     animationFillMode: 'forwards',
   },
-  space: {
-    marginVertical: 20,
-  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -248,7 +322,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   selectedImage: {
-    width: '200%',
+    width: '50%',
+    height: '50%',
     aspectRatio: 1,
   },
   closeButton: {
