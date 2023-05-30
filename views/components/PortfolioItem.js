@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
 
 const Portfolio = ({id, src}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+
   return (
     <View
       style={{
@@ -65,42 +66,9 @@ const Portfolio = ({id, src}) => {
           <Image source={src} style={styles.image} />
         </View>
       </TouchableOpacity>
-      {/* <PortfolioModal
+      <PortfolioModal
         isModalVisible={isModalVisible}
-        setIsModalVisible={isModalVisible}></PortfolioModal> */}
-      <Modal
-        animationType={'fade'}
-        transparent={true}
-        visible={isModalVisible}
-        onRequestClose={() => {
-          setIsModalVisible(!isModalVisible);
-        }}>
-        <TouchableOpacity
-          onPress={() => setIsModalVisible(false)} // modalBackdropPress: 모달 영역 밖 클릭 시 Bottom Nav(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
-          style={styles.modalBackdropPress}>
-          <TouchableOpacity
-            onPress={() => setIsModalVisible(false)}
-            style={styles.saveBtn}>
-            <Text>Save</Text>
-          </TouchableOpacity>
-          <View style={styles.modalView}>
-            <TouchableOpacity
-              onPress={() => {
-                setIsModalVisible(false); // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
-                Alert.alert('Modal', '생성');
-              }}>
-              <Text>Modify</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setIsModalVisible(false);
-                Alert.alert('Modal', '삭제');
-              }}>
-              <Text>Delete</Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      </Modal>
+        setIsModalVisible={setIsModalVisible}></PortfolioModal>
     </View>
   );
 };
