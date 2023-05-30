@@ -160,7 +160,7 @@
 
 // export default Album;
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -216,12 +216,19 @@ const Album = () => {
     setSelectedImage(null);
   };
 
+  const closeButtonRef = useRef(null);
+
   const handleModalPress = event => {
-    if (event.target === endEvent.currentTarget) {
-      handleCloseModal();
-    } else {
-      return;
+    const {target} = event.nativeEvent;
+
+    // Check if the target element matches the close button
+    const isCloseButton = target === closeButtonRef.current;
+
+    if (!isCloseButton) {
+      return; // Do nothing if clicked outside the button area
     }
+
+    handleCloseModal();
   };
 
   return (
@@ -264,6 +271,7 @@ const Album = () => {
                 resizeMode="contain"
               />
               <TouchableOpacity
+                ref={closeButtonRef}
                 style={styles.closeButton}
                 onPress={handleCloseModal}>
                 <Text style={styles.closeButtonText}>X</Text>
