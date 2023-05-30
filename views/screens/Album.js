@@ -216,13 +216,19 @@ const Album = () => {
     setSelectedImage(null);
   };
 
-  const handleModalPress = () => {
-    handleCloseModal();
+  const handleModalPress = event => {
+    if (event.target === endEvent.currentTarget) {
+      handleCloseModal();
+    } else {
+      return;
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContentContainer}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContentContainer}
+        showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>2023</Text>
         <Text style={styles.subtitle}>{imageData.length} photos</Text>
         <View style={styles.flatContainer}>
@@ -259,7 +265,9 @@ const Album = () => {
               />
               <TouchableOpacity
                 style={styles.closeButton}
-                onPress={handleCloseModal}></TouchableOpacity>
+                onPress={handleCloseModal}>
+                <Text style={styles.closeButtonText}>X</Text>
+              </TouchableOpacity>
             </View>
           </TouchableWithoutFeedback>
         )}
@@ -330,6 +338,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 20,
     right: 20,
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    width: 30,
+    height: 30,
+    marginTop: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'black',
   },
 });
 
