@@ -12,6 +12,8 @@ import Youtube from "./views/screens/Youtube";
 import Resume from "./views/screens/Resume";
 import Portfolio from "./views/screens/Portfolio";
 import Review from "./views/screens/Review";
+import Album from "./views/screens/Album";
+
 
 //프로토타입 입니다
 const App = () => {
@@ -39,8 +41,10 @@ const App = () => {
           <Member/>
           <Youtube />
           <Resume />
-          <Portfolio />
+          <Portfolio 
+          options={{headerShown: false}}/>
           <Review />
+          <Album />
       </CubeNavigationHorizontal>
   );
 };
