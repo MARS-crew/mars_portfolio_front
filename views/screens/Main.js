@@ -1,16 +1,16 @@
-import React from "react";
-import { View, Button} from "react-native";
+import React from 'react';
+import {View, Button} from 'react-native';
 
-function Main({ navigation }) {
-    const handleLoginPress = () => {
-    navigation && navigation.navigate("Login");
-};
+function Main({navigation}) {
+  const handleLoginPress = () => {
+    navigation && navigation.navigate('Login');
+  };
 
-return (
+  return (
     <View>
-    <Button title="로그인" onPress={handleLoginPress} />
+      <Button title="로그인" onPress={handleLoginPress} />
     </View>
-);
+  );
 }
 
 export default Main;
