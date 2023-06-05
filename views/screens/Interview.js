@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import {
   View,
-  // Text,
   StyleSheet,
   SafeAreaView,
   ImageBackground,
@@ -9,13 +8,20 @@ import {
   Animated,
   TouchableWithoutFeedback,
   Easing,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import EmptyImg from '../../assets/images/emptyImg.png';
+import EmptyImg from '../../assets/images/EmptyImg.png';
+import SplashImg from '../../assets/images/SplashImg.jpeg';
+import Modall from '../components/Modall';
+
+
 
 const Interview = () => {
   const opacity = useRef(new Animated.Value(0)).current;
   const [heart, setHeart] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [interviewImg, setInterviewImg] = useState(EmptyImg);
 
   var lastTap = null;
 
@@ -52,45 +58,55 @@ const Interview = () => {
     ]).start();
   };
 
+  const findImgUrl = (code) => {
+    const item = jsonData.find(data => data.code === code);
+    return item.data[0].file_url;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.bar}>
         <View style={styles.iconbar}>
-          <TouchableOpacity
-            onPress={toggleHeart}
-            style={{
-              width: 25,
-              height: 25,
-            }}>
+          <TouchableOpacity onPress={toggleHeart} style={styles.icon}>
             {heart ? (
               <Icon name="heart" size={23} color={'#3D3D3D'}></Icon>
             ) : (
               <Icon name="hearto" size={23} color={'#595959'}></Icon>
             )}
           </TouchableOpacity>
-          <Icon name="sharealt" size={23} color={'#3D3D3D'} />
+          <TouchableOpacity
+            onPress={() => Alert.alert('공유')}
+            style={styles.icon}>
+            <Icon name="sharealt" size={23} color={'#3D3D3D'} />
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.section}>
-        <TouchableWithoutFeedback onPress={handleDoubleTap}>
+        <TouchableWithoutFeedback
+          onPress={handleDoubleTap}
+          onLongPress={() => setModalOpen(true)}>
           <ImageBackground
             resizeMode="contain"
-            source={EmptyImg}
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
+            source={interviewImg}
+            style={styles.img}
           />
         </TouchableWithoutFeedback>
         {/* Animated로 변경, opacity 값 */}
-        <Animated.View style={[styles.animate, { opacity: opacity }]}>
+        <Animated.View style={[styles.animate, heartStyle(opacity).heart]}>
           {heart ? (
-            <Icon name="heart" size={80} color={'red'}></Icon>
+            <Icon name="heart" size={100} color={'red'}></Icon>
           ) : (
-            <Icon name="hearto" size={80} color={'gray'}></Icon>
+            <Icon name="hearto" size={100} color={'gray'}></Icon>
           )}
         </Animated.View>
       </View>
+      {/* <Modall isOpen={open} /> */}
+      <Modall
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        interviewImg={interviewImg}
+        setInterviewImg={setInterviewImg}
+      />
     </SafeAreaView>
   );
 };
@@ -110,8 +126,9 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.8,
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 6,
+    flex: 10,
     padding: 15,
+    // backgroundColor: 'red',
   },
   iconbar: {
     width: '90%',
@@ -119,37 +136,24 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
+  icon: {
+    width: 25,
+    height: 25,
+    marginLeft: 10,
+  },
   animate: {
     position: 'absolute',
   },
-
-  user: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  userimage: {
-    width: 32,
-    height: 32,
-    borderRadius: 32 / 2,
-    backgroundColor: 'black',
-    marginHorizontal: 5,
-  },
-  username: {
-    fontSize: 15,
-    fontWeight: '500',
-    fontFamily: 'SpoqaHanSansNeo-Regular',
-  },
-  text: {
-    fontSize: 15,
-    marginVertical: 5,
-    fontFamily: 'SpoqaHanSansNeo-Light',
-  },
-  tags: {
-    fontSize: 15,
-    color: 'green',
-    marginVertical: 5,
+  img: {
+    width: '100%',
+    height: '100%',
   },
 });
+const heartStyle = opacity =>
+  StyleSheet.create({
+    heart: {
+      opacity: opacity,
+    },
+  });
 
 export default Interview;
