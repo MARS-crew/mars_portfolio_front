@@ -17,12 +17,12 @@ import InterviewModal from '../components/InterviewModal';
 
 const Interview = () => {
   const opacity = useRef(new Animated.Value(0)).current;  //하트 이미지 보일 때 사용
+
   const [heart, setHeart] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [interviewImg, setInterviewImg] = useState(EmptyImg);
 
   var lastTap = null;
-
   // 이중탭
   const handleDoubleTap = () => {
     const now = Date.now();
@@ -39,7 +39,7 @@ const Interview = () => {
     setHeart(previousState => !previousState);
     fillHeart();
   };
-  // 하트 채우기
+  //하트채우기
   const fillHeart = () => {
     Animated.sequence([
       Animated.timing(opacity, {
@@ -84,7 +84,6 @@ const Interview = () => {
             style={styles.img}
           />
         </TouchableWithoutFeedback>
-        {/*<Item key={item.id} img={item} />*/}
         {/* Animated로 변경, opacity 값 */}
         <Animated.View style={[styles.animate, heartStyle(opacity).heart]}>
           {heart ? (
