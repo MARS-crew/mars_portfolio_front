@@ -9,21 +9,23 @@ import {
   TouchableWithoutFeedback,
   Easing,
   Alert,
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import EmptyImg from '../../assets/images/EmptyImg.png';
 import Modall from '../components/Modall';
-
+import InterviewModal from '../components/InterviewModal';
 
 
 const Interview = () => {
-  const opacity = useRef(new Animated.Value(0)).current;
+  const opacity = useRef(new Animated.Value(0)).current;  //하트 이미지 보일 때 사용
   const [heart, setHeart] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [interviewImg, setInterviewImg] = useState(EmptyImg);
 
   var lastTap = null;
 
+  // 이중탭
   const handleDoubleTap = () => {
     const now = Date.now();
     const DOUBLE_PRESS_DELAY = 300;
@@ -34,12 +36,12 @@ const Interview = () => {
       lastTap = now;
     }
   };
-
+  //찜 기능
   const toggleHeart = () => {
     setHeart(previousState => !previousState);
     fillHeart();
   };
-
+  // 하트 채우기
   const fillHeart = () => {
     Animated.sequence([
       Animated.timing(opacity, {
@@ -56,12 +58,6 @@ const Interview = () => {
       }),
     ]).start();
   };
-
-  const findImgUrl = (code) => {
-    const item = jsonData.find(data => data.code === code);
-    return item.data[0].file_url;
-  }
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.bar}>
@@ -90,6 +86,7 @@ const Interview = () => {
             style={styles.img}
           />
         </TouchableWithoutFeedback>
+        {/*<Item key={item.id} img={item} />*/}
         {/* Animated로 변경, opacity 값 */}
         <Animated.View style={[styles.animate, heartStyle(opacity).heart]}>
           {heart ? (
@@ -99,11 +96,10 @@ const Interview = () => {
           )}
         </Animated.View>
       </View>
-      {/* <Modall isOpen={open} /> */}
-      <Modall
+      <InterviewModal
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
-        interviewImg={interviewImg}
+        // interviewImg={interviewImg}
         setInterviewImg={setInterviewImg}
       />
     </SafeAreaView>
