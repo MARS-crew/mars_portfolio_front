@@ -18,16 +18,16 @@ const YoutubePop = ({
   setShowSaveBtn,
   setChangeData,
 }) => {
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState(''); //입력된 주소값 저장
 
   const handleRegister = () => {
-    if (url.trim() === '') {
+    if (url.trim() === '') {          //주소값이 입력되지 않았는데 수정할 때
       Alert.alert('url을 입력해주세요');
     } else {
       setChangeData({ uri: url }); //불러올 데이터 이미지 입력 -> 흰 바탕 출력
 
-      setYoutubePopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
-      setShowSaveBtn(true);
+      setYoutubePopVisible(false); // youtube url / 현재는 이미지 파일 입력 팝업 닫기
+      setShowSaveBtn(true);        // 입력된 값이 있으면 save버튼 생성 
     }
   };
   return (
@@ -55,10 +55,10 @@ const YoutubePop = ({
                 <Text>X</Text>
               </TouchableOpacity>
             </View>
-            <View style={[styles.chooseContainer, styles.fileContainer]}>
+            <View style={[styles.popUpContainer, styles.fileContainer]}>
               <Text style={styles.inputRightMargin}>YouTube</Text>
             </View>
-            <View style={styles.chooseContainer}>
+            <View style={styles.popUpContainer}>
               <TextInput
                 style={[styles.Input, styles.inputRightMargin]}
                 value={url}
@@ -88,28 +88,20 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff',
     marginBottom: Dimensions.get('window').height / 2,
-    height: Dimensions.get('window').height / 2,
+    height: Dimensions.get('window').height / 4.5,
     marginHorizontal: 50,
   },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
   },
-  chooseContainer: {
+  popUpContainer: {
     alignItems: 'center',
     flexDirection: 'row',
     display: 'flex',
     marginBottom: 8,
   },
-  chooseBtn: {
-    flex: 1,
-    width: 100,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 0.5,
-    borderColor: '#000',
-  },
+
   Input: {
     flex: 2.5,
     alignItems: 'center',
