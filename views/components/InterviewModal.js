@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import YoutubePop from './YoutubePop';
-import DeletePop from './DeletePop';
+import InterviewDeletePop from './InterviewDeletePop';
 import SaveBtn from './SaveBtn';
 import EmptyImg from '../../assets/images/EmptyImg.png';
 
@@ -78,7 +78,7 @@ const InterviewModal = ({
           <TouchableOpacity onPress={showDelete}>
             <Text>Delete</Text>
           </TouchableOpacity>
-          <DeletePop
+          <InterviewDeletePop
             title="삭제하시겠습니까?"
             deletePopVisible={deletePopVisible}
             setDeletePopVisible={setDeletePopVisible}

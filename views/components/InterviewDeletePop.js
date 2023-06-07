@@ -10,7 +10,7 @@ import {
 
 import EmptyImg from '../../assets/images/EmptyImg.png';
 
-const DeletePop = ({
+const InterviewDeletePop = ({
   title,
   deletePopVisible,
   setDeletePopVisible,
@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DeletePop;
+export default InterviewDeletePop;
