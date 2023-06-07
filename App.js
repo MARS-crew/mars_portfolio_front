@@ -8,6 +8,7 @@ import Main from './views/screens/Main';
 import Test from './views/screens/Test';
 import Album from './views/screens/Album';
 import Review from './views/screens/Review';
+import Portfolio from './views/screens/Portfolio';
 
 const App = () => {
   const callBackAfterSwipe = () => {
