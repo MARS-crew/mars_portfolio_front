@@ -12,8 +12,6 @@ import {
   Alert,
 } from 'react-native';
 
-import SplashImg from '../../assets/images/SplashImg.jpeg';
-
 const YoutubePop = ({
   youtubePopVisible,
   setYoutubePopVisible,

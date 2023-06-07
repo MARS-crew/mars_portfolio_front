@@ -9,11 +9,9 @@ import {
   TouchableWithoutFeedback,
   Easing,
   Alert,
-  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import EmptyImg from '../../assets/images/EmptyImg.png';
-import Modall from '../components/Modall';
 import InterviewModal from '../components/InterviewModal';
 
 
@@ -99,7 +97,7 @@ const Interview = () => {
       <InterviewModal
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
-        // interviewImg={interviewImg}
+        interviewImg={interviewImg}
         setInterviewImg={setInterviewImg}
       />
     </SafeAreaView>

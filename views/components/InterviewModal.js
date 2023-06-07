@@ -6,7 +6,7 @@ import {
   Pressable,
   Dimensions,
   Text,
-  Alert,
+  Alert
 } from 'react-native';
 
 import YoutubePop from './YoutubePop';

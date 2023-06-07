@@ -12,13 +12,11 @@ const SaveBtn = ({
     setModalOpen(false);
     setShowSaveBtn(false);
     setInterviewImg(changeData);
-    setChangeData();        // 데이터 초기화
+    setChangeData(); // 데이터 초기화
     Alert.alert('Modal', '저장');
-  }
+  };
   return (
-    <TouchableOpacity
-      onPress={handleSaveImg}
-      style={styles.saveBtn}>
+    <TouchableOpacity onPress={handleSaveImg} style={styles.saveBtn}>
       <Text>Save</Text>
     </TouchableOpacity>
   );

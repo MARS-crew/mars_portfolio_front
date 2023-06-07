@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 
 import EmptyImg from '../../assets/images/EmptyImg.png';
-import { useState } from 'react';
-import SaveBtn from './SaveBtn';
 
 const DeletePop = ({
   title,
