@@ -13,6 +13,9 @@ import Resume from "./views/screens/Resume";
 import Portfolio from "./views/screens/Portfolio";
 import Review from "./views/screens/Review";
 import Album from "./views/screens/Album";
+import Interview from "./views/screens/Interview";
+
+
 
 
 //프로토타입 입니다
@@ -39,7 +42,7 @@ const App = () => {
       <CubeNavigationHorizontal callBackAfterSwipe={callBackAfterSwipe}>
           {alert === true ? <Splash /> : <Group />}
           <Member/>
-          <Youtube />
+          <Interview />
           <Resume />
           <Portfolio 
           options={{headerShown: false}}/>
