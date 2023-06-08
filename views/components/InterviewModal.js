@@ -11,7 +11,7 @@ import {
 
 import YoutubePop from './YoutubePop';
 import InterviewDeletePop from './InterviewDeletePop';
-import SaveBtn from './SaveBtn';
+import InterviewSavePop from './InterviewSavePop';
 import EmptyImg from '../../assets/images/EmptyImg.png';
 
 const InterviewModal = ({
@@ -24,7 +24,7 @@ const InterviewModal = ({
   const [youtubePopVisible, setYoutubePopVisible] = useState(false);
   const [deletePopVisible, setDeletePopVisible] = useState(false);
   const [showSaveBtn, setShowSaveBtn] = useState(false);
-
+  const [savePopVisible, setSavePopVisible] = useState(false);
   const showDelete = () => {
     if (interviewImg === EmptyImg) {
       Alert.alert('삭제할 데이터가 없습니다.');
@@ -43,13 +43,18 @@ const InterviewModal = ({
       }}>
       {showSaveBtn && (
         <TouchableOpacity style={styles.modalBackdropPress}>
-          <SaveBtn
+          {/* <SaveBtn
             setShowSaveBtn={setShowSaveBtn}
             setModalOpen={setModalOpen}
             changeData={changeData}
             setChangeData={setChangeData}
             setInterviewImg={setInterviewImg}
-          />
+          /> */}
+          <TouchableOpacity
+            onPress={() => { setSavePopVisible(true) }}
+            style={styles.saveBtn}>
+            <Text>Save</Text>
+          </TouchableOpacity>
         </TouchableOpacity>
       )}
       <TouchableOpacity
@@ -83,6 +88,14 @@ const InterviewModal = ({
             setShowSaveBtn={setShowSaveBtn}
             setChangeData={setChangeData}
           />
+          <InterviewSavePop
+            savePopVisible={savePopVisible}
+            setSavePopVisible={setSavePopVisible}
+            setShowSaveBtn={setShowSaveBtn}
+            setChangeData={setChangeData}
+            setModalOpen={setModalOpen}
+            setInterviewImg={setInterviewImg}
+          />
         </Pressable>
       </TouchableOpacity>
     </Modal>
@@ -104,6 +117,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     display: 'flex',
     height: Dimensions.get('window').height / 15,
+  },
+  saveBtn: {
+    width: 100,
+    height: 30,
+    borderColor: '#000',
+    backgroundColor: '#fff',
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 10,
+    right: 10,
   },
 });
 export default InterviewModal;
