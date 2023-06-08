@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Button,
@@ -55,28 +55,86 @@ const DATA = [
   },
 ];
 
-const Item = ({writer, date, content}) => (
-  <View>
-    <ReviewItem writer={writer} date={date} content={content} />
-  </View>
-);
+// const Item = ({writer, date, content}) => (
+
+//   <View>
+//     <ReviewItem writer={writer} date={date} content={content} />
+//   </View>
+// );
+
+// const Review = () => {
+//   return (
+//     <View style={styles.container}>
+//       <SafeAreaView>
+//         <View>
+//           <FlatList
+//             data={DATA}
+//             showsVerticalScrollIndicator={false}
+//             renderItem={({item}) => (
+//               <Item
+//                 writer={item.writer}
+//                 date={item.date}
+//                 content={item.content}
+//                 keyExtractor={(item, index) => index}
+//                 numColumns={1}
+//               />
+//             )}
+//           />
+//         </View>
+//       </SafeAreaView>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//     alignItems: 'center',
+//   },
+// });
+
+// export default Review;
 
 const Review = () => {
+  const [hiddenItems, setHiddenItems] = useState([]);
+
+  const hideItem = itemId => {
+    setHiddenItems(prevHiddenItems => [...prevHiddenItems, itemId]);
+  };
+
+  const isItemHidden = itemId => {
+    return hiddenItems.includes(itemId);
+  };
+
+  const renderItem = ({item}) => {
+    const {writer, date, content} = item;
+    const itemId = item.date; // Use a unique identifier for the item, such as the date
+
+    if (isItemHidden(itemId)) {
+      return null; // Don't render hidden items
+    }
+
+    return (
+      <ReviewItem
+        writer={writer}
+        date={date}
+        content={content}
+        onPressHide={() => hideItem(itemId)}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
       <SafeAreaView>
         <View>
           <FlatList
             data={DATA}
-            renderItem={({item}) => (
-              <Item
-                writer={item.writer}
-                date={item.date}
-                content={item.content}
-                keyExtractor={(item, index) => index}
-                numColumns={1}
-              />
-            )}
+            showsVerticalScrollIndicator={false}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={1}
           />
         </View>
       </SafeAreaView>

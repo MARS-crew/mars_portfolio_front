@@ -11,11 +11,16 @@ import {
 } from 'react-native';
 import ReviewModal from '../components/ReviewModal';
 import ReviewEditModal from './ReviewEditModal';
+import ReviewHideModal from './ReviewHideModal';
 
 const ReviewItem = ({writer, date, content}) => {
   const [isReviewModalVisible, setIsReviewModalVisible] = useState(false);
   const [isReviewEditModalVisible, setIsReviewEditModalVisible] =
     useState(false);
+  const [isReviewHideModalVisible, setIsReviewHideModalVisible] =
+    useState(false);
+
+  const [hiddenItems, setHiddenItems] = useState([]);
 
   const openReviewDialog = () => {
     setIsReviewModalVisible(true);
@@ -25,16 +30,14 @@ const ReviewItem = ({writer, date, content}) => {
     setIsReviewModalVisible(false);
   };
 
-  const saveReview = () => {
-    Alert.alert('리뷰 저장');
-  };
-
   return (
     <View style={styles.reviewContainer}>
       <TouchableOpacity
         onPress={() => setIsReviewModalVisible(!isReviewModalVisible)}
-        onLongPress={() =>
-          setIsReviewEditModalVisible(!isReviewEditModalVisible)
+        onLongPress={
+          () =>
+            // setIsReviewEditModalVisible(!isReviewEditModalVisible) // 리뷰 수정 모당 출력
+            setIsReviewHideModalVisible(true) // 리뷰 숨기기 모달 출력
         }>
         <View>
           <Text style={styles.postUser}>{writer}</Text>
@@ -56,10 +59,22 @@ const ReviewItem = ({writer, date, content}) => {
           onClose={closeReviewModal}
         />
       </Modal>
-      <Modal visible={isReviewEditModalVisible} animationType={'fade'}>
+      {/* <Modal visible={isReviewEditModalVisible} animationType={'fade'}>
         <ReviewEditModal
           isModalVisible={isReviewEditModalVisible}
           setIsModalVisible={setIsReviewEditModalVisible}
+          writer={writer}
+          date={date}
+          content={content}
+        />
+      </Modal> */}
+      <Modal visible={isReviewHideModalVisible} animationType={'fade'}>
+        <ReviewHideModal
+          isModalVisible={isReviewHideModalVisible}
+          setIsModalVisible={setIsReviewHideModalVisible}
+          writer={writer}
+          date={date}
+          content={content}
         />
       </Modal>
     </View>
@@ -68,7 +83,7 @@ const ReviewItem = ({writer, date, content}) => {
 
 const styles = StyleSheet.create({
   reviewContainer: {
-    width: Dimensions.get('window').width * 0.75,
+    width: Dimensions.get('window').width * 0.9,
     display: 'flex',
     borderWidth: 1,
     borderColor: '#000',
