@@ -6,7 +6,7 @@ import {
   Pressable,
   Dimensions,
   Text,
-  Alert
+  Alert,
 } from 'react-native';
 
 import YoutubePop from './YoutubePop';
@@ -42,9 +42,7 @@ const InterviewModal = ({
         setModalOpen(!modalOpen);
       }}>
       {showSaveBtn && (
-        <TouchableOpacity
-          // onPress={() => setModalOpen(true)}
-          style={styles.modalBackdropPress}>
+        <TouchableOpacity style={styles.modalBackdropPress}>
           <SaveBtn
             setShowSaveBtn={setShowSaveBtn}
             setModalOpen={setModalOpen}
