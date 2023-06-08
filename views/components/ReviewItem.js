@@ -35,9 +35,8 @@ const ReviewItem = ({writer, date, content}) => {
       <TouchableOpacity
         onPress={() => setIsReviewModalVisible(!isReviewModalVisible)}
         onLongPress={
-          () =>
-            // setIsReviewEditModalVisible(!isReviewEditModalVisible) // 리뷰 수정 모당 출력
-            setIsReviewHideModalVisible(true) // 리뷰 숨기기 모달 출력
+          () => setIsReviewEditModalVisible(!isReviewEditModalVisible) // 리뷰 수정 모당 출력
+          // setIsReviewHideModalVisible(true) // 리뷰 숨기기 모달 출력
         }>
         <View>
           <Text style={styles.postUser}>{writer}</Text>
@@ -59,7 +58,7 @@ const ReviewItem = ({writer, date, content}) => {
           onClose={closeReviewModal}
         />
       </Modal>
-      {/* <Modal visible={isReviewEditModalVisible} animationType={'fade'}>
+      <Modal visible={isReviewEditModalVisible} animationType={'fade'}>
         <ReviewEditModal
           isModalVisible={isReviewEditModalVisible}
           setIsModalVisible={setIsReviewEditModalVisible}
@@ -67,8 +66,8 @@ const ReviewItem = ({writer, date, content}) => {
           date={date}
           content={content}
         />
-      </Modal> */}
-      <Modal visible={isReviewHideModalVisible} animationType={'fade'}>
+      </Modal>
+      {/* <Modal visible={isReviewHideModalVisible} animationType={'fade'}>
         <ReviewHideModal
           isModalVisible={isReviewHideModalVisible}
           setIsModalVisible={setIsReviewHideModalVisible}
@@ -76,7 +75,7 @@ const ReviewItem = ({writer, date, content}) => {
           date={date}
           content={content}
         />
-      </Modal>
+      </Modal> */}
     </View>
   );
 };
