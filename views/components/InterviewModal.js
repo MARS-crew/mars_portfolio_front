@@ -92,6 +92,7 @@ const InterviewModal = ({
             savePopVisible={savePopVisible}
             setSavePopVisible={setSavePopVisible}
             setShowSaveBtn={setShowSaveBtn}
+            changeData={changeData}
             setChangeData={setChangeData}
             setModalOpen={setModalOpen}
             setInterviewImg={setInterviewImg}

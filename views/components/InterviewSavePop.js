@@ -16,7 +16,7 @@ const InterviewSavePop = ({
     setModalOpen(false);
     setShowSaveBtn(false);
     setInterviewImg(changeData);
-    setChangeData();        // 데이터 초기화
+    setChangeData();        // 저장된 데이터 초기화
     setSavePopVisible(false);
     Alert.alert('Modal', '저장');
   }
