@@ -36,7 +36,7 @@ const ReviewItem = ({writer, date, content}) => {
         onPress={() => setIsReviewModalVisible(!isReviewModalVisible)}
         onLongPress={
           () => setIsReviewEditModalVisible(!isReviewEditModalVisible) // 리뷰 수정 모당 출력
-          // setIsReviewHideModalVisible(true) // 리뷰 숨기기 모달 출력
+          // () => setIsReviewHideModalVisible(true) // 리뷰 숨기기 모달 출력
         }>
         <View>
           <Text style={styles.postUser}>{writer}</Text>
@@ -87,18 +87,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#000',
     marginVertical: 5,
-    alignItems: 'center',
   },
   postUser: {
     marginHorizontal: 20,
     marginTop: 20,
-    textAlign: 'left',
     fontSize: 15,
     fontWeight: 'bold',
   },
   postDate: {
     marginHorizontal: 20,
-    textAlign: 'left',
     fontSize: 12,
     fontWeight: '300',
   },
