@@ -8,8 +8,8 @@ import {
   Text,
 } from 'react-native';
 
-import DetailPop from '../components/DetailPop';
-import ChoosePop from '../components/ChoosePop';
+import DetailPop from '../Portfolio/DetailPop';
+import ChoosePop from '../../components/ChoosePop';
 
 const styles = StyleSheet.create({
   modalBackdropPress: {

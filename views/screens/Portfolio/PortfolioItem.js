@@ -6,7 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import PortfolioModal from '../components/PortfolioModal';
+import PortfolioModal from '../Portfolio/PortfolioModal';
 
 const styles = StyleSheet.create({
   image: {
