@@ -102,6 +102,7 @@ const Interview = () => {
         setModalOpen={setModalOpen}
         interviewImg={interviewImg}
         setInterviewImg={setInterviewImg}
+        setHeart={setHeart}   // deletePopModal에 전달 - 인터뷰 삭제시 하트 취소
       />
     </SafeAreaView>
   );

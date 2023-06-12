@@ -19,6 +19,7 @@ const InterviewModal = ({
   setModalOpen,
   interviewImg,
   setInterviewImg,
+  setHeart,
 }) => {
   const [changeData, setChangeData] = useState(null);
   const [youtubePopVisible, setYoutubePopVisible] = useState(false);
@@ -87,6 +88,7 @@ const InterviewModal = ({
             setDeletePopVisible={setDeletePopVisible}
             setShowSaveBtn={setShowSaveBtn}
             setChangeData={setChangeData}
+            setHeart={setHeart}
           />
           <InterviewSavePop
             savePopVisible={savePopVisible}

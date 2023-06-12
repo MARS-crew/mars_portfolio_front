@@ -15,13 +15,15 @@ const InterviewDeletePop = ({
   deletePopVisible,
   setDeletePopVisible,
   setShowSaveBtn,
-  setChangeData
+  setChangeData,
+  setHeart,
 }) => {
   // const [deleteImg, setDeleteImg] = useState(interviewImg);
   const deleteUrl = () => {
     setChangeData(EmptyImg)
     setShowSaveBtn(true);
     setDeletePopVisible(false);
+    setHeart(false)
   };
 
   return (
