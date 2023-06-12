@@ -12,6 +12,7 @@ import {
 import ReviewModal from '../components/ReviewModal';
 import ReviewEditModal from './ReviewEditModal';
 import ReviewHideModal from './ReviewHideModal';
+import ThumbsUpIcon from '../components/ThumbsUpAnimation';
 
 const ReviewItem = ({writer, date, content}) => {
   const [isReviewModalVisible, setIsReviewModalVisible] = useState(false);
@@ -22,12 +23,18 @@ const ReviewItem = ({writer, date, content}) => {
 
   const [hiddenItems, setHiddenItems] = useState([]);
 
+  const [isReviewLiked, setIsReviewLiked] = useState(false);
+
   const openReviewDialog = () => {
     setIsReviewModalVisible(true);
   };
 
   const closeReviewModal = () => {
     setIsReviewModalVisible(false);
+  };
+
+  const handleReviewLike = () => {
+    setIsReviewLiked(!isReviewLiked);
   };
 
   return (
@@ -39,8 +46,18 @@ const ReviewItem = ({writer, date, content}) => {
           // () => setIsReviewHideModalVisible(true) // 리뷰 숨기기 모달 출력
         }>
         <View>
-          <Text style={styles.postUser}>{writer}</Text>
-          <Text style={styles.postDate}>{date}</Text>
+          <View style={styles.topReviewComponentsContainer}>
+            <View style={styles.topReviewMenu}>
+              <Text style={styles.postUser}>{writer}</Text>
+              <Text style={styles.postDate}>{date}</Text>
+            </View>
+            <View style={styles.thumbsUpIcon}>
+              <ThumbsUpIcon
+                isActive={isReviewLiked}
+                onPress={handleReviewLike}
+              />
+            </View>
+          </View>
           <Text
             style={styles.postContent}
             numberOfLines={3}
@@ -55,6 +72,7 @@ const ReviewItem = ({writer, date, content}) => {
           writer={writer}
           date={date}
           content={content}
+          isReviewLiked={isReviewLiked}
           onClose={closeReviewModal}
         />
       </Modal>
@@ -87,6 +105,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#000',
     marginVertical: 5,
+  },
+  topReviewComponentsContainer: {
+    flexDirection: 'row',
+  },
+  topReviewMenu: {
+    flex: 1,
+  },
+  thumbsUpIcon: {
+    alignItems: 'flex-end',
+    backgroundColor: 'transparent',
+    marginEnd: 20,
+    marginTop: 20,
   },
   postUser: {
     marginHorizontal: 20,
