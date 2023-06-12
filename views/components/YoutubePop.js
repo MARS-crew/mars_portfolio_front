@@ -61,8 +61,7 @@ const YoutubePop = ({
             <View style={styles.popUpContainer}>
               <TextInput
                 style={[styles.Input, styles.inputRightMargin]}
-                value={url}
-                onChangeText={setUrl}></TextInput>
+                onChangeText={(text) => setUrl(text)}></TextInput>
             </View>
 
             <View style={styles.flexCenter}>
