@@ -7,9 +7,9 @@ const ManyGroupItem = ({id, src}) => {
     <View style="outLine">
       <TouchableOpacity>
         <View style={styles.midLine}>
-          <Image source={src} style={styles.image} />
-          <View style={styles.title}>
-            <Text style={styles.text}>{id}기입니다만</Text>
+          <Image source={src} style={styles.manyImage} />
+          <View style={styles.manyTitle}>
+            <Text style={styles.manyText}>{id}기입니다만</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  image: {
+  manyImage: {
     width: 200,
     height: 200,
     left: 0,
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     borderColor: '#000000',
     borderStyle: 'solid',
   },
-  title: {
+  manyTitle: {
     justifyContent: 'center',
     alignItems: 'center',
     width: 200,
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     borderColor: '#000000',
     borderStyle: 'solid',
   },
-  text: {
+  manyText: {
     fontWeight: 'bold',
     fontSize: 20,
   },
