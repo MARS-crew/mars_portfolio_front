@@ -11,54 +11,38 @@ import {
 import ReviewItem from '../components/ReviewItem';
 
 const DATA = [
-  {
-    writer: '김건우',
-    date: '2023-06-07 17:43:17',
-    content:
-      '리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다.',
-  },
-  {
-    writer: '김건우',
-    date: '2023-06-07 17:43:17',
-    content:
-      '리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다.',
-  },
-  {
-    writer: '김건우',
-    date: '2023-06-07 17:43:17',
-    content:
-      '리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다.',
-  },
-  {
-    writer: '김건우',
-    date: '2023-06-07 17:43:17',
-    content:
-      '리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다.',
-  },
-  {
-    writer: '김건우',
-    date: '2023-06-07 17:43:17',
-    content:
-      '리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다.',
-  },
+  // {
+  //   writer: '김건우',
+  //   date: '2023-06-07 17:43:14',
+  //   content: '리뷰 내용 입니다. ',
+  //   isLiked: false,
+  // },
+  // {
+  //   writer: '김건우',
+  //   date: '2023-06-07 17:43:11',
+  //   content: '리뷰 내용 입니다. ',
+  //   isLiked: false,
+  // },
 ];
 
 const Review = () => {
   const [reviews, setReviews] = useState(DATA);
+
   const [newReviewContent, setNewReviewContent] = useState('');
   const [showReviewInput, setShowReviewInput] = useState(false);
 
   const newReviewInputRef = useRef(null);
   const flatListRef = useRef(null);
 
-  const renderItem = ({item}) => {
-    const {writer, date, content} = item;
+  // create random key for each review
 
-    return <ReviewItem writer={writer} date={date} content={content} />;
+  const random = () => {
+    return Math.floor(Math.random() * 100000);
   };
 
   const addReview = () => {
     const newReview = {
+      id: random(),
       writer: 'New User',
       date: new Date().toLocaleString('ko-KR', {
         year: 'numeric',
@@ -68,9 +52,10 @@ const Review = () => {
         minute: '2-digit',
       }),
       content: newReviewContent,
+      isLiked: false,
     };
 
-    setReviews(prevReviews => [newReview, ...prevReviews]);
+    setReviews(preReviews => [newReview, ...preReviews]);
     setNewReviewContent('');
 
     // Scroll to the top of the FlatList
@@ -91,9 +76,18 @@ const Review = () => {
           <FlatList
             ref={flatListRef}
             data={reviews}
+            extraData={this.reviews}
             showsVerticalScrollIndicator={false}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item}) => (
+              <ReviewItem
+                id={item.id}
+                writer={item.writer}
+                date={item.date}
+                content={item.content}
+                isLiked={item.isLiked}
+              />
+            )}
+            keyExtractor={(item, index) => item.id}
             numColumns={1}
           />
           {showReviewInput ? (
@@ -101,7 +95,7 @@ const Review = () => {
               <TextInput
                 ref={newReviewInputRef}
                 style={styles.newReviewInput}
-                multiline
+                multiline={true}
                 placeholder="멤버의 리뷰를 입력해주세요."
                 value={newReviewContent}
                 onChangeText={setNewReviewContent}

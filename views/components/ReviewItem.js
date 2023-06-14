@@ -3,38 +3,33 @@ import {
   View,
   StyleSheet,
   Text,
-  Image,
   Dimensions,
   TouchableOpacity,
-  Alert,
   Modal,
 } from 'react-native';
 import ReviewModal from '../components/ReviewModal';
 import ReviewEditModal from './ReviewEditModal';
-import ReviewHideModal from './ReviewHideModal';
-import ThumbsUpIcon from '../components/ThumbsUpAnimation';
+// import ReviewHideModal from './ReviewHideModal';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const ReviewItem = ({writer, date, content}) => {
+const ReviewItem = ({id, writer, date, content, isLiked}) => {
+  console.log('ReviewItem', [id, writer, date, content, isLiked]);
   const [isReviewModalVisible, setIsReviewModalVisible] = useState(false);
   const [isReviewEditModalVisible, setIsReviewEditModalVisible] =
     useState(false);
-  const [isReviewHideModalVisible, setIsReviewHideModalVisible] =
-    useState(false);
+  const [isReviewLiked, setIsReviewLiked] = useState(isLiked);
+  console.log('ReviewItem2', [id, writer, date, content, isReviewLiked]);
 
-  const [hiddenItems, setHiddenItems] = useState([]);
-
-  const [isReviewLiked, setIsReviewLiked] = useState(false);
-
-  const openReviewDialog = () => {
-    setIsReviewModalVisible(true);
+  const handleLike = () => {
+    return setIsReviewLiked(!isReviewLiked);
   };
+  // const [isReviewHideModalVisible, setIsReviewHideModalVisible] =
+  //   useState(false);
+
+  // const [hiddenItems, setHiddenItems] = useState([]);
 
   const closeReviewModal = () => {
     setIsReviewModalVisible(false);
-  };
-
-  const handleReviewLike = () => {
-    setIsReviewLiked(!isReviewLiked);
   };
 
   return (
@@ -52,10 +47,13 @@ const ReviewItem = ({writer, date, content}) => {
               <Text style={styles.postDate}>{date}</Text>
             </View>
             <View style={styles.thumbsUpIcon}>
-              <ThumbsUpIcon
-                isActive={isReviewLiked}
-                onPress={handleReviewLike}
-              />
+              <TouchableOpacity onPress={handleLike}>
+                <Icon
+                  name={isReviewLiked ? 'thumbs-up' : 'thumbs-up'}
+                  size={25}
+                  color={isReviewLiked ? 'blue' : 'gray'}
+                />
+              </TouchableOpacity>
             </View>
           </View>
           <Text
@@ -72,10 +70,11 @@ const ReviewItem = ({writer, date, content}) => {
           writer={writer}
           date={date}
           content={content}
-          isReviewLiked={isReviewLiked}
+          isLiked={isReviewLiked}
           onClose={closeReviewModal}
         />
       </Modal>
+
       <Modal visible={isReviewEditModalVisible} animationType={'fade'}>
         <ReviewEditModal
           isModalVisible={isReviewEditModalVisible}
@@ -85,6 +84,7 @@ const ReviewItem = ({writer, date, content}) => {
           content={content}
         />
       </Modal>
+
       {/* <Modal visible={isReviewHideModalVisible} animationType={'fade'}>
         <ReviewHideModal
           isModalVisible={isReviewHideModalVisible}
@@ -101,7 +101,6 @@ const ReviewItem = ({writer, date, content}) => {
 const styles = StyleSheet.create({
   reviewContainer: {
     width: Dimensions.get('window').width * 0.9,
-    display: 'flex',
     borderWidth: 1,
     borderColor: '#000',
     marginVertical: 5,

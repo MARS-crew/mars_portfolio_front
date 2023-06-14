@@ -1,27 +1,26 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const ReviewModal = ({writer, date, content, isReviewLiked, onClose}) => {
+const ReviewModal = ({writer, date, content, isLiked, onClose}) => {
   return (
     <View style={styles.modalContainer}>
       <TouchableOpacity style={styles.closeButton} onPress={onClose}>
         <Text style={styles.closeButtonText}>X</Text>
       </TouchableOpacity>
-      <Text style={styles.postWriter}>{writer}</Text>
-      <Text style={styles.postDate}>{date}</Text>
-      <Text style={styles.postContent}>{content}</Text>
-      {isReviewLiked && (
+      <View style={styles.topContentContainer}>
         <View style={styles.likeContainer}>
-          <Icon name="thumbs-up" size={20} color="blue" />
+          <Text style={styles.postWriter}>{writer}</Text>
+          <Text style={styles.postDate}>{date}</Text>
         </View>
-      )}
+        <Icon
+          style={styles.thumbsUpIcon}
+          name={isLiked ? 'thumbs-up' : 'thumbs-up'}
+          size={25}
+          color={isLiked ? 'blue' : 'gray'}
+        />
+      </View>
+      <Text style={styles.postContent}>{content}</Text>
     </View>
   );
 };
@@ -32,6 +31,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#f5fcff',
     padding: 20,
+  },
+  topContentContainer: {
+    flexDirection: 'row',
   },
   postWriter: {
     marginHorizontal: 20,
@@ -70,14 +72,12 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   likeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
+    flex: 1,
   },
-  likeText: {
-    marginLeft: 5,
-    fontSize: 16,
-    color: 'blue',
+  thumbsUpIcon: {
+    backgroundColor: 'transparent',
+    marginEnd: 20,
+    marginTop: 20,
   },
 });
 
