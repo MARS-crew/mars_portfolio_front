@@ -1,51 +1,48 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {React} from 'react';
+import {StyleSheet, View, FlatList, SafeAreaView} from 'react-native';
 
 import Main from './Main';
-import Main2 from './Main2';
-import Main3 from './Main3';
+import GroupItem from '../components/GroupItem';
 
-const Stack = createStackNavigator();
+const Item = ({id, src}) => (
+  <View>
+    <GroupItem id={id} src={src} />
+  </View>
+);
 
-const Group = () => {
-    return (
+const Group = ({data}) => {
+  return (
     <View style={styles.container}>
-        <NavigationContainer>
-        <Stack.Navigator
-            screenOptions={{
-            gestureEnabled: true,
-            gestureDirection: 'vertical',
-            cardStyleInterpolator: ({ current, layouts }) => {
-                return {
-                cardStyle: {
-                    transform: [
-                    {
-                        translateY: current.progress.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [layouts.screen.height, 0],
-                        }),
-                    },
-                    ],
-                },
-                };
-            },
-            }}
-        >
-            <Stack.Screen name="Main" component={Main} />
-            <Stack.Screen name="Main2" component={Main2} />
-            <Stack.Screen name="Main3" component={Main3} />
-        </Stack.Navigator>
-        </NavigationContainer>
+      <View style={styles.button}>
+        <Main />
+      </View>
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={data}
+          renderItem={({item}) => <Item id={item.id} src={item.src} />}
+        />
+      </SafeAreaView>
     </View>
-    );
-    };
+  );
+};
 
-    const styles = StyleSheet.create({
-    container: {
+const styles = StyleSheet.create({
+  containbox: {
     flex: 1,
-    },
+    backgroundColor: 'white',
+  },
+  button: {
+    width: 40,
+    height: 20,
+    position: 'absolute',
+  },
+  container: {
+    backgroundColor: 'white',
+  },
+  manyRow: {
+    flex: 1,
+    flexDirection: 'row',
+  },
 });
 
 export default Group;

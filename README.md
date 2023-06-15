@@ -19,7 +19,7 @@ $ npx pod-install
 ### iOS 실행
 
 ```zsh
-$ npm run ios
+$ npx react-native run-ios --simulator="iPhone 14 Pro"
 ```
 
 ### Android 실행
