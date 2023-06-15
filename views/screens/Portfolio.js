@@ -1,19 +1,19 @@
 import React, {useState} from 'react';
 import {View, SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 
-import PortfolioItem from '../components/PortfolioItem';
+import PortfolioItem from './PortfolioItem';
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   gridView: {
     marginTop: 30,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  container: {
-    flex: 1,
-    backgroundColor: 'white'
-  }
 });
 
 const Portfolio = () => {
