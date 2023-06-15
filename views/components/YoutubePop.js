@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Modal,
   StyleSheet,
@@ -21,13 +21,14 @@ const YoutubePop = ({
   const [url, setUrl] = useState(''); //입력된 주소값 저장
 
   const handleRegister = () => {
-    if (url.trim() === '') {          //주소값이 입력되지 않았는데 수정할 때
+    if (url.trim() === '') {
+      //주소값이 입력되지 않았는데 수정할 때
       Alert.alert('url을 입력해주세요');
     } else {
-      setChangeData({ uri: url }); //불러올 데이터 이미지 입력 -> 흰 바탕 출력
+      setChangeData({uri: url}); //불러올 데이터 이미지 입력 -> 흰 바탕 출력
 
       setYoutubePopVisible(false); // youtube url / 현재는 이미지 파일 입력 팝업 닫기
-      setShowSaveBtn(true);        // 입력된 값이 있으면 save버튼 생성 
+      setShowSaveBtn(true); // 입력된 값이 있으면 save버튼 생성
     }
   };
   return (
@@ -61,8 +62,7 @@ const YoutubePop = ({
             <View style={styles.popUpContainer}>
               <TextInput
                 style={[styles.Input, styles.inputRightMargin]}
-                value={url}
-                onChangeText={setUrl}></TextInput>
+                onChangeText={text => setUrl(text)}></TextInput>
             </View>
 
             <View style={styles.flexCenter}>

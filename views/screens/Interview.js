@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -14,9 +14,8 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import EmptyImg from '../../assets/images/EmptyImg.png';
 import InterviewModal from '../components/InterviewModal';
 
-
 const Interview = () => {
-  const opacity = useRef(new Animated.Value(0)).current;  //하트 이미지 보일 때 사용
+  const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
 
   const [heart, setHeart] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -36,8 +35,13 @@ const Interview = () => {
   };
   //찜 기능
   const toggleHeart = () => {
-    setHeart(previousState => !previousState);
-    fillHeart();
+    if (interviewImg !== EmptyImg) {
+      //interviewImg 데이터가 없을 땐 찜 기능 안되도록
+      setHeart(previousState => !previousState);
+      fillHeart();
+    } else {
+      Alert.alert('데이터가 없습니다.');
+    }
   };
   //하트채우기
   const fillHeart = () => {
@@ -98,6 +102,7 @@ const Interview = () => {
         setModalOpen={setModalOpen}
         interviewImg={interviewImg}
         setInterviewImg={setInterviewImg}
+        setHeart={setHeart} // deletePopModal에 전달 - 인터뷰 삭제시 하트 취소
       />
     </SafeAreaView>
   );

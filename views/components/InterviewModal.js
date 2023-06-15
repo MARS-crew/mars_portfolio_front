@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Modal,
   StyleSheet,
@@ -6,12 +6,12 @@ import {
   Pressable,
   Dimensions,
   Text,
-  Alert
+  Alert,
 } from 'react-native';
 
 import YoutubePop from './YoutubePop';
 import InterviewDeletePop from './InterviewDeletePop';
-import SaveBtn from './SaveBtn';
+import InterviewSavePop from './InterviewSavePop';
 import EmptyImg from '../../assets/images/EmptyImg.png';
 
 const InterviewModal = ({
@@ -19,12 +19,13 @@ const InterviewModal = ({
   setModalOpen,
   interviewImg,
   setInterviewImg,
+  setHeart,
 }) => {
   const [changeData, setChangeData] = useState(null);
   const [youtubePopVisible, setYoutubePopVisible] = useState(false);
   const [deletePopVisible, setDeletePopVisible] = useState(false);
   const [showSaveBtn, setShowSaveBtn] = useState(false);
-
+  const [savePopVisible, setSavePopVisible] = useState(false);
   const showDelete = () => {
     if (interviewImg === EmptyImg) {
       Alert.alert('삭제할 데이터가 없습니다.');
@@ -42,16 +43,21 @@ const InterviewModal = ({
         setModalOpen(!modalOpen);
       }}>
       {showSaveBtn && (
-        <TouchableOpacity
-          // onPress={() => setModalOpen(true)}
-          style={styles.modalBackdropPress}>
-          <SaveBtn
+        <TouchableOpacity style={styles.modalBackdropPress}>
+          {/* <SaveBtn
             setShowSaveBtn={setShowSaveBtn}
             setModalOpen={setModalOpen}
             changeData={changeData}
             setChangeData={setChangeData}
             setInterviewImg={setInterviewImg}
-          />
+          /> */}
+          <TouchableOpacity
+            onPress={() => {
+              setSavePopVisible(true);
+            }}
+            style={styles.saveBtn}>
+            <Text>Save</Text>
+          </TouchableOpacity>
         </TouchableOpacity>
       )}
       <TouchableOpacity
@@ -84,6 +90,16 @@ const InterviewModal = ({
             setDeletePopVisible={setDeletePopVisible}
             setShowSaveBtn={setShowSaveBtn}
             setChangeData={setChangeData}
+            setHeart={setHeart}
+          />
+          <InterviewSavePop
+            savePopVisible={savePopVisible}
+            setSavePopVisible={setSavePopVisible}
+            setShowSaveBtn={setShowSaveBtn}
+            changeData={changeData}
+            setChangeData={setChangeData}
+            setModalOpen={setModalOpen}
+            setInterviewImg={setInterviewImg}
           />
         </Pressable>
       </TouchableOpacity>
@@ -106,6 +122,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     display: 'flex',
     height: Dimensions.get('window').height / 15,
+  },
+  saveBtn: {
+    width: 100,
+    height: 30,
+    borderColor: '#000',
+    backgroundColor: '#fff',
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 10,
+    right: 10,
   },
 });
 export default InterviewModal;
