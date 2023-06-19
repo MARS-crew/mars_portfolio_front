@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import PortfolioModal from '../Portfolio/PortfolioModal';
+import ContentsViewPop from './ContentsViewPop';
 
 const styles = StyleSheet.create({
   image: {
@@ -18,7 +19,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 2.5,
     height: Dimensions.get('window').height / 5,
     margin: 10,
-
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -28,17 +28,26 @@ const styles = StyleSheet.create({
 });
 
 const PortfolioItem = ({id, src, onModify, onDelete}) => {
+  const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   return (
     <View style={styles.gridItem}>
       <TouchableOpacity
-        onPress={() => alert('포트폴리오 생성 및 등록')}
+        onPress={() => setContentsViewPopVisible(!contentsViewPopVisible)}
         onLongPress={() => setIsModalVisible(!isModalVisible)}>
         <View>
           <Image source={src} style={styles.image} />
         </View>
       </TouchableOpacity>
+      <ContentsViewPop
+        id={id}
+        src={src}
+        onModify={onModify}
+        onDelete={onDelete}
+        contentsViewPopVisible={contentsViewPopVisible}
+        setContentsViewPopVisible={setContentsViewPopVisible}></ContentsViewPop>
+
       <PortfolioModal
         id={id}
         onModify={onModify}

@@ -15,11 +15,10 @@ const styles = StyleSheet.create({
   modalBackdropPress: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
   modalView: {
     alignItems: 'center',
-    borderWidth: 1,
+    borderTopWidth: 1,
     borderColor: '#000',
     backgroundColor: '#fff',
     flexDirection: 'row',

@@ -4,6 +4,10 @@ import {View, SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 import PortfolioItem from '../Portfolio/PortfolioItem';
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   gridView: {
     marginTop: 30,
     display: 'flex',
@@ -28,7 +32,7 @@ const Portfolio = () => {
     {
       id: '3',
       title: 'Link 데이터 영역',
-      src: require('../../../assets/images/Link.png'),
+      src: require('../../../assets/images/link.png'),
     },
     {
       id: '4',
@@ -80,7 +84,7 @@ const Portfolio = () => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <SafeAreaView>
         <View style={styles.gridView}>
           <FlatList
