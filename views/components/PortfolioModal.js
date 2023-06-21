@@ -1,17 +1,31 @@
 import React, {useState} from 'react';
 import {
+  Alert,
   Modal,
   StyleSheet,
   TouchableOpacity,
-  Pressable,
   Dimensions,
   Text,
+  View,
 } from 'react-native';
-
-import DetailPop from '../components/DetailPop';
-import ChoosePop from '../components/ChoosePop';
-
 const styles = StyleSheet.create({
+  image: {
+    width: 60,
+    height: 60,
+    resizeMode: 'contain',
+  },
+  //Modal
+  saveBtn: {
+    width: 100,
+    height: 30,
+    borderColor: '#000',
+    backgroundColor: '#fff',
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 10,
+    right: 10,
+  },
   modalBackdropPress: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -29,16 +43,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PortfolioModal = ({
-  id,
-  onModify,
-  onDelete,
-  isModalVisible,
-  setIsModalVisible,
-}) => {
-  const [detailPopVisible, setDetailPopVisible] = useState(false);
-  const [choosePopVisible, setChoosePopVisible] = useState(false);
-
+const PortfolioModal = ({isModalVisible, setIsModalVisible}) => {
   return (
     <Modal
       animationType={'fade'}
@@ -48,39 +53,29 @@ const PortfolioModal = ({
         setIsModalVisible(!isModalVisible);
       }}>
       <TouchableOpacity
-        onPress={() => {
-          setIsModalVisible(false);
-        }} // modalBackdropPress: 모달 영역 밖 클릭 시 Bottom Nav(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
+        onPress={() => setIsModalVisible(false)} // modalBackdropPress: 모달 영역 밖 클릭 시 Bottom Nav(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
         style={styles.modalBackdropPress}>
-        <Pressable
-          onPress={() => setIsModalVisible(true)} // Pressable: 모달 영역 안 클릭 시 Bottom Nav(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
-          style={styles.modalView}>
+        <TouchableOpacity
+          onPress={() => setIsModalVisible(false)}
+          style={styles.saveBtn}>
+          <Text>Save</Text>
+        </TouchableOpacity>
+        <View style={styles.modalView}>
           <TouchableOpacity
             onPress={() => {
-              // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
-              setDetailPopVisible(!detailPopVisible);
+              setIsModalVisible(false); // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
+              Alert.alert('Modal', '생성');
             }}>
             <Text>Modify</Text>
           </TouchableOpacity>
-          <DetailPop
-            id={id}
-            onModify={onModify}
-            detailPopVisible={detailPopVisible}
-            setDetailPopVisible={setDetailPopVisible}></DetailPop>
           <TouchableOpacity
             onPress={() => {
-              // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
-              setChoosePopVisible(!choosePopVisible);
+              setIsModalVisible(false);
+              Alert.alert('Modal', '삭제');
             }}>
             <Text>Delete</Text>
           </TouchableOpacity>
-          <ChoosePop
-            id={id}
-            title="삭제하시겠습니까?"
-            onDelete={onDelete}
-            choosePopVisible={choosePopVisible}
-            setChoosePopVisible={setChoosePopVisible}></ChoosePop>
-        </Pressable>
+        </View>
       </TouchableOpacity>
     </Modal>
   );
