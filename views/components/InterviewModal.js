@@ -19,13 +19,31 @@ const InterviewModal = ({
   setModalOpen,
   interviewImg,
   setInterviewImg,
+  heart,
   setHeart,
 }) => {
   const [changeData, setChangeData] = useState(null);
   const [youtubePopVisible, setYoutubePopVisible] = useState(false);
   const [deletePopVisible, setDeletePopVisible] = useState(false);
-  const [showSaveBtn, setShowSaveBtn] = useState(false);
   const [savePopVisible, setSavePopVisible] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [changeHeart, setChangeHeart] = useState(heart);
+
+
+  const handleSave = () => {
+    setIsEditing(false);
+    setModalOpen(false);
+    setInterviewImg(changeData);
+    setChangeData(); // 저장된 데이터 초기화
+    setSavePopVisible(false);
+    setHeart(changeHeart);
+    Alert.alert('Modal', '저장');
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+  };
+
   const showDelete = () => {
     if (interviewImg === EmptyImg) {
       Alert.alert('삭제할 데이터가 없습니다.');
@@ -42,22 +60,6 @@ const InterviewModal = ({
       onRequestClose={() => {
         setModalOpen(!modalOpen);
       }}>
-      {showSaveBtn && (
-        <TouchableOpacity style={styles.modalBackdropPress}>
-          {/* <SaveBtn
-            setShowSaveBtn={setShowSaveBtn}
-            setModalOpen={setModalOpen}
-            changeData={changeData}
-            setChangeData={setChangeData}
-            setInterviewImg={setInterviewImg}
-          /> */}
-          <TouchableOpacity
-            onPress={() => { setSavePopVisible(true) }}
-            style={styles.saveBtn}>
-            <Text>Save</Text>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      )}
       <TouchableOpacity
         onPress={() => {
           setModalOpen(false);
@@ -66,37 +68,51 @@ const InterviewModal = ({
         <Pressable
           onPress={() => setModalOpen(true)} // Pressable: 모달 영역 안 클릭 시 Bottom Nav(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
           style={styles.modalView}>
-          <TouchableOpacity
-            onPress={() => {
-              // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
-              setYoutubePopVisible(!youtubePopVisible);
-            }}>
-            <Text>Modify</Text>
-          </TouchableOpacity>
+          {isEditing ? (
+            <TouchableOpacity onPress={handleSave}>
+              <Text>저장</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
+                setYoutubePopVisible(!youtubePopVisible);
+              }}>
+              <Text>수정</Text>
+            </TouchableOpacity>
+          )}
+          {isEditing ? (
+            <TouchableOpacity onPress={handleCancel}>
+              <Text>취소</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={showDelete}>
+              <Text>삭제</Text>
+            </TouchableOpacity>
+          )}
           <YoutubePop
             youtubePopVisible={youtubePopVisible}
             setYoutubePopVisible={setYoutubePopVisible}
-            setShowSaveBtn={setShowSaveBtn}
+            setIsEditing={setIsEditing}
             setChangeData={setChangeData}
           />
-          <TouchableOpacity onPress={showDelete}>
+          {/* <TouchableOpacity onPress={showDelete}>
             <Text>Delete</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <InterviewDeletePop
             title="삭제하시겠습니까?"
             deletePopVisible={deletePopVisible}
             setDeletePopVisible={setDeletePopVisible}
-            setShowSaveBtn={setShowSaveBtn}
             setChangeData={setChangeData}
-            setHeart={setHeart}
+            setChangeHeart={setChangeHeart}
+            setModalOpen={setModalOpen}
+            setIsEditing={setIsEditing}
           />
           <InterviewSavePop
             savePopVisible={savePopVisible}
             setSavePopVisible={setSavePopVisible}
-            setShowSaveBtn={setShowSaveBtn}
             changeData={changeData}
             setChangeData={setChangeData}
-            setModalOpen={setModalOpen}
             setInterviewImg={setInterviewImg}
           />
         </Pressable>
