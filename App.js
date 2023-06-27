@@ -1,11 +1,13 @@
-import "react-native-gesture-handler";
+import 'react-native-gesture-handler';
 import React from 'react';
-import { View } from 'react-native';
-import { CubeNavigationHorizontal } from 'react-native-3dcube-navigation';
+import {View} from 'react-native';
+import {CubeNavigationHorizontal} from 'react-native-3dcube-navigation';
 
-import Splash from "./views/screens/splash";
-import Main from "./views/screens/Main";
-import Test from "./views/screens/Test";
+import Splash from './views/screens/splash';
+import Main from './views/screens/Main';
+import Test from './views/screens/Test';
+import WhichGroup from './views/screens/WhichGroup';
+import GroupVideo from './views/screens/GroupVideo';
 
 const App = () => {
   const callBackAfterSwipe = () => {
@@ -13,13 +15,13 @@ const App = () => {
   };
 
   return (
-      <CubeNavigationHorizontal callBackAfterSwipe={callBackAfterSwipe}>
-
-          <Splash />
-          <Main />
-          <Test />
-
-      </CubeNavigationHorizontal>
+    <CubeNavigationHorizontal callBackAfterSwipe={callBackAfterSwipe}>
+      <Splash />
+      <Main />
+      <Test />
+      <WhichGroup />
+      <GroupVideo />
+    </CubeNavigationHorizontal>
   );
 };
 
