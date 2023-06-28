@@ -19,7 +19,8 @@ const InterviewModal = ({
   heart,
   setHeart,
   filePath,
-  setFilePath
+  setFilePath,
+  setIsPlaying
 }) => {
   const [changeData, setChangeData] = useState(null);                 // 수정 전 변경 내용 임시 저장
   const [deletePopVisible, setDeletePopVisible] = useState(false);    // 삭제 확인 창 상태
@@ -31,6 +32,7 @@ const InterviewModal = ({
   const handleSave = () => {
     setIsEditing(false);
     setModalOpen(false);
+    setIsPlaying(true);
     setFilePath(changeData);
     setChangeData(); // 저장된 데이터 초기화
     // setSavePopVisible(false);
@@ -116,7 +118,9 @@ const InterviewModal = ({
       <TouchableOpacity
         onPress={() => {
           setModalOpen(false);
-          isEditing(false);
+          if (isEditing) {
+            isEditing(false);
+          }
         }} // modalBackdropPress: 모달 영역 밖 클릭 시 Bottom Nav(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
         style={styles.modalBackdropPress}>
         <Pressable

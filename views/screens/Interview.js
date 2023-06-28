@@ -9,7 +9,6 @@ import {
   TouchableWithoutFeedback,
   Easing,
   Alert,
-  Text,
   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -24,8 +23,7 @@ const Interview = () => {
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [filePath, setFilePath] = useState(); // video 주소
 
-  //video 재생 커스텀바
-  const videoRef = useRef(null);
+  //video 재생
   const [isPlaying, setIsPlaying] = useState(true);
 
   // 이중탭
@@ -38,8 +36,6 @@ const Interview = () => {
       toggleHeart();
     } else {
       lastTap = now;
-      // handlePlayPause;
-      setIsPlaying(true);
     }
   };
   //찜 기능
@@ -70,6 +66,14 @@ const Interview = () => {
     ]).start();
   };
 
+  // 영상 재생
+  const handleVideoPress = () => {
+    if (isPlaying) {
+      setIsPlaying(false); // 영상멈춤
+    } else {
+      setIsPlaying(true); // 영상 시작
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -91,7 +95,10 @@ const Interview = () => {
       </View>
       <View style={styles.section}>
         <TouchableWithoutFeedback
-          onPress={handleDoubleTap}
+          onPress={() => {
+            handleDoubleTap();
+            handleVideoPress();
+          }}
           onLongPress={() => setModalOpen(true)}>
           {/* 저장된 video가 있으면 video 출력. 없으면  마스외전 로고 출력*/}
           {filePath ? (
@@ -100,8 +107,10 @@ const Interview = () => {
               style={styles.content}
               controls={true}
               resizeMode="contain"
-              paused={!isPlaying}   // isPlaying 상태에 따라 재생/일시정지 제어
-              onEnd={() => setIsPlaying(false)}   //비디오 재생이 끝났을 때 is Playing 상태 업데이트
+              paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
+              onEnd={() => {
+                setIsPlaying(false);
+              }}
             />
           ) : (
             <ImageBackground
@@ -125,7 +134,8 @@ const Interview = () => {
         setModalOpen={setModalOpen}
         filePath={filePath}
         setFilePath={setFilePath}
-        // heart={heart}
+        heart={heart}
+        setIsPlaying={setIsPlaying}
         setHeart={setHeart} // deletePopModal에 전달 - 인터뷰 삭제시 하트 취소
       />
     </SafeAreaView>
@@ -168,7 +178,7 @@ const styles = StyleSheet.create({
   content: {
     // width: '100%',
     height: '90%',
-    width: Dimensions.get('window').width
+    width: Dimensions.get('window').width,
   },
 });
 
