@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 
-import EmptyImg from '../../assets/images/EmptyImg.png';
+import EmptyImg from '../../assets/images/emptyImg.png';
 
 const InterviewDeletePop = ({
   title,
@@ -16,14 +16,14 @@ const InterviewDeletePop = ({
   setDeletePopVisible,
   setChangeData,
   setChangeHeart,
-  setIsEditing
+  setIsEditing,
 }) => {
   // const [deleteImg, setDeleteImg] = useState(interviewImg);
   const deleteUrl = () => {
-    setChangeData(EmptyImg)
+    setChangeData();
     setDeletePopVisible(false);
-    setChangeHeart(false)
-    setIsEditing(true)
+    setChangeHeart(false);
+    setIsEditing(true);
   };
 
   return (
@@ -38,9 +38,6 @@ const InterviewDeletePop = ({
       <TouchableOpacity
         onPress={() => setDeletePopVisible(false)} // modalBackdropPress: 모달 영역 밖 클릭 시 ChoosePopup(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
         style={styles.modalBackdropPress}>
-        {/* {showSaveBtn && (
-          <SaveBtn />
-        )} */}
         <Pressable
           onPress={() => setDeletePopVisible(true)} // Pressable: 모달 영역 안 클릭 시 ChoosePopup(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
           style={styles.modalView}>

@@ -9,20 +9,27 @@ import {
   TouchableWithoutFeedback,
   Easing,
   Alert,
+  Text,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import EmptyImg from '../../assets/images/EmptyImg.png';
+import EmptyImg from '../../assets/images/emptyImg.png';
 import InterviewModal from '../components/InterviewModal';
+import Video from 'react-native-video';
 
 const Interview = () => {
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
 
-  const [heart, setHeart] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [interviewImg, setInterviewImg] = useState(EmptyImg);
+  const [heart, setHeart] = useState(false); // 하트 상태
+  const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
+  const [filePath, setFilePath] = useState(); // video 주소
 
-  var lastTap = null;
+  //video 재생 커스텀바
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+
   // 이중탭
+  var lastTap = null;
   const handleDoubleTap = () => {
     const now = Date.now();
     const DOUBLE_PRESS_DELAY = 300;
@@ -31,12 +38,14 @@ const Interview = () => {
       toggleHeart();
     } else {
       lastTap = now;
+      // handlePlayPause;
+      setIsPlaying(true);
     }
   };
   //찜 기능
   const toggleHeart = () => {
-    if (interviewImg !== EmptyImg) {
-      //interviewImg 데이터가 없을 땐 찜 기능 안되도록
+    //video 데이터가 없을 땐 찜 기능 안되도록
+    if (filePath !== undefined) {
       setHeart(previousState => !previousState);
       fillHeart();
     } else {
@@ -60,6 +69,8 @@ const Interview = () => {
       }),
     ]).start();
   };
+
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.bar}>
@@ -82,11 +93,23 @@ const Interview = () => {
         <TouchableWithoutFeedback
           onPress={handleDoubleTap}
           onLongPress={() => setModalOpen(true)}>
-          <ImageBackground
-            resizeMode="contain"
-            source={interviewImg}
-            style={styles.img}
-          />
+          {/* 저장된 video가 있으면 video 출력. 없으면  마스외전 로고 출력*/}
+          {filePath ? (
+            <Video
+              source={{ uri: filePath }}
+              style={styles.content}
+              controls={true}
+              resizeMode="contain"
+              paused={!isPlaying}   // isPlaying 상태에 따라 재생/일시정지 제어
+              onEnd={() => setIsPlaying(false)}   //비디오 재생이 끝났을 때 is Playing 상태 업데이트
+            />
+          ) : (
+            <ImageBackground
+              resizeMode="contain"
+              source={EmptyImg}
+              style={styles.content}
+            />
+          )}
         </TouchableWithoutFeedback>
         {/* Animated로 변경, opacity 값 */}
         <Animated.View style={[styles.animate, heartStyle(opacity).heart]}>
@@ -100,10 +123,10 @@ const Interview = () => {
       <InterviewModal
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
-        interviewImg={interviewImg}
-        setInterviewImg={setInterviewImg}
-        heart={heart}
-        setHeart={setHeart}   // deletePopModal에 전달 - 인터뷰 삭제시 하트 취소
+        filePath={filePath}
+        setFilePath={setFilePath}
+        // heart={heart}
+        setHeart={setHeart} // deletePopModal에 전달 - 인터뷰 삭제시 하트 취소
       />
     </SafeAreaView>
   );
@@ -142,11 +165,13 @@ const styles = StyleSheet.create({
   animate: {
     position: 'absolute',
   },
-  img: {
-    width: '100%',
-    height: '100%',
+  content: {
+    // width: '100%',
+    height: '90%',
+    width: Dimensions.get('window').width
   },
 });
+
 const heartStyle = opacity =>
   StyleSheet.create({
     heart: {
