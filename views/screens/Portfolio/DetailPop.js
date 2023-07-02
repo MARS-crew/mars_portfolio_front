@@ -67,16 +67,29 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 2,
   },
+  saveBtn: {
+    width: 100,
+    height: 30,
+    borderColor: '#000',
+    backgroundColor: '#fff',
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 10,
+    right: 10,
+  },
 });
 
 import PublicModal from '../../components/PublicModal';
 import DetailPopAttachment from './DetailPopAttachment';
+import ChoosePop from '../../components/ChoosePop';
 
 const DetailPop = ({id, onModify, detailPopVisible, setDetailPopVisible}) => {
   const [selectedButton, setSelectedButton] = useState(selectedValue());
   const [button1Pressed, setButton1Pressed] = useState(selected1Pressed());
   const [button2Pressed, setButton2Pressed] = useState(selected2Pressed());
   const [button3Pressed, setButton3Pressed] = useState(selected3Pressed());
+  const [choosePopVisible, setChoosePopVisible] = useState(false);
 
   function selectedValue() {
     if (id == '1') return 'Photo';
@@ -86,8 +99,8 @@ const DetailPop = ({id, onModify, detailPopVisible, setDetailPopVisible}) => {
   } // id값을 통해 사진 수정 시 초기 selected 값을 사진으로 적용하여 각 종류에 맞는 DetailPopup이 열려있도록 구현
 
   function selected1Pressed() {
-    if (id == '1') return true;
-  }
+    if (id == '1' || id == '4' || id == '5' || id == '6') return true;
+  } // id값을 통해 Photo나 나머지 블럭에서 DetailPopup을 실행한 경우 Photo 버튼의 초기 색상을 설정
   function selected2Pressed() {
     if (id == '2') return true;
   }
@@ -123,6 +136,11 @@ const DetailPop = ({id, onModify, detailPopVisible, setDetailPopVisible}) => {
       onModify={onModify}
       isModalVisible={detailPopVisible}
       setIsModalVisible={setDetailPopVisible}>
+      <TouchableOpacity
+        onPress={() => setChoosePopVisible(true)}
+        style={styles.saveBtn}>
+        <Text>Save</Text>
+      </TouchableOpacity>
       <Pressable
         onPress={() => setDetailPopVisible(true)} // Pressable: Modal 영역 안 클릭 시 Modal 유지 구현을 위해 Pressable로 감싸서 적용
         style={styles.modalView}>
@@ -134,6 +152,7 @@ const DetailPop = ({id, onModify, detailPopVisible, setDetailPopVisible}) => {
             <Text>X</Text>
           </TouchableOpacity>
         </View>
+
         <View style={styles.chooseContainer}>
           <TouchableOpacity
             style={[
@@ -210,6 +229,13 @@ const DetailPop = ({id, onModify, detailPopVisible, setDetailPopVisible}) => {
           </TouchableOpacity>
         </View>
       </Pressable>
+      <ChoosePop
+        id={id}
+        title="저장하시겠습니까?"
+        onModify={onModify}
+        choosePopVisible={choosePopVisible}
+        setChoosePopVisible={setChoosePopVisible}
+        setDetailPopVisible={setDetailPopVisible}></ChoosePop>
     </PublicModal>
   );
 };

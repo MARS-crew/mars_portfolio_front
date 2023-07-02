@@ -71,7 +71,7 @@ const Portfolio = () => {
   const onModify = ({id}) => {
     Alert.alert(
       '수정 테스트',
-      'Props: onModify() \n\nPortfolio > PortfolioItem\n > PortfolioModal > DetailPop',
+      'Props: onModify() \n\nPortfolio > PortfolioItem\n > PortfolioModal > DetailPop > ChoosePop',
     );
   };
 

@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
 const PublicModal = ({
   id,
   onModify,
+  onDelete,
   isModalVisible,
   setIsModalVisible,
   children,
