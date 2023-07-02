@@ -6,6 +6,8 @@ import { CubeNavigationHorizontal } from 'react-native-3dcube-navigation';
 import Splash from "./views/screens/splash";
 import Main from "./views/screens/Main";
 import Test from "./views/screens/Test";
+import Resume from "./views/screens/Resume";
+
 
 const App = () => {
   const callBackAfterSwipe = () => {
@@ -14,11 +16,11 @@ const App = () => {
 
   return (
       <CubeNavigationHorizontal callBackAfterSwipe={callBackAfterSwipe}>
-
+          <Resume />
           <Splash />
           <Main />
           <Test />
-
+          
       </CubeNavigationHorizontal>
   );
 };
