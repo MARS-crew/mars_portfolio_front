@@ -4,8 +4,6 @@ import {Text, View, StyleSheet, Image, ImageBackground} from 'react-native';
 
 import GroupLogo from './GroupLogo';
 
-const PretendardIcon = createIconSetFromFontello(fontelloConfig, 'Pretendard');
-
 const GroupItem = ({id, src}) => {
   return (
     <View>

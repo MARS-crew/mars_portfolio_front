@@ -20,7 +20,6 @@ const App = () => {
           <Main />
           <Test />
           <WhichGroup/>
-          {/* <GroupVideo /> */}
       </CubeNavigationHorizontal>
   );
 };
