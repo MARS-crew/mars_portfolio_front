@@ -24,26 +24,26 @@ const DATA = [
     title: '4기',
     src: require('../../assets/images/Group.png'),
   },
-  {
-    id: '5',
-    title: '5기',
-    src: require('../../assets/images/Group.png'),
-  },
-  {
-    id: '6',
-    title: '6기',
-    src: require('../../assets/images/Group.png'),
-  },
-  {
-    id: '7',
-    title: '7기',
-    src: require('../../assets/images/Group.png'),
-  },
-  {
-    id: '8',
-    title: '8기',
-    src: require('../../assets/images/Group.png'),
-  },
+  // {
+  //   id: '5',
+  //   title: '5기',
+  //   src: require('../../assets/images/Group.png'),
+  // },
+  // {
+  //   id: '6',
+  //   title: '6기',
+  //   src: require('../../assets/images/Group.png'),
+  // },
+  // {
+  //   id: '7',
+  //   title: '7기',
+  //   src: require('../../assets/images/Group.png'),
+  // },
+  // {
+  //   id: '8',
+  //   title: '8기',
+  //   src: require('../../assets/images/Group.png'),
+  // },
 ];
 
 const WhichGroup = ({id}) => {

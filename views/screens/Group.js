@@ -12,17 +12,12 @@ const Item = ({id, src}) => (
 
 const Group = ({data}) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.button}>
-        <Main />
-      </View>
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
         <FlatList
           data={data}
           renderItem={({item}) => <Item id={item.id} src={item.src} />}
         />
       </SafeAreaView>
-    </View>
   );
 };
 
