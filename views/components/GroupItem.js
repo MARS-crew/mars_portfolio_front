@@ -1,14 +1,17 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {Text, View, StyleSheet, Image, ImageBackground} from 'react-native';
+
+
+import GroupLogo from './GroupLogo';
 
 const GroupItem = ({id, src}) => {
   return (
     <View>
-      <View style={styles.title}>
-        <Text style={styles.text}>{id}기 입니다만</Text>
-      </View>
       <View>
-        <Image source={src} style={styles.image} />
+        <ImageBackground source={src} style={styles.image}>
+          <GroupLogo />
+          <Text style={styles.text}>{id}기</Text>
+        </ImageBackground>
       </View>
     </View>
   );
@@ -16,25 +19,16 @@ const GroupItem = ({id, src}) => {
 
 const styles = StyleSheet.create({
   image: {
-    width: 337,
-    height: 548,
+    width: 400,
+    height: 800,
     resizeMode: 'contain',
-    left: 21,
-    top: 100,
-  },
-  title: {
-    backgroundColor: '#F8DFC0',
-    alignItems: 'center',
-    width: 261,
-    height: 69,
-    left: 57,
-    top: 115,
   },
   text: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    top: 22,
-  },
+    color: 'white',
+    left: 95,
+    top: -5,
+    fontSize: 24
+  }
 });
 
 export default GroupItem;
