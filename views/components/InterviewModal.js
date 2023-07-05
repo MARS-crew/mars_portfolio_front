@@ -119,7 +119,7 @@ const InterviewModal = ({
         onPress={() => {
           setModalOpen(false);
           if (isEditing) {
-            isEditing(false);
+            setIsEditing(false);
           }
         }} // modalBackdropPress: 모달 영역 밖 클릭 시 Bottom Nav(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
         style={styles.modalBackdropPress}>

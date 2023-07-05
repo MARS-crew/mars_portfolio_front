@@ -22,7 +22,6 @@ const Interview = () => {
   const [heart, setHeart] = useState(false); // 하트 상태
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [filePath, setFilePath] = useState(); // video 주소
-
   //video 재생
   const [isPlaying, setIsPlaying] = useState(true);
 
@@ -30,7 +29,7 @@ const Interview = () => {
   var lastTap = null;
   const handleDoubleTap = () => {
     const now = Date.now();
-    const DOUBLE_PRESS_DELAY = 300;
+    const DOUBLE_PRESS_DELAY = 500;
     //두번째 tap이 지난 tap을 한지 0.03초 이내에 이뤄졌을 때 -> Double tap
     if (lastTap && now - lastTap < DOUBLE_PRESS_DELAY) {
       toggleHeart();
@@ -66,14 +65,6 @@ const Interview = () => {
     ]).start();
   };
 
-  // 영상 재생
-  const handleVideoPress = () => {
-    if (isPlaying) {
-      setIsPlaying(false); // 영상멈춤
-    } else {
-      setIsPlaying(true); // 영상 시작
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -97,7 +88,7 @@ const Interview = () => {
         <TouchableWithoutFeedback
           onPress={() => {
             handleDoubleTap();
-            handleVideoPress();
+            // handleVideoPress();
           }}
           onLongPress={() => setModalOpen(true)}>
           {/* 저장된 video가 있으면 video 출력. 없으면  마스외전 로고 출력*/}
@@ -107,6 +98,7 @@ const Interview = () => {
               style={styles.content}
               controls={true}
               resizeMode="contain"
+              repeat={true}
               paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
               onEnd={() => {
                 setIsPlaying(false);
