@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   medal: {
     width: 30,
     height: 43.16,
-    left: 150,
+    right: 7,
     top: 15,
   },
 });
