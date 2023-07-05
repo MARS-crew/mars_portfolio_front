@@ -1,0 +1,23 @@
+import React from 'react';
+import {View, StyleSheet, Image} from 'react-native';
+
+const MedalItem = () => {
+  return (
+    <View>
+      <Image
+        source={require('../../assets/images/Medal.png')}
+        style={styles.medal}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  medal: {
+    width: 30,
+    height: 43.16,
+    left: 150,
+    top: 15,
+  },
+});
+export default MedalItem;

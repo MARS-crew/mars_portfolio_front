@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {View} from 'react-native';
 import {CubeNavigationHorizontal} from 'react-native-3dcube-navigation';
 
 import Splash from './views/screens/splash';
