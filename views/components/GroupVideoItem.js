@@ -4,18 +4,30 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import MedalItem from './MedalItem';
 
-const GroupVideoItem = ({id, src}) => {
-  return (
-    <View style={styles.outline}>
-      <TouchableOpacity>
-        <View style={styles.midLine}>
-          <ImageBackground source={src} style={styles.manyImage}>
-            <MedalItem />
-          </ImageBackground>
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
+const GroupVideoItem = ({medal, src}) => {
+  if (medal == 'y') {
+    return (
+      <View style={styles.outline}>
+        <TouchableOpacity>
+          <View style={styles.midLine}>
+            <ImageBackground source={src} style={styles.manyImage}>
+              <MedalItem />
+            </ImageBackground>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.outline}>
+        <TouchableOpacity>
+          <View style={styles.midLine}>
+            <ImageBackground source={src} style={styles.manyImage} />
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

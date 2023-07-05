@@ -10,30 +10,35 @@ const DATA = [
     title: '1기',
     src: require('../../assets/images/Group.png'),
     video: require('../../assets/images/GroupVideo.png'),
+    medal: 'y',
   },
   {
     id: '2',
     title: '2기',
     src: require('../../assets/images/Group.png'),
     video: require('../../assets/images/GroupVideo.png'),
+    medal: 'n',
   },
   {
     id: '3',
     title: '3기',
     src: require('../../assets/images/Group.png'),
     video: require('../../assets/images/GroupVideo.png'),
+    medal: 'n',
   },
   {
     id: '4',
     title: '4기',
     src: require('../../assets/images/Group.png'),
     video: require('../../assets/images/GroupVideo.png'),
+    medal: 'n',
   },
   {
     id: '5',
     title: '5기',
     src: require('../../assets/images/Group.png'),
     video: require('../../assets/images/GroupVideo.png'),
+    medal: 'n',
   },
   // {
   //   id: '6',
@@ -52,9 +57,9 @@ const DATA = [
   // },
 ];
 
-const VideoItem = ({id, src}) => (
+const VideoItem = ({id, src, medal}) => (
   <View>
-    <GroupVideoItem id={id} src={src} />
+    <GroupVideoItem id={id} src={src} medal={medal} />
   </View>
 );
 
@@ -63,7 +68,9 @@ const GroupVideo = () => {
     <SafeAreaView style={styles.containbox}>
       <FlatList
         data={DATA}
-        renderItem={({item}) => <VideoItem id={item.id} src={item.src} />}
+        renderItem={({item}) => (
+          <VideoItem id={item.id} src={item.src} medal={item.medal} />
+        )}
         numColumns={2}
       />
     </SafeAreaView>
