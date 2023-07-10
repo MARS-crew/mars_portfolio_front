@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {View, SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
-import FloatingMenu from '../components/FloatingMenu';
 
-import PortfolioItem from './PortfolioItem';
+
+import PortfolioItem from '../Portfolio/PortfolioItem';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,48 +23,48 @@ const Portfolio = () => {
     {
       id: '1',
       title: 'Video 데이터 영역',
-      src: require('../../assets/images/camera.png'),
+      src: require('../../../assets/images/camera.png'),
     },
     {
       id: '2',
       title: 'Photo 데이터 영역',
-      src: require('../../assets/images/camera.png'),
+      src: require('../../../assets/images/camera.png'),
     },
     {
       id: '3',
       title: 'Link 데이터 영역',
-      src: require('../../assets/images/Link.png'),
+      src: require('../../../assets/images/Link.png'),
     },
     {
       id: '4',
       title: 'Project 프로젝트 영역',
-      src: require('../../assets/images/project.png'),
+      src: require('../../../assets/images/project.png'),
     },
     {
       id: '1',
       title: 'Video 데이터 영역',
-      src: require('../../assets/images/camera.png'),
+      src: require('../../../assets/images/camera.png'),
     },
     {
       id: '2',
       title: 'Photo 데이터 영역',
-      src: require('../../assets/images/camera.png'),
+      src: require('../../../assets/images/camera.png'),
     },
     {
       id: '5',
       title: 'Null 데이터 영역',
-      src: require('../../assets/images/marsLogo.png'),
+      src: require('../../../assets/images/marsLogo.png'),
     },
 
     {
       id: '5',
       title: 'Null 데이터 영역',
-      src: require('../../assets/images/marsLogo.png'),
+      src: require('../../../assets/images/marsLogo.png'),
     },
     {
       id: '6',
       title: 'More 데이터 영역',
-      src: require('../../assets/images/add.png'),
+      src: require('../../../assets/images/add.png'),
     },
   ]);
 
@@ -102,7 +102,6 @@ const Portfolio = () => {
           />
         </View>
       </SafeAreaView>
-      <FloatingMenu />
     </View>
   );
 };

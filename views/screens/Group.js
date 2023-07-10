@@ -1,47 +1,28 @@
 import {React} from 'react';
 import {StyleSheet, View, FlatList, SafeAreaView} from 'react-native';
 
-import Main from './Main';
 import GroupItem from '../components/GroupItem';
 
-const Item = ({id, src}) => (
+const Item = ({id, src, medal}) => (
   <View>
-    <GroupItem id={id} src={src} />
+    <GroupItem id={id} src={src} medal={medal} />
   </View>
 );
 
 const Group = ({data}) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.button}>
-        <Main />
-      </View>
-      <SafeAreaView style={styles.container}>
-        <FlatList
-          data={data}
-          renderItem={({item}) => <Item id={item.id} src={item.src} />}
-        />
-      </SafeAreaView>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={data}
+        renderItem={({item}) => <Item id={item.id} src={item.src} />}
+      />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  containbox: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  button: {
-    width: 40,
-    height: 20,
-    position: 'absolute',
-  },
   container: {
     backgroundColor: 'white',
-  },
-  manyRow: {
-    flex: 1,
-    flexDirection: 'row',
   },
 });
 

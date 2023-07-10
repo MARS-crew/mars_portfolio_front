@@ -24,11 +24,11 @@ const DATA = [
     title: '4기',
     src: require('../../assets/images/Group.png'),
   },
-  {
-    id: '5',
-    title: '5기',
-    src: require('../../assets/images/Group.png'),
-  },
+  // {
+  //   id: '5',
+  //   title: '5기',
+  //   src: require('../../assets/images/Group.png'),
+  // },
   // {
   //   id: '6',
   //   title: '6기',
