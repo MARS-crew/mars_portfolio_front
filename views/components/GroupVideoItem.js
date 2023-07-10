@@ -1,50 +1,52 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {View, StyleSheet, ImageBackground} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const GroupVideoItem = ({id, src}) => {
-  return (
-    <View style="outLine">
-      <TouchableOpacity>
-        <View style={styles.midLine}>
-          <Image source={src} style={styles.manyImage} />
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
+import MedalItem from './MedalItem';
+
+const GroupVideoItem = ({medal, src}) => {
+  if (medal == 'y') {
+    return (
+      <View style={styles.outline}>
+        <TouchableOpacity>
+          <View style={styles.midLine}>
+            <ImageBackground source={src} style={styles.manyImage}>
+              <MedalItem />
+            </ImageBackground>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.outline}>
+        <TouchableOpacity>
+          <View style={styles.midLine}>
+            <ImageBackground source={src} style={styles.manyImage} />
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
   outline: {
     flexDirection: 'row',
     justifyContent: 'center',
-    margin: 15,
+    border: 0,
   },
   midLine: {
     justifyContent: 'center',
     alignItems: 'center',
+    border: 0,
   },
   manyImage: {
-    width: 200,
+    width: 195,
     height: 390,
-    left: 0,
-    top: 0,
-    borderWidth: 2,
     borderColor: '#000000',
     borderStyle: 'solid',
-  },
-  manyTitle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 200,
-    height: 50,
-    borderWidth: 2,
-    borderColor: '#000000',
-    borderStyle: 'solid',
-  },
-  manyText: {
-    fontWeight: 'bold',
-    fontSize: 20,
+    border: 0,
   },
 });
 

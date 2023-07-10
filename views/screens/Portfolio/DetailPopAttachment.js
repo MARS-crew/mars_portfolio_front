@@ -5,6 +5,7 @@ import {
   Text,
   View,
   TextInput,
+  Dimensions,
 } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 
@@ -25,8 +26,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   pickBtn: {
-    width: 100,
+    flex: 1,
+    height: Dimensions.get('window').height / 4,
     alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 0.5,
     borderColor: '#000',
     padding: 8,
@@ -73,12 +76,12 @@ const DetailPopAttachment = () => {
   return (
     <View>
       <View style={styles.chooseContainer}>
-        <TextInput style={[styles.Input, styles.inputRightMargin]}></TextInput>
+        {/* <TextInput style={[styles.Input, styles.inputRightMargin]}></TextInput> */}
         <TouchableOpacity style={styles.pickBtn} onPress={openFilePicker}>
-          <Text>Attach</Text>
+          <Text>첨부파일이 비어있습니다</Text>
         </TouchableOpacity>
       </View>
-      <View style={[styles.chooseContainer, styles.fileContainer]}>
+      {/* <View style={[styles.chooseContainer, styles.fileContainer]}>
         <Text style={styles.inputRightMargin}>첨부파일</Text>
         <View style={styles.chooseContainer}>
           <Text style={styles.inputRightMargin}>{pickUri}</Text>
@@ -86,7 +89,7 @@ const DetailPopAttachment = () => {
             <Text>X</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 };

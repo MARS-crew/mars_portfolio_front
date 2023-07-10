@@ -1,8 +1,14 @@
+import "react-native-gesture-handler";
 import {React} from 'react';
-import {StyleSheet, View, FlatList, SafeAreaView} from 'react-native';
+import { CubeNavigationHorizontal } from 'react-native-3dcube-navigation';
 
-//import ManyGroupItem from '../components/ManyGroupItem';
-import GroupVideoItem from '../components/GroupVideoItem';
+import Group from './Group';
+import ManyGroup from './ManyGroup';
+import GroupVideo from './GroupVideo';
+
+// const callBackAfterSwipe = () => {
+//   // 스와이프 후의 동작 정의
+// };
 
 const DATA = [
   {
@@ -10,35 +16,30 @@ const DATA = [
     title: '1기',
     src: require('../../assets/images/Group.png'),
     video: require('../../assets/images/GroupVideo.png'),
-    medal: 'y',
   },
   {
     id: '2',
     title: '2기',
     src: require('../../assets/images/Group.png'),
     video: require('../../assets/images/GroupVideo.png'),
-    medal: 'n',
   },
   {
     id: '3',
     title: '3기',
     src: require('../../assets/images/Group.png'),
     video: require('../../assets/images/GroupVideo.png'),
-    medal: 'n',
   },
   {
     id: '4',
     title: '4기',
     src: require('../../assets/images/Group.png'),
     video: require('../../assets/images/GroupVideo.png'),
-    medal: 'n',
   },
   {
     id: '5',
     title: '5기',
     src: require('../../assets/images/Group.png'),
     video: require('../../assets/images/GroupVideo.png'),
-    medal: 'n',
   },
   // {
   //   id: '6',
@@ -57,43 +58,17 @@ const DATA = [
   // },
 ];
 
-const VideoItem = ({id, src, medal}) => (
-  <View>
-    <GroupVideoItem id={id} src={src} medal={medal} />
-  </View>
-);
-
-const GroupVideo = () => {
-  return (
-    <SafeAreaView style={styles.containbox}>
-      <FlatList
-        data={DATA}
-        renderItem={({item}) => (
-          <VideoItem id={item.id} src={item.src} medal={item.medal} />
-        )}
-        numColumns={2}
-      />
-    </SafeAreaView>
-  );
+const WhichGroup = () => {
+  if (DATA.length <= 6) {
+    <GroupVideo data={DATA} />
+    return(
+      //<CubeNavigationHorizontal callBackAfterSwipe={callBackAfterSwipe}>
+        <Group data={DATA} />
+      //</CubeNavigationHorizontal>
+    ); 
+  } else {
+    return <ManyGroup data={DATA} />;
+  }
 };
 
-const styles = StyleSheet.create({
-  containbox: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  button: {
-    width: 40,
-    height: 20,
-    position: 'absolute',
-  },
-  container: {
-    backgroundColor: 'white',
-  },
-  manyRow: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-});
-
-export default GroupVideo;
+export default WhichGroup;

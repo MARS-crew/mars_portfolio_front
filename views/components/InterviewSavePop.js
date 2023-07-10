@@ -1,25 +1,40 @@
-import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, Text, Alert, Dimensions, Modal, View } from 'react-native';
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
-
+import {
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+  Dimensions,
+  Text,
+  View,
+} from 'react-native';
 
 const InterviewSavePop = ({
-  setShowSaveBtn,
-  setModalOpen,
-  changeData,
-  setInterviewImg,
-  setChangeData,
   savePopVisible,
-  setSavePopVisible
+  setSavePopVisible,
+  setIsEditing,
+  setModalOpen,
+  setIsPlaying,
+  setFilePath,
+  changeData,
+  setChangeData,
+  setHeart,
+  changeHeart,
 }) => {
-  const handleSaveImg = () => {
+  const handleSave = () => {
+    setIsEditing(false);
     setModalOpen(false);
-    setShowSaveBtn(false);
-    setInterviewImg(changeData);
-    setChangeData();        // 저장된 데이터 초기화
-    setSavePopVisible(false);
+    setIsPlaying(true);
+    setFilePath(changeData);
+    setChangeData(); // 저장된 데이터 초기화
+    // setSavePopVisible(false);
+    setHeart(changeHeart);
     Alert.alert('Modal', '저장');
-  }
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+  };
+
   return (
     <Modal
       title
@@ -32,24 +47,21 @@ const InterviewSavePop = ({
       <TouchableOpacity
         onPress={() => setSavePopVisible(false)} // modalBackdropPress: 모달 영역 밖 클릭 시 ChoosePopup(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
         style={styles.modalBackdropPress}>
-        {/* {showSaveBtn && (
-          <SaveBtn />
-        )} */}
         <Pressable
           onPress={() => setSavePopVisible(true)} // Pressable: 모달 영역 안 클릭 시 ChoosePopup(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
           style={styles.modalView}>
-          <Text style={styles.modalTitle}>저장하시겠습니까?</Text>
+          <Text style={styles.modalTitle}>수정된 내용을 저장하시겠습니까?</Text>
           <View style={styles.chooseContainer}>
-            <TouchableOpacity style={styles.chooseBtn} onPress={handleSaveImg}>
-              <Text>YES</Text>
+            <TouchableOpacity style={styles.chooseBtn} onPress={handleSave}>
+              <Text>확인</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.chooseBtn}
               onPress={() => {
+                handleCancel();
                 setSavePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
-                setModalOpen(false);
               }}>
-              <Text>NO</Text>
+              <Text>취소</Text>
             </TouchableOpacity>
           </View>
         </Pressable>

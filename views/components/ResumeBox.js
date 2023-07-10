@@ -123,6 +123,7 @@ icon : {
     width:20,
     height:20,
     marginTop:6,
+    marginRight:10
 },
 iconsText:{
     flexDirection: 'row',

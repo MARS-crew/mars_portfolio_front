@@ -8,10 +8,7 @@ import {
   View,
 } from 'react-native';
 
-import EmptyImg from '../../assets/images/emptyImg.png';
-
 const InterviewDeletePop = ({
-  title,
   deletePopVisible,
   setDeletePopVisible,
   setChangeData,
@@ -41,7 +38,7 @@ const InterviewDeletePop = ({
         <Pressable
           onPress={() => setDeletePopVisible(true)} // Pressable: 모달 영역 안 클릭 시 ChoosePopup(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
           style={styles.modalView}>
-          <Text style={styles.modalTitle}>{title}</Text>
+          <Text style={styles.modalTitle}>삭제하시겠습니까?</Text>
           <View style={styles.chooseContainer}>
             <TouchableOpacity style={styles.chooseBtn} onPress={deleteUrl}>
               <Text>YES</Text>

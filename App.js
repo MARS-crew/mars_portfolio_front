@@ -21,7 +21,7 @@ import Resume from './views/screens/Resume';
 import Portfolio from './views/screens/Portfolio/Portfolio';
 import Review from './views/screens/Review';
 import Album from './views/screens/Album';
-// import Interview from './views/screens/Interview';
+import Interview from './views/screens/Interview';
 import 'react-native-gesture-handler';
 import WhichGroup from './views/screens/WhichGroup';
 import FlatListAdapter from './views/screens/FlatListAdapter';
@@ -114,7 +114,7 @@ const App = () => {
         <Member />
       </Screen>
       <Screen text="Screen 4" index={3}>
-        <Text>인터뷰</Text>
+        <Interview />
       </Screen>
       <Screen text="Screen 5" index={4}>
         <Resume />

@@ -2,33 +2,45 @@ import {React} from 'react';
 
 import Group from './Group';
 import ManyGroup from './ManyGroup';
+import GroupVideo from './GroupVideo';
+//import { View } from 'react-native';
 
 const DATA = [
   {
     id: '1',
     title: '1기',
     src: require('../../assets/images/Group.png'),
+    video: require('../../assets/images/GroupVideo.png'),
+    merdal: 'y',
   },
   {
     id: '2',
     title: '2기',
     src: require('../../assets/images/Group.png'),
+    video: require('../../assets/images/GroupVideo.png'),
+    merdal: 'n',
   },
   {
     id: '3',
     title: '3기',
     src: require('../../assets/images/Group.png'),
+    video: require('../../assets/images/GroupVideo.png'),
+    merdal: 'n',
   },
   {
     id: '4',
     title: '4기',
     src: require('../../assets/images/Group.png'),
+    video: require('../../assets/images/GroupVideo.png'),
+    merdal: 'n',
   },
-  // {
-  //   id: '5',
-  //   title: '5기',
-  //   src: require('../../assets/images/Group.png'),
-  // },
+  {
+    id: '5',
+    title: '5기',
+    src: require('../../assets/images/Group.png'),
+    video: require('../../assets/images/GroupVideo.png'),
+    merdal: 'n',
+  },
   // {
   //   id: '6',
   //   title: '6기',
@@ -46,7 +58,7 @@ const DATA = [
   // },
 ];
 
-const WhichGroup = ({id}) => {
+const WhichGroup = () => {
   if (DATA.length <= 6) {
     return <Group data={DATA} />;
   } else {

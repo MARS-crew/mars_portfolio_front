@@ -39,14 +39,30 @@ import PublicModal from './PublicModal';
 const choosePop = ({
   id,
   title,
+  onModify,
   onDelete,
   choosePopVisible,
   setChoosePopVisible,
+  setDetailPopVisible,
 }) => {
+  const onDeleteORonModify = () => {
+    if (title === '삭제하시겠습니까?') {
+      onDelete(id); //개발 방식 검토중인 기능이므로 구현 미완료
+      console.log(onDelete);
+    } else if (title === '저장하시겠습니까?') {
+      setDetailPopVisible(false);
+      onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
+      console.log(onModify);
+    }
+
+    console.log('return');
+  };
+
   return (
     <PublicModal
       id={id}
       onDelete={onDelete}
+      onModify={onModify}
       isModalVisible={choosePopVisible}
       setIsModalVisible={setChoosePopVisible}>
       <Pressable
@@ -58,7 +74,8 @@ const choosePop = ({
             style={styles.chooseBtn}
             onPress={() => {
               setChoosePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
-              onDelete(id); //개발 방식 검토중인 기능이므로 구현 미완료
+
+              onDeleteORonModify();
             }}>
             <Text>YES</Text>
           </TouchableOpacity>

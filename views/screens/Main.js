@@ -1,42 +1,39 @@
-import React from "react";
-import { View, Button ,StyleSheet,Image,Text,TouchableOpacity} from "react-native";
-import people_ex from '../../assets/images/people_ex.png';
+import React from 'react';
+import {TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
 
-function Main() {
-
-return (
-    <View style={styles.container}>
-    <Text style={styles.text1}>로그인</Text>
-    <TouchableOpacity style={styles.group_main}>
-    <Text>마스외전 1기를 소개합니다</Text>
+const LoginButton = props => {
+  return (
+    <TouchableOpacity style={styles.button}>
+      <Image source={props.src} style={styles.image} />
+      <Text style={styles.title}>{props.title}</Text>
     </TouchableOpacity>
-    <Image source={people_ex} style={styles.p_image} />
-    </View>
-);
-}
+  );
+};
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor: '#fff'
-    },
-    text1: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 10
-    },
-    p_image:{
-        top:150,
-        left:40,
-        width:'80%',
-        height:'50%'
-    },
-    TouchableOpacity:{
-        width: 60,
-        height: 60,
-        backgroundColor: "#fe5746",
-        justifyContent: "center",
-        alignItems: "center"
-    }
-})
-export default Main;
+  button: {
+    width: 300,
+    height: 20,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFF',
+    borderWidth: 2,
+    borderStyle: 'solid',
+    marginBottom: 10,
+    flexDirection: 'row',
+  },
+  image: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
+    marginRight: 50,
+  },
+  title: {
+    marginRight: 50,
+    marginLeft: 20,
+    fontSize: 15,
+  },
+});
+
+export default LoginButton;
