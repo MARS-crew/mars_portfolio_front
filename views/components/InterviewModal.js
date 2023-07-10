@@ -107,7 +107,7 @@ const InterviewModal = ({
           onPress={() => setModalOpen(true)} // Pressable: 모달 영역 안 클릭 시 Bottom Nav(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
           style={styles.modalView}>
           {isEditing ? (
-            <TouchableOpacity onPress={handleSave}>
+            <TouchableOpacity onPress={() => setSavePopVisible(true)}>
               <Text>저장</Text>
             </TouchableOpacity>
           ) : (
@@ -136,7 +136,6 @@ const InterviewModal = ({
             // setModalOpen={setModalOpen}
             setIsEditing={setIsEditing}
           />
-          {/*}
           <InterviewSavePop
             savePopVisible={savePopVisible}
             setSavePopVisible={setSavePopVisible}
@@ -149,7 +148,7 @@ const InterviewModal = ({
             setHeart={setHeart}
             changeHeart={changeHeart}
           />
-          */}
+
         </Pressable>
       </TouchableOpacity>
     </Modal>

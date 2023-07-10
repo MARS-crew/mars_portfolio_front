@@ -13,7 +13,7 @@ import {
   Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import EmptyImg from '../../assets/images/EmptyImg.png';
+import EmptyImg from '../../assets/images/Empty.png';
 import InterviewModal from '../components/InterviewModal';
 import Video from 'react-native-video';
 
@@ -71,9 +71,9 @@ const Interview = () => {
       <View style={styles.iconBar}>
         <TouchableOpacity onPress={toggleHeart} style={styles.icon}>
           {heart ? (
-            <Icon name="heart" size={30} color={'red'}></Icon>
+            <Icon name="heart" size={30} color={'red'} />
           ) : (
-            <Icon name="heart" size={30} color={'#E4E3E8'}></Icon>
+            <Icon name="heart" size={30} color={'#E4E3E8'} />
           )}
         </TouchableOpacity>
         <TouchableOpacity
@@ -94,7 +94,7 @@ const Interview = () => {
             <Video
               source={{ uri: filePath }}
               style={[styles.content]}
-              controls={true}
+              controls={false}
               resizeMode="cover"
               repeat={true}
               paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
@@ -114,9 +114,9 @@ const Interview = () => {
         {/* Animated로 변경, opacity 값 */}
         <Animated.View style={[styles.animate, heartStyle(opacity).heart]}>
           {heart ? (
-            <Icon name="heart" size={100} color={'white'}></Icon>
+            <Icon name="heart" size={100} color={'white'} />
           ) : (
-            <Icon name="hearto" size={100} color={'gray'}></Icon>
+            <Icon name="hearto" size={100} color={'gray'} />
           )}
         </Animated.View>
       </View>
@@ -135,6 +135,8 @@ const Interview = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
+    height: '100%',
     backgroundColor: '#F5F4F9',
     // padding: 10,
   },
@@ -162,7 +164,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 10,
-    backgroundColor: 'red',
   },
   animate: {
     position: 'absolute',

@@ -28,7 +28,7 @@ const InterviewSavePop = ({
     setChangeData(); // 저장된 데이터 초기화
     // setSavePopVisible(false);
     setHeart(changeHeart);
-    Alert.alert('Modal', '저장');
+    setSavePopVisible(false);
   };
 
   const handleCancel = () => {
