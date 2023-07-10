@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
+import {Album} from '../screens/Album';
 import {FloatingAction} from 'react-native-floating-action';
+import {useNavigation} from '@react-navigation/native';
 
 const actions = [
   {
@@ -30,6 +32,20 @@ const actions = [
 ];
 
 const FloatingMenu = () => {
+  const navigation = useNavigation();
+
+  const handleItemPress = name => {
+    if (name === 'bt_gallery') {
+      navigation.navigate('Album');
+    } else if (name === 'bt_share') {
+      navigation.navigate('Share');
+    } else if (name === 'bt_home') {
+      navigation.navigate('Home');
+    } else if (name === 'bt_help') {
+      navigation.navigate('Help');
+    }
+  };
+
   return (
     <View>
       <FloatingAction
@@ -39,9 +55,7 @@ const FloatingMenu = () => {
         color="#072AC8"
         actionsPaddingTopBottom={10}
         floatingIcon={require('../../assets/images/hamburger.png')}
-        onPressItem={name => {
-          console.log(`selected button: ${name}`);
-        }}
+        onPressItem={handleItemPress}
       />
     </View>
   );
