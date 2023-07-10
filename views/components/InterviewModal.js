@@ -7,11 +7,10 @@ import {
   Dimensions,
   Text,
   Alert,
-  Platform,
-  PermissionsAndroid
 } from 'react-native';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import InterviewDeletePop from './InterviewDeletePop';
+import InterviewSavePop from './InterviewSavePop';
 
 const InterviewModal = ({
   modalOpen,
@@ -24,7 +23,7 @@ const InterviewModal = ({
 }) => {
   const [changeData, setChangeData] = useState(null);                 // 수정 전 변경 내용 임시 저장
   const [deletePopVisible, setDeletePopVisible] = useState(false);    // 삭제 확인 창 상태
-  // const [savePopVisible, setSavePopVisible] = useState(false);
+  const [savePopVisible, setSavePopVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);                  // 수정 여부 확인 ( 수정 내용 없으면 저장 버튼 뜨지 않도록)
   const [changeHeart, setChangeHeart] = useState(heart);              // 수정 내용 저장 전 하트 변경 사항 저장
 
@@ -52,25 +51,6 @@ const InterviewModal = ({
     }
   };
 
-  // 갤러리에서 비디오 선택
-  // const requestExternalWritePermission = async () => {
-  //   if (Platform.OS === 'android') {
-  //     try {
-  //       const granted = await PermissionsAndroid.request(
-  //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-  //         {
-  //           title: 'External Storage Write Permission',
-  //           message: 'App needs write permission'
-  //         },
-  //       );
-  //       return granted === PermissionsAndroid.RESULTS.GRANTED;
-  //     } catch (err) {
-  //       console.warn(err);
-  //       alert('Write permission err', err);
-  //     }
-  //     return false;
-  //   } else return true;
-  // };
   // 갤러리에서 video 파일 선택
   const chooseFile = type => {
     let options = {
@@ -149,7 +129,6 @@ const InterviewModal = ({
             </TouchableOpacity>
           )}
           <InterviewDeletePop
-            title="삭제하시겠습니까?"
             deletePopVisible={deletePopVisible}
             setDeletePopVisible={setDeletePopVisible}
             setChangeData={setChangeData}
@@ -157,6 +136,20 @@ const InterviewModal = ({
             // setModalOpen={setModalOpen}
             setIsEditing={setIsEditing}
           />
+          {/*}
+          <InterviewSavePop
+            savePopVisible={savePopVisible}
+            setSavePopVisible={setSavePopVisible}
+            setIsEditing={setIsEditing}
+            setModalOpen={setModalOpen}
+            setIsPlaying={setIsPlaying}
+            setFilePath={setFilePath}
+            changeData={changeData}
+            setChangeData={setChangeData}
+            setHeart={setHeart}
+            changeHeart={changeHeart}
+          />
+          */}
         </Pressable>
       </TouchableOpacity>
     </Modal>

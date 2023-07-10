@@ -10,9 +10,10 @@ import {
   Easing,
   Alert,
   Dimensions,
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import EmptyImg from '../../assets/images/emptyImg.png';
+import EmptyImg from '../../assets/images/EmptyImg.png';
 import InterviewModal from '../components/InterviewModal';
 import Video from 'react-native-video';
 
@@ -65,24 +66,21 @@ const Interview = () => {
     ]).start();
   };
 
-
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.bar}>
-        <View style={styles.iconbar}>
-          <TouchableOpacity onPress={toggleHeart} style={styles.icon}>
-            {heart ? (
-              <Icon name="heart" size={23} color={'#3D3D3D'}></Icon>
-            ) : (
-              <Icon name="hearto" size={23} color={'#595959'}></Icon>
-            )}
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => Alert.alert('공유')}
-            style={styles.icon}>
-            <Icon name="sharealt" size={23} color={'#3D3D3D'} />
-          </TouchableOpacity>
-        </View>
+      <View style={styles.iconBar}>
+        <TouchableOpacity onPress={toggleHeart} style={styles.icon}>
+          {heart ? (
+            <Icon name="heart" size={30} color={'red'}></Icon>
+          ) : (
+            <Icon name="heart" size={30} color={'#E4E3E8'}></Icon>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => Alert.alert('공유')}
+          style={styles.icon}>
+          <Icon name="sharealt" size={30} color={'#3D3D3D'} />
+        </TouchableOpacity>
       </View>
       <View style={styles.section}>
         <TouchableWithoutFeedback
@@ -95,9 +93,9 @@ const Interview = () => {
           {filePath ? (
             <Video
               source={{ uri: filePath }}
-              style={styles.content}
+              style={[styles.content]}
               controls={true}
-              resizeMode="contain"
+              resizeMode="cover"
               repeat={true}
               paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
               onEnd={() => {
@@ -105,17 +103,18 @@ const Interview = () => {
               }}
             />
           ) : (
-            <ImageBackground
-              resizeMode="contain"
+            <Image
+              resizeMode="cover"
               source={EmptyImg}
               style={styles.content}
+              imageStyle={styles.imgStyle}
             />
           )}
         </TouchableWithoutFeedback>
         {/* Animated로 변경, opacity 값 */}
         <Animated.View style={[styles.animate, heartStyle(opacity).heart]}>
           {heart ? (
-            <Icon name="heart" size={100} color={'red'}></Icon>
+            <Icon name="heart" size={100} color={'white'}></Icon>
           ) : (
             <Icon name="hearto" size={100} color={'gray'}></Icon>
           )}
@@ -136,41 +135,42 @@ const Interview = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#F5F4F9',
     // padding: 10,
   },
-  bar: {
-    borderTopWidth: 0.8,
+  iconBar: {
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
-  },
-  section: {
-    borderTopWidth: 0.8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 10,
-    padding: 15,
-    // backgroundColor: 'red',
-  },
-  iconbar: {
-    width: '90%',
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    alignItems: 'center',
+    paddingRight: 20,
+    paddingTop: 20,
+    paddingBottom: 10,
   },
   icon: {
-    width: 25,
-    height: 25,
-    marginLeft: 10,
+    width: 30,
+    height: 30,
+    marginLeft: 15,
+  },
+  section: {
+    height: 623,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 0.8,
+    marginTop: 10,
+    marginLeft: 20,
+    marginRight: 20,
+    borderRadius: 10,
+    backgroundColor: 'red',
   },
   animate: {
     position: 'absolute',
   },
   content: {
-    // width: '100%',
-    height: '90%',
-    width: Dimensions.get('window').width,
+    width: '100%',
+    height: '100%',
+    borderRadius: 10,
   },
 });
 
