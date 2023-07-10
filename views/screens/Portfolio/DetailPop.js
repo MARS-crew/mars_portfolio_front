@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
   input: {
     alignItems: 'center',
-    textAlign: 'center',
+
     borderWidth: 0.8,
     borderColor: '#000',
     height: 35,
@@ -61,30 +61,39 @@ const styles = StyleSheet.create({
   },
   flexCenter: {
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 
   fileContainer: {
     justifyContent: 'space-between',
     paddingHorizontal: 2,
   },
-  saveBtn: {
-    width: 100,
-    height: 30,
-    borderColor: '#000',
-    backgroundColor: '#fff',
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
-    top: 10,
-    right: 10,
-  },
+  // saveBtn: { 삭제
+  //   width: 100,
+  //   height: 30,
+  //   borderColor: '#000',
+  //   backgroundColor: '#fff',
+  //   position: 'absolute',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   top: 10,
+  //   right: 10,
+  // },
 });
 
 import PublicModal from '../../components/PublicModal';
 import DetailPopAttachment from './DetailPopAttachment';
 import ChoosePop from '../../components/ChoosePop';
 
-const DetailPop = ({id, onModify, detailPopVisible, setDetailPopVisible}) => {
+const DetailPop = ({
+  id,
+  onModify,
+  detailPopVisible,
+  setDetailPopVisible,
+  togleButton,
+  setTogleButton,
+}) => {
   const [selectedButton, setSelectedButton] = useState(selectedValue());
   const [button1Pressed, setButton1Pressed] = useState(selected1Pressed());
   const [button2Pressed, setButton2Pressed] = useState(selected2Pressed());
@@ -136,11 +145,11 @@ const DetailPop = ({id, onModify, detailPopVisible, setDetailPopVisible}) => {
       onModify={onModify}
       isModalVisible={detailPopVisible}
       setIsModalVisible={setDetailPopVisible}>
-      <TouchableOpacity
+      {/* <TouchableOpacity 삭제
         onPress={() => setChoosePopVisible(true)}
         style={styles.saveBtn}>
         <Text>Save</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <Pressable
         onPress={() => setDetailPopVisible(true)} // Pressable: Modal 영역 안 클릭 시 Modal 유지 구현을 위해 Pressable로 감싸서 적용
         style={styles.modalView}>
@@ -160,7 +169,7 @@ const DetailPop = ({id, onModify, detailPopVisible, setDetailPopVisible}) => {
               {backgroundColor: button1Pressed ? '#D8D8D8' : '#fff'},
             ]}
             onPress={() => [handleButtonPress('Photo'), handleButton1Press()]}>
-            <Text>Photo</Text>
+            <Text>이미지</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
@@ -184,11 +193,11 @@ const DetailPop = ({id, onModify, detailPopVisible, setDetailPopVisible}) => {
             <DetailPopAttachment></DetailPopAttachment>
             <TextInput
               style={styles.input}
-              placeholder="TITLE을 입력해주세요"
+              placeholder="제목"
               placeholderTextColor="#D8D8D8"></TextInput>
             <TextInput
               style={[styles.input, styles.description]}
-              placeholder="DESCRIPTION을 입력해주세요"
+              placeholder="내용"
               placeholderTextColor="#D8D8D8"></TextInput>
           </View>
         )}
@@ -196,15 +205,15 @@ const DetailPop = ({id, onModify, detailPopVisible, setDetailPopVisible}) => {
           <View>
             <TextInput
               style={styles.input}
-              placeholder="LINK를 입력해주세요"
+              placeholder="링크"
               placeholderTextColor="#D8D8D8"></TextInput>
             <TextInput
               style={styles.input}
-              placeholder="TITLE을 입력해주세요"
+              placeholder="제목"
               placeholderTextColor="#D8D8D8"></TextInput>
             <TextInput
               style={[styles.input, styles.videoDescription]}
-              placeholder="DESCRIPTION을 입력해주세요"
+              placeholder="내용"
               placeholderTextColor="#D8D8D8"></TextInput>
           </View>
         )}
@@ -213,7 +222,7 @@ const DetailPop = ({id, onModify, detailPopVisible, setDetailPopVisible}) => {
             <DetailPopAttachment></DetailPopAttachment>
             <TextInput
               style={styles.input}
-              placeholder="LINK를 입력해주세요"
+              placeholder="링크"
               placeholderTextColor="#D8D8D8"></TextInput>
           </View>
         )}
@@ -223,9 +232,17 @@ const DetailPop = ({id, onModify, detailPopVisible, setDetailPopVisible}) => {
             style={styles.pickBtn}
             onPress={() => {
               setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
+            }}>
+            <Text>취소</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.pickBtn}
+            onPress={() => {
+              setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
+              setTogleButton(false);
               onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
             }}>
-            <Text>Register</Text>
+            <Text>확인</Text>
           </TouchableOpacity>
         </View>
       </Pressable>

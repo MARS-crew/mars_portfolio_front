@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   gridView: {
-    marginTop: 30,
+    marginTop: 15,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -70,8 +70,8 @@ const Portfolio = () => {
   // 플랫 리스트 데이터 item 수정 기능(개발 방식 검토중인 기능이므로 구현 미완료)
   const onModify = ({id}) => {
     Alert.alert(
-      '수정 테스트',
-      'Props: onModify() \n\nPortfolio > PortfolioItem\n > PortfolioModal > DetailPop > ChoosePop',
+      '확인 테스트',
+      'Props: onModify() \n\nPortfolio > PortfolioItem\n > PortfolioModal > DetailPop',
     );
   };
 
@@ -79,7 +79,7 @@ const Portfolio = () => {
   const onDelete = ({id}) => {
     Alert.alert(
       '삭제 테스트',
-      'Props: onDelete() \n\nPortfolio > PortfolioItem\n > PortfolioModal > ChoosePop',
+      'Props: onDelete() \n\nPortfolio > PortfolioItem\n > PortfolioModal ',
     );
   };
 
