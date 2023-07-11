@@ -11,6 +11,7 @@ import {
 import { launchImageLibrary } from 'react-native-image-picker';
 import InterviewDeletePop from './InterviewDeletePop';
 import InterviewSavePop from './InterviewSavePop';
+import InterviewDeleteAlert from './InterviewDeleteAlert';
 
 const InterviewModal = ({
   modalOpen,
@@ -19,33 +20,35 @@ const InterviewModal = ({
   setHeart,
   filePath,
   setFilePath,
-  setIsPlaying
+  setIsPlaying,
 }) => {
-  const [changeData, setChangeData] = useState(null);                 // 수정 전 변경 내용 임시 저장
-  const [deletePopVisible, setDeletePopVisible] = useState(false);    // 삭제 확인 창 상태
+  const [changeData, setChangeData] = useState(null); // 수정 전 변경 내용 임시 저장
+  const [deletePopVisible, setDeletePopVisible] = useState(false); // 삭제 확인 창 상태
   const [savePopVisible, setSavePopVisible] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);                  // 수정 여부 확인 ( 수정 내용 없으면 저장 버튼 뜨지 않도록)
-  const [changeHeart, setChangeHeart] = useState(heart);              // 수정 내용 저장 전 하트 변경 사항 저장
+  const [isEditing, setIsEditing] = useState(false); // 수정 여부 확인 ( 수정 내용 없으면 저장 버튼 뜨지 않도록)
+  const [changeHeart, setChangeHeart] = useState(heart); // 수정 내용 저장 전 하트 변경 사항 저장
 
+  const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
 
-  const handleSave = () => {
-    setIsEditing(false);
-    setModalOpen(false);
-    setIsPlaying(true);
-    setFilePath(changeData);
-    setChangeData(); // 저장된 데이터 초기화
-    // setSavePopVisible(false);
-    setHeart(changeHeart);
-    Alert.alert('Modal', '저장');
-  };
+  // const handleSave = () => {
+  //   setIsEditing(false);
+  //   setModalOpen(false);
+  //   setIsPlaying(true);
+  //   setFilePath(changeData);
+  //   setChangeData(); // 저장된 데이터 초기화
+  //   // setSavePopVisible(false);
+  //   setHeart(changeHeart);
+  //   Alert.alert('Modal', '저장');
+  // };
 
   const handleCancel = () => {
     setIsEditing(false);
   };
 
   const showDelete = () => {
-    if (filePath === null) {
-      Alert.alert('삭제할 데이터가 없습니다.');
+    if (filePath === undefined) {
+      // Alert.alert('삭제할 데이터가 없습니다.');
+      setDeleteAlertVisible(true);
     } else {
       setDeletePopVisible(!deletePopVisible);
     }
@@ -61,7 +64,6 @@ const InterviewModal = ({
       // quality: 1,
     };
     launchImageLibrary(options, response => {
-
       if (response === undefined) {
         // 선택한 이미지가 없는 경우
         console.log('User did not select an image');
@@ -83,7 +85,6 @@ const InterviewModal = ({
         setChangeData(asset.uri);
         setIsEditing(true);
       }
-
     });
   };
 
@@ -148,7 +149,10 @@ const InterviewModal = ({
             setHeart={setHeart}
             changeHeart={changeHeart}
           />
-
+          <InterviewDeleteAlert
+            deleteAlertVisible={deleteAlertVisible}
+            setDeleteAlertVisible={setDeleteAlertVisible}
+          />
         </Pressable>
       </TouchableOpacity>
     </Modal>
