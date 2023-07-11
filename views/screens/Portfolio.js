@@ -1,88 +1,110 @@
 import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  SafeAreaView,
-  Text,
-  Image,
-  FlatList,
-  Dimensions,
-} from 'react-native';
-import Camera from '../../assets/images/camera.png';
-import Link from '../../assets/images/Link.png';
-const DATA = [
-  {
-    id: 'Video',
-    title: '(TEST)_영상 데이터 영역',
-    image: '../../assets/images/camera.png',
+import {View, SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
+import FloatingMenu from '../components/FloatingMenu';
+
+import PortfolioItem from './PortfolioItem';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
   },
-  {
-    id: 'Photo',
-    title: '(TEST)_사진 데이터 영역',
-    image: '../../assets/images/camera.png',
+  gridView: {
+    marginTop: 30,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  {
-    id: 'Link',
-    title: '(TEST)_링크 데이터 영역',
-    image: '../../assets/images/camera.png',
-  },
-  {
-    id: 'Project',
-    title: '(TEST)_참여 프로젝트 영역',
-    image: '../../assets/images/camera.png',
-  },
-  {
-    id: 'More',
-    title: '(TEST)_추가 데이터 영역',
-    image: '../../assets/images/Link.png',
-  },
-];
-const Item = ({title, width}) => (
-  <View
-    style={{
-      width,
-      height: Dimensions.get('window').height / 2,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderWidth: 1,
-      borderColor: '#000',
-    }}>
-    <Image source={Camera} style={styles.image} />
-    <Text style={{color: 'black', fontSize: 14}}>{title}</Text>
-  </View>
-);
+});
 
 const Portfolio = () => {
-  const [containerWidth, setContainerWidth] = useState(0);
-
-  const margins = 0;
   const numColumns = 2;
+  const [portfolioData, setPortfolioData] = useState([
+    {
+      id: '1',
+      title: 'Video 데이터 영역',
+      src: require('../../assets/images/camera.png'),
+    },
+    {
+      id: '2',
+      title: 'Photo 데이터 영역',
+      src: require('../../assets/images/camera.png'),
+    },
+    {
+      id: '3',
+      title: 'Link 데이터 영역',
+      src: require('../../assets/images/Link.png'),
+    },
+    {
+      id: '4',
+      title: 'Project 프로젝트 영역',
+      src: require('../../assets/images/project.png'),
+    },
+    {
+      id: '1',
+      title: 'Video 데이터 영역',
+      src: require('../../assets/images/camera.png'),
+    },
+    {
+      id: '2',
+      title: 'Photo 데이터 영역',
+      src: require('../../assets/images/camera.png'),
+    },
+    {
+      id: '5',
+      title: 'Null 데이터 영역',
+      src: require('../../assets/images/marsLogo.png'),
+    },
+
+    {
+      id: '5',
+      title: 'Null 데이터 영역',
+      src: require('../../assets/images/marsLogo.png'),
+    },
+    {
+      id: '6',
+      title: 'More 데이터 영역',
+      src: require('../../assets/images/add.png'),
+    },
+  ]);
+
+  // 플랫 리스트 데이터 item 수정 기능(개발 방식 검토중인 기능이므로 구현 미완료)
+  const onModify = ({id}) => {
+    Alert.alert(
+      '수정 테스트',
+      'Props: onModify() \n\nPortfolio > PortfolioItem\n > PortfolioModal > DetailPop',
+    );
+  };
+
+  // 플랫 리스트 데이터 item 삭제 기능(개발 방식 검토중인 기능이므로 구현 미완료)
+  const onDelete = ({id}) => {
+    Alert.alert(
+      '삭제 테스트',
+      'Props: onDelete() \n\nPortfolio > PortfolioItem\n > PortfolioModal > ChoosePop',
+    );
+  };
+
   return (
-    <View>
-      <SafeAreaView style={{marginTop: 0}}>
-        <View>
+    <View style={styles.container}>
+      <SafeAreaView>
+        <View style={styles.gridView}>
           <FlatList
-            data={DATA}
-            onLayout={e => setContainerWidth(e.nativeEvent.layout.width)}
+            data={portfolioData}
             renderItem={({item}) => (
-              <Item
-                title={item.title}
-                width={(containerWidth - margins) / numColumns}
-              />
+              <PortfolioItem
+                id={item.id}
+                src={item.src}
+                onModify={onModify}
+                onDelete={onDelete}></PortfolioItem>
             )}
             keyExtractor={(item, index) => index}
             numColumns={numColumns}
           />
         </View>
       </SafeAreaView>
+      <FloatingMenu />
     </View>
   );
 };
-const styles = StyleSheet.create({
-  image: {
-    width: 60,
-    height: 60,
-  },
-});
+
 export default Portfolio;
