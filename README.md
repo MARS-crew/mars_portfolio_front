@@ -1,5 +1,5 @@
 # mars_portfolio_front
-대결프로젝트 개화팀 React-native
+대결프로젝트 개화팀 front의 prototype입니다.
 
 16.17.0
 

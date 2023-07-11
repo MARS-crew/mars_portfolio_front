@@ -3,9 +3,9 @@ import {StyleSheet, View, FlatList, SafeAreaView} from 'react-native';
 
 import GroupItem from '../components/GroupItem';
 
-const Item = ({id, src}) => (
+const Item = ({id, src, medal}) => (
   <View>
-    <GroupItem id={id} src={src} />
+    <GroupItem id={id} src={src} medal={medal} />
   </View>
 );
 
