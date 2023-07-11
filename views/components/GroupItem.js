@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, View, StyleSheet, Image, ImageBackground} from 'react-native';
 
 import GroupLogo from './GroupLogo';
+import LoginItem from './LoginItem';
 
 const GroupItem = ({id, src}) => {
   return (
@@ -10,6 +11,7 @@ const GroupItem = ({id, src}) => {
         <ImageBackground source={src} style={styles.image}>
           <GroupLogo />
           <Text style={styles.text}>{id}기</Text>
+          <LoginItem />
         </ImageBackground>
       </View>
     </View>
