@@ -11,7 +11,7 @@ import {
 import { launchImageLibrary } from 'react-native-image-picker';
 import InterviewDeletePop from './InterviewDeletePop';
 import InterviewSavePop from './InterviewSavePop';
-import InterviewDeleteAlert from './InterviewDeleteAlert';
+import InterviewAlert from './InterviewAlert';
 
 const InterviewModal = ({
   modalOpen,
@@ -149,9 +149,10 @@ const InterviewModal = ({
             setHeart={setHeart}
             changeHeart={changeHeart}
           />
-          <InterviewDeleteAlert
-            deleteAlertVisible={deleteAlertVisible}
-            setDeleteAlertVisible={setDeleteAlertVisible}
+          <InterviewAlert
+            title={'삭제할 데이터가 없습니다.'}
+            alertVisible={deleteAlertVisible}
+            setAlertVisible={setDeleteAlertVisible}
           />
         </Pressable>
       </TouchableOpacity>

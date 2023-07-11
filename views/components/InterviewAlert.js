@@ -8,30 +8,31 @@ import {
   View,
 } from 'react-native';
 
-const InterviewDeleteAlert = ({
-  deleteAlertVisible,
-  setDeleteAlertVisible
+const InterviewAlert = ({
+  title,
+  alertVisible,
+  setAlertVisible
 }) => {
 
   return (
     <Modal
       animationType={'fade'}
       transparent={true}
-      visible={deleteAlertVisible}
+      visible={alertVisible}
       onRequestClose={() => {
-        setDeleteAlertVisible(!deleteAlertVisible);
+        setAlertVisible(!alertVisible);
       }}>
       <TouchableOpacity
-        onPress={() => setDeleteAlertVisible(false)} // modalBackdropPress: 모달 영역 밖 클릭 시 ChoosePopup(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
+        onPress={() => setAlertVisible(false)} // modalBackdropPress: 모달 영역 밖 클릭 시 ChoosePopup(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
         style={styles.modalBackdropPress}>
         <Pressable
-          onPress={() => setDeleteAlertVisible(true)} // Pressable: 모달 영역 안 클릭 시 ChoosePopup(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
+          onPress={() => setAlertVisible(true)} // Pressable: 모달 영역 안 클릭 시 ChoosePopup(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
           style={styles.modalView}>
-          <Text style={styles.modalTitle}>삭제할 데이터가 없습니다.</Text>
+          <Text style={styles.modalTitle}>{title}</Text>
           <View style={styles.btnContainer}>
             <TouchableOpacity
               style={styles.btnStyle}
-              onPress={() => setDeleteAlertVisible(!deleteAlertVisible)}>
+              onPress={() => setAlertVisible(!alertVisible)}>
               <Text style={styles.textStyle}>확인</Text>
             </TouchableOpacity>
           </View>
@@ -100,4 +101,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default InterviewDeleteAlert;
+export default InterviewAlert;

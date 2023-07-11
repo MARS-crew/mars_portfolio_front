@@ -16,6 +16,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import EmptyImg from '../../assets/images/Empty.png';
 import InterviewModal from '../components/InterviewModal';
 import Video from 'react-native-video';
+import InterviewAlert from '../components/InterviewAlert';
 
 const Interview = () => {
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
@@ -26,16 +27,30 @@ const Interview = () => {
   //video 재생
   const [isPlaying, setIsPlaying] = useState(true);
 
-  // 이중탭
-  var lastTap = null;
-  const handleDoubleTap = () => {
-    const now = Date.now();
-    const DOUBLE_PRESS_DELAY = 500;
-    //두번째 tap이 지난 tap을 한지 0.03초 이내에 이뤄졌을 때 -> Double tap
-    if (lastTap && now - lastTap < DOUBLE_PRESS_DELAY) {
-      toggleHeart();
+  // 데이터 없을 때 alert
+  const [showAlert, setShowAlert] = useState(false);
+
+  let firstPress = true;
+  let lastTime = new Date().getTime();
+  let timer = false;
+  var delay = 200;
+  const doubleTap = () => {
+    const now = new Date().getTime();
+    if (firstPress) {
+      firstPress = false;
+      timer = setTimeout(() => {
+        setIsPlaying(!isPlaying);
+        firstPress = true;
+        timer = false;
+      }, delay);
+      lastTime = now;
     } else {
-      lastTap = now;
+      let delta = new Date().getTime() - lastTime < delay;
+      if (delta) {
+        clearTimeout(timer);
+        firstPress = true;
+        toggleHeart();
+      }
     }
   };
   //찜 기능
@@ -45,7 +60,8 @@ const Interview = () => {
       setHeart(previousState => !previousState);
       fillHeart();
     } else {
-      Alert.alert('데이터가 없습니다.');
+      // Alert.alert('데이터가 없습니다.');
+      setShowAlert(true);
     }
   };
   //하트채우기
@@ -85,8 +101,7 @@ const Interview = () => {
       <View style={styles.section}>
         <TouchableWithoutFeedback
           onPress={() => {
-            handleDoubleTap();
-            // handleVideoPress();
+            doubleTap();
           }}
           onLongPress={() => setModalOpen(true)}>
           {/* 저장된 video가 있으면 video 출력. 없으면  마스외전 로고 출력*/}
@@ -128,6 +143,11 @@ const Interview = () => {
         heart={heart}
         setIsPlaying={setIsPlaying}
         setHeart={setHeart} // deletePopModal에 전달 - 인터뷰 삭제시 하트 취소
+      />
+      <InterviewAlert
+        title={'데이터가 없습니다.'}
+        alertVisible={showAlert}
+        setAlertVisible={setShowAlert}
       />
     </SafeAreaView>
   );
