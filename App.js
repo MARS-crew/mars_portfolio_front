@@ -34,7 +34,7 @@ import {FlatList} from 'react-native-gesture-handler';
 // import Splash from './views/screens/splash';
 // import Main from './views/screens/Main';
 // import Test from './views/screens/Test';
-// import GroupVideo from './views/screens/GroupVideo';
+ import GroupVideo from './views/screens/GroupVideo';
 // >>>>>>> 8670b7acbf172c2fa94b44c98a8d970b6647970a
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -169,7 +169,7 @@ const HomeScreen = () => {
         <WhichGroup />
       </Screen>
       <Screen text="Screen 3" index={2}>
-        <Member />
+        <GroupVideo />
       </Screen>
       <Screen text="Screen 4" index={3}>
         <Text>인터뷰</Text>
