@@ -10,7 +10,7 @@ import {
 
 import Splash from './views/screens/splash';
 import Login from './views/screens/Login';
-import Main from './views/screens/Main';
+//import Main from './views/screens/Main';
 import Test from './views/screens/Test';
 import Group from './views/screens/Group';
 import Member from './views/screens/Member';
@@ -24,6 +24,7 @@ import 'react-native-gesture-handler';
 import WhichGroup from './views/screens/WhichGroup';
 import Help from './views/screens/Help';
 import Share from './views/screens/Share';
+import VideoEx from './views/screens/VideoEx';
 import {FlatList} from 'react-native-gesture-handler';
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -154,6 +155,9 @@ const HomeScreen = () => {
       </Screen>
       <Screen text="Screen 7" index={6}>
         <Review />
+      </Screen>
+      <Screen text="Screen 8" index={7}>
+        <VideoEx />
       </Screen>
     </Animated.ScrollView>
   );

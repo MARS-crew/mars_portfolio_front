@@ -20,7 +20,6 @@ target 'mars_portfolio_react' do
   )
 
 
-  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
   target 'mars_portfolio_reactTests' do
     inherit! :complete
