@@ -53,6 +53,7 @@ const choosePop = ({
   title,
   onModify,
   onDelete,
+  setTogleButton,
   setIsModalVisible,
   checkChoosePopOkButton,
   setCheckChoosePopOkButton,
@@ -98,6 +99,7 @@ const choosePop = ({
             onPress={() => {
               setChoosePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
               setIsModalVisible(false);
+              if (setTogleButton !== undefined) setTogleButton(false);
               onDeleteORonModify();
             }}>
             <Title color={'white'}>확인</Title>

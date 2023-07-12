@@ -113,6 +113,7 @@ const PortfolioModal = ({
             id={id}
             title="수정된 내용을 저장하시겠습니까?"
             onModify={onModify}
+            setTogleButton={setTogleButton}
             checkChoosePopOkButton={checkChoosePopOkButton}
             setCheckChoosePopOkButton={setCheckChoosePopOkButton}
             setIsModalVisible={setIsModalVisible}
