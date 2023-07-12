@@ -108,11 +108,14 @@ const InterviewModal = ({
           onPress={() => setModalOpen(true)} // Pressable: 모달 영역 안 클릭 시 Bottom Nav(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
           style={styles.modalView}>
           {isEditing ? (
-            <TouchableOpacity onPress={() => setSavePopVisible(true)}>
+            <TouchableOpacity
+              style={styles.navBarView}
+              onPress={() => setSavePopVisible(true)}>
               <Text>저장</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
+              style={styles.navBarView}
               onPress={() => {
                 // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
                 chooseFile('video');
@@ -121,11 +124,11 @@ const InterviewModal = ({
             </TouchableOpacity>
           )}
           {isEditing ? (
-            <TouchableOpacity onPress={handleCancel}>
+            <TouchableOpacity onPress={handleCancel} style={styles.navBarView}>
               <Text>취소</Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity onPress={showDelete}>
+            <TouchableOpacity onPress={showDelete} style={styles.navBarView}>
               <Text>삭제</Text>
             </TouchableOpacity>
           )}
@@ -164,28 +167,22 @@ const styles = StyleSheet.create({
   modalBackdropPress: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
   modalView: {
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#000',
+    borderWidth: 2,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderColor: '#EEE',
     backgroundColor: '#fff',
     flexDirection: 'row',
     justifyContent: 'space-around',
     display: 'flex',
-    height: Dimensions.get('window').height / 15,
+    height: Dimensions.get('window').height / 12,
   },
-  saveBtn: {
-    width: 100,
-    height: 30,
-    borderColor: '#000',
-    backgroundColor: '#fff',
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
-    top: 10,
-    right: 10,
+
+  navBarView: {
+    flexDirection: 'row',
   },
 });
 export default InterviewModal;
