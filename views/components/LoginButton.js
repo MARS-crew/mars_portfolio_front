@@ -1,38 +1,48 @@
 import React from 'react';
-import {TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
+import {TouchableOpacity, Text, StyleSheet, Image, View} from 'react-native';
+import {color} from 'react-native-reanimated';
 
 const LoginButton = props => {
   return (
-    <TouchableOpacity style={styles.button}>
+    <TouchableOpacity style={[styles.button, {backgroundColor: props.color}]}>
       <Image source={props.src} style={styles.image} />
-      <Text style={styles.title}>{props.title}</Text>
+      <View style={styles.textAlign}>
+        <Text style={[styles.title, {color: props.textColor}]}>
+          {props.title}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   button: {
-    width: 300,
-    height: 20,
-    flex: 1,
+    width: 335,
+    height: 50,
+    //flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFFF',
-    borderWidth: 2,
+    //justifyContent: 'center',
+    backgroundColor: color,
+    borderWidth: 0,
     borderStyle: 'solid',
-    marginBottom: 10,
+    marginBottom: 15,
     flexDirection: 'row',
+    borderRadius: 50,
+    elevation: 5,
   },
   image: {
-    width: 40,
-    height: 40,
+    width: 20,
+    height: 20,
     resizeMode: 'contain',
-    marginRight: 50,
+    //marginRight: 0,
+    left: 15,
   },
   title: {
     marginRight: 50,
     marginLeft: 20,
     fontSize: 15,
+    justifyContent: 'center',
+    left: 60,
   },
 });
 

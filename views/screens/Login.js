@@ -20,26 +20,35 @@ function Main({navigation}) {
     <View>
       <View style={styles.contain}>
         <Image
-          source={require('../../assets/images/logo.png')}
-          style={styles.image}
+          source={require('../../assets/images/logoLogin.png')}
+          style={styles.logo}
         />
-        <LoginButton
-          title={'페이스북'}
-          src={require('../../assets/images/facebook.png')}
-        />
-        <LoginButton
-          title={'구글'}
-          src={require('../../assets/images/google.png')}
-        />
-        <LoginButton
-          title={'네이버'}
-          src={require('../../assets/images/naver.png')}
-        />
-        <LoginButton
-          title={'카카오'}
-          src={require('../../assets/images/kakao.png')}
-        />
-        <View style={styles.marginView} />
+        <View style={styles.loginButton}>
+          <LoginButton
+            title={'구글로 로그인'}
+            src={require('../../assets/images/google.png')}
+            color={'#FFFF'}
+          />
+          <LoginButton
+            title={'카카오톡으로 로그인'}
+            src={require('../../assets/images/kakao.png')}
+            color={'#FFCD00'}
+          />
+          <LoginButton
+            title={'네이버로 로그인'}
+            src={require('../../assets/images/naver.png')}
+            color={'#00C35A'}
+            textColor={'#FFFF'}
+          />
+          <LoginButton
+            title={'페이스북으로 로그인'}
+            src={require('../../assets/images/facebook.png')}
+            color={'#1877F2'}
+            textColor={'#FFFF'}
+          />
+
+          <View style={styles.marginView} />
+        </View>
       </View>
     </View>
   );
@@ -52,10 +61,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 0,
   },
-  image: {
-    width: 400,
-    height: 400,
+  logo: {
+    width: 90,
+    height: 90,
+    top: 196,
     resizeMode: 'contain',
+  },
+  loginButton: {
+    top: 290,
   },
   marginView: {
     margin: 40,

@@ -10,21 +10,21 @@ import {
 
 import Splash from './views/screens/splash';
 import Login from './views/screens/Login';
-import Main from './views/screens/Main';
-import Test from './views/screens/Test';
-import Group from './views/screens/Group';
+// import Main from './views/screens/Main';
+// import Test from './views/screens/Test';
+// import Group from './views/screens/Group';
 import Member from './views/screens/Member';
-import Youtube from './views/screens/Youtube';
+//import Youtube from './views/screens/Youtube';
 import Resume from './views/screens/Resume';
 import Portfolio from './views/screens/Portfolio/Portfolio';
 import Review from './views/screens/Review';
 import Album from './views/screens/Album';
-import Interview from './views/screens/Interview';
+//import Interview from './views/screens/Interview';
 import 'react-native-gesture-handler';
 import WhichGroup from './views/screens/WhichGroup';
 import Help from './views/screens/Help';
 import Share from './views/screens/Share';
-import {FlatList} from 'react-native-gesture-handler';
+//import {FlatList} from 'react-native-gesture-handler';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
