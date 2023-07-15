@@ -25,6 +25,7 @@ import WhichGroup from './views/screens/WhichGroup';
 import Help from './views/screens/Help';
 import Share from './views/screens/Share';
 import VideoEx from './views/screens/VideoEx';
+import GroupVideo from './views/screens/GroupVideo';
 import {FlatList} from 'react-native-gesture-handler';
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -142,10 +143,11 @@ const HomeScreen = () => {
         <WhichGroup />
       </Screen>
       <Screen text="Screen 3" index={2}>
-        <Member />
+        <GroupVideo />
       </Screen>
       <Screen text="Screen 4" index={3}>
-        <Text>인터뷰</Text>
+        {/* <Text>인터뷰</Text> */}
+        <Interview />
       </Screen>
       <Screen text="Screen 5" index={4}>
         <Resume />

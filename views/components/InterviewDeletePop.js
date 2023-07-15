@@ -40,15 +40,17 @@ const InterviewDeletePop = ({
           style={styles.modalView}>
           <Text style={styles.modalTitle}>삭제하시겠습니까?</Text>
           <View style={styles.chooseContainer}>
-            <TouchableOpacity style={styles.chooseBtn} onPress={deleteUrl}>
-              <Text>YES</Text>
-            </TouchableOpacity>
             <TouchableOpacity
-              style={styles.chooseBtn}
+              style={btnStyle(false).btn}
               onPress={() => {
                 setDeletePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
               }}>
-              <Text>NO</Text>
+              <Text style={textStyle(false).btnText}>취소</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={btnStyle(true).btn}
+              onPress={deleteUrl}>
+              <Text style={textStyle(true).btnText}>확인</Text>
             </TouchableOpacity>
           </View>
         </Pressable>
@@ -63,30 +65,61 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalView: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#F5F5F5',
     backgroundColor: '#fff',
-    marginTop: Dimensions.get('window').height / 2.5,
-    marginHorizontal: 50,
+    // marginTop: Dimensions.get('window').height / 3,
+    marginTop: 256,
+    margin: 37,
+    height: 145,
+    // marginHorizontal: 50,
   },
   modalTitle: {
     alignItems: 'center',
     textAlign: 'center',
-    borderWidth: 0.5,
-    borderColor: '#000',
-    padding: 12,
+    margin: 30,
+    fontSize: 16,
+    color: 'black',
+    // borderWidth: 0.5,
+    // borderColor: '#000',
+    // padding: 12,
   },
   chooseContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-end',
     display: 'flex',
-  },
-  chooseBtn: {
-    flex: 1,
-    alignItems: 'center',
-    borderWidth: 0.5,
-    borderColor: '#000',
-    padding: 8,
+    paddingTop: 6,
+    paddingRight: 20,
   },
 });
+
+// 버튼 스타일
+const btnStyle = isConfirm =>
+  StyleSheet.create({
+    btn: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 1,
+      borderColor: '#F5F5F5',
+      borderRadius: 20,
+      padding: 8,
+      width: 60,
+      height: 40,
+      marginLeft: 10,
+      backgroundColor: isConfirm ? '#072AC8' : '#FFFFFF',
+    },
+  });
+
+const textStyle = isConfirm => StyleSheet.create({
+  btnText: {
+    color: isConfirm ? '#FFFFFF' : 'black',
+    height: 16,
+    fontSize: 14,
+    fontWeight: 'bold',
+    alignContent: 'center',
+  }
+})
 
 export default InterviewDeletePop;

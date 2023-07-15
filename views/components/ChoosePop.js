@@ -6,32 +6,44 @@ import {
   View,
 } from 'react-native';
 
+import Title from './Title';
+
 const styles = StyleSheet.create({
   modalView: {
-    backgroundColor: '#fff',
+    width: 301,
+    height: 145,
+    borderRadius: 12,
+    backgroundColor: '#F5F5F5',
     marginHorizontal: 50,
   },
   modalTitle: {
     alignItems: 'center',
     textAlign: 'center',
-    borderWidth: 0.5,
-    borderColor: '#000',
-    padding: 12,
-    paddingHorizontal: 80,
+    fontSize: 16,
+    fontWeight: '400',
+    color: 'black',
+    marginTop: 33,
   },
   chooseContainer: {
+    marginTop: 33,
+    marginRight: 20,
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-end',
     display: 'flex',
   },
   chooseBtn: {
-    flex: 1,
+    width: 59,
+    height: 40,
     alignItems: 'center',
-    borderWidth: 0.5,
-    borderColor: '#000',
+    justifyContent: 'center',
+    backgroundColor: '#F5F5F5',
+    borderColor: 'lightgray',
+    borderWidth: 1,
+    borderRadius: 20,
     padding: 8,
   },
+  chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 10},
 });
 
 import PublicModal from './PublicModal';
@@ -41,20 +53,23 @@ const choosePop = ({
   title,
   onModify,
   onDelete,
+  setTogleButton,
+  setIsModalVisible,
+  checkChoosePopOkButton,
+  setCheckChoosePopOkButton,
+  isModalVisible,
   choosePopVisible,
   setChoosePopVisible,
   setDetailPopVisible,
 }) => {
   const onDeleteORonModify = () => {
-    if (title === '삭제하시겠습니까?') {
+    if (title === '수정된 내용을 삭제하시겠습니까?') {
       onDelete(id); //개발 방식 검토중인 기능이므로 구현 미완료
       console.log(onDelete);
-    } else if (title === '저장하시겠습니까?') {
-      setDetailPopVisible(false);
+    } else if (title === '수정된 내용을 저장하시겠습니까?') {
       onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
       console.log(onModify);
     }
-
     console.log('return');
   };
 
@@ -74,17 +89,20 @@ const choosePop = ({
             style={styles.chooseBtn}
             onPress={() => {
               setChoosePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
-
-              onDeleteORonModify();
+              if (setCheckChoosePopOkButton !== undefined)
+                setCheckChoosePopOkButton(!checkChoosePopOkButton);
             }}>
-            <Text>YES</Text>
+            <Title>취소</Title>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.chooseBtn}
+            style={[styles.chooseBtn, styles.chooseOkBtn]}
             onPress={() => {
               setChoosePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
+              setIsModalVisible(false);
+              if (setTogleButton !== undefined) setTogleButton(false);
+              onDeleteORonModify();
             }}>
-            <Text>NO</Text>
+            <Title color={'white'}>확인</Title>
           </TouchableOpacity>
         </View>
       </Pressable>

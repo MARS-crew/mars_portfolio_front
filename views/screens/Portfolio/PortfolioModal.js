@@ -53,8 +53,10 @@ const PortfolioModal = ({
   setIsModalVisible,
 }) => {
   const [detailPopVisible, setDetailPopVisible] = useState(false);
-  const [choosePopVisible, setChoosePopVisible] = useState(false);
+  const [removeChoosePopVisible, setRemoveChoosePopVisible] = useState(false);
+  const [saveChoosePopVisible, setSaveChoosePopVisible] = useState(false);
   const [togleButton, setTogleButton] = useState(false);
+  const [checkChoosePopOkButton, setCheckChoosePopOkButton] = useState(false); //디테일 팝업에서 확인을 눌렀는지 감지하여 네비바의 저장을 눌렀을 시 ChoosePop이 뜨도록 함
 
   return (
     <Modal
@@ -81,7 +83,7 @@ const PortfolioModal = ({
               onPress={() => {
                 // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
                 setDetailPopVisible(!detailPopVisible);
-                if (togleButton === false) setTogleButton(!togleButton);
+                setTogleButton(!togleButton);
               }}>
               <View style={styles.navBarView}>
                 <Image source={editingIcon} style={styles.image} />
@@ -94,7 +96,12 @@ const PortfolioModal = ({
               style={styles.navBarView}
               onPress={() => {
                 // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
-                setDetailPopVisible(!detailPopVisible);
+
+                if (checkChoosePopOkButton === false)
+                  setDetailPopVisible(!detailPopVisible);
+                else {
+                  setSaveChoosePopVisible(!saveChoosePopVisible);
+                }
               }}>
               <View style={styles.navBarView}>
                 <Image source={editIcon} style={styles.image} />
@@ -102,33 +109,45 @@ const PortfolioModal = ({
               </View>
             </TouchableOpacity>
           )}
+          <ChoosePop
+            id={id}
+            title="수정된 내용을 저장하시겠습니까?"
+            onModify={onModify}
+            setTogleButton={setTogleButton}
+            checkChoosePopOkButton={checkChoosePopOkButton}
+            setCheckChoosePopOkButton={setCheckChoosePopOkButton}
+            setIsModalVisible={setIsModalVisible}
+            choosePopVisible={saveChoosePopVisible}
+            setChoosePopVisible={setSaveChoosePopVisible}></ChoosePop>
+
           <DetailPop
             id={id}
             onModify={onModify}
+            checkChoosePopOkButton={checkChoosePopOkButton}
+            setCheckChoosePopOkButton={setCheckChoosePopOkButton}
             detailPopVisible={detailPopVisible}
-            togleButton={togleButton}
             setTogleButton={setTogleButton}
             setDetailPopVisible={setDetailPopVisible}></DetailPop>
           <TouchableOpacity
             style={styles.navBarView}
             onPress={() => {
               // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
-              setChoosePopVisible(!choosePopVisible);
-              setIsModalVisible(!isModalVisible);
+              setRemoveChoosePopVisible(!removeChoosePopVisible);
               setTogleButton(false);
-              onDelete(id);
             }}>
             <Image source={deletedIcon} style={styles.image} />
             <Title>삭제</Title>
           </TouchableOpacity>
-          {/*
-            <ChoosePop
-              id={id}
-              title="삭제하시겠습니까?"
-              onDelete={onDelete}
-              choosePopVisible={choosePopVisible}
-              setChoosePopVisible={setChoosePopVisible}></ChoosePop>
-          */}
+
+          <ChoosePop
+            id={id}
+            title="수정된 내용을 삭제하시겠습니까?"
+            onDelete={onDelete}
+            setIsModalVisible={setIsModalVisible}
+            isModalVisible={isModalVisible}
+            choosePopVisible={removeChoosePopVisible}
+            setChoosePopVisible={setRemoveChoosePopVisible}></ChoosePop>
+
           <TouchableOpacity
             style={styles.navBarView}
             onPress={() => {
