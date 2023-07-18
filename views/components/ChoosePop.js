@@ -7,14 +7,18 @@ import {
 } from 'react-native';
 
 import Title from './Title';
+import Button from './Button';
 
 const styles = StyleSheet.create({
   modalView: {
     width: 301,
     height: 145,
-    borderRadius: 12,
-    backgroundColor: '#F5F5F5',
-    marginHorizontal: 50,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#EEEEEE',
+    padding: 20,
+    backgroundColor: '#fff',
+    marginHorizontal: 25,
   },
   modalTitle: {
     alignItems: 'center',
@@ -22,26 +26,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     color: 'black',
-    marginTop: 33,
+    marginTop: 13,
   },
   chooseContainer: {
     marginTop: 33,
-    marginRight: 20,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    display: 'flex',
   },
   chooseBtn: {
     width: 59,
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F5F5F5',
-    borderColor: 'lightgray',
+    backgroundColor: 'white',
+    borderColor: '#F5F5F5',
     borderWidth: 1,
     borderRadius: 20,
-    padding: 8,
   },
   chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 10},
 });
@@ -104,6 +105,7 @@ const choosePop = ({
             }}>
             <Title color={'white'}>확인</Title>
           </TouchableOpacity>
+          {/*<Button background={'blue'}>확인</Button>//아직 스테이트 관리 방법 구현 미적용*/}
         </View>
       </Pressable>
     </PublicModal>

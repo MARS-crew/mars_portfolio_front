@@ -1,5 +1,12 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image, ImageBackground} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  Image,
+  ImageBackground,
+} from 'react-native';
 
 import GroupLogo from './GroupLogo';
 import LoginItem from './LoginItem';
@@ -20,8 +27,8 @@ const GroupItem = ({id, src}) => {
 
 const styles = StyleSheet.create({
   image: {
-    width: 400,
-    height: 800,
+    width: Dimensions.get('window').width / 1,
+    height: Dimensions.get('window').height / 1,
     resizeMode: 'contain',
   },
   text: {

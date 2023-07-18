@@ -12,79 +12,51 @@ import {
 
 const styles = StyleSheet.create({
   modalView: {
+    width: Dimensions.get('window').width / 1,
+    position: 'absolute',
+    bottom: 0,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#EEEEEE',
     padding: 20,
-    paddingBottom: 40,
     backgroundColor: '#fff',
-    marginHorizontal: 50,
   },
-  chooseContainer: {
+  titleView: {
     alignItems: 'center',
     flexDirection: 'row',
-    display: 'flex',
-    marginBottom: 8,
-  },
-  chooseBtn: {
-    flex: 1,
-    width: 100,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 0.8,
-    borderColor: '#000',
-  },
-  input: {
-    padding: 5,
-    borderWidth: 0.8,
-    borderColor: '#000',
-    height: 35,
-  },
-  description: {
-    height: Dimensions.get('window').height / 5,
-  },
-  videoDescription: {
-    height: Dimensions.get('window').height / 7.5,
-  },
-  pickBtn: {
-    width: 100,
-    alignItems: 'center',
-    borderWidth: 0.8,
-    borderColor: '#000',
-    padding: 8,
-  },
-  inputRightMargin: {
-    marginRight: 5,
-    marginBottom: 0,
-  },
-  flexEnd: {
-    alignItems: 'flex-end',
-    marginBottom: 8,
-  },
-  flexCenter: {
-    alignItems: 'center',
-  },
-
-  fileContainer: {
     justifyContent: 'space-between',
-    paddingHorizontal: 2,
-  },
-  image: {
-    width: 60,
-    height: 60,
-    resizeMode: 'contain',
   },
   imageView: {
-    height: Dimensions.get('window').height / 3,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 15,
   },
-  linkView: {
-    flexDirection: 'row',
+
+  image: {
+    resizeMode: 'contain',
   },
+
+  pickBtn: {
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#EEEEEE',
+    borderWidth: 1,
+    borderRadius: 20,
+    marginTop: 20,
+  },
+  chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0},
 });
 
 import PublicModal from '../../components/PublicModal';
 import pause from '../../../assets/images/pause.png';
 import linkBtn from '../../../assets/images/linkBtn.png';
+import closeblack from '../../../assets/images/closeblack.png';
+import testImg from '../../../assets/images/testImg.png';
+
+import Title from '../../components/Title';
 
 const ContentsViewPop = ({
   id,
@@ -111,39 +83,63 @@ const ContentsViewPop = ({
       <Pressable
         onPress={() => setContentsViewPopVisible(true)} // Pressable: Modal 영역 안 클릭 시 Modal 유지 구현을 위해 Pressable로 감싸서 적용
         style={styles.modalView}>
-        <View style={styles.flexEnd}>
+        <View style={styles.titleView}>
+          <Title fontSize={18} style={styles.input}>
+            제목
+          </Title>
           <TouchableOpacity
             onPress={() => {
               setContentsViewPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup X 닫기)
             }}>
-            <Text>X</Text>
+            <Image source={closeblack}></Image>
           </TouchableOpacity>
         </View>
 
         {selectedButton === 'Photo' && (
-          <View>
+          <View style={styles.contentView}>
             <View style={styles.imageView}>
-              <Image source={src} style={styles.image} />
+              <Image source={testImg} style={styles.image} />
             </View>
-            <Text style={styles.input}>TITLE</Text>
-            <Text style={styles.input}>DESCRIPTION</Text>
+
+            <Title style={styles.input}>
+              이미지 테스트 이미지 테스트 이미지 테스트 이미지 테스트 이미지
+              테스트 이미지 테스트 이미지 테스트 이미지 테스트 이미지 테스트
+              이미지 테스트 이미지 테스트 이미지 테스트 이미지 테스트 이미지
+              테스트 이미지 테스트 이미지 테스트 이미지 테스트 이미지 테스트
+              이미지 테스트 이미지 테스트 이미지 테스트 이미지 테스트 이미지
+              테스트 이미지 테스트
+            </Title>
           </View>
         )}
         {selectedButton === 'Video' && (
-          <View>
+          <View style={styles.contentView}>
             <View style={styles.imageView}>
-              <Image source={pause} style={styles.image} />
+              <Image source={testImg} style={styles.image} />
             </View>
-            <Text style={styles.input}>TITLE</Text>
-            <Text style={styles.input}>DESCRIPTION</Text>
+            <Title style={styles.input}>
+              영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상
+              테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트
+              영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상
+              테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트
+              영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상
+              테스트 영상 테스트
+            </Title>
           </View>
         )}
         {selectedButton === 'Link' && (
-          <View>
+          <View style={styles.contentView}>
             <View style={styles.imageView}>
-              <Image source={src} style={styles.image} />
+              <Image source={testImg} style={styles.image} />
             </View>
-            <TouchableOpacity
+            <Title style={styles.input}>
+              링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크
+              테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트
+              링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크
+              테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트
+              링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크
+              테스트 링크 테스트 링크 테스트
+            </Title>
+            {/*<TouchableOpacity
               style={[styles.input, styles.linkView]}
               onPress={() =>
                 Linking.openURL(
@@ -151,10 +147,17 @@ const ContentsViewPop = ({
                 )
               }>
               <Image source={linkBtn} />
-              <Text>LINK</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>*/}
           </View>
         )}
+
+        <TouchableOpacity
+          style={[styles.pickBtn, styles.chooseOkBtn]}
+          onPress={() => {
+            setContentsViewPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup X 닫기)
+          }}>
+          <Title color={'white'}>확인</Title>
+        </TouchableOpacity>
       </Pressable>
     </PublicModal>
   );

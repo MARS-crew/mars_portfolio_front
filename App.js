@@ -10,8 +10,8 @@ import {
 
 import Splash from './views/screens/splash';
 import Login from './views/screens/Login';
-//import Main from './views/screens/Main';
-import Test from './views/screens/Test';
+// import Main from './views/screens/Main';
+// import Test from './views/screens/Test';
 import Group from './views/screens/Group';
 import Member from './views/screens/Member';
 import Youtube from './views/screens/Youtube';
@@ -172,7 +172,6 @@ const styles = StyleSheet.create({
   },
   scrollPage: {
     width: SCREEN_WIDTH,
-    padding: 5,
   },
   screen: {
     width: '100%',

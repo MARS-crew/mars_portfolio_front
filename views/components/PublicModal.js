@@ -8,11 +8,13 @@ import {
 const styles = StyleSheet.create({
   modalBackdropPress: {
     flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   modalContainer: {
     flex: 1,
+    borderRadius: 20,
     justifyContent: 'center',
   },
 });
@@ -27,6 +29,7 @@ const PublicModal = ({
 }) => {
   return (
     <Modal
+      style={styles.modalContainer}
       animationType={'fade'}
       transparent={true}
       visible={isModalVisible}

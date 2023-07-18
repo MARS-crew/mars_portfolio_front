@@ -6,38 +6,32 @@ import {
   View,
   TextInput,
   Dimensions,
+  Image,
 } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
+import Attachment from '../../../assets/images/Attachment.png';
+import emptyImg from '../../../assets/images/emptyImg.png';
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   chooseContainer: {
     alignItems: 'center',
     flexDirection: 'row',
     display: 'flex',
-    marginBottom: 8,
+    marginBottom: 15,
   },
-  Input: {
-    flex: 2.5,
-    alignItems: 'center',
-    textAlign: 'center',
-    borderWidth: 0.5,
-    borderColor: '#000',
-    height: 35,
-    marginBottom: 8,
-  },
+
   pickBtn: {
-    flex: 1,
-    height: Dimensions.get('window').height / 4,
+    borderColor: '#EEEEEE',
+    borderWidth: 1,
+    borderRadius: 10,
+    width: 285,
+    height: 285,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 0.5,
-    borderColor: '#000',
-    padding: 8,
   },
-  inputRightMargin: {
-    marginRight: 5,
-    marginBottom: 0,
-  },
+
   flexEnd: {
     alignItems: 'flex-end',
     marginBottom: 8,
@@ -47,10 +41,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 2,
   },
+  image: {
+    width: SCREEN_WIDTH / 5,
+    height: SCREEN_HEIGHT / 5,
+  },
 });
 
 const DetailPopAttachment = () => {
-  const [pickUri, setPickUri] = useState();
+  const [pickUri, setPickUri] = useState(null);
   const openFilePicker = async () => {
     try {
       const res = await DocumentPicker.pick({
@@ -58,12 +56,12 @@ const DetailPopAttachment = () => {
       });
 
       setPickUri(res.uri);
-      console.log('파일 경로:', pickUri);
+      //console.log('파일 경로:', pickUri);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-        console.log('파일 선택이 취소되었습니다.');
+        //console.log('파일 선택이 취소되었습니다.');
       } else {
-        console.log('오류:', err);
+        //console.log('오류:', err);
       }
     }
   };
@@ -78,7 +76,10 @@ const DetailPopAttachment = () => {
       <View style={styles.chooseContainer}>
         {/* <TextInput style={[styles.Input, styles.inputRightMargin]}></TextInput> */}
         <TouchableOpacity style={styles.pickBtn} onPress={openFilePicker}>
-          <Text>첨부파일이 비어있습니다</Text>
+          {pickUri === null && <Image source={Attachment} />}
+          {pickUri === undefined && (
+            <Image style={styles.image} source={emptyImg} />
+          )}
         </TouchableOpacity>
       </View>
       {/* <View style={[styles.chooseContainer, styles.fileContainer]}>
