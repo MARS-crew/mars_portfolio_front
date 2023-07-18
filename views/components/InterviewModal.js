@@ -1,0 +1,188 @@
+import React, { useState } from 'react';
+import {
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+  Dimensions,
+  Text,
+  Alert,
+} from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+import InterviewDeletePop from './InterviewDeletePop';
+import InterviewSavePop from './InterviewSavePop';
+import InterviewAlert from './InterviewAlert';
+
+const InterviewModal = ({
+  modalOpen,
+  setModalOpen,
+  heart,
+  setHeart,
+  filePath,
+  setFilePath,
+  setIsPlaying,
+}) => {
+  const [changeData, setChangeData] = useState(null); // 수정 전 변경 내용 임시 저장
+  const [deletePopVisible, setDeletePopVisible] = useState(false); // 삭제 확인 창 상태
+  const [savePopVisible, setSavePopVisible] = useState(false);
+  const [isEditing, setIsEditing] = useState(false); // 수정 여부 확인 ( 수정 내용 없으면 저장 버튼 뜨지 않도록)
+  const [changeHeart, setChangeHeart] = useState(heart); // 수정 내용 저장 전 하트 변경 사항 저장
+
+  const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
+
+  // const handleSave = () => {
+  //   setIsEditing(false);
+  //   setModalOpen(false);
+  //   setIsPlaying(true);
+  //   setFilePath(changeData);
+  //   setChangeData(); // 저장된 데이터 초기화
+  //   // setSavePopVisible(false);
+  //   setHeart(changeHeart);
+  //   Alert.alert('Modal', '저장');
+  // };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+  };
+
+  const showDelete = () => {
+    if (filePath === undefined) {
+      // Alert.alert('삭제할 데이터가 없습니다.');
+      setDeleteAlertVisible(true);
+    } else {
+      setDeletePopVisible(!deletePopVisible);
+    }
+  };
+
+  // 갤러리에서 video 파일 선택
+  const chooseFile = type => {
+    let options = {
+      mediaType: 'video',
+      maxWidth: 300,
+      maxHeight: 550,
+      videoQuality: 'low',
+      // quality: 1,
+    };
+    launchImageLibrary(options, response => {
+      if (response === undefined) {
+        // 선택한 이미지가 없는 경우
+        console.log('User did not select an image');
+        return;
+      }
+
+      console.log('Response = ', response);
+
+      if (response.assets && response.assets.length > 0) {
+        const asset = response['assets'][0];
+        console.log('base64 -> ', asset.base64);
+        console.log('uri -> ', asset.uri);
+        console.log('width -> ', asset.width);
+        console.log('height -> ', asset.height);
+        console.log('fileSize -> ', asset.fileSize);
+        console.log('type -> ', asset.type);
+        console.log('fileName -> ', asset.fileName);
+
+        setChangeData(asset.uri);
+        setIsEditing(true);
+      }
+    });
+  };
+
+  return (
+    <Modal
+      animationType={'fade'}
+      transparent={true}
+      visible={modalOpen}
+      onRequestClose={() => {
+        setModalOpen(!modalOpen);
+      }}>
+      <TouchableOpacity
+        onPress={() => {
+          setModalOpen(false);
+          if (isEditing) {
+            setIsEditing(false);
+          }
+        }} // modalBackdropPress: 모달 영역 밖 클릭 시 Bottom Nav(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
+        style={styles.modalBackdropPress}>
+        <Pressable
+          onPress={() => setModalOpen(true)} // Pressable: 모달 영역 안 클릭 시 Bottom Nav(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
+          style={styles.modalView}>
+          {isEditing ? (
+            <TouchableOpacity
+              style={styles.navBarView}
+              onPress={() => setSavePopVisible(true)}>
+              <Text>저장</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.navBarView}
+              onPress={() => {
+                // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
+                chooseFile('video');
+              }}>
+              <Text>수정</Text>
+            </TouchableOpacity>
+          )}
+          {isEditing ? (
+            <TouchableOpacity onPress={handleCancel} style={styles.navBarView}>
+              <Text>취소</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={showDelete} style={styles.navBarView}>
+              <Text>삭제</Text>
+            </TouchableOpacity>
+          )}
+          <InterviewDeletePop
+            deletePopVisible={deletePopVisible}
+            setDeletePopVisible={setDeletePopVisible}
+            setChangeData={setChangeData}
+            setChangeHeart={setChangeHeart}
+            // setModalOpen={setModalOpen}
+            setIsEditing={setIsEditing}
+          />
+          <InterviewSavePop
+            savePopVisible={savePopVisible}
+            setSavePopVisible={setSavePopVisible}
+            setIsEditing={setIsEditing}
+            setModalOpen={setModalOpen}
+            setIsPlaying={setIsPlaying}
+            setFilePath={setFilePath}
+            changeData={changeData}
+            setChangeData={setChangeData}
+            setHeart={setHeart}
+            changeHeart={changeHeart}
+          />
+          <InterviewAlert
+            title={'삭제할 데이터가 없습니다.'}
+            alertVisible={deleteAlertVisible}
+            setAlertVisible={setDeleteAlertVisible}
+          />
+        </Pressable>
+      </TouchableOpacity>
+    </Modal>
+  );
+};
+
+const styles = StyleSheet.create({
+  modalBackdropPress: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  modalView: {
+    alignItems: 'center',
+    borderWidth: 2,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderColor: '#EEE',
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    display: 'flex',
+    height: Dimensions.get('window').height / 12,
+  },
+
+  navBarView: {
+    flexDirection: 'row',
+  },
+});
+export default InterviewModal;
