@@ -1,10 +1,19 @@
 import React from 'react';
-import {StyleSheet, View, Image} from 'react-native';
+import {StyleSheet, View, Image, Input} from 'react-native';
 import LoginButton from '../components/LoginButton';
+
+const Login = ({navigation}) => {
+  return (
+    <View style={styles.container}>
+      <Input inputType={'id'} placeholder={'아이디'} />
+      <Input inputType={'password'} placeholder={'비밀번호'} />
+    </View>
+  );
+};
 
 function Main({navigation}) {
   const handleLoginPress = () => {
-    navigation && navigation.navigate('Login');
+    //navigation && navigation.navigate('Login');
   };
 
   return (

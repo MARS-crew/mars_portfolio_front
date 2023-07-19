@@ -91,7 +91,8 @@ const DetailPop = ({
   onModify,
   detailPopVisible,
   setDetailPopVisible,
-  togleButton,
+  checkChoosePopOkButton,
+  setCheckChoosePopOkButton,
   setTogleButton,
 }) => {
   const [selectedButton, setSelectedButton] = useState(selectedValue());
@@ -239,8 +240,9 @@ const DetailPop = ({
             style={styles.pickBtn}
             onPress={() => {
               setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
-              setTogleButton(false);
-              onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
+              setCheckChoosePopOkButton(!checkChoosePopOkButton);
+              console.log(checkChoosePopOkButton);
+              // onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
             }}>
             <Text>확인</Text>
           </TouchableOpacity>
