@@ -32,7 +32,7 @@ const Portfolio = () => {
     {
       id: '3',
       title: 'Link 데이터 영역',
-      src: require('../../../assets/images/link.png'),
+      src: require('../../../assets/images/Link.png'),
     },
     {
       id: '4',
