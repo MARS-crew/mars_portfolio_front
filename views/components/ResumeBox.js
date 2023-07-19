@@ -4,7 +4,19 @@ import {Shadow} from 'react-native-shadow-2';
 import tel_icon from '../../assets/images/icon-telephone.png';
 import home_icon from '../../assets/images/icon-home.png';
 import main_icon from '../../assets/images/icon-mail.png';
+import java_icon from '../../assets/images/devIcon/java.png'
+import php_icon from '../../assets/images/devIcon/php.png'
+import js_icon from '../../assets/images/devIcon/javascript.png'
+import mysql_icon from '../../assets/images/devIcon/mysql.png'
+import react_icon from '../../assets/images/devIcon/react.png'
+import css3_icon from '../../assets/images/devIcon/css3.png'
+import html5_icon from '../../assets/images/devIcon/html5.png'
+import springboot_icon from '../../assets/images/devIcon/springboot.png'
+
+
+
 import { help } from "yargs";
+import React from "react";
 
 const ResumeBox = ({ item }) => {
 let content = null;
@@ -101,7 +113,45 @@ if (item.id === '1') {
     ;
     contentStyles = styles.specialtyContent; // 전문분야 컨텐츠 스타일
 } else if (item.id === '7') {
-    content = '';
+    content = 
+    <View style={styles.devContainer}>
+        <View style={styles.devIcons}>
+            <Image             
+                source={java_icon} 
+                style={styles.devIcon} />
+            <Text style={styles.devIconText}>JAVA</Text>
+        </View>
+        <View style={styles.devIcons}>
+            <Image             
+                source={php_icon} 
+                style={styles.devIcon} />
+            <Text style={styles.devIconText}>PHP</Text>
+        </View>
+        <View style={styles.devIcons}>
+            <Image             
+                source={react_icon} 
+                style={styles.devIcon} />
+            <Text style={styles.devIconText}>React</Text>
+        </View>
+        <View style={styles.devIcons}>
+            <Image             
+                source={mysql_icon} 
+                style={styles.devIcon} />
+            <Text style={styles.devIconText}>MySQL</Text>
+        </View>
+        <View style={styles.devIcons}>
+            <Image             
+                source={js_icon} 
+                style={styles.devIcon} />
+            <Text style={styles.devIconText}>JavaScript</Text>
+        </View>
+        <View style={styles.devIcons}>
+            <Image             
+                source={html5_icon} 
+                style={styles.devIcon} />
+            <Text style={styles.devIconText}>HTML5</Text>
+        </View>
+    </View>
     contentStyles = styles.skillContent; // 보유기술 컨텐츠 스타일
 }
 
@@ -115,7 +165,11 @@ return (
     distance={8}
     >
     <Text style={styles.title}>{item.title}</Text>
-    <View style={styles.line} />
+    {(item.id === '5' || item.id === '6' ||item.id === '7')?(
+        <View style={styles.line2} />
+    ):(
+        <View style={styles.line} />
+    )}
     <Text style={[styles.content, contentStyles]}>{content}</Text>
     </Shadow>
 );
@@ -149,6 +203,13 @@ line: {
     marginTop:12,
     marginBottom:15,
 },
+line2: {
+    width:'100%',
+    borderColor: '#F5F5F5',
+    borderWidth: 0.2,
+    marginTop:12,
+    //marginBottom:15,
+},
 content: {
    // paddingTop: 15,
     paddingLeft: 15,
@@ -172,10 +233,9 @@ icons : {
 
 },
 icon : {
+    flexDirection: 'column',
     width:20,
     height:20,
-    marginTop:6,
- //   marginRight:10
 },
 iconsText:{
     flexDirection: 'row',
@@ -185,7 +245,9 @@ iconsText:{
 bunyaText :{
     color:'#072AC8',
     backgroundColor:'#F5F4F9',
-    marginBottom:12,
+    marginTop:12,
+    padding:6,
+    borderRadius:5
 
 },
 careerContent: {
@@ -218,7 +280,33 @@ defaultText2:{
 dateText:{
     fontSize:12,
     marginBottom:5,
-}
+},
+devIconText : {
+    justifyContent: 'center',
+    marginLeft:5,
+    color:'#000000',
+    fontSize:14,
+},
+devIcons:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor:'#F5F4F9',
+    padding:6,
+    borderRadius:5,
+    marginTop:12,
+    marginRight:12,
+},
+devIcon : {
+    flexDirection: 'column',
+    width:22,
+    height:22,
+},
+devContainer:{
+    width:320,
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap:'wrap',
+},
 });
 
 export default ResumeBox;
