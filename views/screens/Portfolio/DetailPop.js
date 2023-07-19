@@ -32,6 +32,8 @@ const styles = StyleSheet.create({
   chooseBtn: {
     width: 95,
     height: 26,
+    borderColor: '#F5F5F5',
+    borderBottomWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 5,

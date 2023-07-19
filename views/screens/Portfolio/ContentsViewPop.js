@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    resizeMode: 'contain',
+    width: '100%',
+    resizeMode: 'stretch',
   },
 
   pickBtn: {
