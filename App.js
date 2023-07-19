@@ -24,7 +24,7 @@ import 'react-native-gesture-handler';
 import WhichGroup from './views/screens/WhichGroup';
 import Help from './views/screens/Help';
 import Share from './views/screens/Share';
-import VideoEx from './views/screens/VideoEx';
+import MyPage from './views/screens/MyPage';
 import GroupVideo from './views/screens/GroupVideo';
 import {FlatList} from 'react-native-gesture-handler';
 
@@ -159,7 +159,7 @@ const HomeScreen = () => {
         <Review />
       </Screen>
       <Screen text="Screen 8" index={7}>
-        <VideoEx />
+        <MyPage />
       </Screen>
     </Animated.ScrollView>
   );

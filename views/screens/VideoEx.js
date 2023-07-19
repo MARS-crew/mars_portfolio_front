@@ -6,12 +6,12 @@ const VideoEx = () => {
   return (
     <View style={styles.container}>
       <Video
-        source={{ uri: 'https://www.youtube.com/watch?v=DtVB9LuJrIQ' }}
-        style={styles.fullScreen}
-        paused={false} // 재생/중지 여부
-        resizeMode={"cover"} // 프레임이 비디오 크기와 일치하지 않을 때 비디오 크기를 조정하는 방법을 결정합니다. cover : 비디오의 크기를 유지하면서 최대한 맞게
-        onLoad={e => console.log(e)} // 미디어가 로드되고 재생할 준비가 되면 호출되는 콜백 함수입니다.
-        repeat={true} // video가 끝나면 다시 재생할 지 여부
+        source={require('../../assets/video/mars_profil1.mp4')}
+        style={styles.video} // 스타일 속성 이름 변경
+        paused={false}
+        resizeMode={"cover"}
+        onLoad={e => console.log(e)}
+        repeat={true}
         onAnimatedValueUpdate={() => {}}
       />
     </View>
@@ -25,12 +25,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white"
   },
-  fullScreen: {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      bottom: 0,
-      right: 0
+  video: {
+    flex: 1, // Video 컴포넌트가 부모 View 컴포넌트에 꽉 차도록 flex 속성 추가
   }
 });
 
