@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Animated,
   Dimensions,
@@ -26,10 +26,10 @@ import Help from './views/screens/Help';
 import Share from './views/screens/Share';
 import MyPage from './views/screens/MyPage';
 import GroupVideo from './views/screens/GroupVideo';
-import {FlatList} from 'react-native-gesture-handler';
+import { FlatList } from 'react-native-gesture-handler';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -50,7 +50,7 @@ const Stack = createStackNavigator();
 const transitionAnimation = index => {
   return {
     transform: [
-      {perspective: 800},
+      { perspective: 800 },
       {
         scale: xOffset.interpolate({
           inputRange: [
@@ -92,22 +92,22 @@ const App = () => {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Help"
           component={Help}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Share"
           component={Share}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Album"
           component={Album}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -125,7 +125,7 @@ const HomeScreen = () => {
   return (
     <Animated.ScrollView
       scrollEventThrottle={16}
-      onScroll={Animated.event([{nativeEvent: {contentOffset: {x: xOffset}}}], {
+      onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: xOffset } } }], {
         useNativeDriver: true,
       })}
       horizontal
@@ -153,7 +153,7 @@ const HomeScreen = () => {
         <Resume />
       </Screen>
       <Screen text="Screen 6" index={5}>
-        <Portfolio options={{headerShown: false}} />
+        <Portfolio options={{ headerShown: false }} />
       </Screen>
       <Screen text="Screen 7" index={6}>
         <Review />
