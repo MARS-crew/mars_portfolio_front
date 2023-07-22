@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -17,6 +17,7 @@ import EmptyImg from '../../assets/images/Empty.png';
 import InterviewModal from '../components/InterviewModal';
 import Video from 'react-native-video';
 import InterviewAlert from '../components/InterviewAlert';
+import FAB from '../components/FloatingMenu';
 
 const Interview = () => {
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
@@ -83,80 +84,88 @@ const Interview = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.iconBar}>
-        <TouchableOpacity onPress={toggleHeart} style={styles.icon}>
-          {heart ? (
-            <Icon name="heart" size={30} color={'red'} />
-          ) : (
-            <Icon name="heart" size={30} color={'#E4E3E8'} />
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => Alert.alert('공유')}
-          style={styles.icon}>
-          <Icon name="sharealt" size={30} color={'#3D3D3D'} />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.section}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            doubleTap();
-          }}
-          onLongPress={() => setModalOpen(true)}>
-          {/* 저장된 video가 있으면 video 출력. 없으면  마스외전 로고 출력*/}
-          {filePath ? (
-            <Video
-              source={{ uri: filePath }}
-              style={[styles.content]}
-              controls={false}
-              resizeMode="cover"
-              repeat={true}
-              paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
-              onEnd={() => {
-                setIsPlaying(false);
-              }}
-            />
-          ) : (
-            <Image
-              resizeMode="cover"
-              source={EmptyImg}
-              style={styles.content}
-              imageStyle={styles.imgStyle}
-            />
-          )}
-        </TouchableWithoutFeedback>
-        {/* Animated로 변경, opacity 값 */}
-        <Animated.View style={[styles.animate, heartStyle(opacity).heart]}>
-          {heart ? (
-            <Icon name="heart" size={100} color={'white'} />
-          ) : (
-            <Icon name="hearto" size={100} color={'gray'} />
-          )}
-        </Animated.View>
-      </View>
-      <InterviewModal
-        modalOpen={modalOpen}
-        setModalOpen={setModalOpen}
-        filePath={filePath}
-        setFilePath={setFilePath}
-        heart={heart}
-        setIsPlaying={setIsPlaying}
-        setHeart={setHeart} // deletePopModal에 전달 - 인터뷰 삭제시 하트 취소
-      />
-      <InterviewAlert
-        title={'데이터가 없습니다.'}
-        alertVisible={showAlert}
-        setAlertVisible={setShowAlert}
-      />
-    </SafeAreaView>
+    <View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.iconBar}>
+          <TouchableOpacity onPress={toggleHeart} style={styles.icon}>
+            {heart ? (
+              <Icon name="heart" size={30} color={'red'} />
+            ) : (
+              <Icon name="heart" size={30} color={'#E4E3E8'} />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => Alert.alert('공유')}
+            style={styles.icon}>
+            <Icon name="sharealt" size={30} color={'#3D3D3D'} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.section}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              doubleTap();
+            }}
+            onLongPress={() => setModalOpen(true)}>
+            {/* 저장된 video가 있으면 video 출력. 없으면  마스외전 로고 출력*/}
+            {filePath ? (
+              <Video
+                source={{uri: filePath}}
+                style={[styles.content]}
+                controls={false}
+                resizeMode="cover"
+                repeat={true}
+                paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
+                onEnd={() => {
+                  setIsPlaying(false);
+                }}
+              />
+            ) : (
+              <Image
+                resizeMode="cover"
+                source={EmptyImg}
+                style={styles.content}
+                imageStyle={styles.imgStyle}
+              />
+            )}
+          </TouchableWithoutFeedback>
+          {/* Animated로 변경, opacity 값 */}
+          <Animated.View style={[styles.animate, heartStyle(opacity).heart]}>
+            {heart ? (
+              <Icon name="heart" size={100} color={'white'} />
+            ) : (
+              <Icon name="hearto" size={100} color={'gray'} />
+            )}
+          </Animated.View>
+        </View>
+        <InterviewModal
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+          filePath={filePath}
+          setFilePath={setFilePath}
+          heart={heart}
+          setIsPlaying={setIsPlaying}
+          setHeart={setHeart} // deletePopModal에 전달 - 인터뷰 삭제시 하트 취소
+        />
+        <InterviewAlert
+          title={'데이터가 없습니다.'}
+          alertVisible={showAlert}
+          setAlertVisible={setShowAlert}
+        />
+      </SafeAreaView>
+      <FAB />
+    </View>
   );
 };
+
+// get the dimensions of the screen
+const width = Dimensions.get('screen').width;
+const height = Dimensions.get('screen').height;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: width,
+    height: height,
     backgroundColor: '#F5F4F9',
     // padding: 10,
   },

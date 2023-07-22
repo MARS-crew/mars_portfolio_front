@@ -115,8 +115,8 @@ const Review = () => {
             </TouchableOpacity>
           )}
         </View>
+        <FloatingMenu />
       </SafeAreaView>
-      <FloatingMenu />
     </View>
   );
 };

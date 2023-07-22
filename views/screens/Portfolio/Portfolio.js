@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
-
+import FAB from '../../components/FloatingMenu';
 import PortfolioItem from '../Portfolio/PortfolioItem';
 
 const styles = StyleSheet.create({
@@ -101,6 +101,7 @@ const Portfolio = () => {
           />
         </View>
       </SafeAreaView>
+      <FAB />
     </View>
   );
 };
