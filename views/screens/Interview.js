@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -15,12 +15,13 @@ import {
 import Icon from 'react-native-vector-icons/AntDesign';
 import EmptyImg from '../../assets/images/Empty.png';
 import InterviewModal from '../components/InterviewModal';
+import EditMode from '../components/EditMode';
 import Video from 'react-native-video';
 import InterviewAlert from '../components/InterviewAlert';
 
 const Interview = () => {
+  const [interview, setInterview] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
-
   const [heart, setHeart] = useState(false); // 하트 상태
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [filePath, setFilePath] = useState(); // video 주소
@@ -107,7 +108,7 @@ const Interview = () => {
           {/* 저장된 video가 있으면 video 출력. 없으면  마스외전 로고 출력*/}
           {filePath ? (
             <Video
-              source={{ uri: filePath }}
+              source={{uri: filePath}}
               style={[styles.content]}
               controls={false}
               resizeMode="cover"
@@ -135,15 +136,25 @@ const Interview = () => {
           )}
         </Animated.View>
       </View>
-      <InterviewModal
-        modalOpen={modalOpen}
-        setModalOpen={setModalOpen}
+      <EditMode
+        interview={interview}
+        isModalVisible={modalOpen}
+        setIsModalVisible={setModalOpen}
         filePath={filePath}
         setFilePath={setFilePath}
         heart={heart}
         setIsPlaying={setIsPlaying}
         setHeart={setHeart} // deletePopModal에 전달 - 인터뷰 삭제시 하트 취소
       />
+      {/* <InterviewModal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        filePath={filePath}
+        setFilePath={setFilePath}
+        heart={heart}
+        setIsPlaying={setIsPlaying}
+        setHeart={setHeart}
+      /> */}
       <InterviewAlert
         title={'데이터가 없습니다.'}
         alertVisible={showAlert}

@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
 });
 
 const Portfolio = () => {
+  const [portfolio, setPortfolio] = useState(true); //포트폴리오 페이지인지 확인하는 스테이트
   const numColumns = 2;
   const [portfolioData, setPortfolioData] = useState([
     {
@@ -102,6 +103,7 @@ const Portfolio = () => {
             data={portfolioData}
             renderItem={({item}) => (
               <PortfolioItem
+                portfolio={portfolio}
                 id={item.id}
                 src={item.src}
                 onModify={onModify}

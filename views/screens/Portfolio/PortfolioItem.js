@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import {Shadow} from 'react-native-shadow-2';
-import PortfolioModal from '../Portfolio/PortfolioModal';
+//import PortfolioModal from './PortfolioModalTest';
 import EditMode from '../../components/EditMode';
 import ContentsViewPop from './ContentsViewPop';
 import DetailPop from './DetailPop';
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PortfolioItem = ({id, src, onModify, onDelete}) => {
+const PortfolioItem = ({portfolio, id, src, onModify, onDelete}) => {
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [detailPopVisible, setDetailPopVisible] = useState(false);
@@ -67,12 +67,14 @@ const PortfolioItem = ({id, src, onModify, onDelete}) => {
           setContentsViewPopVisible={
             setContentsViewPopVisible
           }></ContentsViewPop>
-        <PortfolioModal
+        <EditMode
+          portfolio={portfolio}
           id={id}
           onModify={onModify}
           onDelete={onDelete}
           isModalVisible={isModalVisible}
-          setIsModalVisible={setIsModalVisible}></PortfolioModal>
+          setIsModalVisible={setIsModalVisible}></EditMode>
+
         <DetailPop
           id={id}
           onModify={onModify}

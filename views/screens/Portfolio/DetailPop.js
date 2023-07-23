@@ -88,6 +88,7 @@ import closeblack from '../../../assets/images/closeblack.png';
 
 const DetailPop = ({
   id,
+  portfolio,
   onModify,
   detailPopVisible,
   setDetailPopVisible,
@@ -100,6 +101,8 @@ const DetailPop = ({
   const [button2Pressed, setButton2Pressed] = useState(selected2Pressed());
   const [button3Pressed, setButton3Pressed] = useState(selected3Pressed());
   const [choosePopVisible, setChoosePopVisible] = useState(false);
+  const [addPressedIf, SetAddPressedIf] = useState(true);
+  // 포트폴리오 아이템에서 Add 버튼 클릭 시 등장하는 디테일 팝업 적용 후 확인을 눌렀는지 확인하는 스테이트
 
   function selectedValue() {
     if (id == '1') return 'Photo';
@@ -251,9 +254,11 @@ const DetailPop = ({
                 } else {
                   setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
                 }
+
                 if (setCheckChoosePopOkButton !== undefined) {
-                  setCheckChoosePopOkButton(!checkChoosePopOkButton);
+                  setCheckChoosePopOkButton(true);
                 }
+
                 console.log(checkChoosePopOkButton);
               }}>
               <Title color={'white'}>확인</Title>
@@ -265,6 +270,8 @@ const DetailPop = ({
         id={id}
         title="수정된 내용을 저장하시겠습니까?"
         onModify={onModify}
+        portfolio={portfolio}
+        addPressedIf={addPressedIf}
         choosePopVisible={choosePopVisible}
         setChoosePopVisible={setChoosePopVisible}
         setDetailPopVisible={setDetailPopVisible}></ChoosePop>

@@ -50,35 +50,93 @@ const styles = StyleSheet.create({
 import PublicModal from './PublicModal';
 
 const choosePop = ({
-  id,
+  //공통
   title,
-  onModify,
-  onDelete,
   setTogleButton,
   setIsModalVisible,
-  checkChoosePopOkButton,
-  setCheckChoosePopOkButton,
   isModalVisible,
   choosePopVisible,
   setChoosePopVisible,
+  //인터뷰
+  interview,
+  checkDeletePopOkButton,
+  setCheckDeletePopOkButton,
+  //setIsEditing,
+
+  setIsPlaying,
+  setFilePath,
+  changeData,
+  setChangeData,
+  setHeart,
+  changeHeart,
+  //포트폴리오
+  portfolio,
+  id,
   setDetailPopVisible,
+  onModify,
+  onDelete,
+  checkChoosePopOkButton,
+  setCheckChoosePopOkButton,
+  addPressedIf,
 }) => {
+  //포트폴리오
   const onDeleteORonModify = () => {
     if (title === '수정된 내용을 삭제하시겠습니까?') {
-      onDelete(id); //개발 방식 검토중인 기능이므로 구현 미완료
-      console.log(onDelete);
+      setCheckDeletePopOkButton(true);
+      if (interview == true) {
+        deleteUrl();
+        setTogleButton(true);
+      }
     } else if (title === '수정된 내용을 저장하시겠습니까?') {
-      onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
-      console.log(onModify);
+      if (portfolio == true) {
+        if (checkDeletePopOkButton == true) {
+          onDelete(id);
+        } else if (checkDeletePopOkButton == false) {
+          onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
+        }
+        setCheckDeletePopOkButton(false);
+        setIsModalVisible(false);
+      }
+      if (addPressedIf == true) {
+        setDetailPopVisible(false);
+        onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
+      }
+      if (interview == true && checkDeletePopOkButton != true) {
+        handleSave();
+        setTogleButton(false);
+      }
+    } else if (title === '내용을 저장하시겠습니까?') {
     }
-    console.log('return');
+  };
+
+  //인터뷰 세이브
+  const handleSave = () => {
+    if (checkDeletePopOkButton == true) {
+      setChangeData(false);
+    } else {
+      //setTogleButton(true);
+      setIsPlaying(true);
+      setFilePath(changeData);
+      setChangeData(); // 저장된 데이터 초기화
+      // setSavePopVisible(false);
+      setHeart(changeHeart);
+    }
+  };
+
+  const handleCancel = () => {
+    //setIsEditing(false);
+  };
+  // 인터뷰 딜리트
+  // const [deleteImg, setDeleteImg] = useState(interviewImg);
+  const deleteUrl = () => {
+    setChangeData(false);
   };
 
   return (
     <PublicModal
       id={id}
-      onDelete={onDelete}
-      onModify={onModify}
+      onDelete={portfolio == true ? onDelete : null}
+      onModify={portfolio == true ? onModify : null}
       isModalVisible={choosePopVisible}
       setIsModalVisible={setChoosePopVisible}>
       <Pressable
@@ -91,19 +149,18 @@ const choosePop = ({
             onPress={() => {
               setChoosePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
               if (setCheckChoosePopOkButton !== undefined)
-                setCheckChoosePopOkButton(!checkChoosePopOkButton);
+                setCheckChoosePopOkButton(false);
             }}>
             <Title>취소</Title>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.chooseBtn, styles.chooseOkBtn]}
             onPress={() => {
-              setChoosePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
-              if (setIsModalVisible !== undefined) setIsModalVisible(false);
-              else setDetailPopVisible(false);
-
-              if (setTogleButton !== undefined) setTogleButton(false);
+              if (portfolio == true) {
+                if (setTogleButton !== undefined) setTogleButton(false);
+              }
               onDeleteORonModify();
+              setChoosePopVisible(false);
             }}>
             <Title color={'white'}>확인</Title>
           </TouchableOpacity>
