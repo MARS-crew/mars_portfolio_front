@@ -2,12 +2,10 @@ import React, {useState} from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
-  Text,
   View,
   TextInput,
   Image,
   Pressable,
-  Dimensions,
 } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -79,20 +77,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: 'row',
   },
-
-  // saveBtn: { 삭제
-  //   width: 100,
-  //   height: 30,
-  //   borderColor: '#000',
-  //   backgroundColor: '#fff',
-  //   position: 'absolute',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   top: 10,
-  //   right: 10,
-  // },
   PressedBtn: {borderBottomWidth: 2, borderColor: '#072AC8'},
-  TextInputContainer: {},
 });
 
 import PublicModal from '../../components/PublicModal';
@@ -161,11 +146,6 @@ const DetailPop = ({
       onModify={onModify}
       isModalVisible={detailPopVisible}
       setIsModalVisible={setDetailPopVisible}>
-      {/* <TouchableOpacity 삭제
-        onPress={() => setChoosePopVisible(true)}
-        style={styles.saveBtn}>
-        <Text>Save</Text>
-      </TouchableOpacity> */}
       <Pressable
         onPress={() => setDetailPopVisible(true)} // Pressable: Modal 영역 안 클릭 시 Modal 유지 구현을 위해 Pressable로 감싸서 적용
         style={styles.modalView}>
@@ -266,10 +246,15 @@ const DetailPop = ({
             <TouchableOpacity
               style={[styles.pickBtn, styles.chooseOkBtn]}
               onPress={() => {
-                setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
-                setCheckChoosePopOkButton(!checkChoosePopOkButton);
+                if (id == 6) {
+                  setChoosePopVisible(true);
+                } else {
+                  setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
+                }
+                if (setCheckChoosePopOkButton !== undefined) {
+                  setCheckChoosePopOkButton(!checkChoosePopOkButton);
+                }
                 console.log(checkChoosePopOkButton);
-                // onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
               }}>
               <Title color={'white'}>확인</Title>
             </TouchableOpacity>
@@ -278,7 +263,7 @@ const DetailPop = ({
       </Pressable>
       <ChoosePop
         id={id}
-        title="저장하시겠습니까?"
+        title="수정된 내용을 저장하시겠습니까?"
         onModify={onModify}
         choosePopVisible={choosePopVisible}
         setChoosePopVisible={setChoosePopVisible}

@@ -10,6 +10,9 @@ import {
   Dimensions,
 } from 'react-native';
 
+const {width, height} = Dimensions.get('window');
+const squareSize = Math.min(width, height) * 0.9;
+
 const styles = StyleSheet.create({
   modalView: {
     width: Dimensions.get('window').width / 1,
@@ -34,10 +37,15 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: '100%',
-    resizeMode: 'stretch',
+    width: squareSize,
+    height: squareSize,
+    resizeMode: 'contain',
   },
-
+  nullImage: {
+    width: Dimensions.get('window').width / 3,
+    height: Dimensions.get('window').height / 3,
+    resizeMode: 'contain',
+  },
   pickBtn: {
     height: 45,
     alignItems: 'center',
@@ -72,8 +80,17 @@ const ContentsViewPop = ({
     if (id == '1') return 'Photo';
     else if (id == '2') return 'Video';
     else if (id == '3') return 'Link';
+    else if (id == '5') return 'Null';
     else return 'Photo';
   } // id값을 통해 사진 수정 시 초기 selected 값을 사진으로 적용하여 각 종류에 맞는 DetailPopup이 열려있도록 구현
+
+  function selectedTestTitle() {
+    if (id == '1') return '이미지';
+    else if (id == '2') return '영상';
+    else if (id == '3') return '링크';
+    else if (id == '5') return '(비어있음)';
+    else return 'Photo';
+  } // 테스트용
 
   return (
     <PublicModal
@@ -86,7 +103,7 @@ const ContentsViewPop = ({
         style={styles.modalView}>
         <View style={styles.titleView}>
           <Title fontSize={18} style={styles.input}>
-            제목
+            {selectedTestTitle()}
           </Title>
           <TouchableOpacity
             onPress={() => {
@@ -103,12 +120,14 @@ const ContentsViewPop = ({
             </View>
 
             <Title style={styles.input}>
-              이미지 테스트 이미지 테스트 이미지 테스트 이미지 테스트 이미지
-              테스트 이미지 테스트 이미지 테스트 이미지 테스트 이미지 테스트
-              이미지 테스트 이미지 테스트 이미지 테스트 이미지 테스트 이미지
-              테스트 이미지 테스트 이미지 테스트 이미지 테스트 이미지 테스트
-              이미지 테스트 이미지 테스트 이미지 테스트 이미지 테스트 이미지
-              테스트 이미지 테스트
+              포트폴리오 사진 상세 팝업 이미지 부분 테스트 입니다. {'\n'}
+              자세한 내용은 추후 업데이트 될 예정입니다.
+              {'\n'} Graphic design day
+              {'\n'} Graphic design
+              {'\n'} day Graphic design
+              {'\n'} day April 27
+              {'\n'}
+              {'\n'}Portfolio.js {'>'} ContentsViewPop.js
             </Title>
           </View>
         )}
@@ -118,12 +137,14 @@ const ContentsViewPop = ({
               <Image source={testImg} style={styles.image} />
             </View>
             <Title style={styles.input}>
-              영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상
-              테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트
-              영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상
-              테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트
-              영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상 테스트 영상
-              테스트 영상 테스트
+              포트폴리오 영상 상세 팝업 이미지 부분 테스트 입니다. {'\n'}
+              자세한 내용은 추후 업데이트 될 예정입니다.
+              {'\n'} Graphic design day
+              {'\n'} Graphic design
+              {'\n'} day Graphic design
+              {'\n'} day April 27
+              {'\n'}
+              {'\n'}Portfolio.js {'>'} ContentsViewPop.js
             </Title>
           </View>
         )}
@@ -133,22 +154,28 @@ const ContentsViewPop = ({
               <Image source={testImg} style={styles.image} />
             </View>
             <Title style={styles.input}>
-              링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크
-              테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트
-              링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크
-              테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트
-              링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크 테스트 링크
-              테스트 링크 테스트 링크 테스트
+              포트폴리오 링크 상세 팝업 이미지 부분 테스트 입니다. {'\n'}
+              자세한 내용은 추후 업데이트 될 예정입니다.
+              {'\n'} Graphic design day
+              {'\n'} Graphic design
+              {'\n'} day Graphic design
+              {'\n'} day April 27
+              {'\n'}
+              {'\n'}Portfolio.js {'>'} ContentsViewPop.js
             </Title>
-            {/*<TouchableOpacity
-              style={[styles.input, styles.linkView]}
-              onPress={() =>
-                Linking.openURL(
-                  'https://github.com/MARS-crew/mars_portfolio_front',
-                )
-              }>
-              <Image source={linkBtn} />
-            </TouchableOpacity>*/}
+          </View>
+        )}
+        {selectedButton === 'Null' && (
+          <View style={styles.contentView}>
+            <View style={styles.imageView}>
+              <Image source={src} style={[styles.nullImage]} />
+            </View>
+            <Title style={styles.input}>
+              포트폴리오 Null 상세 팝업 이미지 부분 테스트 입니다. {'\n'}
+              자세한 내용은 추후 업데이트 될 예정입니다.
+              {'\n'} Null
+              {'\n'}Portfolio.js {'>'} ContentsViewPop.js
+            </Title>
           </View>
         )}
 

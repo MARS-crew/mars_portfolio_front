@@ -9,7 +9,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   gridView: {
-    marginTop: 15,
+    padding: 5,
+    paddingTop: 10,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -22,32 +23,42 @@ const Portfolio = () => {
     {
       id: '1',
       title: 'Video 데이터 영역',
-      src: require('../../../assets/images/camera.png'),
+      src: require('../../../assets/images/cameraTest.png'),
     },
     {
       id: '2',
       title: 'Photo 데이터 영역',
-      src: require('../../../assets/images/camera.png'),
+      src: require('../../../assets/images/cameraTest.png'),
     },
     {
       id: '3',
       title: 'Link 데이터 영역',
-      src: require('../../../assets/images/link.png'),
+      src: require('../../../assets/images/cameraTest.png'),
     },
     {
       id: '4',
       title: 'Project 프로젝트 영역',
-      src: require('../../../assets/images/project.png'),
+      src: require('../../../assets/images/cameraTest.png'),
     },
     {
       id: '1',
       title: 'Video 데이터 영역',
-      src: require('../../../assets/images/camera.png'),
+      src: require('../../../assets/images/cameraTest.png'),
     },
     {
       id: '2',
       title: 'Photo 데이터 영역',
-      src: require('../../../assets/images/camera.png'),
+      src: require('../../../assets/images/cameraTest.png'),
+    },
+    {
+      id: '1',
+      title: 'Video 데이터 영역',
+      src: require('../../../assets/images/cameraTest.png'),
+    },
+    {
+      id: '2',
+      title: 'Photo 데이터 영역',
+      src: require('../../../assets/images/cameraTest.png'),
     },
     {
       id: '5',
@@ -62,7 +73,7 @@ const Portfolio = () => {
     },
     {
       id: '6',
-      title: 'More 데이터 영역',
+      title: 'Add 데이터 영역',
       src: require('../../../assets/images/add.png'),
     },
   ]);

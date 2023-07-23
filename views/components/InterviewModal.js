@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Modal,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   Text,
   Alert,
 } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 import InterviewDeletePop from './InterviewDeletePop';
 import InterviewSavePop from './InterviewSavePop';
 import InterviewAlert from './InterviewAlert';
