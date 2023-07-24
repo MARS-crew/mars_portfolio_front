@@ -79,16 +79,18 @@ const choosePop = ({
   setCheckChoosePopOkButton,
   addPressedIf,
 }) => {
-  //포트폴리오
+  //공통 컴포넌트 츄즈 팝 스테이트 구분 컴포넌트: 확인 클릭 시
   const onDeleteORonModify = () => {
     if (title === '수정된 내용을 삭제하시겠습니까?') {
-      setCheckDeletePopOkButton(true);
-      if (interview == true) {
+      if (portfolio == true) {
+        setCheckDeletePopOkButton(true);
+      } else if (interview == true) {
+        setCheckDeletePopOkButton(true);
         deleteUrl();
-        setTogleButton(true);
       }
     } else if (title === '수정된 내용을 저장하시겠습니까?') {
       if (portfolio == true) {
+        setCheckChoosePopOkButton(true);
         if (checkDeletePopOkButton == true) {
           onDelete(id);
         } else if (checkDeletePopOkButton == false) {
@@ -96,16 +98,14 @@ const choosePop = ({
         }
         setCheckDeletePopOkButton(false);
         setIsModalVisible(false);
-      }
-      if (addPressedIf == true) {
+      } else if (addPressedIf == true) {
         setDetailPopVisible(false);
         onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
-      }
-      if (interview == true && checkDeletePopOkButton != true) {
-        handleSave();
+      } else if (interview == true) {
+        if (checkDeletePopOkButton == false) handleSave();
         setTogleButton(false);
+        setIsModalVisible(false);
       }
-    } else if (title === '내용을 저장하시겠습니까?') {
     }
   };
 

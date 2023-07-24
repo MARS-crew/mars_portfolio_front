@@ -81,18 +81,6 @@ const EditMode = ({
   const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
 
   //인터뷰 컴포넌트 start-----------------------------------------------------------------------------------------------------------------------------------------
-  const handleCancel = () => {
-    setIsEditing(false);
-  };
-
-  const showDelete = () => {
-    if (filePath === undefined) {
-      // Alert.alert('삭제할 데이터가 없습니다.');
-      setDeleteAlertVisible(true);
-    } else {
-      setDeletePopVisible(!deletePopVisible);
-    }
-  };
 
   // 갤러리에서 video 파일 선택
   const chooseFile = type => {
@@ -122,7 +110,7 @@ const EditMode = ({
         console.log('type -> ', asset.type);
         console.log('fileName -> ', asset.fileName);
 
-        setChangeData(asset.uri);
+        if (checkDeletePopOkButton == false) setChangeData(asset.uri);
         setTogleButton(true);
       }
     });
@@ -154,14 +142,14 @@ const EditMode = ({
               onPress={() => {
                 //인터뷰: interview 스테이트를 통해 인터뷰 페이지에서 진입했다면 하단 파일 탐색기 실행
                 if (interview == true) {
-                  //if (checkDeletePopOkButton != true)
                   chooseFile('video');
                   console.log(checkDeletePopOkButton);
                 }
 
                 //포트폴리오 portfolio 스테이트를 통해 포트폴리오 페이지에서 진입했다면 하단 디테일 팝 실행
                 else if (portfolio == true) {
-                  setDetailPopVisible(!detailPopVisible);
+                  setCheckChoosePopOkButton(false); //수정 누를 때 디테일 팝 확인버튼 클릭 여부 스테이트 초기화
+                  setDetailPopVisible(true);
                   setTogleButton(true);
                 }
                 //마이페이지: myPage 추후에 마이페이지가 완성되면 마이페이지 진입 구분용으로 추가될 if문 코드
