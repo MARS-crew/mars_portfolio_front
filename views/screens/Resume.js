@@ -1,6 +1,7 @@
-import React from "react";
-import { StyleSheet, View, FlatList } from 'react-native';
-import ResumeBox from "../components/ResumeBox";
+import React from 'react';
+import {StyleSheet, View, FlatList} from 'react-native';
+import ResumeBox from '../components/ResumeBox';
+import FAB from '../components/FloatingMenu';
 
 const DATA = [
   {
@@ -34,25 +35,28 @@ const DATA = [
 ];
 
 const Resume = () => {
-  const renderItem = ({ item }) => <ResumeBox item={item} />;
+  const renderItem = ({item}) => <ResumeBox item={item} />;
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={DATA}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-      />
+    <View>
+      <View style={styles.container}>
+        <FlatList
+          data={DATA}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+        />
+      </View>
+      <FAB />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     width: 400,
     padding: 25,
     flex: 2,
-    backgroundColor: "#F3F6FE"
-  }
+    backgroundColor: '#F3F6FE',
+  },
 });
 
 export default Resume;

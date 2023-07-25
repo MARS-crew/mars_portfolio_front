@@ -3,6 +3,7 @@ import {StyleSheet, View, FlatList, SafeAreaView} from 'react-native';
 
 //import ManyGroupItem from '../components/ManyGroupItem';
 import GroupVideoItem from '../components/GroupVideoItem';
+import FAB from '../components/FloatingMenu';
 
 const DATA = [
   {
@@ -73,6 +74,7 @@ const GroupVideo = () => {
         )}
         numColumns={2}
       />
+      <FAB />
     </SafeAreaView>
   );
 };

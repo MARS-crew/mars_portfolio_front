@@ -12,8 +12,9 @@ import people1 from '../../assets/images/test_member1.jpeg';
 import people2 from '../../assets/images/test_member2.jpeg';
 import people3 from '../../assets/images/test_member3.jpeg';
 import people4 from '../../assets/images/test_member4.jpeg';
+import FAB from '../components/FloatingMenu';
 
-function Main3() {
+function Member() {
   return (
     <View style={styles.container}>
       <View style={styles.con1}>
@@ -24,7 +25,7 @@ function Main3() {
         <Image source={people3} style={styles.item3} />
         <Image source={people4} style={styles.item4} />
       </View>
-      <FloatingMenu />
+      <FAB />
     </View>
   );
 }
@@ -73,4 +74,4 @@ const styles = StyleSheet.create({
     right: 0,
   },
 });
-export default Main3;
+export default Member;

@@ -18,6 +18,7 @@ import InterviewModal from '../components/InterviewModal';
 import EditMode from '../components/EditMode';
 import Video from 'react-native-video';
 import InterviewAlert from '../components/InterviewAlert';
+import FAB from '../components/FloatingMenu';
 
 const Interview = () => {
   const [interview, setInterview] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
@@ -163,11 +164,16 @@ const Interview = () => {
     </SafeAreaView>
   );
 };
+
+// get the dimensions of the screen
+const width = Dimensions.get('screen').width;
+const height = Dimensions.get('screen').height;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: width,
+    height: height,
     backgroundColor: '#F5F4F9',
     // padding: 10,
   },

@@ -10,6 +10,7 @@ import {
 
 import GroupLogo from './GroupLogo';
 import LoginItem from './LoginItem';
+import FAB from './FloatingMenu';
 
 const GroupItem = ({id, src}) => {
   return (
@@ -21,6 +22,7 @@ const GroupItem = ({id, src}) => {
           <LoginItem />
         </ImageBackground>
       </View>
+      <FAB />
     </View>
   );
 };

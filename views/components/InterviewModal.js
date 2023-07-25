@@ -7,11 +7,16 @@ import {
   Dimensions,
   Text,
   Alert,
+  Image,
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import InterviewDeletePop from './InterviewDeletePop';
 import InterviewSavePop from './InterviewSavePop';
 import InterviewAlert from './InterviewAlert';
+
+import cancelIcon from '../../assets/images/cancelIcon.png'
+import deletedIcon from '../../assets/images/deletedIcon.png';
+import editingIcon from '../../assets/images/editingIcon.png';
 
 const InterviewModal = ({
   modalOpen,
@@ -120,18 +125,18 @@ const InterviewModal = ({
                 // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
                 chooseFile('video');
               }}>
+              <Image source={editingIcon} style={styles.image} />
               <Text>수정</Text>
             </TouchableOpacity>
           )}
-          {isEditing ? (
-            <TouchableOpacity onPress={handleCancel} style={styles.navBarView}>
-              <Text>취소</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={showDelete} style={styles.navBarView}>
-              <Text>삭제</Text>
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity onPress={showDelete} style={styles.navBarView}>
+            <Image source={deletedIcon} style={styles.image} />
+            <Text>삭제</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleCancel} style={styles.navBarView}>
+            <Image source={cancelIcon} style={styles.image} />
+            <Text>취소</Text>
+          </TouchableOpacity>
           <InterviewDeletePop
             deletePopVisible={deletePopVisible}
             setDeletePopVisible={setDeletePopVisible}
@@ -183,6 +188,9 @@ const styles = StyleSheet.create({
 
   navBarView: {
     flexDirection: 'row',
+  },
+  image: {
+    marginRight: 4,
   },
 });
 export default InterviewModal;
