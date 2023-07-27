@@ -30,7 +30,7 @@ const Id7Popup = ({
   setContentsViewPopVisible,
   }) => {
   const [selectedButton, setSelectedButton] = useState(selectedValue());
-  const rate = 70;
+  const rate = 50;
 
   function calculateLeftValue(rate) {
     // 규칙에 따른 left 값 계산
@@ -43,7 +43,8 @@ const Id7Popup = ({
       { min: 30, max: 40, offset: 1 },
       { min: 50, max: 60, offset: -1 },
       { min: 60, max: 70, offset: -2 },
-      { min: 80, max: 90, offset: -3 },
+      { min: 70, max: 90, offset: -3 },
+      { min: 80, max: 90, offset: -4 },
       { min: 90, max: 101, offset: -5 },
     ];
 
