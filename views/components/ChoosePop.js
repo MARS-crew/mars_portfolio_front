@@ -59,10 +59,9 @@ const choosePop = ({
   setChoosePopVisible,
   //인터뷰
   interview,
+  alert,
   checkDeletePopOkButton,
   setCheckDeletePopOkButton,
-  //setIsEditing,
-
   setIsPlaying,
   setFilePath,
   changeData,
@@ -75,7 +74,6 @@ const choosePop = ({
   setDetailPopVisible,
   onModify,
   onDelete,
-  checkChoosePopOkButton,
   setCheckChoosePopOkButton,
   addPressedIf,
 }) => {
@@ -144,20 +142,22 @@ const choosePop = ({
         style={styles.modalView}>
         <Text style={styles.modalTitle}>{title}</Text>
         <View style={styles.chooseContainer}>
-          <TouchableOpacity
-            style={styles.chooseBtn}
-            onPress={() => {
-              setChoosePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
-              if (setCheckChoosePopOkButton !== undefined)
-                setCheckChoosePopOkButton(false);
-            }}>
-            <Title>취소</Title>
-          </TouchableOpacity>
+          {alert ? null : (
+            <TouchableOpacity
+              style={styles.chooseBtn}
+              onPress={() => {
+                setChoosePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
+                if (setCheckChoosePopOkButton == true)
+                  setCheckChoosePopOkButton(false);
+              }}>
+              <Title>취소</Title>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             style={[styles.chooseBtn, styles.chooseOkBtn]}
             onPress={() => {
               if (portfolio == true) {
-                if (setTogleButton !== undefined) setTogleButton(false);
+                if (setTogleButton == true) setTogleButton(false);
               }
               onDeleteORonModify();
               setChoosePopVisible(false);

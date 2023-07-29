@@ -49,8 +49,10 @@ const styles = StyleSheet.create({
 
 const EditMode = ({
   //공통 프롭스
+
   isModalVisible,
   setIsModalVisible,
+
   //포트폴리오 프롭스
   portfolio,
   id,
@@ -92,7 +94,7 @@ const EditMode = ({
       // quality: 1,
     };
     launchImageLibrary(options, response => {
-      if (response === undefined) {
+      if (response === false) {
         // 선택한 이미지가 없는 경우
         console.log('User did not select an image');
         return;
@@ -116,7 +118,6 @@ const EditMode = ({
     });
   };
   //인터뷰 컴포넌트 end-----------------------------------------------------------------------------------------------------------------------------------------
-
   return (
     <Modal
       animationType={'fade'}
@@ -204,7 +205,6 @@ const EditMode = ({
             setTogleButton={setTogleButton}
             checkDeletePopOkButton={checkDeletePopOkButton}
             setCheckDeletePopOkButton={setCheckDeletePopOkButton}
-            checkChoosePopOkButton={checkChoosePopOkButton}
             setCheckChoosePopOkButton={setCheckChoosePopOkButton}
             setIsModalVisible={setIsModalVisible}
             choosePopVisible={saveChoosePopVisible}
