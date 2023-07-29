@@ -1,13 +1,7 @@
-import {
-  StyleSheet,
-  TouchableOpacity,
-  Pressable,
-  Text,
-  View,
-} from 'react-native';
+import {StyleSheet, Pressable, Text, View} from 'react-native';
 
-import Title from './Title';
-import Button from './Button';
+import PublicModal from './PublicModal';
+import ChooseButton from './ChooseButton';
 
 const styles = StyleSheet.create({
   modalView: {
@@ -47,8 +41,6 @@ const styles = StyleSheet.create({
   chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 10},
 });
 
-import PublicModal from './PublicModal';
-
 const choosePop = ({
   //공통
   title,
@@ -59,15 +51,11 @@ const choosePop = ({
   setChoosePopVisible,
   //인터뷰
   interview,
+  handleSave,
+  deleteUrl,
   alert,
   checkDeletePopOkButton,
   setCheckDeletePopOkButton,
-  setIsPlaying,
-  setFilePath,
-  changeData,
-  setChangeData,
-  setHeart,
-  changeHeart,
   //포트폴리오
   portfolio,
   id,
@@ -96,6 +84,7 @@ const choosePop = ({
         }
         setCheckDeletePopOkButton(false);
         setIsModalVisible(false);
+        setTogleButton(false);
       } else if (addPressedIf == true) {
         setDetailPopVisible(false);
         onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
@@ -107,28 +96,21 @@ const choosePop = ({
     }
   };
 
-  //인터뷰 세이브
-  const handleSave = () => {
-    if (checkDeletePopOkButton == true) {
-      setChangeData(false);
-    } else {
-      //setTogleButton(true);
-      setIsPlaying(true);
-      setFilePath(changeData);
-      setChangeData(); // 저장된 데이터 초기화
-      // setSavePopVisible(false);
-      setHeart(changeHeart);
-    }
+  // ChoosePop Button onPress 용 Props 컴포넌트 start------------------------------------------------------------------------------------------------------------------------
+  const cancel = () => {
+    setChoosePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
+    if (setCheckChoosePopOkButton == true) setCheckChoosePopOkButton(false);
   };
 
-  const handleCancel = () => {
-    //setIsEditing(false);
+  const check = () => {
+    if (portfolio == true) {
+      if (setTogleButton == true) setTogleButton(false);
+    }
+    onDeleteORonModify();
+    setChoosePopVisible(false);
   };
-  // 인터뷰 딜리트
-  // const [deleteImg, setDeleteImg] = useState(interviewImg);
-  const deleteUrl = () => {
-    setChangeData(false);
-  };
+
+  // ChoosePop Button onPress 용 Props 컴포넌트 end------------------------------------------------------------------------------------------------------------------------
 
   return (
     <PublicModal
@@ -143,28 +125,20 @@ const choosePop = ({
         <Text style={styles.modalTitle}>{title}</Text>
         <View style={styles.chooseContainer}>
           {alert ? null : (
-            <TouchableOpacity
-              style={styles.chooseBtn}
+            <ChooseButton
               onPress={() => {
-                setChoosePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
-                if (setCheckChoosePopOkButton == true)
-                  setCheckChoosePopOkButton(false);
+                cancel();
               }}>
-              <Title>취소</Title>
-            </TouchableOpacity>
+              취소
+            </ChooseButton>
           )}
-          <TouchableOpacity
-            style={[styles.chooseBtn, styles.chooseOkBtn]}
+          <ChooseButton
+            background={'blue'}
             onPress={() => {
-              if (portfolio == true) {
-                if (setTogleButton == true) setTogleButton(false);
-              }
-              onDeleteORonModify();
-              setChoosePopVisible(false);
+              check();
             }}>
-            <Title color={'white'}>확인</Title>
-          </TouchableOpacity>
-          {/*<Button background={'blue'}>확인</Button>//아직 스테이트 관리 방법 구현 미적용*/}
+            확인
+          </ChooseButton>
         </View>
       </Pressable>
     </PublicModal>

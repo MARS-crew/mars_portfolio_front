@@ -75,6 +75,14 @@ const ContentsViewPop = ({
   setContentsViewPopVisible,
 }) => {
   const [selectedButton, setSelectedButton] = useState(selectedValue());
+  const TEST_TITLE = `포트폴리오 사진 상세 팝업 테스트 입니다. \n
+          자세한 내용은 추후 업데이트 될 예정입니다.
+          \n Graphic design day
+          \n Graphic design
+          \n day Graphic design
+          \n day April 27
+          \n
+          \n Portfolio.js > ContentsViewPop.js`;
 
   function selectedValue() {
     if (id == '1') return 'Photo';
@@ -91,6 +99,17 @@ const ContentsViewPop = ({
     else if (id == '5') return '(비어있음)';
     else return 'Photo';
   } // 테스트용
+
+  // const ContentsView = (title, src) => {
+  //   return (
+  //     <View style={styles.contentView}>
+  //       <View style={styles.imageView}>
+  //         <Image source={src} style={styles.image} />
+  //       </View>
+  //       <Title style={styles.input}>{title}</Title>
+  //     </View>
+  //   );
+  // };
 
   return (
     <PublicModal
@@ -118,9 +137,8 @@ const ContentsViewPop = ({
             <View style={styles.imageView}>
               <Image source={testImg} style={styles.image} />
             </View>
-
             <Title style={styles.input}>
-              포트폴리오 사진 상세 팝업 이미지 부분 테스트 입니다. {'\n'}
+              포트폴리오 영상 상세 팝업 이미지 부분 테스트 입니다. {'\n'}
               자세한 내용은 추후 업데이트 될 예정입니다.
               {'\n'} Graphic design day
               {'\n'} Graphic design
