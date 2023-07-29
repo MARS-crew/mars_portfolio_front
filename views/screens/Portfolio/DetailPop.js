@@ -255,7 +255,7 @@ const DetailPop = ({
                   setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
                 }
 
-                if (setCheckChoosePopOkButton == true) {
+                if (setCheckChoosePopOkButton !== false) {
                   setCheckChoosePopOkButton(true);
                 }
 
