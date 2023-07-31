@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.19.1",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
     "lottie-react-native": "^5.1.6",
@@ -17,11 +18,13 @@
     "react-native": "0.68.2",
     "react-native-3dcube-navigation": "^1.0.5",
     "react-native-action-button": "^2.8.5",
+    "react-native-async-storage": "^0.0.1",
     "react-native-document-picker": "^9.0.1",
     "react-native-floating-action": "^1.22.0",
     "react-native-floating-action-menu": "^1.2.4",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-image-picker": "^5.4.2",
+    "react-native-progress": "^5.0.0",
     "react-native-reanimated": "^2.17.0",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.20.0",

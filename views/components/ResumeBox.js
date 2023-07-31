@@ -1,158 +1,58 @@
 import {View,Text,StyleSheet,Image} from "react-native";
+import React, {useState} from "react";
 import {Resume} from '../screens/Resume'
+import Id2 from './ResumeCpn/Id2'
+import Id3 from './ResumeCpn/Id3'
+import Id4 from './ResumeCpn/Id4'
+import Id5 from './ResumeCpn/Id5'
+import Id7 from './ResumeCpn/Id7'
+
 import {Shadow} from 'react-native-shadow-2';
-import tel_icon from '../../assets/images/icon-telephone.png';
-import home_icon from '../../assets/images/icon-home.png';
-import main_icon from '../../assets/images/icon-mail.png';
-import java_icon from '../../assets/images/devIcon/java.png'
-import php_icon from '../../assets/images/devIcon/php.png'
-import js_icon from '../../assets/images/devIcon/javascript.png'
-import mysql_icon from '../../assets/images/devIcon/mysql.png'
-import react_icon from '../../assets/images/devIcon/react.png'
-import css3_icon from '../../assets/images/devIcon/css3.png'
-import html5_icon from '../../assets/images/devIcon/html5.png'
-import springboot_icon from '../../assets/images/devIcon/springboot.png'
-
-
-
-import { help } from "yargs";
-import React from "react";
 
 const ResumeBox = ({ item }) => {
+const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
+
 let content = null;
 let contentStyles = {}; // 컨텐츠 부분의 스타일
 
-if (item.id === '1') {
+if (item.id === '1') { //소개글
     content = '소개글을 입력해주세요';
-    contentStyles = styles.introContent; // 소개글 컨텐츠 스타일
-} else if (item.id === '2') {
+    contentStyles = styles.introContent;
+
+} else if (item.id === '2') { //기본정보
     content = 
-    <View>
-        <Text style={styles.infoText}>이화진</Text>
-        <View style={styles.icons}>
-                <View style={styles.iconsText}>
-                    <Image 
-                    source={tel_icon} 
-                    style={styles.icon} />
-                        <Text style={styles.defaultText}>010-1111-2222</Text>
-                </View>
-                <View style={styles.iconsText} >
-            <Image 
-            source={home_icon} 
-            style={styles.icon} />
-            <Text style={styles.defaultText}>경기도</Text>
-            </View>
-            <View style={styles.iconsText}>
-            <Image 
-            source={main_icon} 
-            style={styles.icon} />
-            <Text style={styles.defaultText}>123@naver.com</Text>
-            </View>
-        </View>
-    </View>
+        <Id2 />
     ;
-    contentStyles = styles.basicInfoContent; // 기본정보 컨텐츠 스타일
-} else if (item.id === '3') {
+
+} else if (item.id === '3') {//경력
     content = 
-    <View>
-        <View>
-            <View style={styles.iconsText}>
-                <Text style={styles.infoText}>회사명</Text>
-                <Text style={styles.defaultText}>사원</Text>
-            </View>
-            <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
-            <Text style={styles.defaultText2}>개발</Text>
-        </View>
-        <View style={styles.line} />
-        <View>
-            <View style={styles.iconsText}>
-                <Text style={styles.infoText}>회사명</Text>
-                <Text style={styles.defaultText}>사원</Text>
-            </View>
-            <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
-            <Text style={styles.defaultText2}>개발</Text>
-        </View>
-    </View>
+        <Id3 />
+    ; 
+
+} else if (item.id === '4') {// 수상내역 
+    content = 
+        <Id4 
+        style={styles.boxMarginStyle}/>
     ;
-    contentStyles = styles.careerContent; // 경력 컨텐츠 스타일
-} else if (item.id === '4') {
+
+} else if (item.id === '5') {//보유기술
     content = 
-    <View>
-        <View>
-            <View>
-                <Text style={styles.infoText}>프로젝트 우수상</Text>
-            </View>
-            <Text style={styles.dateText}>2020.06.06</Text>
-            <Text style={styles.defaultText2}>마스외전</Text>
-        </View>
-        <View style={styles.line} />
-        <View>
-            <View>
-                <Text style={styles.infoText}>프로젝트 우수상</Text>
-            </View>
-            <Text style={styles.dateText}>2020.06.06</Text>
-            <Text style={styles.defaultText2}>마스외전</Text>
-        </View>
-    </View>
-;
-    contentStyles = styles.awardContent; // 수상내역 컨텐츠 스타일
-} else if (item.id === '5') {
-    content = 
-    <View>
-        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-    </View>
+        <Id5 
+        style={styles.boxMarginStyle} />
     ;
     contentStyles = styles.interestContent; // 관심분야 컨텐츠 스타일
 } else if (item.id === '6') {
         content = 
-    <View>
-        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-    </View>
+        <Id5 
+        style={styles.boxMarginStyle} />
     ;
-    contentStyles = styles.specialtyContent; // 전문분야 컨텐츠 스타일
+// 전문분야 컨텐츠 스타일
 } else if (item.id === '7') {
     content = 
-    <View style={styles.devContainer}>
-        <View style={styles.devIcons}>
-            <Image             
-                source={java_icon} 
-                style={styles.devIcon} />
-            <Text style={styles.devIconText}>JAVA</Text>
-        </View>
-        <View style={styles.devIcons}>
-            <Image             
-                source={php_icon} 
-                style={styles.devIcon} />
-            <Text style={styles.devIconText}>PHP</Text>
-        </View>
-        <View style={styles.devIcons}>
-            <Image             
-                source={react_icon} 
-                style={styles.devIcon} />
-            <Text style={styles.devIconText}>React</Text>
-        </View>
-        <View style={styles.devIcons}>
-            <Image             
-                source={mysql_icon} 
-                style={styles.devIcon} />
-            <Text style={styles.devIconText}>MySQL</Text>
-        </View>
-        <View style={styles.devIcons}>
-            <Image             
-                source={js_icon} 
-                style={styles.devIcon} />
-            <Text style={styles.devIconText}>JavaScript</Text>
-        </View>
-        <View style={styles.devIcons}>
-            <Image             
-                source={html5_icon} 
-                style={styles.devIcon} />
-            <Text style={styles.devIconText}>HTML5</Text>
-        </View>
-    </View>
-    contentStyles = styles.skillContent; // 보유기술 컨텐츠 스타일
+    <Id7 
+    style={styles.boxMarginStyle} 
+    />
+// 보유기술 컨텐츠 스타일
 }
 
 return (
@@ -177,15 +77,17 @@ return (
 
 const styles = StyleSheet.create({
 container: {
-    width: '100%',
-    margin: 1,
+    width: '88%',
     borderRadius: 10,
     borderColor: '#F5F5F5',
     borderWidth: 1,
     color: 'white',
     borderStyle: 'solid',
     backgroundColor: '#ffffff',
-    marginBottom: 20,
+ //   marginBottom: 20,
+    marginLeft:25,
+    marginRight:25,
+    marginTop:25,
 },
 title: {
     fontSize: 15,
@@ -195,6 +97,9 @@ title: {
     fontWeight: 'bold',
   //  marginBottom: 5,
     color: 'black',
+},
+boxMarginStyle: {
+    marginLeft:15
 },
 line: {
     width:'100%',
@@ -217,95 +122,6 @@ content: {
 },
 introContent: {
     color: '#D9D9D9',
-},
-
-basicInfoContent: {
-    color: '#000000',
-},
-infoText :{
-    color: '#000000',
-    fontSize: 16,
-    fontWeight:'900',
-    marginBottom:5
-},
-icons : {
-    
-
-},
-icon : {
-    flexDirection: 'column',
-    width:20,
-    height:20,
-},
-iconsText:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop:7,
-},
-bunyaText :{
-    color:'#072AC8',
-    backgroundColor:'#F5F4F9',
-    marginTop:12,
-    padding:6,
-    borderRadius:5
-
-},
-careerContent: {
-    // 경력 컨텐츠 스타일
-},
-awardContent: {
-    // 수상내역 컨텐츠 스타일
-},
-interestContent: {
-    // 관심분야 컨텐츠 스타일
-},
-specialtyContent: {
-    // 전문분야 컨텐츠 스타일
-},
-skillContent: {
-    // 보유기술 컨텐츠 스타일
-},
-mainText:{
-
-},
-defaultText:{
-    color:'#000000',
-    marginLeft:10,
-    fontSize:14
-},
-defaultText2:{
-    color:'#000000',
-    fontSize:14
-},
-dateText:{
-    fontSize:12,
-    marginBottom:5,
-},
-devIconText : {
-    justifyContent: 'center',
-    marginLeft:5,
-    color:'#000000',
-    fontSize:14,
-},
-devIcons:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor:'#F5F4F9',
-    padding:6,
-    borderRadius:5,
-    marginTop:12,
-    marginRight:12,
-},
-devIcon : {
-    flexDirection: 'column',
-    width:22,
-    height:22,
-},
-devContainer:{
-    width:320,
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap:'wrap',
 },
 });
 

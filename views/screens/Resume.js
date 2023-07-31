@@ -53,7 +53,6 @@ const Resume = () => {
 const styles = StyleSheet.create({
   container: {
     width: 400,
-    padding: 25,
     flex: 2,
     backgroundColor: '#F3F6FE',
   },
