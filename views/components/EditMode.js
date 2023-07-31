@@ -188,7 +188,7 @@ const EditMode = ({
       <TouchableOpacity style={styles.navBarView} onPress={onPress}>
         <View style={styles.navBarView}>
           <Image source={source} style={styles.image} />
-          <Title>{title}</Title>
+          <Title color={'black'}>{title}</Title>
         </View>
       </TouchableOpacity>
     );
