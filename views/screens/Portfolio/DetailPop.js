@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
 
   pickBtn: {
     width: 132,
-    height: 39,
+    height: 40,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
@@ -84,6 +84,7 @@ import PublicModal from '../../components/PublicModal';
 import DetailPopAttachment from './DetailPopAttachment';
 import Title from '../../components/Title';
 import ChoosePop from '../../components/ChoosePop';
+import ChooseButton from '../../components/ChooseButton';
 import closeblack from '../../../assets/images/closeblack.png';
 
 const DetailPop = ({
@@ -105,8 +106,8 @@ const DetailPop = ({
   // 포트폴리오 아이템에서 Add 버튼 클릭 시 등장하는 디테일 팝업 적용 후 확인을 눌렀는지 확인하는 스테이트
 
   function selectedValue() {
-    if (id == '1') return 'Photo';
-    else if (id == '2') return 'Video';
+    if (id == '1') return 'Video';
+    else if (id == '2') return 'Photo';
     else if (id == '3') return 'Link';
     else return 'Photo';
   } // id값을 통해 사진 수정 시 초기 selected 값을 사진으로 적용하여 각 종류에 맞는 DetailPopup이 열려있도록 구현
@@ -143,6 +144,53 @@ const DetailPop = ({
     setButton3Pressed(true);
   }; // buttonPressed 1~3의 Pressed 여부로 나머지 버튼의 토글 여부를 결정
 
+  // DetailPop Button onPress 용 Props 컴포넌트 start------------------------------------------------------------------------------------------------------------------------
+
+  const DetailPopCheck = () => {
+    // 디테일 팝 확인 버튼 클릭 시 발생
+    if (id == 6) {
+      setChoosePopVisible(true);
+    } else {
+      setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
+    }
+
+    if (setCheckChoosePopOkButton !== undefined) {
+      setCheckChoosePopOkButton(true);
+    }
+
+    console.log(checkChoosePopOkButton);
+  };
+  // DetailPop Button onPress 용 Props 컴포넌트 end------------------------------------------------------------------------------------------------------------------------
+
+  const DetailSectionChooseBtn = ({title, buttonPressed, onPress}) => {
+    //디테일 팝 섹션(이미지, 영상, 링크) 선택 버튼 공통 컴포넌트
+    return (
+      <TouchableOpacity
+        style={[
+          styles.chooseBtn,
+          buttonPressed ? styles.PressedBtn : styles.chooseBtn,
+        ]}
+        onPress={onPress}>
+        <Title fontSize={16} color={buttonPressed ? 'blue' : null}>
+          {title}
+        </Title>
+      </TouchableOpacity>
+    );
+  };
+  const DetailInput = ({description, placeholder}) => {
+    // 디테일 팝 섹션(이미지, 영상, 링크)별 페이지 속 인풋 구성요소 공통 컴포넌트
+    const descriptionStyle = {
+      height: description == true ? 100 : 45,
+      textAlignVertical: 'top',
+    };
+    return (
+      <TextInput
+        style={[styles.input, descriptionStyle]}
+        placeholder={placeholder}
+        placeholderTextColor="#D8D8D8"></TextInput>
+    );
+  };
+
   return (
     <PublicModal
       id={id}
@@ -162,110 +210,69 @@ const DetailPop = ({
         </View>
         <View style={styles.contentView}>
           <View style={styles.chooseContainer}>
-            <TouchableOpacity
-              style={[
-                styles.chooseBtn,
-                button1Pressed ? styles.PressedBtn : styles.chooseBtn,
-              ]}
+            <DetailSectionChooseBtn
+              title={'이미지'}
+              buttonPressed={button2Pressed}
               onPress={() => [
                 handleButtonPress('Photo'),
-                handleButton1Press(),
-              ]}>
-              <Title fontSize={16} color={button1Pressed ? 'blue' : null}>
-                이미지
-              </Title>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.chooseBtn,
-                button2Pressed ? styles.PressedBtn : styles.chooseBtn,
-              ]}
+                handleButton2Press(),
+              ]}></DetailSectionChooseBtn>
+            <DetailSectionChooseBtn
+              title={'영상'}
+              buttonPressed={button1Pressed}
               onPress={() => [
                 handleButtonPress('Video'),
-                handleButton2Press(),
-              ]}>
-              <Title fontSize={16} color={button2Pressed ? 'blue' : null}>
-                영상
-              </Title>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.chooseBtn,
-                button3Pressed ? styles.PressedBtn : styles.chooseBtn,
-              ]}
-              onPress={() => [handleButtonPress('Link'), handleButton3Press()]}>
-              <Title fontSize={16} color={button3Pressed ? 'blue' : null}>
-                링크
-              </Title>
-            </TouchableOpacity>
+                handleButton1Press(),
+              ]}></DetailSectionChooseBtn>
+            <DetailSectionChooseBtn
+              title={'링크'}
+              buttonPressed={button3Pressed}
+              onPress={() => [
+                handleButtonPress('Link'),
+                handleButton3Press(),
+              ]}></DetailSectionChooseBtn>
           </View>
           {selectedButton === 'Photo' && (
             <View style={styles.TextInputContainer}>
               <DetailPopAttachment></DetailPopAttachment>
-              <TextInput
-                style={styles.input}
-                placeholder="제목"
-                placeholderTextColor="#D8D8D8"></TextInput>
-              <TextInput
-                style={[styles.input, styles.description]}
-                placeholder="내용"
-                placeholderTextColor="#D8D8D8"></TextInput>
+              <DetailInput placeholder="제목"></DetailInput>
+              <DetailInput placeholder="내용" description={true}></DetailInput>
             </View>
           )}
           {selectedButton === 'Video' && (
             <View style={styles.TextInputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="링크"
-                placeholderTextColor="#D8D8D8"></TextInput>
-              <TextInput
-                style={styles.input}
-                placeholder="제목"
-                placeholderTextColor="#D8D8D8"></TextInput>
-              <TextInput
-                style={[styles.input, styles.description]}
-                placeholder="내용"
-                placeholderTextColor="#D8D8D8"></TextInput>
+              <DetailInput placeholder="링크"></DetailInput>
+              <DetailInput placeholder="제목"></DetailInput>
+              <DetailInput placeholder="내용" description={true}></DetailInput>
             </View>
           )}
           {selectedButton === 'Link' && (
             <View style={styles.TextInputContainer}>
               <DetailPopAttachment></DetailPopAttachment>
-              <TextInput
-                style={styles.input}
-                placeholder="링크"
-                placeholderTextColor="#D8D8D8"></TextInput>
+              <DetailInput placeholder="링크"></DetailInput>
             </View>
           )}
 
           <View style={styles.flexCenter}>
-            <TouchableOpacity
-              style={styles.pickBtn}
+            <ChooseButton
+              size="M"
               onPress={() => {
                 setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
               }}>
-              <Title>취소</Title>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.pickBtn, styles.chooseOkBtn]}
+              취소
+            </ChooseButton>
+            <ChooseButton
+              size="M"
+              background={'blue'}
               onPress={() => {
-                if (id == 6) {
-                  setChoosePopVisible(true);
-                } else {
-                  setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
-                }
-
-                if (setCheckChoosePopOkButton !== undefined) {
-                  setCheckChoosePopOkButton(true);
-                }
-
-                console.log(checkChoosePopOkButton);
+                DetailPopCheck();
               }}>
-              <Title color={'white'}>확인</Title>
-            </TouchableOpacity>
+              확인
+            </ChooseButton>
           </View>
         </View>
       </Pressable>
+
       <ChoosePop
         id={id}
         title="수정된 내용을 저장하시겠습니까?"

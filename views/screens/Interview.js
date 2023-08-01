@@ -19,6 +19,7 @@ import EditMode from '../components/EditMode';
 import Video from 'react-native-video';
 import InterviewAlert from '../components/InterviewAlert';
 import FAB from '../components/FloatingMenu';
+import ChoosePop from '../components/ChoosePop';
 
 const Interview = () => {
   const [interview, setInterview] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
@@ -133,7 +134,7 @@ const Interview = () => {
           {heart ? (
             <Icon name="heart" size={100} color={'white'} />
           ) : (
-            <Icon name="hearto" size={100} color={'gray'} />
+            <Icon name="heart" size={100} color={'gray'} />
           )}
         </Animated.View>
       </View>
@@ -147,20 +148,11 @@ const Interview = () => {
         setIsPlaying={setIsPlaying}
         setHeart={setHeart} // deletePopModal에 전달 - 인터뷰 삭제시 하트 취소
       />
-      {/* <InterviewModal
-        modalOpen={modalOpen}
-        setModalOpen={setModalOpen}
-        filePath={filePath}
-        setFilePath={setFilePath}
-        heart={heart}
-        setIsPlaying={setIsPlaying}
-        setHeart={setHeart}
-      /> */}
-      <InterviewAlert
+      <ChoosePop
         title={'데이터가 없습니다.'}
-        alertVisible={showAlert}
-        setAlertVisible={setShowAlert}
-      />
+        alert={true}
+        choosePopVisible={showAlert}
+        setChoosePopVisible={setShowAlert}></ChoosePop>
     </SafeAreaView>
   );
 };
@@ -175,7 +167,6 @@ const styles = StyleSheet.create({
     width: width,
     height: height,
     backgroundColor: '#F5F4F9',
-    // padding: 10,
   },
   iconBar: {
     height: 60,

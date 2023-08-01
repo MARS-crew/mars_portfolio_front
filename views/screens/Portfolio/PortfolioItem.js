@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import Video from 'react-native-video';
 import {Shadow} from 'react-native-shadow-2';
-//import PortfolioModal from './PortfolioModalTest';
 import EditMode from '../../components/EditMode';
 import ContentsViewPop from './ContentsViewPop';
 import DetailPop from './DetailPop';
@@ -18,6 +18,12 @@ const squareSize = Math.min(width, height) * 0.4;
 const styles = StyleSheet.create({
   image: {
     resizeMode: 'contain',
+  },
+  content: {
+    width: squareSize,
+    height: squareSize,
+    borderWidth: 1,
+    borderRadius: 10,
   },
   gridItem: {
     width: squareSize,
@@ -33,7 +39,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const PortfolioItem = ({portfolio, id, src, onModify, onDelete}) => {
+const PortfolioItem = ({
+  portfolio,
+  id,
+  title,
+  src,
+  code,
+  message,
+  onModify,
+  onDelete,
+}) => {
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [detailPopVisible, setDetailPopVisible] = useState(false);
@@ -54,13 +69,29 @@ const PortfolioItem = ({portfolio, id, src, onModify, onDelete}) => {
               ? setDetailPopVisible(!detailPopVisible)
               : setIsModalVisible(!isModalVisible)
           }>
-          <View>
-            <Image source={src} style={styles.image} />
-          </View>
+          {code === '1' && (
+            <View>
+              <Video
+                ref={useRef(null)}
+                source={src}
+                style={styles.content}
+                repeat={true}
+                resizeMode="contain"
+              />
+            </View>
+          )}
+          {code !== '1' && (
+            <View>
+              <Image source={src} style={[styles.content, styles.image]} />
+            </View>
+          )}
         </TouchableOpacity>
         <ContentsViewPop
           id={id}
+          title={title}
           src={src}
+          code={code}
+          message={message}
           onModify={onModify}
           onDelete={onDelete}
           contentsViewPopVisible={contentsViewPopVisible}
