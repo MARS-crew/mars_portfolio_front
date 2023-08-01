@@ -106,8 +106,8 @@ const DetailPop = ({
   // 포트폴리오 아이템에서 Add 버튼 클릭 시 등장하는 디테일 팝업 적용 후 확인을 눌렀는지 확인하는 스테이트
 
   function selectedValue() {
-    if (id == '1') return 'Photo';
-    else if (id == '2') return 'Video';
+    if (id == '1') return 'Video';
+    else if (id == '2') return 'Photo';
     else if (id == '3') return 'Link';
     else return 'Photo';
   } // id값을 통해 사진 수정 시 초기 selected 값을 사진으로 적용하여 각 종류에 맞는 DetailPopup이 열려있도록 구현
@@ -212,17 +212,17 @@ const DetailPop = ({
           <View style={styles.chooseContainer}>
             <DetailSectionChooseBtn
               title={'이미지'}
-              buttonPressed={button1Pressed}
+              buttonPressed={button2Pressed}
               onPress={() => [
                 handleButtonPress('Photo'),
-                handleButton1Press(),
+                handleButton2Press(),
               ]}></DetailSectionChooseBtn>
             <DetailSectionChooseBtn
               title={'영상'}
-              buttonPressed={button2Pressed}
+              buttonPressed={button1Pressed}
               onPress={() => [
                 handleButtonPress('Video'),
-                handleButton2Press(),
+                handleButton1Press(),
               ]}></DetailSectionChooseBtn>
             <DetailSectionChooseBtn
               title={'링크'}

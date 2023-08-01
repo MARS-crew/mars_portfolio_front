@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef} from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -9,6 +9,10 @@ import {
   Pressable,
   Dimensions,
 } from 'react-native';
+import Video from 'react-native-video';
+import PublicModal from '../../components/PublicModal';
+import closeblack from '../../../assets/images/closeblack.png';
+import Title from '../../components/Title';
 
 const {width, height} = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.9;
@@ -19,7 +23,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     borderWidth: 1,
-    borderRadius: 10,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     borderColor: '#EEEEEE',
     padding: 20,
     backgroundColor: '#fff',
@@ -35,11 +40,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 15,
   },
-
   image: {
+    resizeMode: 'contain',
+  },
+  content: {
     width: squareSize,
     height: squareSize,
-    resizeMode: 'contain',
   },
   nullImage: {
     width: Dimensions.get('window').width / 3,
@@ -59,58 +65,19 @@ const styles = StyleSheet.create({
   chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0},
 });
 
-import PublicModal from '../../components/PublicModal';
-import pause from '../../../assets/images/pause.png';
-import linkBtn from '../../../assets/images/linkBtn.png';
-import closeblack from '../../../assets/images/closeblack.png';
-import testImg from '../../../assets/images/testImg.png';
-
-import Title from '../../components/Title';
-
 const ContentsViewPop = ({
   id,
+  title,
   src,
+  code,
+  message,
   onModify,
   contentsViewPopVisible,
   setContentsViewPopVisible,
 }) => {
-  const [selectedButton, setSelectedButton] = useState(selectedValue());
-  const TEST_TITLE = `포트폴리오 사진 상세 팝업 테스트 입니다. \n
-          자세한 내용은 추후 업데이트 될 예정입니다.
-          \n Graphic design day
-          \n Graphic design
-          \n day Graphic design
-          \n day April 27
-          \n
-          \n Portfolio.js > ContentsViewPop.js`;
-
-  function selectedValue() {
-    if (id == '1') return 'Photo';
-    else if (id == '2') return 'Video';
-    else if (id == '3') return 'Link';
-    else if (id == '5') return 'Null';
-    else return 'Photo';
-  } // id값을 통해 사진 수정 시 초기 selected 값을 사진으로 적용하여 각 종류에 맞는 DetailPopup이 열려있도록 구현
-
-  function selectedTestTitle() {
-    if (id == '1') return '이미지';
-    else if (id == '2') return '영상';
-    else if (id == '3') return '링크';
-    else if (id == '5') return '(비어있음)';
-    else return 'Photo';
-  } // 테스트용
-
-  // const ContentsView = (title, src) => {
-  //   return (
-  //     <View style={styles.contentView}>
-  //       <View style={styles.imageView}>
-  //         <Image source={src} style={styles.image} />
-  //       </View>
-  //       <Title style={styles.input}>{title}</Title>
-  //     </View>
-  //   );
-  // };
-
+  const handleLinkPress = () => {
+    Linking.openURL(message);
+  };
   return (
     <PublicModal
       id={id}
@@ -122,7 +89,7 @@ const ContentsViewPop = ({
         style={styles.modalView}>
         <View style={styles.titleView}>
           <Title fontSize={18} style={styles.input}>
-            {selectedTestTitle()}
+            {title}
           </Title>
           <TouchableOpacity
             onPress={() => {
@@ -132,70 +99,41 @@ const ContentsViewPop = ({
           </TouchableOpacity>
         </View>
 
-        {selectedButton === 'Photo' && (
-          <View style={styles.contentView}>
-            <View style={styles.imageView}>
-              <Image source={testImg} style={styles.image} />
-            </View>
-            <Title style={styles.input}>
-              포트폴리오 영상 상세 팝업 이미지 부분 테스트 입니다. {'\n'}
-              자세한 내용은 추후 업데이트 될 예정입니다.
-              {'\n'} Graphic design day
-              {'\n'} Graphic design
-              {'\n'} day Graphic design
-              {'\n'} day April 27
-              {'\n'}
-              {'\n'}Portfolio.js {'>'} ContentsViewPop.js
-            </Title>
+        <View style={styles.contentView}>
+          <View style={styles.imageView}>
+            {code === '1' && (
+              <View>
+                <Video
+                  ref={useRef(null)}
+                  source={src}
+                  style={styles.content}
+                  controls={true}
+                  repeat={true}
+                  resizeMode="contain"
+                />
+              </View>
+            )}
+
+            {code !== '1' && (
+              <View>
+                {id === '3' && (
+                  <TouchableOpacity
+                    style={[styles.input, styles.linkView]}
+                    onPress={() => handleLinkPress()}>
+                    <Image
+                      source={src}
+                      style={[styles.content, styles.image]}
+                    />
+                  </TouchableOpacity>
+                )}
+                {id !== '3' && (
+                  <Image source={src} style={[styles.content, styles.image]} />
+                )}
+              </View>
+            )}
           </View>
-        )}
-        {selectedButton === 'Video' && (
-          <View style={styles.contentView}>
-            <View style={styles.imageView}>
-              <Image source={testImg} style={styles.image} />
-            </View>
-            <Title style={styles.input}>
-              포트폴리오 영상 상세 팝업 이미지 부분 테스트 입니다. {'\n'}
-              자세한 내용은 추후 업데이트 될 예정입니다.
-              {'\n'} Graphic design day
-              {'\n'} Graphic design
-              {'\n'} day Graphic design
-              {'\n'} day April 27
-              {'\n'}
-              {'\n'}Portfolio.js {'>'} ContentsViewPop.js
-            </Title>
-          </View>
-        )}
-        {selectedButton === 'Link' && (
-          <View style={styles.contentView}>
-            <View style={styles.imageView}>
-              <Image source={testImg} style={styles.image} />
-            </View>
-            <Title style={styles.input}>
-              포트폴리오 링크 상세 팝업 이미지 부분 테스트 입니다. {'\n'}
-              자세한 내용은 추후 업데이트 될 예정입니다.
-              {'\n'} Graphic design day
-              {'\n'} Graphic design
-              {'\n'} day Graphic design
-              {'\n'} day April 27
-              {'\n'}
-              {'\n'}Portfolio.js {'>'} ContentsViewPop.js
-            </Title>
-          </View>
-        )}
-        {selectedButton === 'Null' && (
-          <View style={styles.contentView}>
-            <View style={styles.imageView}>
-              <Image source={src} style={[styles.nullImage]} />
-            </View>
-            <Title style={styles.input}>
-              포트폴리오 Null 상세 팝업 이미지 부분 테스트 입니다. {'\n'}
-              자세한 내용은 추후 업데이트 될 예정입니다.
-              {'\n'} Null
-              {'\n'}Portfolio.js {'>'} ContentsViewPop.js
-            </Title>
-          </View>
-        )}
+          <Title style={styles.input}>{message}</Title>
+        </View>
 
         <TouchableOpacity
           style={[styles.pickBtn, styles.chooseOkBtn]}

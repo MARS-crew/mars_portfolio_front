@@ -83,8 +83,6 @@ const styles = StyleSheet.create({
 });
 
 import PublicModal from '../components/PublicModal';
-import pause from '../../assets/images/pause.png';
-import linkBtn from '../../assets/images/linkBtn.png';
 
 const ContentsViewPop = ({
   id,
