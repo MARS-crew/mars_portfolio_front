@@ -80,6 +80,7 @@ const ContentsViewPop = ({
   };
   return (
     <PublicModal
+      animationType={'slide'}
       id={id}
       onModify={onModify}
       isModalVisible={contentsViewPopVisible}

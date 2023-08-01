@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
 });
 
 const PublicModal = ({
+  animationType,
   id,
   onModify,
   onDelete,
@@ -30,7 +31,7 @@ const PublicModal = ({
   return (
     <Modal
       style={styles.modalContainer}
-      animationType={'fade'}
+      animationType={animationType == 'slide' ? 'slide' : 'fade'}
       transparent={true}
       visible={isModalVisible}
       onRequestClose={() => {
