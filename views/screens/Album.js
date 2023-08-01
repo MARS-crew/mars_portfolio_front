@@ -219,30 +219,30 @@ import {
 const albumImages = [
   {
     id: 1,
-    url: require('../../assets/images/text_album_1.png'),
+    url: require('../../assets/images/album1.jpeg'),
   },
   {
     id: 2,
-    url: require('../../assets/images/text_album_2.png'),
+    url: require('../../assets/images/album2.jpeg'),
   },
   {
     id: 3,
-    url: require('../../assets/images/text_album_3.png'),
+    url: require('../../assets/images/album3.jpeg'),
   },
 ];
 
 const albumImages2 = [
   {
     id: 4,
-    url: require('../../assets/images/text_album_4.png'),
+    url: require('../../assets/images/album4.jpeg'),
   },
   {
     id: 5,
-    url: require('../../assets/images/text_album_5.png'),
+    url: require('../../assets/images/album5.jpeg'),
   },
   {
     id: 6,
-    url: require('../../assets/images/text_album_6.png'),
+    url: require('../../assets/images/album6.jpeg'),
   },
 ];
 
@@ -281,28 +281,30 @@ const Album = () => {
         <View style={styles.divider} />
         <View style={styles.body}>
           <View style={styles.bodyContent}>
-            <View style={styles.imageContainer}>
+            <View style={styles.imageRowContainer}>
               {albumImages.map(image => (
                 <TouchableOpacity
+                  style={styles.imageContainer}
                   key={image.id}
                   onPress={() => handleImagePress(image)}>
                   <Image
                     style={styles.imageContent}
                     source={image.url}
-                    resizeMode="contain"
+                    resizeMode="cover"
                   />
                 </TouchableOpacity>
               ))}
             </View>
-            <View style={styles.imageContainer}>
+            <View style={styles.imageRowContainer}>
               {albumImages2.map(image => (
                 <TouchableOpacity
+                  style={styles.imageContainer}
                   key={image.id}
                   onPress={() => handleImagePress(image)}>
                   <Image
                     style={styles.imageContent}
                     source={image.url}
-                    resizeMode="contain"
+                    resizeMode="cover"
                   />
                 </TouchableOpacity>
               ))}
@@ -317,28 +319,30 @@ const Album = () => {
         <View style={styles.divider} />
         <View style={styles.body}>
           <View style={styles.bodyContent}>
-            <View style={styles.imageContainer}>
+            <View style={styles.imageRowContainer}>
               {albumImages.map(image => (
                 <TouchableOpacity
+                  style={styles.imageContainer}
                   key={image.id}
                   onPress={() => handleImagePress(image)}>
                   <Image
                     style={styles.imageContent}
                     source={image.url}
-                    resizeMode="contain"
+                    resizeMode="cover"
                   />
                 </TouchableOpacity>
               ))}
             </View>
-            <View style={styles.imageContainer}>
+            <View style={styles.imageRowContainer}>
               {albumImages2.map(image => (
                 <TouchableOpacity
+                  style={styles.imageContainer}
                   key={image.id}
                   onPress={() => handleImagePress(image)}>
                   <Image
                     style={styles.imageContent}
                     source={image.url}
-                    resizeMode="contain"
+                    resizeMode="cover"
                   />
                 </TouchableOpacity>
               ))}
@@ -375,8 +379,7 @@ const Album = () => {
 
 export default Album;
 
-const {width} = Dimensions.get('window').width;
-const {height} = Dimensions.get('window').height;
+const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -412,19 +415,25 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  imageContainer: {
+  imageRowContainer: {
     flexDirection: 'row',
   },
   imageContent: {
-    width: 125,
-    height: 125,
+    width: '100%',
+    height: '100%',
+    borderRadius: 10,
+  },
+  imageContainer: {
+    width: width * 0.27,
+    height: height * 0.15,
+    margin: 8,
+    elevation: 8,
   },
   divider: {
-    width: width,
-    height: 1,
-    marginVertical: 10,
     marginHorizontal: 20,
-    backgroundColor: '#D8D8D8',
+    marginVertical: 10,
+    borderBottomColor: '#E5E5E5',
+    borderBottomWidth: 1,
   },
   modalContainer: {
     flex: 1,
