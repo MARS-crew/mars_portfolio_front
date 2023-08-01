@@ -5,8 +5,6 @@ import {
   TouchableOpacity,
   Pressable,
   Dimensions,
-  Text,
-  Platform,
   View,
   Image,
 } from 'react-native';
@@ -17,9 +15,8 @@ import ChoosePop from '../components/ChoosePop';
 import Title from '../components/Title';
 import cancelIcon from '../../assets/images/cancelIcon.png';
 import deletedIcon from '../../assets/images/deletedIcon.png';
-import editIcon from '../../assets/images/editIcon.png';
+import saveIcon from '../../assets/images/editIcon.png';
 import editingIcon from '../../assets/images/editingIcon.png';
-import {FlatList} from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
   modalBackdropPress: {
@@ -56,7 +53,6 @@ const EditMode = ({
   id,
   onModify,
   onDelete,
-
   //인터뷰 프롭스
   interview,
   heart,
@@ -81,7 +77,6 @@ const EditMode = ({
   const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
 
   //인터뷰 컴포넌트 start-----------------------------------------------------------------------------------------------------------------------------------------
-
   // 갤러리에서 video 파일 선택
   const chooseFile = type => {
     let options = {
@@ -89,15 +84,13 @@ const EditMode = ({
       maxWidth: 300,
       maxHeight: 550,
       videoQuality: 'low',
-      // quality: 1,
     };
     launchImageLibrary(options, response => {
-      if (response === undefined) {
+      if (response === false) {
         // 선택한 이미지가 없는 경우
         console.log('User did not select an image');
         return;
       }
-
       console.log('Response = ', response);
 
       if (response.assets && response.assets.length > 0) {
@@ -115,7 +108,91 @@ const EditMode = ({
       }
     });
   };
+
+  //인터뷰 세이브
+  const handleSave = () => {
+    //setTogleButton(true);
+    setIsPlaying(true);
+    setFilePath(changeData);
+    setChangeData(); // 저장된 데이터 초기화
+    // setSavePopVisible(false);
+    setHeart(changeHeart);
+  };
+
+  // 인터뷰 딜리트
+  const deleteUrl = () => {
+    setChangeData(false);
+  };
   //인터뷰 컴포넌트 end-----------------------------------------------------------------------------------------------------------------------------------------
+
+  // EditMode Button onPress 용 Props 컴포넌트 start------------------------------------------------------------------------------------------------------------------------
+  const editingButton = () => {
+    //수정 섹션을 클릭한 경우
+    //인터뷰: interview 스테이트를 통해 인터뷰 페이지에서 진입했다면 하단 파일 탐색기 실행
+    if (interview == true) {
+      chooseFile('video');
+      console.log(checkDeletePopOkButton);
+    }
+    //포트폴리오: portfolio 스테이트를 통해 포트폴리오 페이지에서 진입했다면 하단 디테일 팝 실행
+    else if (portfolio == true) {
+      setCheckChoosePopOkButton(false); //수정 누를 때 디테일 팝 확인버튼 클릭 여부 스테이트 초기화
+      setDetailPopVisible(true);
+      setTogleButton(true);
+    }
+  };
+
+  const saveButton = () => {
+    //저장 섹션을 클릭한 경우
+    //인터뷰: interview 스테이트를 통해 인터뷰 페이지에서 진입했다면 하단 파일 탐색기 실행
+    if (interview == true) {
+      setSaveChoosePopVisible(true);
+    }
+    //포트폴리오 portfolio 스테이트를 통해 포트폴리오 페이지에서 진입했다면 하단 디테일 팝 실행
+    else if (portfolio == true) {
+      if (checkChoosePopOkButton == false) {
+        console.log('if (checkChoosePopOkButton === false) 디테일팝업 취소');
+        if (checkDeletePopOkButton == true) {
+          setDetailPopVisible(false);
+          setSaveChoosePopVisible(true); // 그러나 삭제 츄즈 팝업에서 확인을 눌렀다면 디테일 팝업 닫고 저장 클릭 시 츄즈팝업 실행
+        } else if (checkDeletePopOkButton == false) {
+          setDetailPopVisible(true);
+          //디테일 팝업에서 취소 누른 경우 저장 클릭 시 디테일 팝업만 계속 실행
+        }
+      } else if (checkChoosePopOkButton == true) {
+        setDetailPopVisible(false);
+        console.log(
+          'else if (checkChoosePopOkButton === true) 디테일팝업 확인',
+        );
+        setSaveChoosePopVisible(true); // 디테일 팝업에서 확인 누른 경우 이후에 저장 클릭 시 디테일 팝업 대신 저장 츄즈 팝업 실행
+      }
+    }
+  };
+  const deletedButton = () => {
+    //인터뷰: interview 스테이트를 통해 인터뷰 페이지에서 진입했다면 하단 파일 탐색기 실행
+    if (interview == true) {
+      setRemoveChoosePopVisible(true);
+      setTogleButton(true);
+    }
+    //포트폴리오 portfolio 스테이트를 통해 포트폴리오 페이지에서 진입했다면 하단 디테일 팝 실행
+    else if (portfolio == true) {
+      setRemoveChoosePopVisible(true);
+      setTogleButton(true);
+    }
+    // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
+  };
+
+  // EditMode Button onPress 용 Props 컴포넌트 end------------------------------------------------------------------------------------------------------------------------
+
+  const EditModeSectionChooseBtn = ({title, source, onPress}) => {
+    return (
+      <TouchableOpacity style={styles.navBarView} onPress={onPress}>
+        <View style={styles.navBarView}>
+          <Image source={source} style={styles.image} />
+          <Title color={'black'}>{title}</Title>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <Modal
@@ -137,92 +214,34 @@ const EditMode = ({
           }} // Pressable: 모달 영역 안 클릭 시 Bottom Nav(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
           style={[styles.modalView, styles.shadow]}>
           {togleButton === false && (
-            <TouchableOpacity
-              style={styles.navBarView}
+            <EditModeSectionChooseBtn
+              title={'수정'}
+              source={editingIcon}
               onPress={() => {
-                //인터뷰: interview 스테이트를 통해 인터뷰 페이지에서 진입했다면 하단 파일 탐색기 실행
-                if (interview == true) {
-                  chooseFile('video');
-                  console.log(checkDeletePopOkButton);
-                }
-
-                //포트폴리오 portfolio 스테이트를 통해 포트폴리오 페이지에서 진입했다면 하단 디테일 팝 실행
-                else if (portfolio == true) {
-                  setCheckChoosePopOkButton(false); //수정 누를 때 디테일 팝 확인버튼 클릭 여부 스테이트 초기화
-                  setDetailPopVisible(true);
-                  setTogleButton(true);
-                }
-                //마이페이지: myPage 추후에 마이페이지가 완성되면 마이페이지 진입 구분용으로 추가될 if문 코드
-                //else if (myPage == true)
-                //명령어;
-              }}>
-              <View style={styles.navBarView}>
-                <Image source={editingIcon} style={styles.image} />
-                <Title>수정</Title>
-              </View>
-            </TouchableOpacity>
+                editingButton();
+              }}></EditModeSectionChooseBtn>
           )}
           {togleButton === true && (
-            <TouchableOpacity
-              style={styles.navBarView}
+            <EditModeSectionChooseBtn
+              title={'저장'}
+              source={saveIcon}
               onPress={() => {
-                //인터뷰: interview 스테이트를 통해 인터뷰 페이지에서 진입했다면 하단 파일 탐색기 실행
-                if (interview == true) {
-                  setSaveChoosePopVisible(true);
-                }
-                //포트폴리오 portfolio 스테이트를 통해 포트폴리오 페이지에서 진입했다면 하단 디테일 팝 실행
-                else if (portfolio == true) {
-                  if (checkChoosePopOkButton == false) {
-                    console.log(
-                      'if (checkChoosePopOkButton === false) 디테일팝업 취소',
-                    );
-                    if (checkDeletePopOkButton == true) {
-                      setDetailPopVisible(false);
-                      setSaveChoosePopVisible(true); // 그러나 삭제 츄즈 팝업에서 확인을 눌렀다면 디테일 팝업 닫고 저장 클릭 시 츄즈팝업 실행
-                    } else if (checkDeletePopOkButton == false) {
-                      setDetailPopVisible(true);
-                      //디테일 팝업에서 취소 누른 경우 저장 클릭 시 디테일 팝업만 계속 실행
-                    }
-                  } else if (checkChoosePopOkButton == true) {
-                    setDetailPopVisible(false);
-                    console.log(
-                      'else if (checkChoosePopOkButton === true) 디테일팝업 확인',
-                    );
-                    setSaveChoosePopVisible(true); // 디테일 팝업에서 확인 누른 경우 이후에 저장 클릭 시 디테일 팝업 대신 저장 츄즈 팝업 실행
-                  }
-                }
-              }}>
-              <View style={styles.navBarView}>
-                <Image source={editIcon} style={styles.image} />
-                <Title>저장</Title>
-              </View>
-            </TouchableOpacity>
+                saveButton();
+              }}></EditModeSectionChooseBtn>
           )}
-          <ChoosePop
-            //공통
-            title="수정된 내용을 저장하시겠습니까?"
-            setTogleButton={setTogleButton}
-            checkDeletePopOkButton={checkDeletePopOkButton}
-            setCheckDeletePopOkButton={setCheckDeletePopOkButton}
-            checkChoosePopOkButton={checkChoosePopOkButton}
-            setCheckChoosePopOkButton={setCheckChoosePopOkButton}
-            setIsModalVisible={setIsModalVisible}
-            choosePopVisible={saveChoosePopVisible}
-            setChoosePopVisible={setSaveChoosePopVisible}
-            //인터뷰
-            interview={interview}
-            setIsEditing={setIsEditing}
-            setIsPlaying={setIsPlaying}
-            setFilePath={setFilePath}
-            changeData={changeData}
-            setChangeData={setChangeData}
-            setHeart={setHeart}
-            changeHeart={changeHeart}
-            //포트폴리오
-            portfolio={portfolio}
-            id={id}
-            onModify={onModify}
-            onDelete={onDelete}></ChoosePop>
+          <EditModeSectionChooseBtn
+            title={'삭제'}
+            source={deletedIcon}
+            onPress={() => {
+              deletedButton();
+            }}></EditModeSectionChooseBtn>
+          <EditModeSectionChooseBtn
+            title={'취소'}
+            source={cancelIcon}
+            onPress={() => {
+              setIsModalVisible(!isModalVisible);
+              setTogleButton(false);
+            }}></EditModeSectionChooseBtn>
 
           <DetailPop
             id={id}
@@ -232,26 +251,25 @@ const EditMode = ({
             detailPopVisible={detailPopVisible}
             setTogleButton={setTogleButton}
             setDetailPopVisible={setDetailPopVisible}></DetailPop>
-          <TouchableOpacity
-            style={styles.navBarView}
-            onPress={() => {
-              //인터뷰: interview 스테이트를 통해 인터뷰 페이지에서 진입했다면 하단 파일 탐색기 실행
-              if (interview == true) {
-                setRemoveChoosePopVisible(true);
-                setTogleButton(true);
-              }
-              //포트폴리오 portfolio 스테이트를 통해 포트폴리오 페이지에서 진입했다면 하단 디테일 팝 실행
-              else if (portfolio == true) {
-                setRemoveChoosePopVisible(true);
-                setTogleButton(true);
-              }
-
-              // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
-            }}>
-            <Image source={deletedIcon} style={styles.image} />
-            <Title>삭제</Title>
-          </TouchableOpacity>
-
+          <ChoosePop
+            //공통
+            title="수정된 내용을 저장하시겠습니까?"
+            setTogleButton={setTogleButton}
+            checkDeletePopOkButton={checkDeletePopOkButton}
+            setCheckDeletePopOkButton={setCheckDeletePopOkButton}
+            setCheckChoosePopOkButton={setCheckChoosePopOkButton}
+            setIsModalVisible={setIsModalVisible}
+            choosePopVisible={saveChoosePopVisible}
+            setChoosePopVisible={setSaveChoosePopVisible}
+            //인터뷰
+            interview={interview}
+            handleSave={handleSave}
+            deleteUrl={deleteUrl}
+            //포트폴리오
+            portfolio={portfolio}
+            id={id}
+            onModify={onModify}
+            onDelete={onDelete}></ChoosePop>
           <ChoosePop
             //공통
             title="수정된 내용을 삭제하시겠습니까?"
@@ -268,17 +286,6 @@ const EditMode = ({
             //포트폴리오
             portfolio={portfolio}
             id={id}></ChoosePop>
-
-          <TouchableOpacity
-            style={styles.navBarView}
-            onPress={() => {
-              // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
-              setIsModalVisible(!isModalVisible);
-              setTogleButton(false);
-            }}>
-            <Image source={cancelIcon} style={styles.image} />
-            <Title>취소</Title>
-          </TouchableOpacity>
         </Pressable>
       </TouchableOpacity>
     </Modal>

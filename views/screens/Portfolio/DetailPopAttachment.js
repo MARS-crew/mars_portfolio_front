@@ -2,9 +2,7 @@ import React, {useState} from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
-  Text,
   View,
-  TextInput,
   Dimensions,
   Image,
 } from 'react-native';
@@ -74,7 +72,6 @@ const DetailPopAttachment = () => {
   return (
     <View>
       <View style={styles.chooseContainer}>
-        {/* <TextInput style={[styles.Input, styles.inputRightMargin]}></TextInput> */}
         <TouchableOpacity style={styles.pickBtn} onPress={openFilePicker}>
           {pickUri === null && <Image source={Attachment} />}
           {pickUri === undefined && (
@@ -82,15 +79,6 @@ const DetailPopAttachment = () => {
           )}
         </TouchableOpacity>
       </View>
-      {/* <View style={[styles.chooseContainer, styles.fileContainer]}>
-        <Text style={styles.inputRightMargin}>첨부파일</Text>
-        <View style={styles.chooseContainer}>
-          <Text style={styles.inputRightMargin}>{pickUri}</Text>
-          <TouchableOpacity style={styles.flexEnd} onPress={() => DeleteFile()}>
-            <Text>X</Text>
-          </TouchableOpacity>
-        </View>
-      </View> */}
     </View>
   );
 };
