@@ -96,6 +96,8 @@ const InterviewModal = ({
       transparent={true}
       visible={modalOpen}
       onRequestClose={() => {
+        setFilePath(prevFile);
+        setPrevFile();
         setModalOpen(!modalOpen);
       }}>
       <TouchableOpacity
@@ -103,11 +105,16 @@ const InterviewModal = ({
           setModalOpen(false);
           if (isEditing) {
             setIsEditing(false);
+            setFilePath(prevFile);
+            setPrevFile();
           }
+
         }} // modalBackdropPress: 모달 영역 밖 클릭 시 Bottom Nav(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
         style={styles.modalBackdropPress}>
         <Pressable
-          onPress={() => setModalOpen(true)} // Pressable: 모달 영역 안 클릭 시 Bottom Nav(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
+          onPress={() => {
+            setModalOpen(true);
+          }} // Pressable: 모달 영역 안 클릭 시 Bottom Nav(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
           style={styles.modalView}>
           {isEditing ? (
             <TouchableOpacity
