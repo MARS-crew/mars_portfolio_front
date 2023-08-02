@@ -115,18 +115,33 @@ const InterviewContents = ({ path }) => {
           onLongPress={() => setModalOpen(true)}>
           {/* 저장된 video가 있으w면 video 출력. 없으면  마스외전 로고 출력*/}
           {filePath ? (
-            <Video
-              ref={useRef(null)}
-              source={filePath}
-              style={[styles.content]}
-              controls={false}
-              resizeMode="cover"
-              repeat={true}
-              paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
-              onEnd={() => {
-                setIsPlaying(false);
-              }}
-            />
+            typeof filePath === "string" ? (  //filepath가 string일때
+              <Video
+                ref={useRef(null)}
+                source={{ uri: filePath }}
+                style={[styles.content]}
+                controls={false}
+                resizeMode="cover"
+                repeat={true}
+                paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
+                onEnd={() => {
+                  setIsPlaying(false);
+                }}
+              />
+            ) : ( //filepath가 파일일때
+              <Video
+                ref={useRef(null)}
+                source={filePath}
+                style={[styles.content]}
+                controls={false}
+                resizeMode="cover"
+                repeat={true}
+                paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
+                onEnd={() => {
+                  setIsPlaying(false);
+                }}
+              />
+            )
           ) : (
             <Image
               resizeMode="cover"
