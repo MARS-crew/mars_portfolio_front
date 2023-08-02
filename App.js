@@ -113,6 +113,7 @@ const App = () => {
 };
 
 const HomeScreen = () => {
+  const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
 
   useEffect(() => {
@@ -155,7 +156,7 @@ const HomeScreen = () => {
         <Interview />
       </Screen>
       <Screen text="Screen 4" index={3}>
-        <Resume />
+        <Resume modalOpen={modalOpen} />
       </Screen>
       <Screen text="Screen 5" index={4}>
         <Portfolio options={{headerShown: false}} />

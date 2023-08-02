@@ -1,6 +1,5 @@
-import {View,Text,StyleSheet,Image} from "react-native";
+import {View,Text,StyleSheet,Image,TextInput,Button,Modal} from "react-native";
 import {Resume} from '../screens/Resume'
-import Id7Popup from "./Id7Popup";
 import {Shadow} from 'react-native-shadow-2';
 import tel_icon from '../../assets/images/icon-telephone.png';
 import home_icon from '../../assets/images/icon-home.png';
@@ -13,24 +12,40 @@ import react_icon from '../../assets/images/devIcon/react.png'
 import css3_icon from '../../assets/images/devIcon/css3.png'
 import html5_icon from '../../assets/images/devIcon/html5.png'
 import springboot_icon from '../../assets/images/devIcon/springboot.png'
+import write from '../../assets/images/write.png'
+import Postcode from '@actbase/react-daum-postcode';
 
 
 
 import { help } from "yargs";
 import React,{useState} from "react";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const ResumeBox = ({ item }) => {
-    const containerStyles = item.id === '1' ? { ...styles.container, marginTop: 20 } : 
-    item.id === '7' ? { ...styles.container, marginBottom: 20 } : styles.container;
+const containerStyles = item.id === '1' ? { ...styles.container, marginTop: 20 } : 
+item.id === '7' ? { ...styles.container, marginBottom: 80 } : styles.container;
 
 let content = null;
 let contentStyles = {}; // 컨텐츠 부분의 스타일
+const [inputText, setInputText] = useState('');
+const [resume, setResume] = useState({})
+// const test = async () => {
+//     const result = await axios.get("/api/v1/resume/123");
 
+//     setResume(result.data.data)
+
+// }
 if (item.id === '1') {
-    content = '소개글을 입력해주세요';
-    contentStyles = styles.introContent; // 소개글 컨텐츠 스타일
+    content = 
+    <View>
+        <TextInput
+            onChangeText={(text) => { setInputText(text) }}
+            placeholder="소개글을 입력해주세요"
+            />
+    </View>
 } else if (item.id === '2') {
+    const [isModalVisible, setModalVisible] = useState(false);
+    
     content = 
     <View>
         <Text style={styles.infoText}>이화진</Text>
@@ -45,18 +60,35 @@ if (item.id === '1') {
             <Image 
             source={home_icon} 
             style={styles.icon} />
-            <Text style={styles.defaultText}>경기도</Text>
-            </View>
-            <View style={styles.iconsText}>
-            <Image 
-            source={main_icon} 
-            style={styles.icon} />
-            <Text style={styles.defaultText}>123@naver.com</Text>
+                    {/* <TextInput
+            onChangeText={(text) => { setInputText(text) }}
+            placeholder="주소를 입력해주세요."
+            /> */}
+        <Modal visible={isModalVisible}>
+            <Postcode
+                style={{ width: 300, height: 300 }}
+                jsOptions={{ animation: true, hideMapBtn: true }}
+                onSelected={data => {
+                    alert(JSON.stringify(data));
+                    setModalVisible(false);
+                }}
+            />
+        </Modal>
+        <TouchableOpacity onPress={() => setModalVisible(true)} style={{ width: 50, height: 30 }}>
+            <Text>{resume.introduce}</Text>
+        </TouchableOpacity>
+            
+                </View>
+                <View style={styles.iconsText}>
+                <Image 
+                source={main_icon} 
+                style={styles.icon} />
+                <Text style={styles.defaultText}>123@naver.com</Text>
             </View>
         </View>
     </View>
     ;
-    contentStyles = styles.basicInfoContent; // 기본정보 컨텐츠 스타일
+
 } else if (item.id === '3') {
     content = 
     <View>
@@ -118,99 +150,45 @@ if (item.id === '1') {
     ;
     contentStyles = styles.specialtyContent; // 전문분야 컨텐츠 스타일
 } else if (item.id === '7') {
-    const [popupIcon, setPopupIcon] = useState('');
-    const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [detailPopVisible, setDetailPopVisible] = useState(false);
-
-    const handleIconClick = (id) => {
-        // 클릭하면 상세 팝업 가시성과 컨텐츠 뷰 팝업 가시성을 모두 반전시킴
-        setDetailPopVisible(!detailPopVisible);
-        setContentsViewPopVisible(!contentsViewPopVisible);
-    
-        // 클릭한 아이콘의 아이디를 설정
-        setPopupIcon(id);
-    };
-
-    const handleClosePopup = () => {
-        setPopupIcon('');
-    };
-    
     content = 
     <View style={styles.devContainer}>
-
-    {/* 자바 */}
-    <TouchableOpacity onPress={() => handleIconClick('java')}>
         <View style={styles.devIcons}>
-            <Image
-                source={java_icon}
+            <Image             
+                source={java_icon} 
                 style={styles.devIcon} />
             <Text style={styles.devIconText}>JAVA</Text>
         </View>
-    </TouchableOpacity>
-
-    {/* php */}
-    <TouchableOpacity onPress={() => handleIconClick('php')}>
         <View style={styles.devIcons}>
-            <Image
-                source={php_icon}
+            <Image             
+                source={php_icon} 
                 style={styles.devIcon} />
             <Text style={styles.devIconText}>PHP</Text>
         </View>
-    </TouchableOpacity>
-
-    {/* 리액트 */}
-    <TouchableOpacity onPress={() => handleIconClick('react')}>
         <View style={styles.devIcons}>
-            <Image
-                source={react_icon}
+            <Image             
+                source={react_icon} 
                 style={styles.devIcon} />
             <Text style={styles.devIconText}>React</Text>
         </View>
-    </TouchableOpacity>
-
-    {/* mysql */}
-    <TouchableOpacity onPress={() => handleIconClick('mysql')}>
         <View style={styles.devIcons}>
-            <Image
-                source={mysql_icon}
+            <Image             
+                source={mysql_icon} 
                 style={styles.devIcon} />
             <Text style={styles.devIconText}>MySQL</Text>
         </View>
-    </TouchableOpacity>
-
-    {/* 자바스크립트  */}
-    <TouchableOpacity onPress={() => handleIconClick('js')}>
         <View style={styles.devIcons}>
-            <Image
-                source={js_icon}
+            <Image             
+                source={js_icon} 
                 style={styles.devIcon} />
             <Text style={styles.devIconText}>JavaScript</Text>
         </View>
-    </TouchableOpacity>
-
-    {/* html */}
-    <TouchableOpacity onPress={() => handleIconClick('html')}>
         <View style={styles.devIcons}>
-            <Image
-                source={html5_icon}
+            <Image             
+                source={html5_icon} 
                 style={styles.devIcon} />
             <Text style={styles.devIconText}>HTML5</Text>
         </View>
-    </TouchableOpacity>
-
-     {/* 팝업 */}
-        {popupIcon !== '' && (
-        <Id7Popup
-        id={popupIcon}
-        onClose={handleClosePopup}
-        contentsViewPopVisible={contentsViewPopVisible}
-        setContentsViewPopVisible={setContentsViewPopVisible}
-        detailPopVisible={detailPopVisible} // 추가: 상세 팝업 가시성 상태를 전달
-        setDetailPopVisible={setDetailPopVisible} // 추가: 상세 팝업 가시성 상태를 업데이트하는 함수를 전달
-    />
-    )}
-</View>
+    </View>
     contentStyles = styles.skillContent; // 보유기술 컨텐츠 스타일
 }
 
@@ -223,7 +201,15 @@ return (
     endColor={'rgba(151, 151, 151, 0.01)'}
     distance={8}
     >
-    <Text style={styles.title}>{item.title}</Text>
+        <View style={styles.titleContainer}>
+        <Image 
+                source={write} 
+                style={styles.writeImg}
+            />
+    <Text style={styles.title}>{item.title}
+        </Text>
+
+        </View>
     {(item.id === '5' || item.id === '6' ||item.id === '7')?(
         <View style={styles.line2} />
     ):(
@@ -368,6 +354,18 @@ devContainer:{
     flexDirection: 'row',
     flexWrap:'wrap',
 },
+titleContainer:{
+    flexDirection: 'row-reverse', // Add this line to set content direction to right-to-left
+    alignItems: 'center', // Add this line to align content to the center
+    justifyContent: 'space-between', // Add this line to create space between text and writeImg
+  },
+
+writeImg:{
+    width:20,
+    height:20,
+    marginRight: 15,
+    marginTop:13
+}
 });
 
 export default ResumeBox;
