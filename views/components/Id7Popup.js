@@ -12,10 +12,10 @@ import {
 } from 'react-native';
 import * as Progress from 'react-native-progress';
 
-import PublicModal from '../PublicModal';
-import Title from '../Title';
-import closeblack from '../../../assets/images/closeblack.png';
-import testImg from '../../../assets/images/testImg.png';
+import PublicModal from './PublicModal';
+import Title from './Title';
+import closeblack from '../../assets/images/closeblack.png';
+import testImg from '../../assets/images/testImg.png';
 
 const { width, height } = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.9;
@@ -108,7 +108,7 @@ const Id7Popup = ({
               >
                 </Progress.Bar>
                 <ImageBackground
-                  source={require('../../../assets/images/blackBuble.png')}
+                  source={require('../../assets/images/blackBuble.png')}
                   style={[styles.bubble, {  left: calculateLeftValue(rate),  transform: [{ rotate: '180deg' }] }]}
               >
               <View style={styles.bubbleContent}>
