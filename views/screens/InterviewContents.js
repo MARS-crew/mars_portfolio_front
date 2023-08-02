@@ -91,12 +91,6 @@ const InterviewContents = ({ path }) => {
       }
     }, [])
   )
-
-  useEffect(() => {
-    return () => {
-      setIsPlaying(false);
-    };
-  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.iconBar}>
@@ -119,10 +113,11 @@ const InterviewContents = ({ path }) => {
             doubleTap();
           }}
           onLongPress={() => setModalOpen(true)}>
-          {/* 저장된 video가 있으면 video 출력. 없으면  마스외전 로고 출력*/}
+          {/* 저장된 video가 있으w면 video 출력. 없으면  마스외전 로고 출력*/}
           {filePath ? (
             <Video
-              source={{ filePath }}
+              ref={useRef(null)}
+              source={filePath}
               style={[styles.content]}
               controls={false}
               resizeMode="cover"

@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
-import ii from '../../assets/videos/aa1.mp4'
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -56,11 +55,11 @@ const transitionAnimation = index => {
 const interviewFiles = [
   {
     id: 1,
-    path: ii,
+    path: require('../../assets/videos/interviewVideo.mp4'),
   },
   {
     id: 2,
-    path: ii,
+    path: "",
   },
   {
     id: 3,
