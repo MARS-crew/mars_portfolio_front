@@ -1,56 +1,191 @@
-import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+  ScrollView,
+  Modal,
+  TouchableWithoutFeedback,
+  Dimensions,
+} from 'react-native';
+import ShareEditMode from '../components/ShareEditMode';
+
+const shareImages = [
+  {
+    id: 1,
+    url: require('../../assets/images/test_member1.jpeg'),
+  },
+  {
+    id: 2,
+    url: require('../../assets/images/test_member2.jpeg'),
+  },
+  {
+    id: 3,
+    url: require('../../assets/images/test_member3.jpeg'),
+  },
+];
+
+const shareImages2 = [
+  {
+    id: 4,
+    url: require('../../assets/images/test_member4.jpeg'),
+  },
+  {
+    id: 5,
+    url: require('../../assets/images/test_member1.jpeg'),
+  },
+  {
+    id: 6,
+    url: require('../../assets/images/test_member2.jpeg'),
+  },
+];
 
 const Share = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleCloseModal = () => {
+    setSelectedImage(null);
+  };
+
+  const closeButtonRef = useRef(null);
+
   return (
-    <View style={styles.container}>
-      <Text>Share</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>마스외전 2023년</Text>
+          <Text style={styles.headerSubTitle}>111개</Text>
+        </View>
+        <View style={styles.divider} />
+        <View style={styles.body}>
+          <View style={styles.bodyContent}>
+            <View style={styles.imageContainer}>
+              {shareImages.map(image => (
+                <TouchableOpacity
+                  key={image.id}
+                  onPress={() => setIsModalVisible(true)}>
+                  <Image
+                    style={styles.imageContent}
+                    source={image.url}
+                    resizeMode="cover"
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+            <View style={styles.imageContainer}>
+              {shareImages2.map(image => (
+                <TouchableOpacity
+                  key={image.id}
+                  onPress={() => setIsModalVisible(true)}>
+                  <Image
+                    style={styles.imageContent}
+                    source={image.url}
+                    resizeMode="cover"
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>마스외전 2022년</Text>
+          <Text style={styles.headerSubTitle}>111개</Text>
+        </View>
+        <View style={styles.divider} />
+        <View style={styles.body}>
+          <View style={styles.bodyContent}>
+            <View style={styles.imageContainer}>
+              {shareImages.map(image => (
+                <TouchableOpacity
+                  key={image.id}
+                  onPress={() => setIsModalVisible(true)}>
+                  <Image
+                    style={styles.imageContent}
+                    source={image.url}
+                    resizeMode="cover"
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+            <View style={styles.imageContainer}>
+              {shareImages2.map(image => (
+                <TouchableOpacity
+                  key={image.id}
+                  onPress={() => setIsModalVisible(true)}>
+                  <Image
+                    style={styles.imageContent}
+                    source={image.url}
+                    resizeMode="cover"
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </View>
+        <ShareEditMode
+          isModalVisible={isModalVisible}
+          setIsModalVisible={setIsModalVisible}></ShareEditMode>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
+
+export default Share;
+
+const {width} = Dimensions.get('window').width;
+const {height} = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    width: width,
+    height: height,
+    backgroundColor: 'white',
   },
-  con1: {
-    flex: 1,
+  header: {
+    marginTop: 20,
+    marginHorizontal: 20,
+    height: 30,
     flexDirection: 'row',
-    width: '100%',
-    height: '100%',
+    justifyContent: 'space-between',
   },
-  con2: {
-    flex: 1,
-    flexDirection: 'row',
-    width: '100%',
-    height: '100%',
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333333',
   },
-  item1: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-  },
-  item2: {
-    flex: 1,
-    right: 0,
-    width: '100%',
-    height: '100%',
-  },
-  item3: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-  },
-  item4: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-  },
-  floatingMenu: {
+  headerSubTitle: {
     position: 'absolute',
     bottom: 0,
     right: 0,
+    fontSize: 12,
+    fontWeight: 'normal',
+    color: '#333333',
+  },
+  body: {
+    marginHorizontal: 20,
+  },
+  bodyContent: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  imageContainer: {
+    flexDirection: 'row',
+  },
+  imageContent: {
+    width: 105,
+    height: 105,
+    margin: 8,
+  },
+  divider: {
+    width: width,
+    height: 1,
+    marginVertical: 10,
+    marginHorizontal: 20,
+    backgroundColor: '#D8D8D8',
   },
 });
-export default Share;
