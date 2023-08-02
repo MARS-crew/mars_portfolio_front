@@ -19,20 +19,26 @@ const InterviewSavePop = ({
   setChangeData,
   setHeart,
   changeHeart,
+  setPrevFile,
+  prevFile,
 }) => {
   const handleSave = () => {
     setIsEditing(false);
     setModalOpen(false);
     setIsPlaying(true);
-    setFilePath(changeData);
+    // setFilePath(changeData);
     setChangeData(); // 저장된 데이터 초기화
     // setSavePopVisible(false);
     setHeart(changeHeart);
     setSavePopVisible(false);
+    setPrevFile();
   };
 
   const handleCancel = () => {
+    setFilePath(prevFile);
     setIsEditing(false);
+    setPrevFile();
+
   };
 
   return (

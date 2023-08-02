@@ -14,13 +14,20 @@ const InterviewDeletePop = ({
   setChangeData,
   setChangeHeart,
   setIsEditing,
+  setFilePath,
+  prevFile,
+  filePath,
+  setPrevFile,
 }) => {
   // const [deleteImg, setDeleteImg] = useState(interviewImg);
   const deleteUrl = () => {
     setChangeData();
+    setPrevFile(filePath);
+    setFilePath();
     setDeletePopVisible(false);
     setChangeHeart(false);
     setIsEditing(true);
+
   };
 
   return (

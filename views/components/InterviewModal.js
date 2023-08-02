@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Modal,
   StyleSheet,
@@ -32,22 +32,17 @@ const InterviewModal = ({
   const [savePopVisible, setSavePopVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false); // 수정 여부 확인 ( 수정 내용 없으면 저장 버튼 뜨지 않도록)
   const [changeHeart, setChangeHeart] = useState(heart); // 수정 내용 저장 전 하트 변경 사항 저장
-
+  const [prevFile, setPrevFile] = useState(filePath); // 저장 전 이전 파일 저장
   const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
 
-  // const handleSave = () => {
-  //   setIsEditing(false);
-  //   setModalOpen(false);
-  //   setIsPlaying(true);
-  //   setFilePath(changeData);
-  //   setChangeData(); // 저장된 데이터 초기화
-  //   // setSavePopVisible(false);
-  //   setHeart(changeHeart);
-  //   Alert.alert('Modal', '저장');
-  // };
 
   const handleCancel = () => {
+    if (isEditing) {
+      setFilePath(prevFile);
+    }
+    setModalOpen(false);
     setIsEditing(false);
+
   };
 
   const showDelete = () => {
@@ -87,7 +82,9 @@ const InterviewModal = ({
         console.log('type -> ', asset.type);
         console.log('fileName -> ', asset.fileName);
 
+        setPrevFile(filePath);  // 수정 시 수정 전 내용 저장
         setChangeData(asset.uri);
+        setFilePath(asset.uri);
         setIsEditing(true);
       }
     });
@@ -99,6 +96,8 @@ const InterviewModal = ({
       transparent={true}
       visible={modalOpen}
       onRequestClose={() => {
+        setFilePath(prevFile);
+        setPrevFile();
         setModalOpen(!modalOpen);
       }}>
       <TouchableOpacity
@@ -106,11 +105,16 @@ const InterviewModal = ({
           setModalOpen(false);
           if (isEditing) {
             setIsEditing(false);
+            setFilePath(prevFile);
+            setPrevFile();
           }
+
         }} // modalBackdropPress: 모달 영역 밖 클릭 시 Bottom Nav(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
         style={styles.modalBackdropPress}>
         <Pressable
-          onPress={() => setModalOpen(true)} // Pressable: 모달 영역 안 클릭 시 Bottom Nav(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
+          onPress={() => {
+            setModalOpen(true);
+          }} // Pressable: 모달 영역 안 클릭 시 Bottom Nav(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
           style={styles.modalView}>
           {isEditing ? (
             <TouchableOpacity
@@ -142,8 +146,12 @@ const InterviewModal = ({
             setDeletePopVisible={setDeletePopVisible}
             setChangeData={setChangeData}
             setChangeHeart={setChangeHeart}
+            filePath={filePath}
+            setFilePath={setFilePath}
             // setModalOpen={setModalOpen}
             setIsEditing={setIsEditing}
+            setPrevFile={setPrevFile}
+            prevFile={prevFile}
           />
           <InterviewSavePop
             savePopVisible={savePopVisible}
@@ -156,6 +164,8 @@ const InterviewModal = ({
             setChangeData={setChangeData}
             setHeart={setHeart}
             changeHeart={changeHeart}
+            setPrevFile={setPrevFile}
+            prevFile={prevFile}
           />
           <InterviewAlert
             title={'삭제할 데이터가 없습니다.'}
