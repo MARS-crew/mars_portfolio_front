@@ -17,15 +17,14 @@ import EmptyImg from '../../assets/images/Empty.png';
 import InterviewModal from '../components/InterviewModal';
 import Video from 'react-native-video';
 import InterviewAlert from '../components/InterviewAlert';
-import exVideo from '../../assets/videos/aa1.mp4';
 import { useFocusEffect } from '@react-navigation/native';
 
-const InterviewContents = (props) => {
+const InterviewContents = ({ path }) => {
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
 
   const [heart, setHeart] = useState(false); // 하트 상태
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
-  const [filePath, setFilePath] = useState(props.path); // video 주소
+  const [filePath, setFilePath] = useState(path); // video 주소
 
   //video 재생
   const [isPlaying, setIsPlaying] = useState(true);
@@ -123,7 +122,7 @@ const InterviewContents = (props) => {
           {/* 저장된 video가 있으면 video 출력. 없으면  마스외전 로고 출력*/}
           {filePath ? (
             <Video
-              source={{ uri: filePath }}
+              source={{ filePath }}
               style={[styles.content]}
               controls={false}
               resizeMode="cover"
