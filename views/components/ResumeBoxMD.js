@@ -45,6 +45,7 @@ if (item.id === '1') {
     </View>
 } else if (item.id === '2') {
     const [isModalVisible, setModalVisible] = useState(false);
+    const [selectedAddress, setSelectedAddress] = useState('');
     
     content = 
     <View>
@@ -64,19 +65,35 @@ if (item.id === '1') {
             onChangeText={(text) => { setInputText(text) }}
             placeholder="주소를 입력해주세요."
             /> */}
-        <Modal visible={isModalVisible}>
+<Modal visible={isModalVisible} transparent={true} animationType="slide">
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+        <View style={{ width: 400, height: 400, backgroundColor: 'white', borderRadius: 10, padding: 20 }}>
+           {/* <Text>{resume.introduce}</Text> */}
             <Postcode
-                style={{ width: 300, height: 300 }}
+                style={{ width: '100%', height: '100%' }}
                 jsOptions={{ animation: true, hideMapBtn: true }}
                 onSelected={data => {
-                    alert(JSON.stringify(data));
-                    setModalVisible(false);
+                    setSelectedAddress(data.address); // 선택한 주소 저장
+                    setModalVisible(false); // 모달 닫기
                 }}
             />
-        </Modal>
-        <TouchableOpacity onPress={() => setModalVisible(true)} style={{ width: 50, height: 30 }}>
-            <Text>{resume.introduce}</Text>
-        </TouchableOpacity>
+            {/* <Text>선택한 주소: {selectedAddress}</Text> 선택한 주소 표시 */}
+            {/* <TouchableOpacity 
+            onPress={() => setModalVisible(false)} 
+            style={{ marginTop: 10, alignSelf: 'flex-end', padding: 10, backgroundColor:'' }}>
+                
+                <Text>닫기</Text>
+            </TouchableOpacity> */}
+<TouchableOpacity onPress={() => setModalVisible(false)}>
+  <Text>닫기</Text>
+</TouchableOpacity>
+
+        </View>
+    </View>
+</Modal>
+        <TouchableOpacity onPress={() => setModalVisible(true)} style={{ width: 300, height: 40, justifyContent: 'center', alignItems: 'flex-end' }}>
+    <Text>주소 등록</Text>
+</TouchableOpacity>
             
                 </View>
                 <View style={styles.iconsText}>

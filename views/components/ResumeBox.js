@@ -5,6 +5,7 @@ import {Shadow} from 'react-native-shadow-2';
 import tel_icon from '../../assets/images/icon-telephone.png';
 import home_icon from '../../assets/images/icon-home.png';
 import main_icon from '../../assets/images/icon-mail.png';
+
 import java_icon from '../../assets/images/devIcon/java.png'
 import php_icon from '../../assets/images/devIcon/php.png'
 import js_icon from '../../assets/images/devIcon/javascript.png'
