@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Dimensions, TouchableOpacity} from 'react-native';
 import {Shadow} from 'react-native-shadow-2';
-import ContentsViewPop from '../../componentsContentsViewPop';
-import SectionChooseBtn from '../../componentsSectionChooseBtn';
-import Title from '../../componentsTitle';
+import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
+import SectionChooseBtn from '../../components/commonComponent/SectionChooseBtn';
+import Title from '../../components/commonComponent/Title';
 import LogList from './LogList';
 
 const styles = StyleSheet.create({

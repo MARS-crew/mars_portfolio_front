@@ -10,13 +10,13 @@ import {
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 
-import DetailPop from '../screens/Portfolio/DetailPop';
-import ChoosePop from '../components/ChoosePop';
-import Title from '../components/Title';
-import cancelIcon from '../../assets/images/cancelIcon.png';
-import deletedIcon from '../../assets/images/deletedIcon.png';
-import saveIcon from '../../assets/images/editIcon.png';
-import editingIcon from '../../assets/images/editingIcon.png';
+import DetailPop from '../../screens/Portfolio/DetailPop';
+import ChoosePop from './ChoosePop';
+import Title from './Title';
+import cancelIcon from '../../../assets/images/cancelIcon.png';
+import deletedIcon from '../../../assets/images/deletedIcon.png';
+import saveIcon from '../../../assets/images/editIcon.png';
+import editingIcon from '../../../assets/images/editingIcon.png';
 
 const styles = StyleSheet.create({
   modalBackdropPress: {

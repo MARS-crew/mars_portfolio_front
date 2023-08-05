@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 
-import Splash from './views/screens/splash';
+import Splash from './views/screens/Splash';
 import Login from './views/screens/Login';
 import Group from './views/screens/Group';
 import Member from './views/screens/Member';
@@ -16,13 +16,14 @@ import Youtube from './views/screens/Youtube';
 import Resume from './views/screens/Resume';
 import Portfolio from './views/screens/Portfolio/Portfolio';
 import Review from './views/screens/Review';
+import MyPage from './views/screens/MyPage/MyPage';
 import Album from './views/screens/Album';
 import Interview from './views/screens/Interview';
 import 'react-native-gesture-handler';
 import WhichGroup from './views/screens/WhichGroup';
 import Help from './views/screens/Help';
 import Share from './views/screens/Share';
-import MyPage from './views/screens/MyPage';
+
 import GroupVideo from './views/screens/GroupVideo';
 
 import {NavigationContainer} from '@react-navigation/native';

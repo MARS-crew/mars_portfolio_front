@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Title from '../../components/Title';
+import Title from '../../components/commonComponent/Title';
 import {SwipeListView} from 'react-native-swipe-list-view';
 
 const styles = StyleSheet.create({
