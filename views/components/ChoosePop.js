@@ -1,98 +1,147 @@
-import {
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-  Pressable,
-  Dimensions,
-  Text,
-  View,
-} from 'react-native';
+import {StyleSheet, Pressable, Text, View} from 'react-native';
+
+import PublicModal from './PublicModal';
+import ChooseButton from './ChooseButton';
 
 const styles = StyleSheet.create({
-  saveBtn: {
-    width: 100,
-    height: 30,
-    borderColor: '#000',
-    backgroundColor: '#fff',
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
-    top: 10,
-    right: 10,
-  },
-  modalBackdropPress: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
   modalView: {
+    width: 301,
+    height: 145,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#EEEEEE',
+    padding: 20,
     backgroundColor: '#fff',
-    marginTop: Dimensions.get('window').height / 2.5,
-    marginHorizontal: 50,
+    marginHorizontal: 25,
   },
   modalTitle: {
     alignItems: 'center',
     textAlign: 'center',
-    borderWidth: 0.5,
-    borderColor: '#000',
-    padding: 12,
+    fontSize: 16,
+    fontWeight: '400',
+    color: 'black',
+    marginTop: 13,
   },
   chooseContainer: {
+    marginTop: 33,
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    display: 'flex',
+    justifyContent: 'flex-end',
   },
   chooseBtn: {
-    flex: 1,
+    width: 59,
+    height: 40,
     alignItems: 'center',
-    borderWidth: 0.5,
-    borderColor: '#000',
-    padding: 8,
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderColor: '#F5F5F5',
+    borderWidth: 1,
+    borderRadius: 20,
   },
+  chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 10},
 });
 
 const choosePop = ({
-  id,
+  //공통
   title,
-  onDelete,
+  setTogleButton,
+  setIsModalVisible,
+  isModalVisible,
   choosePopVisible,
   setChoosePopVisible,
+  //인터뷰
+  interview,
+  handleSave,
+  deleteUrl,
+  alert,
+  checkDeletePopOkButton,
+  setCheckDeletePopOkButton,
+  //포트폴리오
+  portfolio,
+  id,
+  setDetailPopVisible,
+  onModify,
+  onDelete,
+  setCheckChoosePopOkButton,
+  addPressedIf,
 }) => {
+  //공통 컴포넌트 츄즈 팝 스테이트 구분 컴포넌트: 확인 클릭 시
+  const onDeleteORonModify = () => {
+    if (title === '수정된 내용을 삭제하시겠습니까?') {
+      if (portfolio == true) {
+        setCheckDeletePopOkButton(true);
+      } else if (interview == true) {
+        setCheckDeletePopOkButton(true);
+        deleteUrl();
+      }
+    } else if (title === '수정된 내용을 저장하시겠습니까?') {
+      if (portfolio == true) {
+        setCheckChoosePopOkButton(true);
+        if (checkDeletePopOkButton == true) {
+          onDelete(id);
+        } else if (checkDeletePopOkButton == false) {
+          onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
+        }
+        setCheckDeletePopOkButton(false);
+        setIsModalVisible(false);
+        setTogleButton(false);
+      } else if (addPressedIf == true) {
+        setDetailPopVisible(false);
+        onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
+      } else if (interview == true) {
+        if (checkDeletePopOkButton == false) handleSave();
+        setTogleButton(false);
+        setIsModalVisible(false);
+      }
+    }
+  };
+
+  // ChoosePop Button onPress 용 Props 컴포넌트 start------------------------------------------------------------------------------------------------------------------------
+  const cancel = () => {
+    setChoosePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
+    if (setCheckChoosePopOkButton == true) setCheckChoosePopOkButton(false);
+  };
+
+  const check = () => {
+    if (portfolio == true) {
+      if (setTogleButton == true) setTogleButton(false);
+    }
+    onDeleteORonModify();
+    setChoosePopVisible(false);
+  };
+
+  // ChoosePop Button onPress 용 Props 컴포넌트 end------------------------------------------------------------------------------------------------------------------------
+
   return (
-    <Modal
-      animationType={'fade'}
-      transparent={true}
-      visible={choosePopVisible}
-      onRequestClose={() => {
-        setChoosePopVisible(!choosePopVisible);
-      }}>
-      <TouchableOpacity
-        onPress={() => setChoosePopVisible(false)} // modalBackdropPress: 모달 영역 밖 클릭 시 ChoosePopup(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
-        style={styles.modalBackdropPress}>
-        <Pressable
-          onPress={() => setChoosePopVisible(true)} // Pressable: 모달 영역 안 클릭 시 ChoosePopup(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
-          style={styles.modalView}>
-          <Text style={styles.modalTitle}>{title}</Text>
-          <View style={styles.chooseContainer}>
-            <TouchableOpacity
-              style={styles.chooseBtn}
+    <PublicModal
+      id={id}
+      onDelete={portfolio == true ? onDelete : null}
+      onModify={portfolio == true ? onModify : null}
+      isModalVisible={choosePopVisible}
+      setIsModalVisible={setChoosePopVisible}>
+      <Pressable
+        onPress={() => setChoosePopVisible(true)} // Pressable: Modal 영역 안 클릭 시 Modal 유지 구현을 위해 Pressable로 감싸서 적용
+        style={styles.modalView}>
+        <Text style={styles.modalTitle}>{title}</Text>
+        <View style={styles.chooseContainer}>
+          {alert ? null : (
+            <ChooseButton
               onPress={() => {
-                setChoosePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
-                onDelete(id); //개발 방식 검토중인 기능이므로 구현 미완료
+                cancel();
               }}>
-              <Text>YES</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.chooseBtn}
-              onPress={() => {
-                setChoosePopVisible(false); // chooseBtn: 모달 영역 안 (ChoosePopup YES or NO, props를 통해 {title} 설정(예:  title="삭제하시겠습니까?"))
-              }}>
-              <Text>NO</Text>
-            </TouchableOpacity>
-          </View>
-        </Pressable>
-      </TouchableOpacity>
-    </Modal>
+              취소
+            </ChooseButton>
+          )}
+          <ChooseButton
+            background={'blue'}
+            onPress={() => {
+              check();
+            }}>
+            확인
+          </ChooseButton>
+        </View>
+      </Pressable>
+    </PublicModal>
   );
 };
 export default choosePop;

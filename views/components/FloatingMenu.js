@@ -1,32 +1,93 @@
-import React, {useState} from 'react';
-import {FloatingMenu} from 'react-native-floating-action-menu';
+import React from 'react';
+import {View, StyleSheet} from 'react-native';
+import {Album} from '../screens/Album';
+import {FloatingAction} from 'react-native-floating-action';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 
-const FloatingButtonMenu = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const actions = [
+  {
+    // text: 'Gallery',
+    icon: require('../../assets/images/gallery.png'),
+    name: 'bt_gallery',
+    tintColor: '#072AC8',
+    color: '#FDFDFD',
+    buttonSize: 45,
+    position: 3,
+  },
+  {
+    // text: 'Share',
+    icon: require('../../assets/images/share.png'),
+    name: 'bt_share',
+    tintColor: '#072AC8',
+    color: '#FDFDFD',
+    buttonSize: 45,
+    position: 4,
+  },
+  {
+    // text: 'Home',
+    icon: require('../../assets/images/home.png'),
+    name: 'bt_home',
+    tintColor: '#072AC8',
+    color: '#FDFDFD',
+    buttonSize: 45,
+    position: 2,
+  },
+  {
+    // text: 'Help',
+    icon: require('../../assets/images/help.png'),
+    name: 'bt_help',
+    tintColor: '#072AC8',
+    color: '#FDFDFD',
+    buttonSize: 45,
+    position: 1,
+  },
+];
 
-  const handleMenuToggle = () => {
-    setIsMenuOpen(!isMenuOpen);
+const FloatingMenu = () => {
+  const navigation = useNavigation();
+
+  const handleItemPress = name => {
+    if (name === 'bt_gallery') {
+      navigation.navigate('Album');
+    } else if (name === 'bt_share') {
+      navigation.navigate('Share');
+    } else if (name === 'bt_home') {
+      navigation.dispatch(
+        CommonActions.reset({
+          routes: [{name: 'Home'}],
+        }),
+      );
+
+      //   index: 0,
+      //   routes: [{name: 'Home'}],
+      //   params: {animationEnabled: false},
+
+      //   navigation.dispatch(
+      //     CommonActions.reset({
+      //       routes: [
+      //         { name: 'Main' },
+      //       ],
+      //     }))
+      //  navigation.navigate('Main')
+    } else if (name === 'bt_help') {
+      navigation.navigate('Help');
+    }
   };
-
-  const handleItemPress = index => {
-    console.log(`Item ${index} pressed`);
-  };
-
-  const items = [
-    {label: '도움말'},
-    {label: '홈'},
-    {label: '앨범'},
-    {label: '공유'},
-  ];
 
   return (
-    <FloatingMenu
-      items={items}
-      isOpen={isMenuOpen}
-      onMenuToggle={handleMenuToggle}
-      onItemPress={handleItemPress}
-    />
+    <View>
+      <FloatingAction
+        animated={true}
+        actions={actions}
+        position="right"
+        buttonSize={58}
+        color="#072AC8"
+        actionsPaddingTopBottom={10}
+        floatingIcon={require('../../assets/images/hamburger.png')}
+        onPressItem={handleItemPress}
+      />
+    </View>
   );
 };
 
-export default FloatingButtonMenu;
+export default FloatingMenu;

@@ -1,51 +1,29 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {React} from 'react';
+import {StyleSheet, View, FlatList, SafeAreaView} from 'react-native';
 
-import Main from './Main';
-import Main2 from './Main2';
-import Main3 from './Main3';
+import GroupItem from '../components/GroupItem';
 
-const Stack = createStackNavigator();
+const Item = ({id, src, medal}) => (
+  <View>
+    <GroupItem id={id} src={src} medal={medal} />
+  </View>
+);
 
-const Group = () => {
-    return (
-    <View style={styles.container}>
-        <NavigationContainer>
-        <Stack.Navigator
-            screenOptions={{
-            gestureEnabled: true,
-            gestureDirection: 'vertical',
-            cardStyleInterpolator: ({ current, layouts }) => {
-                return {
-                cardStyle: {
-                    transform: [
-                    {
-                        translateY: current.progress.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [layouts.screen.height, 0],
-                        }),
-                    },
-                    ],
-                },
-                };
-            },
-            }}
-        >
-            <Stack.Screen name="Main" component={Main} />
-            <Stack.Screen name="Main2" component={Main2} />
-            <Stack.Screen name="Main3" component={Main3} />
-        </Stack.Navigator>
-        </NavigationContainer>
-    </View>
-    );
-    };
+const Group = ({data}) => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={data}
+        renderItem={({item}) => <Item id={item.id} src={item.src}  />}
+      />
+    </SafeAreaView>
+  );
+};
 
-    const styles = StyleSheet.create({
-    container: {
-    flex: 1,
-    },
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+  },
 });
 
 export default Group;

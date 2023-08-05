@@ -6,30 +6,24 @@ import {
   TouchableOpacity,
   Dimensions,
   Text,
+  TextInput,
   View,
 } from 'react-native';
+
+const {width} = Dimensions.get('window').width;
+const {height} = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
-  image: {
-    width: 60,
-    height: 60,
-    resizeMode: 'contain',
-  },
-  //Modal
-  saveBtn: {
-    width: 100,
-    height: 30,
-    borderColor: '#000',
-    backgroundColor: '#fff',
-    position: 'absolute',
+  modalContainer: {
+    flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    top: 10,
-    right: 10,
+    backgroundColor: '#ccc',
+    padding: 20,
   },
   modalBackdropPress: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: 'white',
   },
   modalView: {
     alignItems: 'center',
@@ -38,12 +32,51 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    display: 'flex',
     height: Dimensions.get('window').height / 15,
+  },
+  postWriter: {
+    marginHorizontal: 20,
+    marginTop: 20,
+    textAlign: 'left',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  postDate: {
+    marginHorizontal: 20,
+    textAlign: 'left',
+    fontSize: 12,
+    fontWeight: '300',
+  },
+  postContent: {
+    marginHorizontal: 20,
+    marginVertical: 20,
+    fontWeight: '300',
+    fontSize: 18,
   },
 });
 
-const ReviewEditModal = ({isModalVisible, setIsModalVisible}) => {
+const ReviewEditModal = ({
+  isModalVisible,
+  setIsModalVisible,
+  writer,
+  date,
+  content,
+}) => {
+  const [editableContent, setEditableContent] = useState(content);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleModify = () => {
+    setIsEditing(true);
+  };
+
+  const handleSave = () => {
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+  };
+
   return (
     <Modal
       animationType={'fade'}
@@ -52,29 +85,45 @@ const ReviewEditModal = ({isModalVisible, setIsModalVisible}) => {
       onRequestClose={() => {
         setIsModalVisible(!isModalVisible);
       }}>
+      <View style={styles.modalContainer}>
+        <Text style={styles.postWriter}>{writer}</Text>
+        <Text style={styles.postDate}>{date}</Text>
+        <TextInput
+          style={styles.postContent}
+          multiline={true}
+          editable={isEditing}
+          value={editableContent}
+          onChangeText={setEditableContent}
+        />
+      </View>
       <TouchableOpacity
-        onPress={() => setIsModalVisible(false)} // modalBackdropPress: 모달 영역 밖 클릭 시 Bottom Nav(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
+        onPress={() => setIsModalVisible(false)}
         style={styles.modalBackdropPress}>
-        <TouchableOpacity
-          onPress={() => setIsModalVisible(false)}
-          style={styles.saveBtn}>
-          <Text>Save</Text>
-        </TouchableOpacity>
         <View style={styles.modalView}>
-          <TouchableOpacity
-            onPress={() => {
-              setIsModalVisible(false); // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
-              Alert.alert('Modal', '생성');
-            }}>
-            <Text>Modify</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setIsModalVisible(false);
-              Alert.alert('Modal', '삭제');
-            }}>
-            <Text>Delete</Text>
-          </TouchableOpacity>
+          {isEditing ? (
+            <TouchableOpacity onPress={handleSave}>
+              <Text>저장</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={handleModify}>
+              <Text>수정</Text>
+            </TouchableOpacity>
+          )}
+          <View>
+            {isEditing ? (
+              <TouchableOpacity onPress={handleCancel}>
+                <Text>취소</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  setIsModalVisible(false);
+                  Alert.alert('Modal', '삭제');
+                }}>
+                <Text>삭제</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       </TouchableOpacity>
     </Modal>
