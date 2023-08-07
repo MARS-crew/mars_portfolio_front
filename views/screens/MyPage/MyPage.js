@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Dimensions, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Dimensions} from 'react-native';
 import {Shadow} from 'react-native-shadow-2';
 import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
 import SectionChooseBtn from '../../components/commonComponent/SectionChooseBtn';
@@ -71,31 +71,59 @@ const MyPage = () => {
   const [button3Pressed, setButton3Pressed] = useState(false);
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const shadowColor = 'rgba(151, 151, 151, 0.36)';
-  const [list, setList] = useState('방문기록');
 
   const handleButton1Press = () => {
     setButton1Pressed(true);
     setButton2Pressed(false);
     setButton3Pressed(false);
-    setList('방문기록');
-    console.log(list);
   };
 
   const handleButton2Press = () => {
     setButton1Pressed(false);
     setButton2Pressed(true);
     setButton3Pressed(false);
-    setList('좋아요');
-    console.log(list);
   };
 
   const handleButton3Press = () => {
     setButton1Pressed(false);
     setButton2Pressed(false);
     setButton3Pressed(true);
-    setList('찜하기');
-    console.log(list);
   }; // buttonPressed 1~3의 Pressed 여부로 나머지 버튼의 토글 여부를 결정
+
+  const ListViewData = () => {
+    var data = '2023.11.';
+    const LIST_VIEW_DATA = Array(30)
+      .fill('')
+      .map((_, i) => ({
+        key: `${i}`,
+        text: `김채린님이 회원님을 방문하였습니다.`,
+        date: `${data}${i + 1}`,
+      }));
+
+    return LIST_VIEW_DATA;
+  };
+
+  const ListLikeData = () => {
+    const LIST_LIKE_DATA = Array(8)
+      .fill('')
+      .map((_, i) => ({
+        key: `${i}`,
+        text: `조호연님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
+      }));
+
+    return LIST_LIKE_DATA;
+  };
+
+  const ListWantData = () => {
+    const LIST_WANT_DATA = Array(20)
+      .fill('')
+      .map((_, i) => ({
+        key: `${i}`,
+        text: `김건우님이 회원님의 인터뷰 영상을 찜하였습니다.`,
+      }));
+
+    return LIST_WANT_DATA;
+  };
 
   const VisitSubContainer = ({title, value}) => {
     return (
@@ -149,27 +177,21 @@ const MyPage = () => {
               onPress={() => [handleButton3Press()]}></SectionChooseBtn>
           </View>
 
-          <View style={styles.visitLogView}>
-            <LogList list={list}></LogList>
-          </View>
-
-          {/*
           {button1Pressed && (
             <View style={styles.visitLogView}>
-              <LogList list={list}></LogList>
+              <LogList ListData={ListViewData()}></LogList>
             </View>
           )}
           {button2Pressed && (
             <View style={styles.visitLogView}>
-              <LogList list={list}></LogList>
+              <LogList ListData={ListLikeData()}></LogList>
             </View>
           )}
           {button3Pressed && (
             <View style={styles.visitLogView}>
-              <LogList list={list}></LogList>
+              <LogList ListData={ListWantData()}></LogList>
             </View>
           )}
-          */}
         </View>
 
         {/*
