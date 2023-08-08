@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  FlatList,
 } from 'react-native';
 import Title from '../../components/commonComponent/Title';
 import {SwipeListView} from 'react-native-swipe-list-view';
@@ -55,14 +56,14 @@ const styles = StyleSheet.create({
 
 const LogList = ListData => {
   const [text, setText] = useState('Not Pressed');
+  const [myListData, setMyListData] = useState(ListData);
 
-  const result = ListData;
-  console.log(result);
+  console.log(myListData);
 
   return (
     <SafeAreaView style={styles.container}>
       <SwipeListView
-        data={result}
+        data={myListData}
         renderItem={({item}) => (
           <View style={styles.swipeListItem}>
             <Title color={'black'}>{item.text}</Title>

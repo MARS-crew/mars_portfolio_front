@@ -109,6 +109,7 @@ const MyPage = () => {
       .map((_, i) => ({
         key: `${i}`,
         text: `조호연님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
+        date: '',
       }));
 
     return LIST_LIKE_DATA;
@@ -120,6 +121,7 @@ const MyPage = () => {
       .map((_, i) => ({
         key: `${i}`,
         text: `김건우님이 회원님의 인터뷰 영상을 찜하였습니다.`,
+        date: '',
       }));
 
     return LIST_WANT_DATA;
