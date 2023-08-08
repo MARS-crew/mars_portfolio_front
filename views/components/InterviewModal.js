@@ -26,8 +26,10 @@ const InterviewModal = ({
   filePath,
   setFilePath,
   setIsPlaying,
+  setChangeData,
+  setThumbnailPath,
 }) => {
-  const [changeData, setChangeData] = useState(null); // 수정 전 변경 내용 임시 저장
+  //const [changeData, setChangeData] = useState(null); // 수정 전 변경 내용 임시 저장
   const [deletePopVisible, setDeletePopVisible] = useState(false); // 삭제 확인 창 상태
   const [savePopVisible, setSavePopVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false); // 수정 여부 확인 ( 수정 내용 없으면 저장 버튼 뜨지 않도록)
@@ -42,6 +44,8 @@ const InterviewModal = ({
     }
     setModalOpen(false);
     setIsEditing(false);
+    setChangeData(null);
+    setThumbnailPath();
 
   };
 
@@ -74,17 +78,10 @@ const InterviewModal = ({
 
       if (response.assets && response.assets.length > 0) {
         const asset = response['assets'][0];
-        console.log('base64 -> ', asset.base64);
-        console.log('uri -> ', asset.uri);
-        console.log('width -> ', asset.width);
-        console.log('height -> ', asset.height);
-        console.log('fileSize -> ', asset.fileSize);
-        console.log('type -> ', asset.type);
-        console.log('fileName -> ', asset.fileName);
 
         setPrevFile(filePath);  // 수정 시 수정 전 내용 저장
         setChangeData(asset.uri);
-        setFilePath(asset.uri);
+        //setFilePath(asset.uri);
         setIsEditing(true);
       }
     });
@@ -160,12 +157,12 @@ const InterviewModal = ({
             setModalOpen={setModalOpen}
             setIsPlaying={setIsPlaying}
             setFilePath={setFilePath}
-            changeData={changeData}
             setChangeData={setChangeData}
             setHeart={setHeart}
             changeHeart={changeHeart}
             setPrevFile={setPrevFile}
             prevFile={prevFile}
+            setThumbnailPath={setThumbnailPath}
           />
           <InterviewAlert
             title={'삭제할 데이터가 없습니다.'}

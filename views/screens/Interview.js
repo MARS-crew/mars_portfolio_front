@@ -59,49 +59,67 @@ const interviewFiles = [
   },
   {
     id: 2,
-    path: "",
+    path: require('../../assets/videos/interviewVideo.mp4'),
   },
   {
     id: 3,
-    path: '',
+    path: require('../../assets/videos/interviewVideo.mp4'),
   },
 ];
 
-const Interview = () => {
+const Interview = (props) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: yOffset } } }],
+    {
+      useNativeDriver: true,
+      listener: event => {
+        const offset = event.nativeEvent.contentOffset.y;
+        const currentIndex = Math.round(offset / SCREEN_HEIGHT);
+        console.log('Current Index: ', currentIndex);
+        setCurrentIndex(currentIndex);
+      },
+    }
+  );
 
   return (
-    <Animated.ScrollView
-      scrollEventThrottle={16}
-      onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: yOffset } } }], {
-        useNativeDriver: true,
-      })}
-      pagingEnabled
-      style={styles.scrollView}>
-      {interviewFiles.map((interview, index) => (
-        <Screen key={interview.id} index={index}>
-          <InterviewContents path={interview.path} />
-        </Screen>
-      ))}
-    </Animated.ScrollView>
+    <View style={styles.container}>
+      <Animated.ScrollView
+        scrollEventThrottle={16}
+        onScroll={handleScroll}
+        pagingEnabled
+        style={styles.scrollView}>
+        {interviewFiles.map((interview, index) => (
+          <Screen key={interview.id} index={index}>
+            <InterviewContents
+              path={interview.path}
+              currentPage={props.currentPage}
+              currentIndex={currentIndex}
+              index={index}
+              isPlaying={currentIndex === index && isPlaying}
+              setIsPlaying={setIsPlaying}
+            />
+          </Screen>
+        ))}
+      </Animated.ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
   scrollView: {
     flex: 1,
     flexDirection: 'column',
-  },
-  scrollPage: {
-    width: SCREEN_WIDTH,
-    padding: 0,
   },
   screen: {
     flex: 1,
     width: '100%',
     height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-
   },
 });
 

@@ -17,17 +17,24 @@ import EmptyImg from '../../assets/images/Empty.png';
 import InterviewModal from '../components/InterviewModal';
 import Video from 'react-native-video';
 import InterviewAlert from '../components/InterviewAlert';
-import { useFocusEffect } from '@react-navigation/native';
-
-const InterviewContents = ({ path }) => {
+import { captureVideo } from 'react-native-thumbnail';
+const InterviewContents = ({
+  path,
+  currentPage,
+  currentIndex,
+  index,
+  isPlaying,
+  setIsPlaying,
+}) => {
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
-
+  const videoRef = useRef(null); //video 컴포넌트에 대한 ref
   const [heart, setHeart] = useState(false); // 하트 상태
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [filePath, setFilePath] = useState(path); // video 주소
-
+  const [changeData, setChangeData] = useState();
+  const [thumbnailPath, setThumbnailPath] = useState(null);
   //video 재생
-  const [isPlaying, setIsPlaying] = useState(true);
+  //const [isPlaying, setIsPlaying] = useState(false);
 
   // 데이터 없을 때 alert
   const [showAlert, setShowAlert] = useState(false);
@@ -83,14 +90,49 @@ const InterviewContents = ({ path }) => {
       }),
     ]).start();
   };
-  useFocusEffect(
-    useCallback(() => {
-      setIsPlaying(false);
-      return () => {
-        setIsPlaying(false);
+  useEffect(() => {
+    if (currentPage === 3 && currentIndex === index) {
+      setIsPlaying(true);
+      if (videoRef.current) {
+        videoRef.current.seek(0);
       }
-    }, [])
-  )
+    }
+    return () => {
+      setIsPlaying(false);
+    }
+  }, [, currentPage, currentIndex, index, setIsPlaying]);
+  {/*}
+  const handleVideoLoad = useCallback(async () => {
+    // 영상이 로드된 후 첫 프레임을 캡처하여 썸네일로 설정
+    if (videoRef.current) {
+      videoRef.current.seek(0); // 영상을 시작 지점으로 되돌림
+    }
+    try {
+      const thumbnail = await captureVideo(filePath, {
+        timeStamp: 1000, // 영상의 1초 지점에서 썸네일을 캡처합니다 (1000 밀리초 = 1초)
+        format: 'jpeg',
+        quality: 1,
+      });
+      setThumbnailPath(thumbnail.path); // 캡처한 썸네일의 경로를 상태 변수에 업데이트합니다
+    } catch (error) {
+      console.log('썸네일 캡처 오류:', error);
+    }
+  }, [filePath]);
+*/}
+
+
+  useEffect(() => {
+    if (changeData) {
+      setFilePath(changeData);
+      setChangeData(null);
+      setIsPlaying(true);
+      //handleVideoLoad();
+
+    }
+  }, [changeData, setIsPlaying]);
+
+
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.iconBar}>
@@ -112,25 +154,37 @@ const InterviewContents = ({ path }) => {
           onPress={() => {
             doubleTap();
           }}
-          onLongPress={() => setModalOpen(true)}>
+          onLongPress={() => {
+            setModalOpen(true);
+            setIsPlaying(false);
+          }}>
           {/* 저장된 video가 있으w면 video 출력. 없으면  마스외전 로고 출력*/}
           {filePath ? (
             typeof filePath === "string" ? (  //filepath가 string일때
-              <Video
-                ref={useRef(null)}
-                source={{ uri: filePath }}
-                style={[styles.content]}
-                controls={false}
-                resizeMode="cover"
-                repeat={true}
-                paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
-                onEnd={() => {
-                  setIsPlaying(false);
-                }}
-              />
+              thumbnailPath ? (
+                <Image
+                  source={{ uri: thumbnailPath }}
+                  style={styles.content}
+                  resizeMode="cover"
+                />
+              ) : (
+                <Video
+                  //ref={videoRef}
+                  source={{ uri: filePath }}
+                  style={[styles.content]}
+                  controls={false}
+                  resizeMode="cover"
+                  repeat={true}
+                  paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
+                  onEnd={() => {
+                    setIsPlaying(false);
+                  }}
+                //onLoad={handleVideoLoad}
+                />
+              )
             ) : ( //filepath가 파일일때
               <Video
-                ref={useRef(null)}
+                ref={videoRef}
                 source={filePath}
                 style={[styles.content]}
                 controls={false}
@@ -167,6 +221,8 @@ const InterviewContents = ({ path }) => {
         setFilePath={setFilePath}
         heart={heart}
         setIsPlaying={setIsPlaying}
+        setChangeData={setChangeData}
+        setThumbnailPath={setThumbnailPath}
         setHeart={setHeart} // deletePopModal에 전달 - 인터뷰 삭제시 하트 취소
       />
       <InterviewAlert
@@ -183,17 +239,14 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
     backgroundColor: '#F5F4F9',
-    // padding: 10,
+    padding: 20,
   },
   iconBar: {
-    height: 60,
+    height: 70,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    paddingRight: 20,
-    paddingTop: 20,
-    paddingBottom: 10,
   },
   icon: {
     width: 30,
@@ -205,9 +258,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 0.8,
-    marginTop: 10,
-    marginLeft: 20,
-    marginRight: 20,
     borderRadius: 10,
   },
   animate: {
