@@ -31,6 +31,7 @@ import { FlatList } from 'react-native-gesture-handler';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import InterviewSwipe from './views/screens/Interview';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -123,12 +124,24 @@ const HomeScreen = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  const [currentPage, setCurrentPage] = useState(0);
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { x: xOffset } } }],
+    {
+      useNativeDriver: true,
+      listener: event => {
+        const offset = event.nativeEvent.contentOffset.x;
+        const currentIndex = Math.round(offset / SCREEN_WIDTH);
+        setCurrentPage(currentIndex);
+      },
+    }
+  );
+
   return (
     <Animated.ScrollView
       scrollEventThrottle={16}
-      onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: xOffset } } }], {
-        useNativeDriver: true,
-      })}
+      onScroll={handleScroll}
       horizontal
       pagingEnabled
       style={styles.scrollView}>
@@ -147,8 +160,7 @@ const HomeScreen = () => {
         <GroupVideo />
       </Screen>
       <Screen text="Screen 4" index={3}>
-        {/* <Text>인터뷰</Text> */}
-        <Interview />
+        <Interview currentPage={currentPage} />
       </Screen>
       <Screen text="Screen 5" index={4}>
         <Resume />
@@ -162,6 +174,7 @@ const HomeScreen = () => {
       <Screen text="Screen 8" index={7}>
         <VideoEx />
       </Screen>
+
     </Animated.ScrollView>
   );
 };
