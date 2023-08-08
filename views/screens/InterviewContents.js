@@ -17,7 +17,7 @@ import EmptyImg from '../../assets/images/Empty.png';
 import InterviewModal from '../components/InterviewModal';
 import Video from 'react-native-video';
 import InterviewAlert from '../components/InterviewAlert';
-import { captureVideo } from 'react-native-thumbnail';
+// import { captureVideo } from 'react-native-thumbnail';
 const InterviewContents = ({
   path,
   currentPage,
