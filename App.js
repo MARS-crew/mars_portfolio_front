@@ -31,7 +31,6 @@ import { FlatList } from 'react-native-gesture-handler';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import InterviewSwipe from './views/screens/Interview';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
