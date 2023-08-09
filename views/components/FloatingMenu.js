@@ -2,32 +2,44 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Album} from '../screens/Album';
 import {FloatingAction} from 'react-native-floating-action';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 
 const actions = [
   {
     // text: 'Gallery',
     icon: require('../../assets/images/gallery.png'),
     name: 'bt_gallery',
-    position: 2,
+    tintColor: '#072AC8',
+    color: '#FDFDFD',
+    buttonSize: 45,
+    position: 3,
   },
   {
     // text: 'Share',
     icon: require('../../assets/images/share.png'),
     name: 'bt_share',
-    position: 1,
+    tintColor: '#072AC8',
+    color: '#FDFDFD',
+    buttonSize: 45,
+    position: 4,
   },
   {
     // text: 'Home',
     icon: require('../../assets/images/home.png'),
     name: 'bt_home',
-    position: 3,
+    tintColor: '#072AC8',
+    color: '#FDFDFD',
+    buttonSize: 45,
+    position: 2,
   },
   {
     // text: 'Help',
     icon: require('../../assets/images/help.png'),
     name: 'bt_help',
-    position: 4,
+    tintColor: '#072AC8',
+    color: '#FDFDFD',
+    buttonSize: 45,
+    position: 1,
   },
 ];
 
@@ -40,7 +52,23 @@ const FloatingMenu = () => {
     } else if (name === 'bt_share') {
       navigation.navigate('Share');
     } else if (name === 'bt_home') {
-      navigation.navigate('Home');
+      navigation.dispatch(
+        CommonActions.reset({
+          routes: [{name: 'Home'}],
+        }),
+      );
+
+      //   index: 0,
+      //   routes: [{name: 'Home'}],
+      //   params: {animationEnabled: false},
+
+      //   navigation.dispatch(
+      //     CommonActions.reset({
+      //       routes: [
+      //         { name: 'Main' },
+      //       ],
+      //     }))
+      //  navigation.navigate('Main')
     } else if (name === 'bt_help') {
       navigation.navigate('Help');
     }
@@ -52,6 +80,7 @@ const FloatingMenu = () => {
         animated={true}
         actions={actions}
         position="right"
+        buttonSize={58}
         color="#072AC8"
         actionsPaddingTopBottom={10}
         floatingIcon={require('../../assets/images/hamburger.png')}

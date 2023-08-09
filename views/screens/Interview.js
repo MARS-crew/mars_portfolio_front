@@ -106,7 +106,6 @@ const Interview = (props) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width,

@@ -2,55 +2,67 @@ import React, {useState} from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
-  Text,
   View,
   TextInput,
+  Image,
   Pressable,
-  Dimensions,
 } from 'react-native';
 
 const styles = StyleSheet.create({
   modalView: {
+    width: 325,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#EEEEEE',
     padding: 20,
     backgroundColor: '#fff',
-    marginHorizontal: 50,
+    marginHorizontal: 25,
+  },
+  contentView: {
+    alignItems: 'center',
   },
   chooseContainer: {
     alignItems: 'center',
     flexDirection: 'row',
     display: 'flex',
-    marginBottom: 8,
+    marginBottom: 25,
   },
   chooseBtn: {
-    flex: 1,
-    width: 100,
-    height: 50,
+    width: 95,
+    height: 26,
+    borderColor: '#F5F5F5',
+    borderBottomWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 0.8,
-    borderColor: '#000',
+    paddingBottom: 5,
   },
   input: {
-    alignItems: 'center',
-
-    borderWidth: 0.8,
-    borderColor: '#000',
-    height: 35,
-    marginBottom: 8,
+    borderColor: '#EEEEEE',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingLeft: 12,
+    paddingTop: 14,
+    paddingBottom: 14,
+    marginBottom: 12,
+    width: 285,
+    height: 45,
   },
   description: {
-    height: Dimensions.get('window').height / 5,
+    height: 100,
+    textAlignVertical: 'top',
   },
-  videoDescription: {
-    height: Dimensions.get('window').height / 7.5,
-  },
+
   pickBtn: {
-    width: 100,
+    width: 132,
+    height: 40,
     alignItems: 'center',
-    borderWidth: 0.8,
-    borderColor: '#000',
-    padding: 8,
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#EEEEEE',
+    borderWidth: 1,
+    borderRadius: 20,
   },
+  chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 22},
   inputRightMargin: {
     marginRight: 5,
     marginBottom: 0,
@@ -62,32 +74,23 @@ const styles = StyleSheet.create({
   flexCenter: {
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    marginTop: 20,
+    flexDirection: 'row',
   },
-
-  fileContainer: {
-    justifyContent: 'space-between',
-    paddingHorizontal: 2,
-  },
-  // saveBtn: { 삭제
-  //   width: 100,
-  //   height: 30,
-  //   borderColor: '#000',
-  //   backgroundColor: '#fff',
-  //   position: 'absolute',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   top: 10,
-  //   right: 10,
-  // },
+  PressedBtn: {borderBottomWidth: 2, borderColor: '#072AC8'},
 });
 
-import PublicModal from '../../components/PublicModal';
+import PublicModal from '../../components/commonComponent/PublicModal';
 import DetailPopAttachment from './DetailPopAttachment';
-import ChoosePop from '../../components/ChoosePop';
+import Title from '../../components/commonComponent/Title';
+import SectionChooseBtn from '../../components/commonComponent/SectionChooseBtn';
+import ChoosePop from '../../components/commonComponent/ChoosePop';
+import ChooseButton from '../../components/commonComponent/ChooseButton';
+import closeblack from '../../../assets/images/closeblack.png';
 
 const DetailPop = ({
   id,
+  portfolio,
   onModify,
   detailPopVisible,
   setDetailPopVisible,
@@ -100,10 +103,12 @@ const DetailPop = ({
   const [button2Pressed, setButton2Pressed] = useState(selected2Pressed());
   const [button3Pressed, setButton3Pressed] = useState(selected3Pressed());
   const [choosePopVisible, setChoosePopVisible] = useState(false);
+  const [addPressedIf, SetAddPressedIf] = useState(true);
+  // 포트폴리오 아이템에서 Add 버튼 클릭 시 등장하는 디테일 팝업 적용 후 확인을 눌렀는지 확인하는 스테이트
 
   function selectedValue() {
-    if (id == '1') return 'Photo';
-    else if (id == '2') return 'Video';
+    if (id == '1') return 'Video';
+    else if (id == '2') return 'Photo';
     else if (id == '3') return 'Link';
     else return 'Photo';
   } // id값을 통해 사진 수정 시 초기 selected 값을 사진으로 적용하여 각 종류에 맞는 DetailPopup이 열려있도록 구현
@@ -140,17 +145,44 @@ const DetailPop = ({
     setButton3Pressed(true);
   }; // buttonPressed 1~3의 Pressed 여부로 나머지 버튼의 토글 여부를 결정
 
+  // DetailPop Button onPress 용 Props 컴포넌트 start------------------------------------------------------------------------------------------------------------------------
+
+  const DetailPopCheck = () => {
+    // 디테일 팝 확인 버튼 클릭 시 발생
+    if (id == 6) {
+      setChoosePopVisible(true);
+    } else {
+      setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
+    }
+
+    if (setCheckChoosePopOkButton !== undefined) {
+      setCheckChoosePopOkButton(true);
+    }
+
+    console.log(checkChoosePopOkButton);
+  };
+  // DetailPop Button onPress 용 Props 컴포넌트 end------------------------------------------------------------------------------------------------------------------------
+
+  const DetailInput = ({description, placeholder}) => {
+    // 디테일 팝 섹션(이미지, 영상, 링크)별 페이지 속 인풋 구성요소 공통 컴포넌트
+    const descriptionStyle = {
+      height: description == true ? 100 : 45,
+      textAlignVertical: 'top',
+    };
+    return (
+      <TextInput
+        style={[styles.input, descriptionStyle]}
+        placeholder={placeholder}
+        placeholderTextColor="#D8D8D8"></TextInput>
+    );
+  };
+
   return (
     <PublicModal
       id={id}
       onModify={onModify}
       isModalVisible={detailPopVisible}
       setIsModalVisible={setDetailPopVisible}>
-      {/* <TouchableOpacity 삭제
-        onPress={() => setChoosePopVisible(true)}
-        style={styles.saveBtn}>
-        <Text>Save</Text>
-      </TouchableOpacity> */}
       <Pressable
         onPress={() => setDetailPopVisible(true)} // Pressable: Modal 영역 안 클릭 시 Modal 유지 구현을 위해 Pressable로 감싸서 적용
         style={styles.modalView}>
@@ -159,99 +191,80 @@ const DetailPop = ({
             onPress={() => {
               setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup X 닫기)
             }}>
-            <Text>X</Text>
+            <Image source={closeblack}></Image>
           </TouchableOpacity>
         </View>
+        <View style={styles.contentView}>
+          <View style={styles.chooseContainer}>
+            <SectionChooseBtn
+              title={'이미지'}
+              buttonPressed={button2Pressed}
+              onPress={() => [
+                handleButtonPress('Photo'),
+                handleButton2Press(),
+              ]}></SectionChooseBtn>
+            <SectionChooseBtn
+              title={'영상'}
+              buttonPressed={button1Pressed}
+              onPress={() => [
+                handleButtonPress('Video'),
+                handleButton1Press(),
+              ]}></SectionChooseBtn>
+            <SectionChooseBtn
+              title={'링크'}
+              buttonPressed={button3Pressed}
+              onPress={() => [
+                handleButtonPress('Link'),
+                handleButton3Press(),
+              ]}></SectionChooseBtn>
+          </View>
+          {selectedButton === 'Photo' && (
+            <View style={styles.TextInputContainer}>
+              <DetailPopAttachment></DetailPopAttachment>
+              <DetailInput placeholder="제목"></DetailInput>
+              <DetailInput placeholder="내용" description={true}></DetailInput>
+            </View>
+          )}
+          {selectedButton === 'Video' && (
+            <View style={styles.TextInputContainer}>
+              <DetailInput placeholder="링크"></DetailInput>
+              <DetailInput placeholder="제목"></DetailInput>
+              <DetailInput placeholder="내용" description={true}></DetailInput>
+            </View>
+          )}
+          {selectedButton === 'Link' && (
+            <View style={styles.TextInputContainer}>
+              <DetailPopAttachment></DetailPopAttachment>
+              <DetailInput placeholder="링크"></DetailInput>
+            </View>
+          )}
 
-        <View style={styles.chooseContainer}>
-          <TouchableOpacity
-            style={[
-              styles.chooseBtn,
-              {backgroundColor: button1Pressed ? '#D8D8D8' : '#fff'},
-            ]}
-            onPress={() => [handleButtonPress('Photo'), handleButton1Press()]}>
-            <Text>이미지</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.chooseBtn,
-              {backgroundColor: button2Pressed ? '#D8D8D8' : '#fff'},
-            ]}
-            onPress={() => [handleButtonPress('Video'), handleButton2Press()]}>
-            <Text>Video</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.chooseBtn,
-              {backgroundColor: button3Pressed ? '#D8D8D8' : '#fff'},
-            ]}
-            onPress={() => [handleButtonPress('Link'), handleButton3Press()]}>
-            <Text>Link</Text>
-          </TouchableOpacity>
-        </View>
-        {selectedButton === 'Photo' && (
-          <View>
-            <DetailPopAttachment></DetailPopAttachment>
-            <TextInput
-              style={styles.input}
-              placeholder="제목"
-              placeholderTextColor="#D8D8D8"></TextInput>
-            <TextInput
-              style={[styles.input, styles.description]}
-              placeholder="내용"
-              placeholderTextColor="#D8D8D8"></TextInput>
+          <View style={styles.flexCenter}>
+            <ChooseButton
+              size="M"
+              onPress={() => {
+                setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
+              }}>
+              취소
+            </ChooseButton>
+            <ChooseButton
+              size="M"
+              background={'blue'}
+              onPress={() => {
+                DetailPopCheck();
+              }}>
+              확인
+            </ChooseButton>
           </View>
-        )}
-        {selectedButton === 'Video' && (
-          <View>
-            <TextInput
-              style={styles.input}
-              placeholder="링크"
-              placeholderTextColor="#D8D8D8"></TextInput>
-            <TextInput
-              style={styles.input}
-              placeholder="제목"
-              placeholderTextColor="#D8D8D8"></TextInput>
-            <TextInput
-              style={[styles.input, styles.videoDescription]}
-              placeholder="내용"
-              placeholderTextColor="#D8D8D8"></TextInput>
-          </View>
-        )}
-        {selectedButton === 'Link' && (
-          <View>
-            <DetailPopAttachment></DetailPopAttachment>
-            <TextInput
-              style={styles.input}
-              placeholder="링크"
-              placeholderTextColor="#D8D8D8"></TextInput>
-          </View>
-        )}
-
-        <View style={styles.flexCenter}>
-          <TouchableOpacity
-            style={styles.pickBtn}
-            onPress={() => {
-              setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
-            }}>
-            <Text>취소</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.pickBtn}
-            onPress={() => {
-              setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
-              setCheckChoosePopOkButton(!checkChoosePopOkButton);
-              console.log(checkChoosePopOkButton);
-              // onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
-            }}>
-            <Text>확인</Text>
-          </TouchableOpacity>
         </View>
       </Pressable>
+
       <ChoosePop
         id={id}
-        title="저장하시겠습니까?"
+        title="수정된 내용을 저장하시겠습니까?"
         onModify={onModify}
+        portfolio={portfolio}
+        addPressedIf={addPressedIf}
         choosePopVisible={choosePopVisible}
         setChoosePopVisible={setChoosePopVisible}
         setDetailPopVisible={setDetailPopVisible}></ChoosePop>

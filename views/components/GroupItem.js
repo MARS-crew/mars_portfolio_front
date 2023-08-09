@@ -1,8 +1,16 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image, ImageBackground} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  Image,
+  ImageBackground,
+} from 'react-native';
 
 import GroupLogo from './GroupLogo';
 import LoginItem from './LoginItem';
+import FAB from './FloatingMenu';
 
 const GroupItem = ({id, src}) => {
   return (
@@ -14,14 +22,15 @@ const GroupItem = ({id, src}) => {
           <LoginItem />
         </ImageBackground>
       </View>
+      <FAB />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   image: {
-    width: 400,
-    height: 800,
+    width: Dimensions.get('window').width / 1,
+    height: Dimensions.get('window').height / 1,
     resizeMode: 'contain',
   },
   text: {

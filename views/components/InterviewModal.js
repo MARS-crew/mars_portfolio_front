@@ -9,12 +9,12 @@ import {
   Alert,
   Image,
 } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 import InterviewDeletePop from './InterviewDeletePop';
 import InterviewSavePop from './InterviewSavePop';
 import InterviewAlert from './InterviewAlert';
 
-import cancelIcon from '../../assets/images/cancelIcon.png'
+import cancelIcon from '../../assets/images/cancelIcon.png';
 import deletedIcon from '../../assets/images/deletedIcon.png';
 import editingIcon from '../../assets/images/editingIcon.png';
 
@@ -50,7 +50,7 @@ const InterviewModal = ({
   };
 
   const showDelete = () => {
-    if (filePath === undefined) {
+    if (filePath === false) {
       // Alert.alert('삭제할 데이터가 없습니다.');
       setDeleteAlertVisible(true);
     } else {
@@ -68,7 +68,7 @@ const InterviewModal = ({
       // quality: 1,
     };
     launchImageLibrary(options, response => {
-      if (response === undefined) {
+      if (response === false) {
         // 선택한 이미지가 없는 경우
         console.log('User did not select an image');
         return;

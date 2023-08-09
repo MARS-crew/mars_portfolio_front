@@ -1,6 +1,12 @@
-import React from "react";
-import { StyleSheet, View, FlatList } from 'react-native';
-import ResumeBox from "../components/ResumeBox";
+import React,{useState} from 'react';
+import {StyleSheet, View, FlatList,Image} from 'react-native';
+import ResumeBox from '../components/ResumeBox';
+import ResumeBoxMD from '../components/ResumeBoxMD';
+import FAB from '../components/FloatingMenu';
+import ResumeEditMode from "../components/ResumeEditMode";
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
+
 
 const DATA = [
   {
@@ -34,25 +40,58 @@ const DATA = [
 ];
 
 const Resume = () => {
-  const renderItem = ({ item }) => <ResumeBox item={item} />;
+  const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
+  const [resume, setResume] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
+  const toggleModal = () => {
+    setModalOpen(prevState => !prevState);
+  };
+
+const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity 
+      onLongPress={toggleModal}
+      activeOpacity={100} 
+      >
+        {modalOpen ? (
+          <ResumeBoxMD item={item} />
+        ) : (
+          <ResumeBox item={item} />
+        )}
+      </TouchableOpacity>
+    );
+  };
+
+  // ) <ResumeBox item={item} modalOpen={modalOpen} />; // Pass modalOpen as a prop
+
+
   return (
     <View style={styles.container}>
+    <TouchableOpacity 
+    onPress={toggleModal}
+    activeOpacity={100} >
       <FlatList
         data={DATA}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
       />
-    </View>
+      <FAB />
+      <ResumeEditMode
+        resume={resume}
+        isModalVisible={modalOpen}
+        setIsModalVisible={setModalOpen}
+      />
+    </TouchableOpacity>
+  </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     width: 400,
-    padding: 25,
+   // padding: 25,
     flex: 2,
-    backgroundColor: "#F3F6FE"
-  }
+    backgroundColor: '#F3F6FE',
+  },
 });
 
 export default Resume;
