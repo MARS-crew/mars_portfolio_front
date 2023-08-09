@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Title from '../../components/commonComponent/Title';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import {multiply} from 'react-native-reanimated';
 
 const styles = StyleSheet.create({
   container: {
@@ -54,11 +55,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const LogList = ListData => {
+const LogList = (ListData, hiddenItem) => {
   const [text, setText] = useState('Not Pressed');
-  const [myListData, setMyListData] = useState(ListData);
+  const [myListData, setMyListData] = useState(ListData.ListData);
 
-  console.log(myListData);
+  console.log(hiddenItem);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -73,13 +74,16 @@ const LogList = ListData => {
         renderHiddenItem={(data, rowMap) => (
           <View style={styles.swipeHiddenItemContainer}>
             <TouchableOpacity></TouchableOpacity>
-            <TouchableOpacity onPress={() => setText('right is pressed')}>
-              <View style={styles.swipeHiddenItem}>
-                <Title color={'#FF3040'} fontSize={16} fontWeight={'700'}>
-                  삭제
-                </Title>
-              </View>
-            </TouchableOpacity>
+
+            {hiddenItem != null ? (
+              <TouchableOpacity onPress={() => setText('right is pressed')}>
+                <View style={styles.swipeHiddenItem}>
+                  <Title color={'#FF3040'} fontSize={16} fontWeight={'700'}>
+                    삭제
+                  </Title>
+                </View>
+              </TouchableOpacity>
+            ) : null}
           </View>
         )}
         leftOpenValue={70}

@@ -70,24 +70,28 @@ const MyPage = () => {
   const [button2Pressed, setButton2Pressed] = useState(false);
   const [button3Pressed, setButton3Pressed] = useState(false);
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
+  const [hiddenItem, setHiddenItem] = useState(true);
   const shadowColor = 'rgba(151, 151, 151, 0.36)';
 
   const handleButton1Press = () => {
     setButton1Pressed(true);
     setButton2Pressed(false);
     setButton3Pressed(false);
+    setHiddenItem(true);
   };
 
   const handleButton2Press = () => {
     setButton1Pressed(false);
     setButton2Pressed(true);
     setButton3Pressed(false);
+    setHiddenItem(false);
   };
 
   const handleButton3Press = () => {
     setButton1Pressed(false);
     setButton2Pressed(false);
     setButton3Pressed(true);
+    setHiddenItem(false);
   }; // buttonPressed 1~3의 Pressed 여부로 나머지 버튼의 토글 여부를 결정
 
   const ListViewData = () => {
@@ -181,17 +185,23 @@ const MyPage = () => {
 
           {button1Pressed && (
             <View style={styles.visitLogView}>
-              <LogList ListData={ListViewData()}></LogList>
+              <LogList
+                ListData={ListViewData()}
+                hiddenItem={hiddenItem}></LogList>
             </View>
           )}
           {button2Pressed && (
             <View style={styles.visitLogView}>
-              <LogList ListData={ListLikeData()}></LogList>
+              <LogList
+                ListData={ListLikeData()}
+                hiddenItem={hiddenItem}></LogList>
             </View>
           )}
           {button3Pressed && (
             <View style={styles.visitLogView}>
-              <LogList ListData={ListWantData()}></LogList>
+              <LogList
+                ListData={ListWantData()}
+                hiddenItem={hiddenItem}></LogList>
             </View>
           )}
         </View>
