@@ -29,13 +29,10 @@ import GroupVideo from './views/screens/GroupVideo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import GroupApp from './GroupApp';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const xOffset = new Animated.Value(0);
-const yOffset = new Animated.Value(0);
 
 const Screen = props => {
   return (
@@ -47,121 +44,111 @@ const Screen = props => {
   );
 };
 
+const Stack = createStackNavigator();
+
 const transitionAnimation = index => {
   return {
     transform: [
       { perspective: 800 },
       {
-        scale: yOffset.interpolate({
+        scale: xOffset.interpolate({
           inputRange: [
-            (index - 1) * SCREEN_HEIGHT,
-            index * SCREEN_HEIGHT,
-            (index + 1) * SCREEN_HEIGHT,
+            (index - 1) * SCREEN_WIDTH,
+            index * SCREEN_WIDTH,
+            (index + 1) * SCREEN_WIDTH,
           ],
-          outputRange: [1, 1, 1],
+          outputRange: [0.95, 1, 0.95],
         }),
       },
       {
-        translateY: yOffset.interpolate({
+        rotateX: xOffset.interpolate({
           inputRange: [
-            (index - 1) * SCREEN_HEIGHT,
-            index * SCREEN_HEIGHT,
-            (index + 1) * SCREEN_HEIGHT,
+            (index - 1) * SCREEN_WIDTH,
+            index * SCREEN_WIDTH,
+            (index + 1) * SCREEN_WIDTH,
           ],
-          outputRange: [0, 0, 0],
+          outputRange: ['0deg', '0deg', '0deg'], //x각도
+        }),
+      },
+      {
+        rotateY: xOffset.interpolate({
+          inputRange: [
+            (index - 1) * SCREEN_WIDTH,
+            index * SCREEN_WIDTH,
+            (index + 1) * SCREEN_WIDTH,
+          ],
+          outputRange: ['35deg', '0deg', '-35deg'], //y각도
         }),
       },
     ],
   };
 };
 
-const datas = [
-  {
-    id: 1,
-    group: 3,
-    interviewData: '',
-    portfolioData: '',
-    resumeData: '',
-    reviewData: '',
-  },
-  {
-    id: 2,
-    group: 3,
-    interviewData: '',
-    portfolioData: '',
-    resumeData: '',
-    reviewData: '',
-  },
-  {
-    id: 3,
-    group: 4,
-    interviewData: '',
-    portfolioData: '',
-    resumeData: '',
-    reviewData: '',
-  },
-  {
-    id: 4,
-    group: 4,
-    interviewData: '',
-    portfolioData: '',
-    resumeData: '',
-    reviewData: '',
-  },
-  {
-    id: 5,
-    group: 3,
-    interviewData: '',
-    portfolioData: '',
-    resumeData: '',
-    reviewData: '',
-  },
-];
-
-const App = () => {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: yOffset } } }],
-    {
-      useNativeDriver: true,
-      listener: event => {
-        const offset = event.nativeEvent.contentOffset.y;
-        const currentIndex = Math.round(offset / SCREEN_HEIGHT);
-        console.log('Current Index: ', currentIndex);
-        setCurrentIndex(currentIndex);
-      },
-    },
-  );
+const GroupApp = ({
+  index,
+  id,
+  group,
+  interviewData,
+  portfolioData,
+  resumeData,
+  reviewData,
+  currentPage,
+  setCurrentPage,
+  currentIndex,
+}) => {
   return (
-    <View style={styles.container}>
-      <Animated.ScrollView
-        scrollEventThrottle={16}
-        onScroll={handleScroll}
-        pagingEnabled
-        style={styles.scrollView}>
-        {datas.map((data, index) => (
-          <Screen key={data.id} index={index}>
-            <GroupApp
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={() => (
+            <HomeScreen
               index={index}
-              id={data.id}
-              group={data.group}
-              interviewData={data.interviewData}
-              portfolioData={data.portfolioData}
-              resumeData={data.resumeData}
-              reviewData={data.reviewData}
+              id={id}
+              group={group}
+              interviewData={interviewData}
+              portfolioData={portfolioData}
+              resumeData={resumeData}
+              reviewData={reviewData}
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
               currentIndex={currentIndex}
             />
-          </Screen>
-        ))}
-      </Animated.ScrollView>
-    </View>
+          )}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Help"
+          component={Help}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Share"
+          component={Share}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Album"
+          component={Album}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
-const HomeScreen = () => {
+const HomeScreen = ({
+  index,
+  id,
+  group,
+  interviewData,
+  portfolioData,
+  resumeData,
+  reviewData,
+  currentPage,
+  setCurrentPage,
+  currentIndex,
+}) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
 
@@ -182,13 +169,22 @@ const HomeScreen = () => {
   useEffect(() => {
     AsyncStorage.setItem('isSplashVisible', JSON.stringify(isSplashVisible));
   }, [isSplashVisible]);
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { x: xOffset } } }],
+    {
+      useNativeDriver: true,
+      listener: event => {
+        const offset = event.nativeEvent.contentOffset.x;
+        const currentIndex = Math.round(offset / SCREEN_WIDTH);
+        setCurrentPage(currentIndex);
+      },
+    }
+  );
 
   return (
     <Animated.ScrollView
       scrollEventThrottle={16}
-      onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: xOffset } } }], {
-        useNativeDriver: true,
-      })}
+      onScroll={handleScroll}
       horizontal
       pagingEnabled
       style={styles.scrollView}>
@@ -202,7 +198,14 @@ const HomeScreen = () => {
         <GroupVideo />
       </Screen>
       <Screen text="Screen 3" index={2}>
-        <Interview />
+        <InterviewContents
+          path={interviewData}
+          currentPage={currentPage}
+          currentIndex={currentIndex}
+          index={index}
+          isPlaying={currentIndex === index && isPlaying}
+          setIsPlaying={setIsPlaying}
+        />
       </Screen>
       <Screen text="Screen 4" index={3}>
         <Resume modalOpen={modalOpen} />
@@ -242,4 +245,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default GroupApp;
