@@ -131,7 +131,7 @@ const ContentsViewPop = ({
                     />
                   </TouchableOpacity>
                 )}
-                {id !== '3' && (
+                {id !== '3' && portfolio && (
                   <Image source={src} style={[styles.content, styles.image]} />
                 )}
               </View>
