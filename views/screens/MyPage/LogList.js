@@ -9,34 +9,22 @@ import {
 } from 'react-native';
 import Title from '../../components/commonComponent/Title';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import {multiply} from 'react-native-reanimated';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  textContainer: {
-    width: '100%',
-    height: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  styledText: {
-    color: '#111',
-    fontWeight: 'bold',
-  },
   swipeListItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 15,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
     borderBottomColor: '#F5F5F5',
     borderBottomWidth: 1,
-    height: 40,
     backgroundColor: '#FDFDFD',
   },
   swipeHiddenItemContainer: {
-    flex: 1,
-    height: '100%',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: 'white',
@@ -49,17 +37,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  swipeHiddenItemText: {
-    color: 'white',
-    fontSize: 14,
-  },
 });
 
-const LogList = (ListData, hiddenItem) => {
+const LogList = ListData => {
   const [text, setText] = useState('Not Pressed');
   const [myListData, setMyListData] = useState(ListData.ListData);
-
-  console.log(hiddenItem);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -75,15 +57,13 @@ const LogList = (ListData, hiddenItem) => {
           <View style={styles.swipeHiddenItemContainer}>
             <TouchableOpacity></TouchableOpacity>
 
-            {hiddenItem != null ? (
-              <TouchableOpacity onPress={() => setText('right is pressed')}>
-                <View style={styles.swipeHiddenItem}>
-                  <Title color={'#FF3040'} fontSize={16} fontWeight={'700'}>
-                    삭제
-                  </Title>
-                </View>
-              </TouchableOpacity>
-            ) : null}
+            <TouchableOpacity onPress={() => setText('right is pressed')}>
+              <View style={styles.swipeHiddenItem}>
+                <Title color={'#FF3040'} fontSize={16} fontWeight={'700'}>
+                  삭제
+                </Title>
+              </View>
+            </TouchableOpacity>
           </View>
         )}
         leftOpenValue={70}

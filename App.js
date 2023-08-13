@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 
-import Splash from './views/screens/Splash';
+import Splash from './views/screens/splash';
 import Login from './views/screens/Login';
 import Group from './views/screens/Group';
 import Member from './views/screens/Member';
@@ -166,7 +166,7 @@ const HomeScreen = () => {
         <Review />
       </Screen>
       <Screen text="Screen 7" index={6}>
-        <MyPage />
+        <MyPage options={{headerShown: false}} />
       </Screen>
     </Animated.ScrollView>
   );

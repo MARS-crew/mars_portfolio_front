@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Dimensions} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  FlatList,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import {Shadow} from 'react-native-shadow-2';
 import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
 import SectionChooseBtn from '../../components/commonComponent/SectionChooseBtn';
@@ -7,11 +14,15 @@ import Title from '../../components/commonComponent/Title';
 import LogList from './LogList';
 
 const styles = StyleSheet.create({
-  Container: {
-    flex: 1,
+  container: {
+    height: Dimensions.get('window').height * 1,
     backgroundColor: '#F5F4F9',
     paddingHorizontal: 20,
     alignItems: 'center',
+  },
+  ListContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
   },
 
   visitContainer: {
@@ -41,7 +52,6 @@ const styles = StyleSheet.create({
   chooseContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    display: 'flex',
     paddingTop: 15,
   },
   arrangement: {
@@ -49,18 +59,20 @@ const styles = StyleSheet.create({
   },
 
   visitLogView: {
-    height: Dimensions.get('window').height * 0.72,
+    height: Dimensions.get('window').height * 0.75,
     alignItems: 'center',
     flexDirection: 'row',
-    display: 'flex',
-    marginVertical: 12,
+    paddingBottom: 10,
   },
-  DeleteButton: {
-    backgroundColor: '#FFE9EA',
-    width: 84,
-    height: 41,
-    alignItems: 'center',
-    justifyContent: 'center',
+
+  swipeListItem: {
+    width: Dimensions.get('window').height * 1,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    borderBottomColor: '#F5F5F5',
+    borderBottomWidth: 1,
+    borderRadius: 10,
+    backgroundColor: '#FDFDFD',
   },
 });
 
@@ -112,8 +124,9 @@ const MyPage = () => {
       .fill('')
       .map((_, i) => ({
         key: `${i}`,
-        text: `조호연님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
+        text: `김건우님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
         date: '',
+        id: 2,
       }));
 
     return LIST_LIKE_DATA;
@@ -124,8 +137,9 @@ const MyPage = () => {
       .fill('')
       .map((_, i) => ({
         key: `${i}`,
-        text: `김건우님이 회원님의 인터뷰 영상을 찜하였습니다.`,
+        text: `조호연님이 회원님의 인터뷰 영상을 찜하였습니다.`,
         date: '',
+        id: 3,
       }));
 
     return LIST_WANT_DATA;
@@ -144,8 +158,33 @@ const MyPage = () => {
     );
   };
 
+  const LikeWantList = ListData => {
+    return (
+      <SafeAreaView style={styles.ListContainer}>
+        <View>
+          <FlatList
+            data={ListData.ListData}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                activeOpacity={item.id == 2 ? 0.2 : 1}
+                onPress={() =>
+                  item.id == 2
+                    ? setContentsViewPopVisible(!contentsViewPopVisible)
+                    : null
+                }
+                style={styles.swipeListItem}>
+                <Title color={'black'}>{item.text}</Title>
+              </TouchableOpacity>
+            )}
+            keyExtractor={(item, key) => key}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  };
+
   return (
-    <View style={styles.Container}>
+    <View style={styles.container}>
       <Shadow
         style={styles.arrangement}
         distance="12"
@@ -185,82 +224,33 @@ const MyPage = () => {
 
           {button1Pressed && (
             <View style={styles.visitLogView}>
-              <LogList
-                ListData={ListViewData()}
-                hiddenItem={hiddenItem}></LogList>
+              <LogList ListData={ListViewData()}></LogList>
             </View>
           )}
           {button2Pressed && (
             <View style={styles.visitLogView}>
-              <LogList
+              <LikeWantList
                 ListData={ListLikeData()}
-                hiddenItem={hiddenItem}></LogList>
+                modalOpen={contentsViewPopVisible}
+                setModalOpen={setContentsViewPopVisible}></LikeWantList>
             </View>
           )}
           {button3Pressed && (
             <View style={styles.visitLogView}>
-              <LogList
-                ListData={ListWantData()}
-                hiddenItem={hiddenItem}></LogList>
+              <LikeWantList ListData={ListWantData()}></LikeWantList>
             </View>
           )}
         </View>
-
-        {/*
-        <View style={styles.flexCenter}>
-          <ChooseButton
-            size="M"
-            onPress={() => {
-              setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup Register 등록)
-            }}>
-            취소
-          </ChooseButton>
-          <ChooseButton
-            size="M"
-            background={'blue'}
-            onPress={() => {
-              DetailPopCheck();
-            }}>
-            확인
-          </ChooseButton>
-        </View>
-        */}
       </Shadow>
-
-      {/* 
-      <View style={styles.logContainer1}>
-        <View style={styles.logContainer2}>
-          <TouchableOpacity style={styles.btn1}>
-            <Text>방문기록</Text>
-            <View style={styles.btnLine} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btn}>
-            <Text>좋아요</Text>
-            <View style={styles.btnLine} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setContentsViewPopVisible(!contentsViewPopVisible)}
-            style={styles.btn}>
-            <Text>찜하기</Text>
-            <View style={styles.btnLine} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.logContainer3}>
-          <Text>jeaHYeopLee님 2020-03-22 15:33:33</Text>
-          <Text>jeaHYeopLee님 2020-03-22 15:33:33</Text>
-          <Text>jeaHYeopLee님 2020-03-22 15:33:33</Text>
-          <Text>jeaHYeopLee님 2020-03-22 15:33:33</Text>
-          <Text>jeaHYeopLee님 2020-03-22 15:33:33</Text>
-          <Text>jeaHYeopLee님 2020-03-22 15:33:33</Text>
-          <Text>jeaHYeopLee님 2020-03-22 15:33:33</Text>
-          <Text>jeaHYeopLee님 2020-03-22 15:33:33</Text>
-          <Text>jeaHYeopLee님 2020-03-22 15:33:33</Text>
-        </View>
-      </View>
-*/}
 
       <ContentsViewPop
         myPage={myPage}
+        title={'조호연'}
+        message={`안녕하세요 저는 조호연입니다.👋
+올려주신 이력서와 포트폴리오는 흥미롭게 보았습니다.\n
+하지만 수상내역 부분이 조금 부족한 듯 보여집니다.
+고로 해당 내용을 더 채워넣으시면 좋겠다는 생각이 들어 리뷰를 남기게 되었습니다.🌱\n
+궁금하신 사항은 akftjd100@naver.com 으로 문의주세요.📫`}
         contentsViewPopVisible={contentsViewPopVisible}
         setContentsViewPopVisible={setContentsViewPopVisible}></ContentsViewPop>
     </View>
