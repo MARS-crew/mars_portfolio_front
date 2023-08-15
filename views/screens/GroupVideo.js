@@ -74,7 +74,7 @@ const GroupVideo = () => {
         )}
         numColumns={2}
       />
-      <FAB />
+      <FAB yourData={`2`} />
     </SafeAreaView>
   );
 };

@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
 });
-const FloatingActionMenu = () => {
+const FloatingActionMenu = yourData => {
   const navigation = useNavigation();
 
   const handleItemPress = iconName => {
@@ -25,7 +25,8 @@ const FloatingActionMenu = () => {
         }),
       );
     } else if (iconName === 'bt_help') {
-      navigation.navigate('Help');
+      navigation.navigate('Help', {propName: yourData});
+      console.log(yourData);
     }
   };
 
@@ -35,7 +36,7 @@ const FloatingActionMenu = () => {
       position="right"
       offsetX={40}
       offsetY={100}
-      hideShadow="false"
+      hideShadow={false}
       buttonColor="#072AC8">
       <ActionButton.Item
         buttonColor="#F5F5F5"

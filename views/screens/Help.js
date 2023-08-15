@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useRoute} from '@react-navigation/native';
 import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import Swiper from 'react-native-swiper';
 import Title from '../components/commonComponent/Title';
@@ -6,6 +7,7 @@ import Close from '../../assets/images/slideClose.png';
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: 'rgba(33, 33, 33, 0.7)',
   },
   closeButton: {
@@ -30,7 +32,7 @@ const styles = StyleSheet.create({
     height: 74.5,
   },
   slide1: {
-    paddingHorizontal: 64,
+    paddingHorizontal: 55,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -38,6 +40,10 @@ const styles = StyleSheet.create({
 });
 
 const Help = () => {
+  const route = useRoute();
+  const customData = route.params.propName;
+  console.log(customData);
+
   const [slideIndex, setSlideIndex] = useState(0);
   const TITLE_1 = {
     text1: `이전 기수는 위쪽, 다음 기수는 아래쪽\n위아래로 화면을 밀어보세요!`,
@@ -57,6 +63,10 @@ const Help = () => {
   };
   const TITLE_4 = {
     text1: `왼쪽으로 밀어 로그를 삭제할 수 있어요!`,
+    src1: require('../../assets/images/helpArrow5.png'),
+  };
+  const TITLE_5 = {
+    text1: `Null`,
     src1: require('../../assets/images/helpArrow5.png'),
   };
   const slide2 = {
@@ -91,18 +101,14 @@ const Help = () => {
       </View>
     );
   };
-
+  console.log('CD', customData);
   return (
-    <Swiper
-      style={styles.container}
-      showsButtons
-      showsPagination={false}
-      loop={false}>
-      <HelpSlid text={TITLE_1}></HelpSlid>
-      <HelpSlid text={TITLE_2}></HelpSlid>
-      <HelpSlid text={TITLE_3}></HelpSlid>
-      <HelpSlid text={TITLE_4} Horizontal={slide4}></HelpSlid>
-    </Swiper>
+    <View style={styles.container}>
+      {customData == 1 && <HelpSlid text={TITLE_1}></HelpSlid>}
+      {customData == 2 && <HelpSlid text={TITLE_2}></HelpSlid>}
+      {customData == 3 && <HelpSlid text={TITLE_3}></HelpSlid>}
+      {customData == 4 && <HelpSlid text={TITLE_2}></HelpSlid>}
+    </View>
   );
 };
 

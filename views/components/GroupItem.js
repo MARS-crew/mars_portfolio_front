@@ -22,7 +22,7 @@ const GroupItem = ({id, src}) => {
           <LoginItem />
         </ImageBackground>
       </View>
-      <FAB />
+      <FAB yourData={`1`} />
     </View>
   );
 };

@@ -1,12 +1,10 @@
-import React,{useState} from 'react';
-import {StyleSheet, View, FlatList,Image} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, FlatList, Image} from 'react-native';
 import ResumeBox from '../components/ResumeBox';
 import ResumeBoxMD from '../components/ResumeBoxMD';
 import FAB from '../components/FloatingMenu';
-import ResumeEditMode from "../components/ResumeEditMode";
-import { TouchableOpacity } from 'react-native-gesture-handler';
-
-
+import ResumeEditMode from '../components/ResumeEditMode';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const DATA = [
   {
@@ -46,49 +44,39 @@ const Resume = () => {
     setModalOpen(prevState => !prevState);
   };
 
-const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     return (
-      <TouchableOpacity 
-      onLongPress={toggleModal}
-      activeOpacity={100} 
-      >
-        {modalOpen ? (
-          <ResumeBoxMD item={item} />
-        ) : (
-          <ResumeBox item={item} />
-        )}
+      <TouchableOpacity onLongPress={toggleModal} activeOpacity={100}>
+        {modalOpen ? <ResumeBoxMD item={item} /> : <ResumeBox item={item} />}
       </TouchableOpacity>
     );
   };
 
   // ) <ResumeBox item={item} modalOpen={modalOpen} />; // Pass modalOpen as a prop
 
-
   return (
     <View style={styles.container}>
-    <TouchableOpacity 
-    onPress={toggleModal}
-    activeOpacity={100} >
-      <FlatList
-        data={DATA}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
-      <FAB />
-      <ResumeEditMode
-        resume={resume}
-        isModalVisible={modalOpen}
-        setIsModalVisible={setModalOpen}
-      />
-    </TouchableOpacity>
-  </View>
+      <TouchableOpacity onPress={toggleModal} activeOpacity={100}>
+        <FlatList
+          data={DATA}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+        />
+        <FAB yourData={`3`} />
+        <ResumeEditMode
+          resume={resume}
+          isModalVisible={modalOpen}
+          setIsModalVisible={setModalOpen}
+        />
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     width: 400,
-   // padding: 25,
+    // padding: 25,
     flex: 2,
     backgroundColor: '#F3F6FE',
   },

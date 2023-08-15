@@ -150,7 +150,7 @@ const Portfolio = () => {
           />
         </View>
       </SafeAreaView>
-      <FAB portfolio={portfolio} />
+      <FAB yourData={4} />
     </View>
   );
 };
