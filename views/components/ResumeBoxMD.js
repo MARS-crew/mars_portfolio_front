@@ -385,7 +385,6 @@ if (item.id === '1') {
         >
         <Image source={write} style={styles.writeImg} >
         </Image>
-        {console.log("please", detailPopVisible)}
         { detailPopVisible ? (
         <ResumePopup
             id={item.id}

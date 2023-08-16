@@ -1,89 +1,3 @@
-// import React, {useState, useEffect} from 'react';
-// import {
-//   Animated,
-//   Dimensions,
-//   ScrollView,
-//   StyleSheet,
-//   Text,
-//   View,
-// } from 'react-native';
-// import GroupApp from './GroupApp';
-// import Group from './views/screens/Group';
-
-// const SCREEN_HEIGHT = Dimensions.get('window').height;
-// const SCREEN_WIDTH = Dimensions.get('window').width;
-
-// const yOffset = new Animated.Value(0);
-
-// const Screen = props => {
-//   return (
-//     <View style={styles.scrollPage}>
-//       <Animated.View style={[styles.screen, transitionAnimation(props.index)]}>
-//         {props.children}
-//       </Animated.View>
-//     </View>
-//   );
-// };
-
-// const transitionAnimation = index => {
-//   return {
-//     transform: [
-//       { perspective: 800 },
-//       {
-//         scale: yOffset.interpolate({
-//           inputRange: [
-//             (index - 1) * SCREEN_HEIGHT,
-//             index * SCREEN_HEIGHT,
-//             (index + 1) * SCREEN_HEIGHT,
-//           ],
-//           outputRange: [1, 1, 1],
-//         }),
-//       },
-//       {
-//         translateY: yOffset.interpolate({
-//           inputRange: [
-//             (index - 1) * SCREEN_HEIGHT,
-//             index * SCREEN_HEIGHT,
-//             (index + 1) * SCREEN_HEIGHT,
-//           ],
-//           outputRange: [0, 0, 0],
-//         }),
-//       },
-//     ],
-//   };
-// };
-
-// const App = () => {
-//   return (
-//     <Animated.ScrollView
-//       scrollEventThrottle={16}
-//       onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: yOffset } } }], {
-//         useNativeDriver: true,
-//       })}
-//       pagingEnabled
-//       style={styles.scrollView}>
-//         {/* <Screen> */}
-//           <Group/>
-//           <Group/>
-//         {/* </Screen> */}
-
-//     </Animated.ScrollView>
-//   );
-// };
-
-
-// const styles = StyleSheet.create({
-//     scrollView: {
-//       flex: 1,
-//       flexDirection: 'column',
-//   },
-//   scrollPage: {
-//     width: SCREEN_WIDTH,
-//     padding: 0,
-//   },
-// });
-
-// export default App;
 import React, {useState, useEffect} from 'react';
 import {
   Animated,
@@ -230,12 +144,12 @@ const HomeScreen = () => {
       horizontal
       pagingEnabled
       style={styles.scrollView}>
-      {/* <Splash isSplashVisible={isSplashVisible} />
-      {isSplashVisible === false ? ( */}
+      <Splash isSplashVisible={isSplashVisible} />
+      {isSplashVisible === false ? (
         <Screen text="Screen 1" index={0}>
           <WhichGroup />
         </Screen>
-      {/* ) : null} */}
+      ) : null}
       <Screen text="Screen 2" index={1}>
         <GroupVideo />
       </Screen>

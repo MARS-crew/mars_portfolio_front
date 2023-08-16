@@ -147,11 +147,9 @@ trackStyle:{
 // },
 
 });
-import PublicModal from './PublicModal';
-import DetailPopAttachment from '../screens/DetailPopAttachment';
-import Title from './Title';
-import ChoosePop from './ChoosePop';
-import ChooseButton from './ChooseButton';
+import PublicModal from './commonComponent/PublicModal';
+import Title from './commonComponent/Title';
+import ChooseButton from './commonComponent/ChooseButton';
 import closeblack from '../../assets/images/closeblack.png';
 const DetailPop = ({
   id,
