@@ -102,13 +102,14 @@ import Youtube from './views/screens/Youtube';
 import Resume from './views/screens/Resume';
 import Portfolio from './views/screens/Portfolio/Portfolio';
 import Review from './views/screens/Review';
+import MyPage from './views/screens/MyPage/MyPage';
 import Album from './views/screens/Album';
 import Interview from './views/screens/Interview';
 import 'react-native-gesture-handler';
 import WhichGroup from './views/screens/WhichGroup';
 import Help from './views/screens/Help';
 import Share from './views/screens/Share';
-import MyPage from './views/screens/MyPage';
+
 import GroupVideo from './views/screens/GroupVideo';
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -251,7 +252,7 @@ const HomeScreen = () => {
         <Review />
       </Screen>
       <Screen text="Screen 7" index={6}>
-        <MyPage />
+        <MyPage options={{headerShown: false}} />
       </Screen>
     </Animated.ScrollView>
   );

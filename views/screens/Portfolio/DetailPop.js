@@ -80,11 +80,12 @@ const styles = StyleSheet.create({
   PressedBtn: {borderBottomWidth: 2, borderColor: '#072AC8'},
 });
 
-import PublicModal from '../../components/PublicModal';
+import PublicModal from '../../components/commonComponent/PublicModal';
 import DetailPopAttachment from './DetailPopAttachment';
-import Title from '../../components/Title';
-import ChoosePop from '../../components/ChoosePop';
-import ChooseButton from '../../components/ChooseButton';
+import Title from '../../components/commonComponent/Title';
+import SectionChooseBtn from '../../components/commonComponent/SectionChooseBtn';
+import ChoosePop from '../../components/commonComponent/ChoosePop';
+import ChooseButton from '../../components/commonComponent/ChooseButton';
 import closeblack from '../../../assets/images/closeblack.png';
 
 const DetailPop = ({
@@ -162,21 +163,6 @@ const DetailPop = ({
   };
   // DetailPop Button onPress 용 Props 컴포넌트 end------------------------------------------------------------------------------------------------------------------------
 
-  const DetailSectionChooseBtn = ({title, buttonPressed, onPress}) => {
-    //디테일 팝 섹션(이미지, 영상, 링크) 선택 버튼 공통 컴포넌트
-    return (
-      <TouchableOpacity
-        style={[
-          styles.chooseBtn,
-          buttonPressed ? styles.PressedBtn : styles.chooseBtn,
-        ]}
-        onPress={onPress}>
-        <Title fontSize={16} color={buttonPressed ? 'blue' : null}>
-          {title}
-        </Title>
-      </TouchableOpacity>
-    );
-  };
   const DetailInput = ({description, placeholder}) => {
     // 디테일 팝 섹션(이미지, 영상, 링크)별 페이지 속 인풋 구성요소 공통 컴포넌트
     const descriptionStyle = {
@@ -210,27 +196,27 @@ const DetailPop = ({
         </View>
         <View style={styles.contentView}>
           <View style={styles.chooseContainer}>
-            <DetailSectionChooseBtn
+            <SectionChooseBtn
               title={'이미지'}
               buttonPressed={button2Pressed}
               onPress={() => [
                 handleButtonPress('Photo'),
                 handleButton2Press(),
-              ]}></DetailSectionChooseBtn>
-            <DetailSectionChooseBtn
+              ]}></SectionChooseBtn>
+            <SectionChooseBtn
               title={'영상'}
               buttonPressed={button1Pressed}
               onPress={() => [
                 handleButtonPress('Video'),
                 handleButton1Press(),
-              ]}></DetailSectionChooseBtn>
-            <DetailSectionChooseBtn
+              ]}></SectionChooseBtn>
+            <SectionChooseBtn
               title={'링크'}
               buttonPressed={button3Pressed}
               onPress={() => [
                 handleButtonPress('Link'),
                 handleButton3Press(),
-              ]}></DetailSectionChooseBtn>
+              ]}></SectionChooseBtn>
           </View>
           {selectedButton === 'Photo' && (
             <View style={styles.TextInputContainer}>

@@ -9,8 +9,8 @@ import {
 
 import Video from 'react-native-video';
 import {Shadow} from 'react-native-shadow-2';
-import EditMode from '../../components/EditMode';
-import ContentsViewPop from './ContentsViewPop';
+import EditMode from '../../components/commonComponent/EditMode';
+import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
 import DetailPop from './DetailPop';
 const {width, height} = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.4;
@@ -87,6 +87,7 @@ const PortfolioItem = ({
           )}
         </TouchableOpacity>
         <ContentsViewPop
+          portfolio={portfolio}
           id={id}
           title={title}
           src={src}

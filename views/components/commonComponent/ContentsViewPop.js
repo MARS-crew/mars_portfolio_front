@@ -10,9 +10,9 @@ import {
   Dimensions,
 } from 'react-native';
 import Video from 'react-native-video';
-import PublicModal from '../../components/PublicModal';
+import PublicModal from './PublicModal';
 import closeblack from '../../../assets/images/closeblack.png';
-import Title from '../../components/Title';
+import Title from './Title';
 
 const {width, height} = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.9;
@@ -66,6 +66,8 @@ const styles = StyleSheet.create({
 });
 
 const ContentsViewPop = ({
+  //포트폴리오 프롭스
+  portfolio,
   id,
   title,
   src,
@@ -74,6 +76,8 @@ const ContentsViewPop = ({
   onModify,
   contentsViewPopVisible,
   setContentsViewPopVisible,
+  //마이페이지 프롭스
+  myPage,
 }) => {
   const handleLinkPress = () => {
     Linking.openURL(message);
@@ -127,7 +131,7 @@ const ContentsViewPop = ({
                     />
                   </TouchableOpacity>
                 )}
-                {id !== '3' && (
+                {id !== '3' && portfolio && (
                   <Image source={src} style={[styles.content, styles.image]} />
                 )}
               </View>

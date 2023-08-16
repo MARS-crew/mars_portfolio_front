@@ -1,93 +1,76 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {Album} from '../screens/Album';
-import {FloatingAction} from 'react-native-floating-action';
+import {View, Image, StyleSheet} from 'react-native';
 import {useNavigation, CommonActions} from '@react-navigation/native';
+import ActionButton from 'react-native-action-button';
 
-const actions = [
-  {
-    // text: 'Gallery',
-    icon: require('../../assets/images/gallery.png'),
-    name: 'bt_gallery',
-    tintColor: '#072AC8',
-    color: '#FDFDFD',
-    buttonSize: 45,
-    position: 3,
+const styles = StyleSheet.create({
+  actionButtonIcon: {
+    width: 25,
+    height: 25,
+    resizeMode: 'contain',
   },
-  {
-    // text: 'Share',
-    icon: require('../../assets/images/share.png'),
-    name: 'bt_share',
-    tintColor: '#072AC8',
-    color: '#FDFDFD',
-    buttonSize: 45,
-    position: 4,
-  },
-  {
-    // text: 'Home',
-    icon: require('../../assets/images/home.png'),
-    name: 'bt_home',
-    tintColor: '#072AC8',
-    color: '#FDFDFD',
-    buttonSize: 45,
-    position: 2,
-  },
-  {
-    // text: 'Help',
-    icon: require('../../assets/images/help.png'),
-    name: 'bt_help',
-    tintColor: '#072AC8',
-    color: '#FDFDFD',
-    buttonSize: 45,
-    position: 1,
-  },
-];
-
-const FloatingMenu = () => {
+});
+const FloatingActionMenu = () => {
   const navigation = useNavigation();
 
-  const handleItemPress = name => {
-    if (name === 'bt_gallery') {
+  const handleItemPress = iconName => {
+    if (iconName === 'bt_gallery') {
       navigation.navigate('Album');
-    } else if (name === 'bt_share') {
+    } else if (iconName === 'bt_share') {
       navigation.navigate('Share');
-    } else if (name === 'bt_home') {
+    } else if (iconName === 'bt_home') {
       navigation.dispatch(
         CommonActions.reset({
           routes: [{name: 'Home'}],
         }),
       );
-
-      //   index: 0,
-      //   routes: [{name: 'Home'}],
-      //   params: {animationEnabled: false},
-
-      //   navigation.dispatch(
-      //     CommonActions.reset({
-      //       routes: [
-      //         { name: 'Main' },
-      //       ],
-      //     }))
-      //  navigation.navigate('Main')
-    } else if (name === 'bt_help') {
+    } else if (iconName === 'bt_help') {
       navigation.navigate('Help');
     }
   };
 
   return (
-    <View>
-      <FloatingAction
-        animated={true}
-        actions={actions}
-        position="right"
-        buttonSize={58}
-        color="#072AC8"
-        actionsPaddingTopBottom={10}
-        floatingIcon={require('../../assets/images/hamburger.png')}
-        onPressItem={handleItemPress}
-      />
-    </View>
+    <ActionButton
+      // style={styles.floatingActionMain}
+      position="right"
+      offsetX={40}
+      offsetY={100}
+      hideShadow="false"
+      buttonColor="#072AC8">
+      <ActionButton.Item
+        buttonColor="#F5F5F5"
+        onPress={() => handleItemPress('bt_help')}>
+        <Image
+          source={require('../../assets/images/help.png')}
+          style={styles.actionButtonIcon}
+        />
+      </ActionButton.Item>
+      <ActionButton.Item
+        buttonColor="#F5F5F5"
+        onPress={() => handleItemPress('bt_home')}>
+        <Image
+          source={require('../../assets/images/home.png')}
+          style={styles.actionButtonIcon}
+        />
+      </ActionButton.Item>
+      <ActionButton.Item
+        buttonColor="#F5F5F5"
+        onPress={() => handleItemPress('bt_gallery')}>
+        <Image
+          source={require('../../assets/images/gallery.png')}
+          style={styles.actionButtonIcon}
+        />
+      </ActionButton.Item>
+      <ActionButton.Item
+        buttonColor="#F5F5F5"
+        onPress={() => handleItemPress('bt_share')}>
+        <Image
+          source={require('../../assets/images/share.png')}
+          style={styles.actionButtonIcon}
+        />
+      </ActionButton.Item>
+    </ActionButton>
   );
 };
 
-export default FloatingMenu;
+export default FloatingActionMenu;
