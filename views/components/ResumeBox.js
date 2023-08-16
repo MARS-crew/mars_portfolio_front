@@ -91,14 +91,14 @@ if (item.id === '1') {
             <Text style={styles.dateText}>2020.06.06</Text>
             <Text style={styles.defaultText2}>마스외전</Text>
         </View>
-        <View style={styles.line} />
+        {/* <View style={styles.line} />
         <View>
             <View>
                 <Text style={styles.infoText}>프로젝트 우수상</Text>
             </View>
             <Text style={styles.dateText}>2020.06.06</Text>
             <Text style={styles.defaultText2}>마스외전</Text>
-        </View>
+        </View> */}
     </View>
 ;
     contentStyles = styles.awardContent; // 수상내역 컨텐츠 스타일

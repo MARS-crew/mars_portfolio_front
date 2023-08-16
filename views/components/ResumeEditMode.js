@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, Text, View, Image, StyleSheet, Dimensions } from 'react-native';
 
+
 const styles = StyleSheet.create({
   popupContainer: {
     position: 'absolute',
@@ -60,7 +61,7 @@ const CustomPopup = ({
       ) : (
         <TouchableOpacity style={styles.popupButton} onPress={onEdit}>
           <Image source={require('../../assets/images/editingIcon.png')} style={styles.image} />
-          <Text style={styles.buttonText}>수정</Text>
+          <Text style={styles.buttonText}>저장</Text>
         </TouchableOpacity>
       )}
 

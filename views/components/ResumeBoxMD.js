@@ -1,211 +1,482 @@
-import {View,Text,StyleSheet,Image,TextInput,Button,Modal} from "react-native";
-import {Resume} from '../screens/Resume'
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TextInput,
+    Button,
+    Modal,
+    Pressable,
+} from 'react-native';
+import {Resume} from '../screens/Resume';
 import {Shadow} from 'react-native-shadow-2';
 import tel_icon from '../../assets/images/icon-telephone.png';
 import home_icon from '../../assets/images/icon-home.png';
 import main_icon from '../../assets/images/icon-mail.png';
-import java_icon from '../../assets/images/devIcon/java.png'
-import php_icon from '../../assets/images/devIcon/php.png'
-import js_icon from '../../assets/images/devIcon/javascript.png'
-import mysql_icon from '../../assets/images/devIcon/mysql.png'
-import react_icon from '../../assets/images/devIcon/react.png'
-import css3_icon from '../../assets/images/devIcon/css3.png'
-import html5_icon from '../../assets/images/devIcon/html5.png'
-import springboot_icon from '../../assets/images/devIcon/springboot.png'
-import write from '../../assets/images/write.png'
+import java_icon from '../../assets/images/devIcon/java.png';
+import php_icon from '../../assets/images/devIcon/php.png';
+import js_icon from '../../assets/images/devIcon/javascript.png';
+import mysql_icon from '../../assets/images/devIcon/mysql.png';
+import react_icon from '../../assets/images/devIcon/react.png';
+import css3_icon from '../../assets/images/devIcon/css3.png';
+import html5_icon from '../../assets/images/devIcon/html5.png';
+import springboot_icon from '../../assets/images/devIcon/springboot.png';
+import write from '../../assets/images/write.png';
 import Postcode from '@actbase/react-daum-postcode';
 
+import {help} from 'yargs';
+import React, {useMemo, useState} from 'react';
+import {TouchableOpacity} from 'react-native';
 
+import ResumePopup from './ResumePopup';
 
-import { help } from "yargs";
-import React,{useState} from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
+const getTechIcon = (techName) => {
+    switch(techName) {
+        case "JAVA": return java_icon; break;
+        case "PHP": return php_icon; break;
+        case "SPRING": return springboot_icon; break;
+        case "HTML5": return html5_icon; break;
 
-const ResumeBox = ({ item }) => {
-const containerStyles = item.id === '1' ? { ...styles.container, marginTop: 20 } : 
-item.id === '7' ? { ...styles.container, marginBottom: 80 } : styles.container;
+    }
+}
+const ResumeBox = ({item}) => { 
+const containerStyles =
+    item.id === '1'
+    ? {...styles.container, marginTop: 20}
+    : item.id === '7'
+    ? {...styles.container, marginBottom: 80}
+    : styles.container;
 
 let content = null;
 let contentStyles = {}; // 컨텐츠 부분의 스타일
 const [inputText, setInputText] = useState('');
-const [resume, setResume] = useState({})
+const [resume, setResume] = useState({});
 // const test = async () => {
 //     const result = await axios.get("/api/v1/resume/123");
 
 //     setResume(result.data.data)
 
 // }
+
+const [selectedFirst, setSelectedFirst] = useState("");
+const [selectedSecond, setSelectedSecond] = useState("");
+const [selectedThird, setSelectedThird] = useState("");
+
+const [interestBunya, setInterestBunya] = useState([]);
+const [specialityBunya, setSpecialityBunya] = useState([]);
+
 if (item.id === '1') {
-    content = 
+    content = (
     <View>
+        <View style={styles.titleContainer}>
+        <Text style={styles.title}>{item.title}</Text>
+        <Image source={write} style={styles.writeImg} />
+        </View>
+        <View style={styles.line3} />
         <TextInput
-            onChangeText={(text) => { setInputText(text) }}
-            placeholder="소개글을 입력해주세요"
-            />
+        onChangeText={text => {
+            setInputText(text);
+        }}
+        placeholder="소개글을 입력해주세요"
+        />
     </View>
+    );
 } else if (item.id === '2') {
     const [isModalVisible, setModalVisible] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState('');
-    
-    content = 
+
+    content = (
     <View>
+        <View style={styles.titleContainer}>
+        <Text style={styles.title}>{item.title}</Text>
+        <Image source={write} style={styles.writeImg} />
+        </View>
+        <View style={styles.line} />
         <Text style={styles.infoText}>이화진</Text>
         <View style={styles.icons}>
-                <View style={styles.iconsText}>
-                    <Image 
-                    source={tel_icon} 
-                    style={styles.icon} />
-                        <Text style={styles.defaultText}>010-1111-2222</Text>
+        <View style={styles.iconsText}>
+            <Image source={tel_icon} style={styles.icon} />
+            <Text style={styles.defaultText}>010-1111-2222</Text>
+        </View>
+        <View style={styles.iconsText}>
+            <Image source={home_icon} style={styles.icon} />
+            <Text style={styles.defaultText}>{selectedAddress}</Text>
+            <TouchableOpacity
+            onPress={() => setModalVisible(true)}
+            style={styles.postcode}>
+            <Text>주소 등록</Text>
+            </TouchableOpacity>
+            <Pressable
+            onPress={() => {
+                setModalOpen(true);
+            }}>
+            <Modal
+                visible={isModalVisible}
+                transparent={true}
+                animationType="slide">
+                <View
+                style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                }}>
+                <View
+                    style={{
+                    width: 400,
+                    height: 470,
+                    backgroundColor: 'white',
+                    borderRadius: 10,
+                    padding: 20,
+                    }}>
+                    {/* <Text>{resume.introduce}</Text> */}
+                    <TouchableOpacity
+                    onPress={() => setModalVisible(false)}
+                    style={{
+                        marginBottom: 0,
+                        alignSelf: 'flex-end',
+                        padding: 0,
+                        backgroundColor: '',
+                    }}>
+                    <Text>X</Text>
+                    </TouchableOpacity>
+                    <Postcode
+                    style={{width: '100%', height: '100%'}}
+                    jsOptions={{animation: true, hideMapBtn: true}}
+                    onSelected={data => {
+                        setSelectedAddress(data.address); // 선택한 주소 저장
+                        setModalVisible(false); // 모달 닫기
+                    }}
+                    />
+                    {/* <Text>선택한 주소: {selectedAddress}</Text> 선택한 주소 표시 */}
                 </View>
-                <View style={styles.iconsText} >
-            <Image 
-            source={home_icon} 
-            style={styles.icon} />
-                    {/* <TextInput
-            onChangeText={(text) => { setInputText(text) }}
-            placeholder="주소를 입력해주세요."
-            /> */}
-<Modal visible={isModalVisible} transparent={true} animationType="slide">
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-        <View style={{ width: 400, height: 400, backgroundColor: 'white', borderRadius: 10, padding: 20 }}>
-           {/* <Text>{resume.introduce}</Text> */}
-            <Postcode
-                style={{ width: '100%', height: '100%' }}
-                jsOptions={{ animation: true, hideMapBtn: true }}
-                onSelected={data => {
-                    setSelectedAddress(data.address); // 선택한 주소 저장
-                    setModalVisible(false); // 모달 닫기
-                }}
-            />
-            {/* <Text>선택한 주소: {selectedAddress}</Text> 선택한 주소 표시 */}
-            {/* <TouchableOpacity 
-            onPress={() => setModalVisible(false)} 
-            style={{ marginTop: 10, alignSelf: 'flex-end', padding: 10, backgroundColor:'' }}>
-                
-                <Text>닫기</Text>
-            </TouchableOpacity> */}
-<TouchableOpacity onPress={() => setModalVisible(false)}>
-  <Text>닫기</Text>
-</TouchableOpacity>
+                </View>
+            </Modal>
+            </Pressable>
 
         </View>
-    </View>
-</Modal>
-        <TouchableOpacity onPress={() => setModalVisible(true)} style={{ width: 300, height: 40, justifyContent: 'center', alignItems: 'flex-end' }}>
-    <Text>주소 등록</Text>
-</TouchableOpacity>
-            
-                </View>
-                <View style={styles.iconsText}>
-                <Image 
-                source={main_icon} 
-                style={styles.icon} />
-                <Text style={styles.defaultText}>123@naver.com</Text>
-            </View>
+        <View style={styles.iconsText}>
+            <Image source={main_icon} style={styles.icon} />
+            <Text style={styles.defaultText}>123@naver.com</Text>
+        </View>
         </View>
     </View>
-    ;
-
+    );
 } else if (item.id === '3') {
-    content = 
+    const [companyName, setcompanyName] = useState('');
+    const [tenureDate, settenureDate] = useState('');
+    const [companyRank, setCompanyRank] = useState('');
+    const [mainWork, setMainWork] = useState('');
+    const [savedCareer, setSavedCareer] = useState([]);
+
+    const submitBtn = () => {
+    if (companyName && tenureDate && companyRank && mainWork) {
+        const newContent = {
+        name: companyName,
+        date: tenureDate,
+        Rank: companyRank,
+        work: mainWork,
+        };
+
+        // 기존의 저장된 내용과 새로운 내용을 함께 저장
+        setSavedCareer(prevContents => [...prevContents, newContent]);
+
+        // 상태 변수 초기화
+        setcompanyName('');
+        settenureDate('');
+        setCompanyRank('');
+        setMainWork('');
+    }
+    };
+    content = (
     <View>
-        <View>
-            <View style={styles.iconsText}>
-                <Text style={styles.infoText}>회사명</Text>
-                <Text style={styles.defaultText}>사원</Text>
-            </View>
-            <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
-            <Text style={styles.defaultText2}>개발</Text>
+        <View style={styles.titleContainer}>
+        <Text style={styles.title}>{item.title}</Text>
+        <TouchableOpacity
+            onPress={submitBtn}>
+            <Image source={write} style={styles.writeImg} />
+        </TouchableOpacity>
         </View>
-        <View style={styles.line} />
-        <View>
+        {/* ... */}
+        {savedCareer.map((content, index) => (
+        <View key={index}>
+            <View style={styles.line} />
+            <View>
             <View style={styles.iconsText}>
-                <Text style={styles.infoText}>회사명</Text>
-                <Text style={styles.defaultText}>사원</Text>
+                <Text style={styles.infoText}>{content.name}</Text>
+                <Text style={styles.defaultText}>{content.Rank}</Text>
             </View>
-            <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
-            <Text style={styles.defaultText2}>개발</Text>
+            <Text style={styles.dateText}>{content.date}</Text>
+            <Text style={styles.defaultText2}>{content.work}</Text>
+            </View>
+        </View>
+        ))}
+        <View>
+        <View style={styles.line} />
+        <TextInput
+            style={styles.textInput}
+            onChangeText={text => {
+            setcompanyName(text);
+            }}
+            placeholder="회사명"
+            value={companyName}
+        />
+        <TextInput
+            style={styles.textInput}
+            onChangeText={text => {
+            settenureDate(text);
+            }}
+            placeholder="업무기간"
+            value={tenureDate}
+        />
+        <TextInput
+            style={styles.textInput}
+            onChangeText={text => {
+            setCompanyRank(text);
+            }}
+            placeholder="직급"
+            value={companyRank}
+        />
+        <TextInput
+            style={styles.textInput}
+            onChangeText={text => {
+            setMainWork(text);
+            }}
+            placeholder="주요업무"
+            value={mainWork}
+        />
         </View>
     </View>
-    ;
+    );
     contentStyles = styles.careerContent; // 경력 컨텐츠 스타일
 } else if (item.id === '4') {
-    content = 
+    const [awardName, setAwardName] = useState('');
+    const [awardDate, setAwardDate] = useState('');
+    const [awardOrganization, setAwardOrganization] = useState('');
+    const [savedContents, setSavedContents] = useState([]);
+
+    const submitBtn = () => {
+    if (awardName && awardDate && awardOrganization) {
+        const newContent = {
+        name: awardName,
+        date: awardDate,
+        organization: awardOrganization,
+        };
+
+        // 기존의 저장된 내용과 새로운 내용을 함께 저장
+        setSavedContents(prevContents => [...prevContents, newContent]);
+
+        // 상태 변수 초기화
+        setAwardName('');
+        setAwardDate('');
+        setAwardOrganization('');
+    }
+    };
+
+    content = (
     <View>
-        <View>
-            <View>
-                <Text style={styles.infoText}>프로젝트 우수상</Text>
-            </View>
-            <Text style={styles.dateText}>2020.06.06</Text>
-            <Text style={styles.defaultText2}>마스외전</Text>
+        <View style={styles.titleContainer}>
+        <Text style={styles.title}>{item.title}</Text>
+        <TouchableOpacity
+            onPress={submitBtn}>
+            <Image source={write} style={styles.writeImg} />
+        </TouchableOpacity>
         </View>
-        <View style={styles.line} />
-        <View>
+        {/* ... */}
+        {savedContents.map((content, index) => (
+        <View key={index}>
+            <View style={styles.line} />
             <View>
-                <Text style={styles.infoText}>프로젝트 우수상</Text>
+            <Text style={styles.infoText}>{content.name}</Text>
             </View>
-            <Text style={styles.dateText}>2020.06.06</Text>
-            <Text style={styles.defaultText2}>마스외전</Text>
+            <Text style={styles.dateText}>{content.date}</Text>
+            <Text style={styles.defaultText2}>{content.organization}</Text>
+        </View>
+        ))}
+        <View>
+        <View style={styles.line} />
+        <TextInput
+            style={styles.textInput}
+            onChangeText={text => {
+            setAwardName(text);
+            }}
+            placeholder="수상명"
+            value={awardName}
+        />
+        <TextInput
+            style={styles.textInput}
+            onChangeText={text => {
+            setAwardDate(text);
+            }}
+            placeholder="수상한 날짜"
+            value={awardDate}
+        />
+        <TextInput
+            style={styles.textInput}
+            onChangeText={text => {
+            setAwardOrganization(text);
+            }}
+            placeholder="수상기관"
+            value={awardOrganization}
+        />
         </View>
     </View>
-;
+    );
+
     contentStyles = styles.awardContent; // 수상내역 컨텐츠 스타일
 } else if (item.id === '5') {
-    content = 
+    const [detailPopVisible,setDetailPopVisible] = useState(false);
+    
+
+
+    content = (
     <View>
-        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
+        <View style={styles.titleContainer}>
+        <Text style={styles.title}>{item.title}</Text>
+        <TouchableOpacity
+        onPress={() => setDetailPopVisible(true)}
+        >
+        <Image source={write} style={styles.writeImg} >
+        </Image>
+        { detailPopVisible ? (
+        <ResumePopup
+            id={item.id}
+            setDetailPopVisible={setDetailPopVisible}
+            interestBunya={interestBunya}
+            setInterestBunya={setInterestBunya}
+        />
+        ):null}
+        </TouchableOpacity>
+        </View>
+        <View style={styles.line2} />
+        <Text>
+        {(interestBunya.length > 0)
+                    ?
+                    (
+                        <View style={styles.selectResult}>
+                        { /* {selectedFirst} {">"} {selectedSecond} {">"} {selectedThird} */ }
+                        {interestBunya.map((bunya, index) => (
+                            <View key={index}>
+                                <Text style={styles.bunyaText}>
+                                    {bunya.selectedFirst} {">"} {bunya.selectedSecond} {">"} {bunya.selectedThird}
+                                </Text>
+                                </View>
+                                
+                        )
+                        )}
+                        </View>
+                    )
+                        : (null)
+                }
+        </Text>
     </View>
-    ;
+    );
     contentStyles = styles.interestContent; // 관심분야 컨텐츠 스타일
 } else if (item.id === '6') {
-        content = 
+
+    const [detailPopVisible,setDetailPopVisible] = useState(false);
+
+    content = (
     <View>
-        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
+        <View style={styles.titleContainer}>
+        <Text style={styles.title}>{item.title}</Text>
+        <TouchableOpacity
+        onPress={() => setDetailPopVisible(true)}
+        >
+        <Image source={write} style={styles.writeImg} >
+        </Image>
+        {console.log("please", detailPopVisible)}
+        { detailPopVisible ? (
+        <ResumePopup
+            id={item.id}
+            setDetailPopVisible={setDetailPopVisible}
+            specialityBunya={specialityBunya}
+            setSpecialityBunya={setSpecialityBunya}
+        />
+        ):null}
+        </TouchableOpacity>
+        </View>
+        <View style={styles.line2} />
+        <Text>
+        {(specialityBunya.length > 0)
+                    ?
+                    (
+                        <View style={styles.selectResult}>
+                        { /* {selectedFirst} {">"} {selectedSecond} {">"} {selectedThird} */ }
+                        {specialityBunya.map((bunya, index) => (
+                            <View key={index}>
+                                <Text style={styles.bunyaText}>
+                                    {bunya.selectedFirst} {">"} {bunya.selectedSecond} {">"} {bunya.selectedThird}
+                                </Text>
+                                </View>
+                                
+                        )
+                        )}
+                        </View>
+                    )
+                        : (null)
+                }
+        </Text>
     </View>
-    ;
+    );
     contentStyles = styles.specialtyContent; // 전문분야 컨텐츠 스타일
 } else if (item.id === '7') {
-    content = 
+    const [detailPopVisible,setDetailPopVisible] = useState(false);
+    const [techInfo, setTechInfo] = useState([])
+    content = (
     <View style={styles.devContainer}>
-        <View style={styles.devIcons}>
-            <Image             
-                source={java_icon} 
-                style={styles.devIcon} />
-            <Text style={styles.devIconText}>JAVA</Text>
+        <View>
+        <View style={styles.titleContainer}>
+        <Text style={styles.title}>{item.title}</Text>
+        <TouchableOpacity
+        onPress={() => setDetailPopVisible(true)}
+        >
+        <Image source={write} style={styles.writeImg} >
+        </Image>
+        { detailPopVisible ? (
+        <ResumePopup
+            id={item.id}
+            detailPopVisible={detailPopVisible}
+            setDetailPopVisible={setDetailPopVisible}
+            setTechInfo={setTechInfo}
+        />
+        ):null}
+        </TouchableOpacity>
+        </View>
+        </View>
+        <View style={styles.line} />
+            {techInfo.map((tech, index) => {
+                return (
+                    <View key={index}
+                    style={styles.devIcons}>
+                        <Image source={getTechIcon(tech.techName)} style={styles.devIcon} />
+                        <Text style={styles.devIconText}>{tech.techName}</Text>
+
+                    </View>
+                )
+            })}
+        {/*<View style={styles.devIcons}>
+        <Image source={php_icon} style={styles.devIcon} />
+        <Text style={styles.devIconText}>PHP</Text>
         </View>
         <View style={styles.devIcons}>
-            <Image             
-                source={php_icon} 
-                style={styles.devIcon} />
-            <Text style={styles.devIconText}>PHP</Text>
+        <Image source={react_icon} style={styles.devIcon} />
+        <Text style={styles.devIconText}>React</Text>
         </View>
         <View style={styles.devIcons}>
-            <Image             
-                source={react_icon} 
-                style={styles.devIcon} />
-            <Text style={styles.devIconText}>React</Text>
+        <Image source={mysql_icon} style={styles.devIcon} />
+        <Text style={styles.devIconText}>MySQL</Text>
         </View>
         <View style={styles.devIcons}>
-            <Image             
-                source={mysql_icon} 
-                style={styles.devIcon} />
-            <Text style={styles.devIconText}>MySQL</Text>
+        <Image source={js_icon} style={styles.devIcon} />
+        <Text style={styles.devIconText}>JavaScript</Text>
         </View>
         <View style={styles.devIcons}>
-            <Image             
-                source={js_icon} 
-                style={styles.devIcon} />
-            <Text style={styles.devIconText}>JavaScript</Text>
-        </View>
-        <View style={styles.devIcons}>
-            <Image             
-                source={html5_icon} 
-                style={styles.devIcon} />
-            <Text style={styles.devIconText}>HTML5</Text>
-        </View>
+        <Image source={html5_icon} style={styles.devIcon} />
+        <Text style={styles.devIconText}>HTML5</Text>
+        </View> */}
     </View>
+    );
     contentStyles = styles.skillContent; // 보유기술 컨텐츠 스타일
 }
 
@@ -216,22 +487,12 @@ return (
     offset={[1, 1]}
     startColor={'rgba(151, 151, 151, 0.05)'}
     endColor={'rgba(151, 151, 151, 0.01)'}
-    distance={8}
-    >
-        <View style={styles.titleContainer}>
-        <Image 
-                source={write} 
-                style={styles.writeImg}
-            />
-    <Text style={styles.title}>{item.title}
-        </Text>
-
-        </View>
-    {(item.id === '5' || item.id === '6' ||item.id === '7')?(
+    distance={8}>
+    {/* {item.id === '5' || item.id === '6' || item.id === '7' ? (
         <View style={styles.line2} />
-    ):(
+    ) : (
         <View style={styles.line} />
-    )}
+    )} */}
     <Text style={[styles.content, contentStyles]}>{content}</Text>
     </Shadow>
 );
@@ -248,34 +509,37 @@ container: {
     borderStyle: 'solid',
     backgroundColor: '#ffffff',
     marginBottom: 20,
-    marginLeft:20,
-    marginRight:20
+    marginLeft: 20,
+    marginRight: 20,
 },
 title: {
     fontSize: 15,
-    paddingLeft: 15,
     paddingTop: 15,
- //   paddingBottom: 12,
-    fontWeight: 'bold',
-  //  marginBottom: 5,
     color: 'black',
+    fontWeight:'900'
 },
 line: {
-    width:'100%',
+    width: '100%',
     borderColor: '#F5F5F5',
     borderWidth: 0.2,
-    marginTop:12,
-    marginBottom:15,
+    marginTop: 12,
+    marginBottom: 15,
 },
 line2: {
-    width:'100%',
+    width: '100%',
     borderColor: '#F5F5F5',
     borderWidth: 0.2,
-    marginTop:12,
-    //marginBottom:15,
+    marginTop: 12,
+    marginBottom:12,
+},
+line3: {
+    width: '100%',
+    borderColor: '#F5F5F5',
+    borderWidth: 0.2,
+    marginTop: 12,
 },
 content: {
-   // paddingTop: 15,
+    flex:1,
     paddingLeft: 15,
     paddingBottom: 15,
 },
@@ -286,102 +550,93 @@ introContent: {
 basicInfoContent: {
     color: '#000000',
 },
-infoText :{
+infoText: {
     color: '#000000',
     fontSize: 16,
-    fontWeight:'900',
-    marginBottom:5
+    fontWeight: '900',
+    marginBottom: 5,
 },
-icons : {
-    
-
-},
-icon : {
+icons: {},
+icon: {
     flexDirection: 'column',
-    width:20,
-    height:20,
+    width: 20,
+    height: 20,
 },
-iconsText:{
+iconsText: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop:7,
+    marginTop: 7,
 },
-bunyaText :{
-    color:'#072AC8',
-    backgroundColor:'#F5F4F9',
-    marginTop:12,
-    padding:6,
-    borderRadius:5
-
+bunyaText: {
+    color: '#072AC8',
 },
-careerContent: {
-    // 경력 컨텐츠 스타일
+defaultText: {
+    color: '#000000',
+    marginLeft: 10,
+    fontSize: 14,
 },
-awardContent: {
-    // 수상내역 컨텐츠 스타일
+defaultText2: {
+    color: '#000000',
+    fontSize: 14,
 },
-interestContent: {
-    // 관심분야 컨텐츠 스타일
+dateText: {
+    fontSize: 12,
+    marginBottom: 5,
 },
-specialtyContent: {
-    // 전문분야 컨텐츠 스타일
-},
-skillContent: {
-    // 보유기술 컨텐츠 스타일
-},
-mainText:{
-
-},
-defaultText:{
-    color:'#000000',
-    marginLeft:10,
-    fontSize:14
-},
-defaultText2:{
-    color:'#000000',
-    fontSize:14
-},
-dateText:{
-    fontSize:12,
-    marginBottom:5,
-},
-devIconText : {
+devIconText: {
     justifyContent: 'center',
-    marginLeft:5,
-    color:'#000000',
-    fontSize:14,
+    marginLeft: 5,
+    color: '#000000',
+    fontSize: 14,
 },
-devIcons:{
+devIcons: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor:'#F5F4F9',
-    padding:6,
-    borderRadius:5,
-    marginTop:12,
-    marginRight:12,
+    backgroundColor: '#F5F4F9',
+    padding: 6,
+    borderRadius: 5,
+    marginTop: 12,
+    marginRight: 12,
 },
-devIcon : {
+devIcon: {
     flexDirection: 'column',
-    width:22,
-    height:22,
+    width: 22,
+    height: 22,
 },
-devContainer:{
-    width:320,
+devContainer: {
+    width: 340,
     flex: 1,
     flexDirection: 'row',
-    flexWrap:'wrap',
+    flexWrap: 'wrap',
 },
-titleContainer:{
-    flexDirection: 'row-reverse', // Add this line to set content direction to right-to-left
-    alignItems: 'center', // Add this line to align content to the center
-    justifyContent: 'space-between', // Add this line to create space between text and writeImg
-  },
+titleContainer: {
+    width:320,
+ //   backgroundColor:'red',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+},
 
-writeImg:{
-    width:20,
-    height:20,
-    marginRight: 15,
-    marginTop:13
+writeImg: {
+    width: 20,
+    height: 20,
+    marginTop: 13,
+},
+selectResult :{
+    backgroundColor: '#F5F4F9',
+    padding: 6,
+    borderRadius: 5,
+    marginBottom:12
+},
+bunyaText2: {
+    color: '#072AC8',
+},
+postcode :{
+    width: 300,
+    height: 40,
+    justifyContent: 'center',
+},
+bunyablock:{
+    marginBottom:12,
 }
 });
 

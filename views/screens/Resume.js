@@ -43,7 +43,14 @@ const Resume = () => {
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [resume, setResume] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
   const toggleModal = () => {
-    setModalOpen(prevState => !prevState);
+    if(modalOpen){
+      return false;
+    }
+    console.log('나는챌린')
+    setModalOpen((prev) => {
+      console.log("야호")
+      return !prev;
+    });
   };
 
 const renderItem = ({ item }) => {
@@ -66,21 +73,21 @@ const renderItem = ({ item }) => {
 
   return (
     <View style={styles.container}>
-    <TouchableOpacity 
-    onPress={toggleModal}
-    activeOpacity={100} >
-      <FlatList
-        data={DATA}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
-      <FAB />
-      <ResumeEditMode
-        resume={resume}
-        isModalVisible={modalOpen}
-        setIsModalVisible={setModalOpen}
-      />
-    </TouchableOpacity>
+      {/* <TouchableOpacity 
+        onPress={toggleModal}
+        activeOpacity={100} > */}
+        <FlatList
+          data={DATA}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+        />
+        <FAB />
+        <ResumeEditMode
+          resume={resume}
+          isModalVisible={modalOpen}
+          setIsModalVisible={setModalOpen}
+        />
+      {/* </TouchableOpacity> */}
   </View>
   );
 };
