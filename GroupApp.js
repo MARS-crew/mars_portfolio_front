@@ -19,6 +19,7 @@ import Review from './views/screens/Review';
 import MyPage from './views/screens/MyPage/MyPage';
 import Album from './views/screens/Album';
 import Interview from './views/screens/Interview';
+import InterviewContents from './views/screens/InterviewContents';
 import 'react-native-gesture-handler';
 import WhichGroup from './views/screens/WhichGroup';
 import Help from './views/screens/Help';
@@ -84,37 +85,13 @@ const transitionAnimation = index => {
   };
 };
 
-const GroupApp = ({
-  index,
-  id,
-  group,
-  interviewData,
-  portfolioData,
-  resumeData,
-  reviewData,
-  currentPage,
-  setCurrentPage,
-  currentIndex,
-}) => {
+const App = (props) => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
-          component={() => (
-            <HomeScreen
-              index={index}
-              id={id}
-              group={group}
-              interviewData={interviewData}
-              portfolioData={portfolioData}
-              resumeData={resumeData}
-              reviewData={reviewData}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              currentIndex={currentIndex}
-            />
-          )}
+          component={HomeScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -151,6 +128,7 @@ const HomeScreen = ({
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     AsyncStorage.getItem('isSplashVisible').then(value => {
@@ -245,4 +223,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroupApp;
+export default App;

@@ -19,7 +19,6 @@ import Review from './views/screens/Review';
 import MyPage from './views/screens/MyPage/MyPage';
 import Album from './views/screens/Album';
 import Interview from './views/screens/Interview';
-import InterviewContents from './views/screens/InterviewContents';
 import 'react-native-gesture-handler';
 import WhichGroup from './views/screens/WhichGroup';
 import Help from './views/screens/Help';
@@ -30,6 +29,8 @@ import GroupVideo from './views/screens/GroupVideo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ScrollAppComponent from './ScrollAppComponent';
+import InterviewContents from './views/screens/InterviewContents';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -40,13 +41,12 @@ const yOffset = new Animated.Value(0);
 const Screen = props => {
   return (
     <View style={styles.scrollPage}>
-      <Animated.View style={[styles.screen, transitionAnimation(props.index)]}>
+      <Animated.View style={[styles.screen, transitionXAnimation(props.index)]}>
         {props.children}
       </Animated.View>
     </View>
   );
 };
-
 const ScreenY = props => {
   return (
     <View style={styles.scrollPage}>
@@ -59,7 +59,7 @@ const ScreenY = props => {
 
 const Stack = createStackNavigator();
 
-const transitionAnimation = index => {
+const transitionXAnimation = index => {
   return {
     transform: [
       { perspective: 800 },
@@ -152,7 +152,6 @@ const App = () => {
     </NavigationContainer>
   );
 };
-
 const datas = [
   {
     id: 1,
@@ -195,25 +194,12 @@ const datas = [
     reviewData: '',
   },
 ];
-
 const HomeScreen = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: yOffset } } }],
-    {
-      useNativeDriver: true,
-      listener: event => {
-        const offset = event.nativeEvent.contentOffset.y;
-        const currentIndex = Math.round(offset / SCREEN_HEIGHT);
-        console.log('Current Index: ', currentIndex);
-        setCurrentIndex(currentIndex);
-      },
-    },
-  );
 
   useEffect(() => {
     AsyncStorage.getItem('isSplashVisible').then(value => {
@@ -233,10 +219,25 @@ const HomeScreen = () => {
     AsyncStorage.setItem('isSplashVisible', JSON.stringify(isSplashVisible));
   }, [isSplashVisible]);
 
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: yOffset } } }],
+    {
+      useNativeDriver: true,
+      listener: event => {
+        const offset = event.nativeEvent.contentOffset.y;
+        const currentIndex = Math.round(offset / SCREEN_HEIGHT);
+        console.log('Current Index: ', currentIndex);
+        setCurrentIndex(currentIndex);
+      },
+    }
+  );
+
   return (
     <Animated.ScrollView
       scrollEventThrottle={16}
-      onScroll={handleScroll}
+      onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: xOffset } } }], {
+        useNativeDriver: true,
+      })}
       horizontal
       pagingEnabled
       style={styles.scrollView}>
@@ -246,48 +247,79 @@ const HomeScreen = () => {
           <WhichGroup />
         </Screen>
       ) : null}
-
       <Screen text="Screen 2" index={1}>
-        {datas.map((data, index) => (
-          <ScreenY>
-            <GroupVideo index={index} />
-          </ScreenY>
-        ))}
+        <ScrollView
+          scrollEventThrottle={16}
+          onScroll={handleScroll}
+          pagingEnabled
+          style={styles.scrollView}
+        >
+          {datas.map((data, index) => (
+            <ScreenY key={data.id} index={index}>
+              <Group
+                group={data.group}
+                currentPage={currentPage}
+                currentIndex={currentIndex}
+                index={index}
+              />
+            </ScreenY>
+          ))}
+        </ScrollView>
       </Screen>
       <Screen text="Screen 3" index={2}>
         {datas.map((data, index) => (
-          <ScreenY index={index}>
+          <ScreenY key={data.id} index={index}>
             <InterviewContents
-              path={data.interviewData}
+              path={data.path}
               currentPage={currentPage}
               currentIndex={currentIndex}
               index={index}
               isPlaying={currentIndex === index && isPlaying}
               setIsPlaying={setIsPlaying}
             />
-            {/* <Interview /> */}
           </ScreenY>
         ))}
       </Screen>
-      <Screen Screen text="Screen 4" index={3}>
+      <Screen text="Screen 4" index={3}>
         {datas.map((data, index) => (
-          <ScreenY index={index}>
-            <Resume modalOpen={modalOpen} />
+          <ScreenY key={data.id} index={index}>
+            <Resume
+              resumeData={data.resumeData}
+              currentPage={currentPage}
+              currentIndex={currentIndex}
+              index={index}
+              modalOpen={modalOpen}
+            />
           </ScreenY>
         ))}
       </Screen>
       <Screen text="Screen 5" index={4}>
         {datas.map((data, index) => (
-          <ScreenY index={index}>
-            <Portfolio options={{ headerShown: false }} />
+          <ScreenY key={data.id} index={index}>
+            <Portfolio
+              portfolioData={data.portfolioData}
+              currentPage={currentPage}
+              currentIndex={currentIndex}
+              index={index}
+              options={{ headerShown: false }}
+            />
           </ScreenY>
         ))}
       </Screen>
       <Screen text="Screen 6" index={5}>
-        <Review />
+        {datas.map((data, index) => (
+          <ScreenY key={data.id} index={index}>
+            <Review
+              reviewData={data.portfolioData}
+              currentPage={currentPage}
+              currentIndex={currentIndex}
+              index={index}
+            />
+          </ScreenY>
+        ))}
       </Screen>
       <Screen text="Screen 7" index={6}>
-        <MyPage options={{ headerShown: false }} />
+        <MyPage />
       </Screen>
     </Animated.ScrollView>
   );
