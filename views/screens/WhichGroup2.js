@@ -7,11 +7,11 @@ import GroupVideo from './GroupVideo';
 
 const DATA = [
   {
-    id: '1',
-    title: '1기',
+    id: '2',
+    title: '2기',
     src: require('../../assets/images/Group.png'),
     video: require('../../assets/images/GroupVideo.png'),
-    merdal: 'y',
+    merdal: 'n',
   },
   // {
   //   id: '2',
@@ -58,7 +58,7 @@ const DATA = [
   // },
 ];
 
-const WhichGroup = () => {
+const WhichGroup2 = () => {
   if (DATA.length <= 6) {
     return <Group data={DATA} />;
   } else {
@@ -66,4 +66,4 @@ const WhichGroup = () => {
   }
 };
 
-export default WhichGroup;
+export default WhichGroup2;

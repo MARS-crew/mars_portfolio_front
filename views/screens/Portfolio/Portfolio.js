@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
+import {View, SafeAreaView, FlatList, StyleSheet, Alert ,Text} from 'react-native';
 import FAB from '../../components/FloatingMenu';
 import PortfolioItem from '../Portfolio/PortfolioItem';
 

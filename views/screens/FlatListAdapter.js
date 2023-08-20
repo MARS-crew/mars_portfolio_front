@@ -2,7 +2,8 @@ import React from 'react';
 import {Text, Dimensions, StyleSheet, View} from 'react-native';
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
 import Interview from './Interview';
-import Portfolio from './Portfolio';
+
+import Portfolio from './Portfolio/Portfolio';
 
 const colors = ['tomato', 'thistle', 'skyblue', 'teal'];
 
