@@ -9,29 +9,16 @@ import {
   TextInput,
   View,
 } from 'react-native';
+
+const {width} = Dimensions.get('window').width;
+const {height} = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#f3f3f3',
+    backgroundColor: '#ccc',
     padding: 20,
-  },
-  image: {
-    width: 60,
-    height: 60,
-    resizeMode: 'contain',
-  },
-  //Modal
-  saveBtn: {
-    width: 100,
-    height: 30,
-    borderColor: '#000',
-    backgroundColor: '#fff',
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
-    top: 10,
-    right: 10,
   },
   modalBackdropPress: {
     flex: 1,
@@ -45,7 +32,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    display: 'flex',
     height: Dimensions.get('window').height / 15,
   },
   postWriter: {

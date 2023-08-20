@@ -9,6 +9,7 @@ import {
   TextInput,
 } from 'react-native';
 import ReviewItem from '../components/ReviewItem';
+import FloatingMenu from '../components/FloatingMenu';
 
 const DATA = [
   // {
@@ -114,6 +115,7 @@ const Review = () => {
             </TouchableOpacity>
           )}
         </View>
+        <FloatingMenu />
       </SafeAreaView>
     </View>
   );
@@ -122,6 +124,8 @@ const Review = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
+    height: '100%',
     backgroundColor: '#fff',
   },
   safeArea: {
@@ -140,7 +144,7 @@ const styles = StyleSheet.create({
   },
   newReviewInput: {
     flex: 1,
-    height: 30,
+    height: 50,
     borderWidth: 1,
     color: '#000',
     borderColor: '#ccc',
@@ -153,7 +157,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'darkblue',
     flex: 0.3,
-    height: 30,
+    height: 50,
     borderRadius: 5,
   },
   addFirstReviewButton: {

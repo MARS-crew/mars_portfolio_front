@@ -1,24 +1,30 @@
-import React from "react";
-import { View,Image,StyleSheet, TouchableOpacity,Text} from "react-native";
-import SplashImg from '../../assets/images/SplashImg.jpeg';
+import React from 'react';
+import {View, StyleSheet, Dimensions} from 'react-native';
+import LottieView from 'lottie-react-native';
 
-const Splash=()=>{
-    return(
-        <View>
-            <Text>그림을 클릭시 메인화면으로 갑니다.</Text>
-                <Image 
-                source={SplashImg}
-                style={styles.image}
-                />
-        </View>
-    );
-}
+const Splash = ({isSplashVisible}) => {
+  if (!isSplashVisible) return null;
+
+  return (
+    <View>
+      <LottieView
+        source={require('../../assets/lottie/spaceship.json')}
+        style={styles.lottie}
+      />
+    </View>
+  );
+};
+
+// get the dimensions of the screen
+const width = Dimensions.get('screen').width;
+const height = Dimensions.get('screen').height;
 
 const styles = StyleSheet.create({
-    image:{
-        width:'100%',
-        height:'100%'
-    }
-})
+  // view lottie animation
+  lottie: {
+    width: width * 0.5,
+    height: height * 0.5,
+  },
+});
 
 export default Splash;
