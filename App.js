@@ -30,99 +30,12 @@ import GroupVideo from './views/screens/GroupVideo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Swiper from 'react-native-swiper';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-const xOffset = new Animated.Value(0);
-const yOffset = new Animated.Value(0);
-
-const Screen = props => {
-  return (
-    <View style={styles.scrollPage}>
-      <Animated.View style={[styles.screen, transitionAnimation(props.index)]}>
-        {props.children}
-      </Animated.View>
-    </View>
-  );
-};
-
-const ScreenY = props => {
-  return (
-    <View style={styles.scrollPage}>
-      <Animated.View style={[styles.screen, transitionYAnimation(props.index)]}>
-        {props.children}
-      </Animated.View>
-    </View>
-  );
-};
-
 const Stack = createStackNavigator();
-
-const transitionAnimation = index => {
-  return {
-    transform: [
-      { perspective: 800 },
-      {
-        scale: xOffset.interpolate({
-          inputRange: [
-            (index - 1) * SCREEN_WIDTH,
-            index * SCREEN_WIDTH,
-            (index + 1) * SCREEN_WIDTH,
-          ],
-          outputRange: [0.95, 1, 0.95],
-        }),
-      },
-      {
-        rotateX: xOffset.interpolate({
-          inputRange: [
-            (index - 1) * SCREEN_WIDTH,
-            index * SCREEN_WIDTH,
-            (index + 1) * SCREEN_WIDTH,
-          ],
-          outputRange: ['0deg', '0deg', '0deg'], //x각도
-        }),
-      },
-      {
-        rotateY: xOffset.interpolate({
-          inputRange: [
-            (index - 1) * SCREEN_WIDTH,
-            index * SCREEN_WIDTH,
-            (index + 1) * SCREEN_WIDTH,
-          ],
-          outputRange: ['35deg', '0deg', '-35deg'], //y각도
-        }),
-      },
-    ],
-  };
-};
-const transitionYAnimation = index => {
-  return {
-    transform: [
-      { perspective: 800 },
-      {
-        scale: yOffset.interpolate({
-          inputRange: [
-            (index - 1) * SCREEN_HEIGHT,
-            index * SCREEN_HEIGHT,
-            (index + 1) * SCREEN_HEIGHT,
-          ],
-          outputRange: [1, 1, 1],
-        }),
-      },
-      {
-        translateY: yOffset.interpolate({
-          inputRange: [
-            (index - 1) * SCREEN_HEIGHT,
-            index * SCREEN_HEIGHT,
-            (index + 1) * SCREEN_HEIGHT,
-          ],
-          outputRange: [0, 0, 0],
-        }),
-      },
-    ],
-  };
-};
 
 const App = () => {
   return (
@@ -202,18 +115,6 @@ const HomeScreen = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: yOffset } } }],
-    {
-      useNativeDriver: true,
-      listener: event => {
-        const offset = event.nativeEvent.contentOffset.y;
-        const currentIndex = Math.round(offset / SCREEN_HEIGHT);
-        console.log('Current Index: ', currentIndex);
-        setCurrentIndex(currentIndex);
-      },
-    },
-  );
 
   useEffect(() => {
     AsyncStorage.getItem('isSplashVisible').then(value => {
@@ -234,62 +135,29 @@ const HomeScreen = () => {
   }, [isSplashVisible]);
 
   return (
-    <Animated.ScrollView
-      scrollEventThrottle={16}
-      onScroll={handleScroll}
-      horizontal
-      pagingEnabled
-      style={styles.scrollView}>
-      <Splash isSplashVisible={isSplashVisible} />
-      {isSplashVisible === false ? (
-        <Screen text="Screen 1" index={0}>
-          <WhichGroup />
-        </Screen>
-      ) : null}
-
-      <Screen text="Screen 2" index={1}>
-        {datas.map((data, index) => (
-          <ScreenY>
-            <GroupVideo index={index} />
-          </ScreenY>
-        ))}
-      </Screen>
-      <Screen text="Screen 3" index={2}>
-        {datas.map((data, index) => (
-          <ScreenY index={index}>
-            <InterviewContents
-              path={data.interviewData}
-              currentPage={currentPage}
-              currentIndex={currentIndex}
-              index={index}
-              isPlaying={currentIndex === index && isPlaying}
-              setIsPlaying={setIsPlaying}
-            />
-            {/* <Interview /> */}
-          </ScreenY>
-        ))}
-      </Screen>
-      <Screen Screen text="Screen 4" index={3}>
-        {datas.map((data, index) => (
-          <ScreenY index={index}>
-            <Resume modalOpen={modalOpen} />
-          </ScreenY>
-        ))}
-      </Screen>
-      <Screen text="Screen 5" index={4}>
-        {datas.map((data, index) => (
-          <ScreenY index={index}>
-            <Portfolio options={{ headerShown: false }} />
-          </ScreenY>
-        ))}
-      </Screen>
-      <Screen text="Screen 6" index={5}>
-        <Review />
-      </Screen>
-      <Screen text="Screen 7" index={6}>
-        <MyPage options={{ headerShown: false }} />
-      </Screen>
-    </Animated.ScrollView>
+    <View style={styles.container}>
+      <Swiper style={styles.wrapper} showsPagination={false}>
+        <View style={styles.slide}>
+          <Splash isSplashVisible={isSplashVisible} />
+          {isSplashVisible === false ? <WhichGroup index={1} /> : null}
+        </View>
+        <GroupVideo index={1} />
+        <InterviewContents
+          index={2}
+          path={''}
+          currentPage={currentPage}
+          currentIndex={currentIndex}
+          isPlaying={currentIndex === 2 && isPlaying}
+          setIsPlaying={setIsPlaying}
+        />
+        <Resume modalOpen={modalOpen} index={3} />
+        <Portfolio options={{ headerShown: false }} index={4} />
+        <Review index={5} />
+        <View style={styles.slide}>
+          <MyPage options={{ headerShown: false }} index={6} />
+        </View>
+      </Swiper>
+    </View>
   );
 };
 
@@ -312,6 +180,16 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 45,
     fontWeight: 'bold',
+  },
+  wrapper: {
+    // backgroundColor: '#f00'
+  },
+  slide: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  container: {
+    flex: 1,
   },
 });
 
