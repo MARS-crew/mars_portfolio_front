@@ -10,7 +10,7 @@ const GroupItem = ({id, src}) => {
       <ImageBackground source={src} style={styles.image}>
         <GroupLogo />
         <Text style={styles.text}>{id}기</Text>
-        <LoginItem />
+        {/* <LoginItem style={styles.login} /> */}
       </ImageBackground>
     </View>
   );
@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
     left: 95,
     top: -5,
     fontSize: 24,
+  },
+  login: {
+    position: 'absolute',
   },
 });
 

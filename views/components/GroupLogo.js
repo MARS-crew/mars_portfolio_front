@@ -26,5 +26,3 @@ const styles = StyleSheet.create({
 });
 
 export default GroupLogo;
-
-export default GroupLogo;

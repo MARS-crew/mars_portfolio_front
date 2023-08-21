@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -13,7 +13,7 @@ import {
   Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import EmptyImg from '../../assets/images/EmptyImg.png';
+import EmptyImg from '../../assets/images/emptyImg.png';
 import InterviewModal from '../components/InterviewModal';
 import Video from 'react-native-video';
 
@@ -92,7 +92,7 @@ const Interview = () => {
           {/* 저장된 video가 있으면 video 출력. 없으면  마스외전 로고 출력*/}
           {filePath ? (
             <Video
-              source={{ uri: filePath }}
+              //source={{ uri: filePath }}
               style={[styles.content]}
               controls={true}
               resizeMode="cover"
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    //justifyContent: 'flex-end',
     paddingRight: 20,
     paddingTop: 20,
     paddingBottom: 10,

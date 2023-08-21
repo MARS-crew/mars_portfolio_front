@@ -2,6 +2,7 @@ import {React} from 'react';
 import {StyleSheet, View, FlatList, SafeAreaView} from 'react-native';
 
 import GroupItem from '../components/GroupItem';
+import LoginItem from '../components/LoginItem';
 
 const Item = ({id, src, medal}) => (
   <View>
@@ -12,10 +13,13 @@ const Item = ({id, src, medal}) => (
 const Group = ({data}) => {
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={data}
-        renderItem={({item}) => <Item id={item.id} src={item.src} />}
-      />
+      <View>
+        <FlatList
+          data={data}
+          renderItem={({item}) => <Item id={item.id} src={item.src} />}
+        />
+        <LoginItem style={styles.login}/>
+      </View>
     </SafeAreaView>
   );
 };
@@ -23,6 +27,9 @@ const Group = ({data}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
+  },
+  login: {
+    position: 'absolute',
   },
 });
 
