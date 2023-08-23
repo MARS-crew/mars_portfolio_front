@@ -17,11 +17,19 @@ const GroupLogo = () => {
 
 const styles = StyleSheet.create({
   image: {
+    // position: 'absolute',
     width: 70,
     height: 70,
     resizeMode: 'contain',
     left: 20,
     top: 25,
+  },
+  text: {
+    // position: 'absolute',
+    color: 'white',
+    left: 95,
+    top: -5,
+    fontSize: 24,
   },
 });
 

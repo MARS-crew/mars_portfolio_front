@@ -18,6 +18,7 @@ const LoginItem = () => {
 
 const styles = StyleSheet.create({
   button: {
+    // position: 'absolute',
     width: 104,
     height: 38,
     alignItems: 'center',
