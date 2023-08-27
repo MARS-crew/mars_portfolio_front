@@ -43,9 +43,10 @@ const App = () => {
           <Swiper
             horizontal={false}
             showsPagination={false}
+            sensitivity={0.5}
             loop={false}
-          // index={currentIndex}
-          //onIndexChanged={(subIndex) => setCurrentIndex(subIndex)}
+            index={currentPage}
+            onIndexChanged={index => setCurrentIndex(index)}
           >
             <View style={styles.slide}>
               <Group1

@@ -47,11 +47,10 @@ const Group1 = ({
       showsPagination={false}
       index={currentIndex}
       loop={false}
-      onIndexChanged={index => setCurrentIndex(index)}
-    >
-      <WhichGroup index={0} />
+      onIndexChanged={index => setCurrentIndex(index)}>
+      <WhichGroup />
       <View style={styles.slide}>
-        <GroupVideo index={1} />
+        <GroupVideo />
       </View>
       <View style={styles.slide}>
         <InterviewContents
@@ -64,16 +63,16 @@ const Group1 = ({
         />
       </View>
       <View style={styles.slide}>
-        <Resume index={3} />
+        <Resume />
       </View>
       <View style={styles.slide}>
-        <Portfolio options={{ headerShown: false }} index={4} />
+        <Portfolio options={{ headerShown: false }} />
       </View>
       <View style={styles.slide}>
-        <Review index={5} />
+        <Review />
       </View>
       <View style={styles.slide}>
-        <MyPage index={6} />
+        <MyPage />
       </View>
     </Swiper>
   );
