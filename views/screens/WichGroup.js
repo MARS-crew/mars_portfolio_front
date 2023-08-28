@@ -1,10 +1,11 @@
-import "react-native-gesture-handler";
+import 'react-native-gesture-handler';
 import {React} from 'react';
-import { CubeNavigationHorizontal } from 'react-native-3dcube-navigation';
+import {CubeNavigationHorizontal} from 'react-native-3dcube-navigation';
 
 import Group from './Group';
 import ManyGroup from './ManyGroup';
 import GroupVideo from './GroupVideo';
+import Swiper from 'react-native-swiper';
 
 // const callBackAfterSwipe = () => {
 //   // 스와이프 후의 동작 정의
@@ -60,12 +61,8 @@ const DATA = [
 
 const WhichGroup = () => {
   if (DATA.length <= 6) {
-    <GroupVideo data={DATA} />
-    return(
-      //<CubeNavigationHorizontal callBackAfterSwipe={callBackAfterSwipe}>
-        <Group data={DATA} />
-      //</CubeNavigationHorizontal>
-    ); 
+    // <GroupVideo data={DATA} />;
+    return <Group data={DATA} />;
   } else {
     return <ManyGroup data={DATA} />;
   }

@@ -1,5 +1,6 @@
 import {React} from 'react';
 import {StyleSheet, View, FlatList, SafeAreaView} from 'react-native';
+import {SwiperFlatList} from 'react-native-swiper-flatlist';
 
 //import ManyGroupItem from '../components/ManyGroupItem';
 import GroupVideoItem from '../components/GroupVideoItem';
@@ -67,7 +68,8 @@ const VideoItem = ({id, src, medal}) => (
 const GroupVideo = () => {
   return (
     <SafeAreaView style={styles.containbox}>
-      <FlatList
+      <SwiperFlatList
+        vertical={true}
         data={DATA}
         renderItem={({item}) => (
           <VideoItem id={item.id} src={item.src} medal={item.medal} />
