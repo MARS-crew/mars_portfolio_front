@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, View, FlatList, SafeAreaView} from 'react-native';
 
 import Splash from './views/screens/splash';
@@ -16,12 +16,12 @@ import 'react-native-gesture-handler';
 import WhichGroup from './views/screens/WhichGroup';
 import Help from './views/screens/Help';
 import Share from './views/screens/Share';
+import {PageIndexProvider} from './views/screens/Context';
 
 import GroupVideo from './views/screens/GroupVideo';
 import Swiper from 'react-native-swiper';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-
 var styles = {
   wrapper: {},
   slide1: {
@@ -50,24 +50,26 @@ var styles = {
 };
 const Stack = createStackNavigator();
 export default () => (
-  <Swiper>
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="WhichGroup"
-          component={WhichGroup}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="GroupVideo"
-          component={GroupVideo}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  </Swiper>
+  <PageIndexProvider>
+    <Swiper>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="WhichGroup"
+            component={WhichGroup}
+            options={{headerShown: false}}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="GroupVideo"
+            component={GroupVideo}
+            options={{headerShown: false}}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Swiper>
+  </PageIndexProvider>
 );

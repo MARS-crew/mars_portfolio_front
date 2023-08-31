@@ -1,18 +1,25 @@
-import React from 'react';
+import {React, useState} from 'react';
 import {View, StyleSheet, ImageBackground} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import MedalItem from './MedalItem';
 
-const GroupVideoItem = ({medal, src}) => {
+const GroupVideoItem = ({id, medal, src}) => {
+  // const [view, setView] = useState(1);
+  // const GroupVideoView = () => {
+  //   setView(id);
+  // };
+
   if (medal == 'y') {
     return (
       <View style={styles.outline}>
         <TouchableOpacity>
           <View style={styles.midLine}>
-            <ImageBackground source={src} style={styles.manyImage}>
-              <MedalItem />
-            </ImageBackground>
+            {
+              <ImageBackground source={src} style={styles.manyImage}>
+                <MedalItem />
+              </ImageBackground>
+            }
           </View>
         </TouchableOpacity>
       </View>
