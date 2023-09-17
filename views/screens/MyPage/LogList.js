@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   item: {paddingVertical: 12, paddingHorizontal: 15},
   deleteButton: {
     backgroundColor: '#FFE9EA',
-    width: 70,
+    width: 90,
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
