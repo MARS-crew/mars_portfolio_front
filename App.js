@@ -15,7 +15,7 @@ import Member from './views/screens/Member';
 import Youtube from './views/screens/Youtube';
 import Resume from './views/screens/Resume';
 import Portfolio from './views/screens/Portfolio/Portfolio';
-import Review from './views/screens/Review';
+import Review from './views/screens/Review/Review';
 import MyPage from './views/screens/MyPage/MyPage';
 import Album from './views/screens/Album';
 import Interview from './views/screens/Interview';
