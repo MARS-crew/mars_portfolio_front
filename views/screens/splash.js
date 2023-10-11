@@ -8,7 +8,7 @@ const Splash = ({ isSplashVisible }) => {
   return (
     <View>
       <LottieView
-        source={require('../../assets/lottie/spaceship.json')}
+        source={require('../../assets/lottie/Splash.json')}
         style={styles.lottie}
       />
     </View>
