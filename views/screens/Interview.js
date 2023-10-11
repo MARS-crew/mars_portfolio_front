@@ -6,101 +6,91 @@ import {
   StyleSheet,
   Text,
   View,
+  SafeAreaView
 } from 'react-native';
 import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
+import SwiperFlatList from 'react-native-swiper-flatlist';
+import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const yOffset = new Animated.Value(0);
-
-const Screen = props => {
-  return (
-    <View style={styles.scrollPage}>
-      <Animated.View style={[styles.screen, transitionAnimation(props.index)]}>
-        {props.children}
-      </Animated.View>
-    </View>
-  );
-};
-
-const transitionAnimation = index => {
-  return {
-    transform: [
-      { perspective: 800 },
-      {
-        scale: yOffset.interpolate({
-          inputRange: [
-            (index - 1) * SCREEN_HEIGHT,
-            index * SCREEN_HEIGHT,
-            (index + 1) * SCREEN_HEIGHT,
-          ],
-          outputRange: [1, 1, 1],
-        }),
-      },
-      {
-        translateY: yOffset.interpolate({
-          inputRange: [
-            (index - 1) * SCREEN_HEIGHT,
-            index * SCREEN_HEIGHT,
-            (index + 1) * SCREEN_HEIGHT,
-          ],
-          outputRange: [0, 0, 0],
-        }),
-      },
-    ],
-  };
-};
-
-
-const interviewFiles = [
+const DATA = [
   {
-    id: 1,
+    group: '1기',
+    id: 'nn',
     path: require('../../assets/videos/interviewVideo.mp4'),
+    merdal: 'n'
+
   },
   {
-    id: 2,
+    group: '1기',
+    id: 'n1',
+    path: require('../../assets/videos/interviewVideo.mp4'),
+    merdal: 'n'
+
+  },
+  {
+    group: '1기',
+    id: 'n2',
     path: "",
+    merdal: 'n'
+
   },
   {
-    id: 3,
-    path: '',
+    group: '1기',
+    id: 'n3',
+    path: "",
+    merdal: 'n'
+
   },
+  {
+    group: '1기',
+    id: 'n4',
+    path: "",
+    merdal: 'n',
+  }
 ];
 
-const Interview = () => {
-
+const InterviewItem = ({ id, path, merdal }) => {
   return (
-    <Animated.ScrollView
-      scrollEventThrottle={16}
-      onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: yOffset } } }], {
-        useNativeDriver: true,
-      })}
-      pagingEnabled
-      style={styles.scrollView}>
-      {interviewFiles.map((interview, index) => (
-        <Screen key={interview.id} index={index}>
-          <InterviewContents path={interview.path} />
-        </Screen>
-      ))}
-    </Animated.ScrollView>
+    <View>
+      <InterviewContents id={id} path={path} merdal={merdal} />
+    </View>
+  );
+
+}
+
+const Interview = () => {
+  return (
+    <SafeAreaView style={styles.containbox}>
+      <SwiperFlatList
+        vertical={true}
+        data={DATA}
+        renderItem={({ item }) => (
+          <InterviewItem id={item.id} path={item.path} merdal={item.merdal} />
+        )}
+        hideShadow={true}
+      />
+    </SafeAreaView>
+
   );
 };
 const styles = StyleSheet.create({
-  scrollView: {
+  containbox: {
     flex: 1,
-    flexDirection: 'column',
+    backgroundColor: 'white',
   },
-  scrollPage: {
-    width: SCREEN_WIDTH,
-    padding: 0,
+  button: {
+    width: 40,
+    height: 20,
+    position: 'absolute',
   },
-  screen: {
+  container: {
+    backgroundColor: 'white',
+  },
+  manyRow: {
     flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-
+    flexDirection: 'row',
   },
 });
 

@@ -1,9 +1,11 @@
-import {React} from 'react';
-import {StyleSheet, View, FlatList, SafeAreaView} from 'react-native';
+import { React } from 'react';
+import { StyleSheet, View, FlatList, SafeAreaView } from 'react-native';
 
 //import ManyGroupItem from '../components/ManyGroupItem';
 import GroupVideoItem from '../components/GroupVideoItem';
 import FAB from '../components/FloatingMenu';
+import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
+import SwiperFlatList from 'react-native-swiper-flatlist';
 
 const DATA = [
   {
@@ -41,24 +43,24 @@ const DATA = [
     video: require('../../assets/images/GroupVideo.png'),
     medal: 'n',
   },
-  // {
-  //   id: '6',
-  //   title: '6기',
-  //   src: require('../../assets/images/Group.png'),
-  // },
-  // {
-  //   id: '7',
-  //   title: '7기',
-  //   src: require('../../assets/images/Group.png'),
-  // },
-  // {
-  //   id: '8',
-  //   title: '8기',
-  //   src: require('../../assets/images/Group.png'),
-  // },
+  {
+    id: '6',
+    title: '6기',
+    src: require('../../assets/images/Group.png'),
+  },
+  {
+    id: '7',
+    title: '7기',
+    src: require('../../assets/images/Group.png'),
+  },
+  {
+    id: '8',
+    title: '8기',
+    src: require('../../assets/images/Group.png'),
+  },
 ];
 
-const VideoItem = ({id, src, medal}) => (
+const VideoItem = ({ id, src, medal }) => (
   <View>
     <GroupVideoItem id={id} src={src} medal={medal} />
   </View>
@@ -67,11 +69,13 @@ const VideoItem = ({id, src, medal}) => (
 const GroupVideo = () => {
   return (
     <SafeAreaView style={styles.containbox}>
-      <FlatList
+      <SwiperFlatList
+        vertical={true}
         data={DATA}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <VideoItem id={item.id} src={item.src} medal={item.medal} />
         )}
+        hideShadow={true}
         numColumns={2}
       />
       <FAB />

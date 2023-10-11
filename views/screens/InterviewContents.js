@@ -19,7 +19,7 @@ import Video from 'react-native-video';
 import InterviewAlert from '../components/InterviewAlert';
 import { useFocusEffect } from '@react-navigation/native';
 
-const InterviewContents = ({ path }) => {
+const InterviewContents = ({ id, path }) => {
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
 
   const [heart, setHeart] = useState(false); // 하트 상태
@@ -58,7 +58,7 @@ const InterviewContents = ({ path }) => {
   //찜 기능
   const toggleHeart = () => {
     //video 데이터가 없을 땐 찜 기능 안되도록
-    if (filePath !== undefined) {
+    if (filePath !== "") {
       setHeart(previousState => !previousState);
       fillHeart();
     } else {

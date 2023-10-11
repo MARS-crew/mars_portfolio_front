@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, StyleSheet, ImageBackground} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { View, StyleSheet, ImageBackground } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import MedalItem from './MedalItem';
 
-const GroupVideoItem = ({medal, src}) => {
+const GroupVideoItem = ({ medal, src }) => {
   if (medal == 'y') {
     return (
       <View style={styles.outline}>

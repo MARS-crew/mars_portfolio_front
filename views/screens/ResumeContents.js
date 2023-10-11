@@ -5,8 +5,6 @@ import ResumeBoxMD from '../components/ResumeBoxMD';
 import FAB from '../components/FloatingMenu';
 import ResumeEditMode from "../components/ResumeEditMode";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import SwiperFlatList from 'react-native-swiper-flatlist';
-import ResumeContents from './ResumeContents';
 
 
 
@@ -40,13 +38,8 @@ const DATA = [
     title: '보유기술',
   },
 ];
-const ResumeItem = (item) => (
-  <View>
-    <ResumeContents id={id} src={src} medal={medal} />
-  </View>
-);
 
-const Resume = () => {
+const ResumeContents = () => {
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [resume, setResume] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
   const toggleModal = () => {
@@ -83,10 +76,16 @@ const Resume = () => {
       {/* <TouchableOpacity 
         onPress={toggleModal}
         activeOpacity={100} > */}
-      <SwiperFlatList
-        vertical={true}
+      <FlatList
         data={DATA}
         renderItem={renderItem}
+        keyExtractor={item => item.id}
+      />
+      <FAB />
+      <ResumeEditMode
+        resume={resume}
+        isModalVisible={modalOpen}
+        setIsModalVisible={setModalOpen}
       />
       {/* </TouchableOpacity> */}
     </View>
@@ -102,4 +101,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Resume;
+export default ResumeContents;

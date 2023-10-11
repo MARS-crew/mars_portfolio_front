@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Animated,
   Dimensions,
@@ -13,7 +13,7 @@ import Login from './views/screens/Login';
 import Group from './views/screens/Group';
 import Member from './views/screens/Member';
 import Youtube from './views/screens/Youtube';
-import Resume from './views/screens/Resume';
+import Resume from './views/screens/ResumeContents';
 import Portfolio from './views/screens/Portfolio/Portfolio';
 import Review from './views/screens/Review';
 import MyPage from './views/screens/MyPage/MyPage';
@@ -26,8 +26,8 @@ import Share from './views/screens/Share';
 
 import GroupVideo from './views/screens/GroupVideo';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -49,7 +49,7 @@ const Stack = createStackNavigator();
 const transitionAnimation = index => {
   return {
     transform: [
-      {perspective: 800},
+      { perspective: 800 },
       {
         scale: xOffset.interpolate({
           inputRange: [
@@ -91,22 +91,22 @@ const App = () => {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Help"
           component={Help}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Share"
           component={Share}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Album"
           component={Album}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -138,7 +138,7 @@ const HomeScreen = () => {
   return (
     <Animated.ScrollView
       scrollEventThrottle={16}
-      onScroll={Animated.event([{nativeEvent: {contentOffset: {x: xOffset}}}], {
+      onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: xOffset } } }], {
         useNativeDriver: true,
       })}
       horizontal
@@ -160,13 +160,13 @@ const HomeScreen = () => {
         <Resume modalOpen={modalOpen} />
       </Screen>
       <Screen text="Screen 5" index={4}>
-        <Portfolio options={{headerShown: false}} />
+        <Portfolio options={{ headerShown: false }} />
       </Screen>
       <Screen text="Screen 6" index={5}>
         <Review />
       </Screen>
       <Screen text="Screen 7" index={6}>
-        <MyPage options={{headerShown: false}} />
+        <MyPage options={{ headerShown: false }} />
       </Screen>
     </Animated.ScrollView>
   );
