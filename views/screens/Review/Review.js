@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   StyleSheet,
@@ -9,8 +9,6 @@ import {
   TextInput,
   Dimensions,
 } from 'react-native';
-import axios from 'axios';
-
 import ReviewItem from '../Review/ReviewItem';
 import FloatingMenu from '../../components/FloatingMenu';
 
@@ -92,49 +90,63 @@ const onDelete = ({code}) => {
   );
 };
 
+const DATA = [
+  {
+    writer: '아무개',
+    date: '2023-06-07 17:43:14',
+    content:
+      '리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. 리뷰 내용 입니다. ',
+    imageType: randomImageId(),
+    isLiked: true,
+  },
+  {
+    writer: '김아무개',
+    date: '2023-06-07 17:43:14',
+    content:
+      '리뷰 내용 입니다. 리뷰 내용 입니다.리뷰' +
+      '내용 입니다.리뷰 내용 입니다.리뷰 내용 입니다.리뷰 내용 입니다.' +
+      '리뷰 내용 입니다.리뷰 내용 입니다.리뷰 내용 입니다.리뷰 내용 입니다.' +
+      '리뷰 내용 입니다.리뷰 내용 입니다.리뷰 내용 입니다.리뷰 내용 입니다.' +
+      '리뷰 내용 입니다.리뷰 내용 입니다.리뷰 내용 입니다.리뷰 내용 입니다.리뷰' +
+      '내용 입니다.리뷰 내용 입니다.',
+    imageType: randomImageId(),
+    isLiked: true,
+  },
+  {
+    writer: '아무개',
+    date: '2023-06-07 17:43:14',
+    content: '리뷰 내용 입니다. ',
+    imageType: randomImageId(),
+    isLiked: true,
+  },
+  {
+    writer: '아무개',
+    date: '2023-06-07 17:43:14',
+    content: '리뷰 내용 입니다. ',
+    imageType: randomImageId(),
+    isLiked: true,
+  },
+  {
+    writer: '아무개',
+    date: '2023-06-07 17:43:14',
+    content: '리뷰 내용 입니다. ',
+    imageType: randomImageId(),
+    isLiked: true,
+  },
+  {
+    writer: '아무개',
+    date: '2023-06-07 17:43:14',
+    content: '리뷰 내용 입니다. ',
+    imageType: randomImageId(),
+    isLiked: true,
+  },
+];
+
 const Review = () => {
-  const [data, setData] = useState([]);
   const [review, isReview] = useState(true);
   const [showReviewInput, setShowReviewInput] = useState(false);
   const [reviewContent, setReviewContent] = useState('');
   const newReviewInputRef = useRef(null);
-
-  useEffect(() => {
-    let isMounted = true;
-    const source = axios.CancelToken.source();
-    axios({
-      method: 'get',
-      url: 'http://10.0.2.2:3000/api/v1/review/1',
-      headers: {
-        Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTcwMzMzOTEsImV4cCI6MTY5NzAzNjk5MX0.ICZlDhf3LlxHgo7r70tIdLDGmEO4mLveQfkJMtFh4C8',
-      },
-      cancelToken: source.token,
-    })
-      .then(response => {
-        if (isMounted) {
-          console.log('Success:', response.status);
-          const extractedData = response.data.data.map(item => ({
-            member_id: item.member_id,
-            content: item.content,
-            reg_date: item.reg_date,
-            isLiked: 1,
-            imageType: randomImageId(),
-          }));
-          setData(extractedData);
-        }
-      })
-      .catch(error => {
-        console.log('Error Message:', error.message);
-        console.log('Error Response:', error.response);
-        console.log('Error Request:', error.request);
-      });
-
-    return () => {
-      isMounted = false;
-      source.cancel('API 호출이 취소되었습니다.');
-    };
-  }, []);
 
   const random = () => {
     return Math.floor(Math.random() * 100000);
@@ -145,13 +157,13 @@ const Review = () => {
       <SafeAreaView>
         <View style={styles.itemView}>
           <FlatList
-            data={data}
+            data={DATA}
             renderItem={({item}) => (
               <ReviewItem
                 review={review}
                 id={item.id}
-                writer={item.member_id}
-                date={item.reg_date}
+                writer={item.writer}
+                date={item.date}
                 content={item.content}
                 imageType={item.imageType}
                 isLiked={item.isLiked}
