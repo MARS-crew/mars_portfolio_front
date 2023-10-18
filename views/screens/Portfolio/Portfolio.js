@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   SafeAreaView,
-  FlatList,
+  ScrollView,
   StyleSheet,
   Alert,
   Text,
@@ -27,18 +27,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   container: {
-    flex: 1,
+    padding: 5,
     backgroundColor: '#fff',
   },
   gridView: {
     padding: 5,
     paddingTop: 10,
-    display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   gridItem: {
-    width: squareSize,
+    width: squareSize, // 두 항목이 한 줄에 올 수 있도록 너비를 조정
     height: squareSize,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
@@ -57,6 +58,7 @@ const Portfolio = () => {
   const [fileIdLength, setFileIdLength] = useState(null);
   const [portfolio, setPortfolio] = useState(true); //포트폴리오 페이지인지 확인하는 스테이트
   const numColumns = 2;
+  const itemWidth = (Dimensions.get('window').width - 20) / numColumns; // 각 항목의 너비 계산
 
   const shadowColor = 'rgba(151, 151, 151, 0.36)';
 
@@ -67,7 +69,7 @@ const Portfolio = () => {
       url: 'http://10.0.2.2:3000/api/v1/portfolio/',
       headers: {
         Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTc2MTg3ODUsImV4cCI6MTY5NzYyMjM4NX0.d8HunIzNkCkJuslFO-5Sr4418LH2YARxXGT7czp3ACU',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTc2Mjc4NTEsImV4cCI6MTY5NzYzMTQ1MX0.DdVTsHNymF7t3t5U0CEV808DiFkXIJF5MofzE74-Svk',
       },
       cancelToken: source.token,
     })
@@ -241,67 +243,48 @@ const Portfolio = () => {
     );
   };
 
-  const renderListItem = ({item}) => {
-    const emptyItemCount = fileIdLength % numColumns;
-    if (emptyItemCount === 1) {
-      return (
-        <Shadow distance="12" startColor={shadowColor} offset={[15, 15]}>
-          <TouchableOpacity
-            style={styles.gridItem}
-            onPress={() => setDetailPopVisible(!detailPopVisible)}>
-            <View>
-              <Image source={addBtn} style={styles.content} />
-            </View>
-          </TouchableOpacity>
-        </Shadow>
-      );
-    }
-
-    return (
-      <PortfolioItem
-        portfolio={portfolio}
-        onModify={onModify} //생성 테스트
-        onDelete={onDelete} //삭제 테스트
-        member_id={item.member_id} //member_id: item.member_id
-        id={item.portfolio_id} // portfolio_id: item.portfolio_id,
-        title={item.title} // title: item.title
-        message={item.description} //description: item.description
-        reg_date={item.reg_date} //reg_date: item.reg_date
-        mod_date={item.mod_date} //mod_date: item.mod_date
-        code={item.kind} //kind: item.kind
-        file_id={item.file_id} //item.file.file_id
-        src={item.url} // url: item.file.url
-        ext={item.ext} //ext: item.file.ext,
-        del_yn={item.del_yn}></PortfolioItem>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <SafeAreaView>
-        <View style={styles.gridView}>
-          <FlatList
-            data={data}
-            renderItem={renderListItem}
-            keyExtractor={(item, index) => index}
-            numColumns={numColumns}
-            ListFooterComponent={
-              <Shadow distance="12" startColor={shadowColor} offset={[15, 15]}>
-                <TouchableOpacity
-                  style={styles.gridItem}
-                  onPress={() => setDetailPopVisible(!detailPopVisible)}>
-                  <View>
-                    <Image source={addBtn} style={styles.content} />
-                  </View>
-                </TouchableOpacity>
-              </Shadow>
-            }
-          />
-          <DetailPop
-            onModify={onModify}
-            setDetailPopVisible={setDetailPopVisible}
-            detailPopVisible={detailPopVisible}></DetailPop>
-        </View>
+        <ScrollView>
+          <View style={styles.gridView}>
+            {data.map((item, index) => (
+              <View style={styles.gridItem} key={index}>
+                <PortfolioItem
+                  portfolio={portfolio}
+                  onModify={onModify}
+                  onDelete={onDelete}
+                  member_id={item.member_id}
+                  id={item.portfolio_id}
+                  title={item.title}
+                  message={item.description}
+                  reg_date={item.reg_date}
+                  mod_date={item.mod_date}
+                  code={item.kind}
+                  file_id={item.file_id}
+                  src={item.url}
+                  ext={item.ext}
+                  del_yn={item.del_yn}
+                />
+              </View>
+            ))}
+            <Shadow distance="12" startColor={shadowColor} offset={[15, 15]}>
+              <TouchableOpacity
+                style={styles.gridItem}
+                onPress={() => setDetailPopVisible(!detailPopVisible)}>
+                <View>
+                  <Image source={addBtn} style={styles.content} />
+                </View>
+              </TouchableOpacity>
+            </Shadow>
+
+            <DetailPop
+              onModify={onModify}
+              setDetailPopVisible={setDetailPopVisible}
+              detailPopVisible={detailPopVisible}
+            />
+          </View>
+        </ScrollView>
       </SafeAreaView>
       <FAB />
     </View>

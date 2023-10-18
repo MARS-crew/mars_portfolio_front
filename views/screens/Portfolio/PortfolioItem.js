@@ -43,7 +43,6 @@ const PortfolioItem = ({
   portfolio,
   id,
   title,
-
   code,
   file_id,
   src,
