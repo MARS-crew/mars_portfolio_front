@@ -1,25 +1,140 @@
-import React, {useState} from 'react';
-import {View, SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Alert,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  Image,
+} from 'react-native';
 import FAB from '../../components/FloatingMenu';
 import PortfolioItem from '../Portfolio/PortfolioItem';
+import DetailPop from './DetailPop';
+import axios from 'axios'; // axios import 합니다.
+import {Shadow} from 'react-native-shadow-2';
+import addBtn from '../../../assets/images/add.png';
+const {width, height} = Dimensions.get('window');
+const squareSize = Math.min(width, height) * 0.4;
 
 const styles = StyleSheet.create({
+  content: {
+    width: 54,
+    height: 54,
+    borderWidth: 1,
+    borderRadius: 10,
+  },
   container: {
-    flex: 1,
+    padding: 5,
     backgroundColor: '#fff',
   },
   gridView: {
     padding: 5,
     paddingTop: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  gridItem: {
+    width: squareSize, // 두 항목이 한 줄에 올 수 있도록 너비를 조정
+    height: squareSize,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderRadius: 10,
     display: 'flex',
+    borderColor: '#F5F5F5',
     justifyContent: 'center',
     alignItems: 'center',
+    margin: 15,
   },
 });
 
 const Portfolio = () => {
+  const [detailPopVisible, setDetailPopVisible] = useState(false);
+  const [data, setData] = useState([]);
+  const [fileIdLength, setFileIdLength] = useState(null);
   const [portfolio, setPortfolio] = useState(true); //포트폴리오 페이지인지 확인하는 스테이트
   const numColumns = 2;
+  const itemWidth = (Dimensions.get('window').width - 20) / numColumns; // 각 항목의 너비 계산
+
+  const shadowColor = 'rgba(151, 151, 151, 0.36)';
+
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    axios({
+      method: 'get',
+      url: 'http://10.0.2.2:3000/api/v1/portfolio/',
+      headers: {
+        Authorization:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTc2Mjc4NTEsImV4cCI6MTY5NzYzMTQ1MX0.DdVTsHNymF7t3t5U0CEV808DiFkXIJF5MofzE74-Svk',
+      },
+      cancelToken: source.token,
+    })
+      .then(function (response) {
+        const extractedData = response.data.data.map(item => ({
+          member_id: item.member_id,
+          portfolio_id: item.portfolio_id,
+          title: item.title,
+          description: item.description,
+          reg_date: item.reg_date,
+          mod_date: item.mod_date,
+          kind: item.kind,
+
+          file_id: item.file_id,
+          ext: item.ext,
+          url: item.url,
+          del_yn: item.del_yn,
+        }));
+        setData(extractedData);
+
+        const fileIdData = response.data.data.map(item => ({
+          file_id: item.file_id,
+        }));
+        const fileIdLength = fileIdData.length;
+        console.log(fileIdData);
+        console.log(fileIdLength);
+
+        //console.log(response);
+        // console.log(
+        //   'file_id--------------------------------------------------',
+        // );
+        // console.log(
+        //   response.data.data.map(item => ({
+        //     file_id: item.file_id,
+        //   })),
+        // );
+        // console.log('ext--------------------------------------------------');
+        // console.log(
+        //   response.data.data.map(item => ({
+        //     ext: item.ext,
+        //   })),
+        // );
+        // console.log('uri--------------------------------------------------');
+        // console.log(
+        //   response.data.data.map(item => ({
+        //     url: item.url,
+        //   })),
+        // );
+        // console.log('del_yn--------------------------------------------------');
+        // console.log(
+        //   response.data.data.map(item => ({
+        //     del_yn: item.del_yn,
+        //   })),
+        // );
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    return () => {
+      isMounted = false;
+      source.cancel('API 호출이 취소되었습니다.');
+    };
+  }, []);
+
   const [portfolioData, setPortfolioData] = useState([
     {
       id: '1',
@@ -131,24 +246,45 @@ const Portfolio = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView>
-        <View style={styles.gridView}>
-          <FlatList
-            data={portfolioData}
-            renderItem={({item}) => (
-              <PortfolioItem
-                portfolio={portfolio}
-                id={item.id}
-                title={item.title}
-                src={item.src}
-                message={item.message}
-                code={item.code}
-                onModify={onModify}
-                onDelete={onDelete}></PortfolioItem>
-            )}
-            keyExtractor={(item, index) => index}
-            numColumns={numColumns}
-          />
-        </View>
+        <ScrollView>
+          <View style={styles.gridView}>
+            {data.map((item, index) => (
+              <View style={styles.gridItem} key={index}>
+                <PortfolioItem
+                  portfolio={portfolio}
+                  onModify={onModify}
+                  onDelete={onDelete}
+                  member_id={item.member_id}
+                  id={item.portfolio_id}
+                  title={item.title}
+                  message={item.description}
+                  reg_date={item.reg_date}
+                  mod_date={item.mod_date}
+                  code={item.kind}
+                  file_id={item.file_id}
+                  src={item.url}
+                  ext={item.ext}
+                  del_yn={item.del_yn}
+                />
+              </View>
+            ))}
+            <Shadow distance="12" startColor={shadowColor} offset={[15, 15]}>
+              <TouchableOpacity
+                style={styles.gridItem}
+                onPress={() => setDetailPopVisible(!detailPopVisible)}>
+                <View>
+                  <Image source={addBtn} style={styles.content} />
+                </View>
+              </TouchableOpacity>
+            </Shadow>
+
+            <DetailPop
+              onModify={onModify}
+              setDetailPopVisible={setDetailPopVisible}
+              detailPopVisible={detailPopVisible}
+            />
+          </View>
+        </ScrollView>
       </SafeAreaView>
       <FAB />
     </View>
