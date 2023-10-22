@@ -1,11 +1,13 @@
 import { React } from 'react';
-import { StyleSheet, View, FlatList, SafeAreaView } from 'react-native';
+import { useContext } from 'react';
+import { Dimensions, StyleSheet, View, FlatList, SafeAreaView } from 'react-native';
 
 //import ManyGroupItem from '../components/ManyGroupItem';
 import GroupVideoItem from '../components/GroupVideoItem';
 import FAB from '../components/FloatingMenu';
 import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
 import SwiperFlatList from 'react-native-swiper-flatlist';
+import AppContext from '../../AppContext';
 
 const DATA = [
   {
@@ -66,7 +68,18 @@ const VideoItem = ({ id, src, medal }) => (
   </View>
 );
 
-const GroupVideo = () => {
+
+const GroupVideo = ({ data }) => {
+  // console.log(swiperIndex)
+  const IndexData = useContext(AppContext);
+  const height = Dimensions.get('window').width;
+  const handleScroll = (event) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const index = Math.floor(offsetY / height);
+    IndexData.setIndexValue(index);
+    console.log(IndexData.swiperIndex)
+  };
+
   return (
     <SafeAreaView style={styles.containbox}>
       <SwiperFlatList
@@ -75,7 +88,9 @@ const GroupVideo = () => {
         renderItem={({ item }) => (
           <VideoItem id={item.id} src={item.src} medal={item.medal} />
         )}
+        initialScrollIndex={IndexData.swiperIndex}
         hideShadow={true}
+        onScroll={handleScroll}
         numColumns={2}
       />
       <FAB />

@@ -39,7 +39,7 @@ const DATA = [
   },
 ];
 
-const ResumeContents = () => {
+const ResumeContents = (swiperIndex, setSwiperIndex) => {
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [resume, setResume] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
   const toggleModal = () => {

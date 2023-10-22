@@ -1,8 +1,9 @@
-import {React} from 'react';
+import { React } from 'react';
 
 import Group from './Group';
 import ManyGroup from './ManyGroup';
 import GroupVideo from './GroupVideo';
+import { set } from 'react-native-reanimated';
 //import { View } from 'react-native';
 
 const DATA = [
@@ -16,27 +17,6 @@ const DATA = [
   {
     id: '2',
     title: '2기',
-    src: require('../../assets/images/Group.png'),
-    video: require('../../assets/images/GroupVideo.png'),
-    merdal: 'n',
-  },
-  {
-    id: '3',
-    title: '3기',
-    src: require('../../assets/images/Group.png'),
-    video: require('../../assets/images/GroupVideo.png'),
-    merdal: 'n',
-  },
-  {
-    id: '4',
-    title: '4기',
-    src: require('../../assets/images/Group.png'),
-    video: require('../../assets/images/GroupVideo.png'),
-    merdal: 'n',
-  },
-  {
-    id: '5',
-    title: '5기',
     src: require('../../assets/images/Group.png'),
     video: require('../../assets/images/GroupVideo.png'),
     merdal: 'n',
@@ -58,7 +38,7 @@ const DATA = [
   // },
 ];
 
-const WhichGroup = () => {
+const WhichGroup = ({ swiperIndex, setSwiperIndex }) => {
   if (DATA.length <= 6) {
     return <Group data={DATA} />;
   } else {

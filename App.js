@@ -29,6 +29,7 @@ import GroupVideo from './views/screens/GroupVideo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppContext from './AppContext';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -135,40 +136,52 @@ const HomeScreen = () => {
     AsyncStorage.setItem('isSplashVisible', JSON.stringify(isSplashVisible));
   }, [isSplashVisible]);
 
+  const [indexValue, setIndexValue] = useState(0);
+
+  const userSettings = {
+    swiperIndex: indexValue,
+    setIndexValue,
+  };
+  // console.log(ind);
   return (
-    <Animated.ScrollView
-      scrollEventThrottle={16}
-      onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: xOffset } } }], {
-        useNativeDriver: true,
-      })}
-      horizontal
-      pagingEnabled
-      style={styles.scrollView}>
-      <Splash isSplashVisible={isSplashVisible} />
-      {isSplashVisible === false ? (
-        <Screen text="Screen 1" index={0}>
-          <WhichGroup />
+    <AppContext.Provider value={userSettings}>
+      <Animated.ScrollView
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: xOffset } } }],
+          {
+            useNativeDriver: true,
+          },
+        )}
+        horizontal
+        pagingEnabled
+        style={styles.scrollView}>
+        <Splash isSplashVisible={isSplashVisible} />
+        {isSplashVisible === false ? (
+          <Screen text="Screen 1" index={0}>
+            <WhichGroup />
+          </Screen>
+        ) : null}
+        <Screen text="Screen 2" index={1}>
+          <GroupVideo />
         </Screen>
-      ) : null}
-      <Screen text="Screen 2" index={1}>
-        <GroupVideo />
-      </Screen>
-      <Screen text="Screen 3" index={2}>
-        <Interview />
-      </Screen>
-      <Screen text="Screen 4" index={3}>
-        <Resume modalOpen={modalOpen} />
-      </Screen>
-      <Screen text="Screen 5" index={4}>
-        <Portfolio options={{ headerShown: false }} />
-      </Screen>
-      <Screen text="Screen 6" index={5}>
-        <Review />
-      </Screen>
-      <Screen text="Screen 7" index={6}>
-        <MyPage options={{ headerShown: false }} />
-      </Screen>
-    </Animated.ScrollView>
+        <Screen text="Screen 3" index={2}>
+          <Interview />
+        </Screen>
+        <Screen text="Screen 4" index={3}>
+          <Resume />
+        </Screen>
+        <Screen text="Screen 5" index={4}>
+          <Portfolio options={{ headerShown: false }} />
+        </Screen>
+        <Screen text="Screen 6" index={5}>
+          <Review />
+        </Screen>
+        <Screen text="Screen 7" index={6}>
+          <MyPage options={{ headerShown: false }} />
+        </Screen>
+      </Animated.ScrollView>
+    </AppContext.Provider>
   );
 };
 

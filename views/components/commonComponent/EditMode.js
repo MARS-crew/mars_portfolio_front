@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Modal,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   View,
   Image,
 } from 'react-native';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 import DetailPop from '../../screens/Portfolio/DetailPop';
 import ChoosePop from './ChoosePop';
@@ -95,13 +95,6 @@ const EditMode = ({
 
       if (response.assets && response.assets.length > 0) {
         const asset = response['assets'][0];
-        console.log('base64 -> ', asset.base64);
-        console.log('uri -> ', asset.uri);
-        console.log('width -> ', asset.width);
-        console.log('height -> ', asset.height);
-        console.log('fileSize -> ', asset.fileSize);
-        console.log('type -> ', asset.type);
-        console.log('fileName -> ', asset.fileName);
 
         if (checkDeletePopOkButton == false) setChangeData(asset.uri);
         setTogleButton(true);
@@ -183,7 +176,7 @@ const EditMode = ({
 
   // EditMode Button onPress 용 Props 컴포넌트 end------------------------------------------------------------------------------------------------------------------------
 
-  const EditModeSectionChooseBtn = ({title, source, onPress}) => {
+  const EditModeSectionChooseBtn = ({ title, source, onPress }) => {
     return (
       <TouchableOpacity style={styles.navBarView} onPress={onPress}>
         <View style={styles.navBarView}>
