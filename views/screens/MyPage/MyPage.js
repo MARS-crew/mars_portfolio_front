@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -12,6 +12,7 @@ import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
 import SectionChooseBtn from '../../components/commonComponent/SectionChooseBtn';
 import Title from '../../components/commonComponent/Title';
 import LogList from './LogList';
+import axios from 'axios';
 
 const styles = StyleSheet.create({
   container: {
@@ -78,12 +79,83 @@ const styles = StyleSheet.create({
 
 const MyPage = () => {
   const [myPage, setMyPage] = useState(true);
+  const [data, setData] = useState([]);
   const [button1Pressed, setButton1Pressed] = useState(true);
   const [button2Pressed, setButton2Pressed] = useState(false);
   const [button3Pressed, setButton3Pressed] = useState(false);
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const [hiddenItem, setHiddenItem] = useState(true);
   const shadowColor = 'rgba(151, 151, 151, 0.36)';
+
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    axios({
+      method: 'get',
+      url: 'http://10.0.2.2:3000/api/v1/mypage/2/',
+
+      headers: {
+        Authorization:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTgwMjQ4NzcsImV4cCI6MTY5ODAyODQ3N30.ig6B8bm5HrTn0coEG24hI5V1sfKLqNz6JbDTzifDrao',
+      },
+      cancelToken: source.token,
+    })
+      .then(function (response) {
+        const extractedData = {
+          Reviewlike: response.data.data.Reviewlike,
+          heart: response.data.data.heart,
+          log_today: response.data.data.todayCount,
+          log_total: response.data.data.totalCount,
+
+          visit_reg_date: response.data.data.visitLog.visit_reg_date,
+        };
+
+        setData(extractedData);
+
+        console.log(extractedData);
+        // const fileIdData = response.data.data.map(item => ({
+        //   file_id: item.file_id,
+        // }));
+        // const fileIdLength = fileIdData.length;
+        // console.log(fileIdData);
+        // console.log(fileIdLength);
+
+        //console.log(response);
+        // console.log(
+        //   'file_id--------------------------------------------------',
+        // );
+        // console.log(
+        //   response.data.data.map(item => ({
+        //     file_id: item.file_id,
+        //   })),
+        // );
+        // console.log('ext--------------------------------------------------');
+        // console.log(
+        //   response.data.data.map(item => ({
+        //     ext: item.ext,
+        //   })),
+        // );
+        // console.log('uri--------------------------------------------------');
+        // console.log(
+        //   response.data.data.map(item => ({
+        //     url: item.url,
+        //   })),
+        // );
+        // console.log('del_yn--------------------------------------------------');
+        // console.log(
+        //   response.data.data.map(item => ({
+        //     del_yn: item.del_yn,
+        //   })),
+        // );
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    return () => {
+      isMounted = false;
+      source.cancel('API 호출이 취소되었습니다.');
+    };
+  }, []);
 
   const handleButton1Press = () => {
     setButton1Pressed(true);
@@ -238,11 +310,11 @@ const MyPage = () => {
         <View style={styles.visitContainer}>
           <VisitSubContainer
             title="오늘 방문자 수"
-            value="10"></VisitSubContainer>
+            value={data.log_today}></VisitSubContainer>
           <View style={styles.visitSubCenterLine} />
           <VisitSubContainer
             title="누적 방문자 수"
-            value="300"></VisitSubContainer>
+            value={data.log_total}></VisitSubContainer>
         </View>
       </Shadow>
 
