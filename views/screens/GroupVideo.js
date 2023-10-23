@@ -1,6 +1,12 @@
-import { React } from 'react';
-import { useContext } from 'react';
-import { Dimensions, StyleSheet, View, FlatList, SafeAreaView } from 'react-native';
+import {React} from 'react';
+import {useContext} from 'react';
+import {
+  Dimensions,
+  StyleSheet,
+  View,
+  FlatList,
+  SafeAreaView,
+} from 'react-native';
 
 //import ManyGroupItem from '../components/ManyGroupItem';
 import GroupVideoItem from '../components/GroupVideoItem';
@@ -34,7 +40,7 @@ const DATA = [
   {
     id: '4',
     title: '4기',
-    src: require('../../assets/images/test_member4.jpeg'),
+    src: require('../../assets/images/test_member5.png'),
     video: require('../../assets/images/GroupVideo.png'),
     medal: 'n',
   },
@@ -48,44 +54,75 @@ const DATA = [
   {
     id: '6',
     title: '6기',
-    src: require('../../assets/images/Group.png'),
+    src: require('../../assets/images/test_member5.png'),
+    video: require('../../assets/images/GroupVideo.png'),
   },
   {
     id: '7',
     title: '7기',
-    src: require('../../assets/images/Group.png'),
+    src: require('../../assets/images/test_member4.jpeg'),
+    video: require('../../assets/images/GroupVideo.png'),
   },
   {
     id: '8',
     title: '8기',
-    src: require('../../assets/images/Group.png'),
+    src: require('../../assets/images/test_member4.jpeg'),
+    video: require('../../assets/images/GroupVideo.png'),
+  },
+  {
+    id: '9',
+    title: '9기',
+    src: require('../../assets/images/test_member5.png'),
+    video: require('../../assets/images/GroupVideo.png'),
+    medal: 'n',
+  },
+  {
+    id: '10',
+    title: '10기',
+    src: require('../../assets/images/test_member3.jpeg'),
+    video: require('../../assets/images/GroupVideo.png'),
+  },
+  {
+    id: '11',
+    title: '11기',
+    src: require('../../assets/images/test_member3.jpeg'),
+    video: require('../../assets/images/GroupVideo.png'),
+  },
+  {
+    id: '12',
+    title: '12기',
+    src: require('../../assets/images/test_member3.jpeg'),
+    video: require('../../assets/images/GroupVideo.png'),
   },
 ];
 
-const VideoItem = ({ id, src, medal }) => (
+const VideoItem = ({id, src, medal}) => (
   <View>
     <GroupVideoItem id={id} src={src} medal={medal} />
   </View>
 );
 
-
-const GroupVideo = ({ data }) => {
+const GroupVideo = ({data}) => {
   // console.log(swiperIndex)
   const IndexData = useContext(AppContext);
-  const height = Dimensions.get('window').width;
-  const handleScroll = (event) => {
+  const height = Dimensions.get('window').height;
+  const handleScroll = event => {
     const offsetY = event.nativeEvent.contentOffset.y;
-    const index = Math.floor(offsetY / height);
+    const index = Math.round(offsetY / height);
     IndexData.setIndexValue(index);
-    console.log(IndexData.swiperIndex)
+    //console.log('스크롤 거리값:', Math.floor(offsetY));
+    //console.log('세로 화면  값:', Math.floor(height));
+    console.log('인덱스 값 (전체 거리 /세로 1 화면):', offsetY / height);
   };
+
+  console.log('2번 스크린 기수 비디오:', IndexData.swiperIndex);
 
   return (
     <SafeAreaView style={styles.containbox}>
       <SwiperFlatList
         vertical={true}
         data={DATA}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <VideoItem id={item.id} src={item.src} medal={item.medal} />
         )}
         initialScrollIndex={IndexData.swiperIndex}
