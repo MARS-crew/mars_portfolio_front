@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Animated,
   Dimensions,
@@ -6,15 +6,9 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
 } from 'react-native';
 import axios from 'axios';
 import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
-import SwiperFlatList from 'react-native-swiper-flatlist';
-import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
-
-import AppContext from '../../AppContext';
-
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const yOffset = new Animated.Value(0);
@@ -59,26 +53,16 @@ const transitionAnimation = index => {
 
 const interviewFiles = [
   {
-    group: '1기',
-    id: 'nn',
+    id: 1,
     path: require('../../assets/videos/interviewVideo.mp4'),
-    merdal: 'n',
   },
   {
     id: 2,
     path: '',
   },
   {
-    group: '1기',
-    id: 'n3',
+    id: 3,
     path: '',
-    merdal: 'n',
-  },
-  {
-    group: '1기',
-    id: 'n4',
-    path: '',
-    merdal: 'n',
   },
 ];
 
@@ -91,7 +75,7 @@ const Interview = () => {
       url: 'http://10.0.2.2:3000/api/v1/interview/',
       headers: {
         Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTc2OTY1NTksImV4cCI6MTY5NzcwMDE1OX0.P8khH_mybYKLJAU7e_7hGArt8P8blre6Ky-gNtPe2x0',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTgxMjgxMzQsImV4cCI6MTY5ODEzMTczNH0.-DUZG3W7gcVPzm3bH_SM9lyAJt5_kZnIqD5_SN4SyT0',
       },
       cancelToken: source.token,
     })
@@ -159,19 +143,15 @@ const Interview = () => {
 };
 
 const styles = StyleSheet.create({
-  containbox: {
+  scrollView: {
     flex: 1,
-    backgroundColor: 'white',
+    flexDirection: 'column',
   },
-  button: {
-    width: 40,
-    height: 20,
-    position: 'absolute',
+  scrollPage: {
+    width: SCREEN_WIDTH,
+    padding: 0,
   },
-  container: {
-    backgroundColor: 'white',
-  },
-  manyRow: {
+  screen: {
     flex: 1,
     width: '100%',
     height: '100%',
