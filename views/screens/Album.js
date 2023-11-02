@@ -214,8 +214,10 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
 } from 'react-native';
+import axios from 'axios';
+import {Shadow} from 'react-native-shadow-2';
+import FAB from '../components/FloatingMenu';
 
-// album images
 const albumImages = [
   {
     id: 1,
@@ -245,12 +247,53 @@ const albumImages2 = [
     url: require('../../assets/images/album6.jpeg'),
   },
 ];
+const {width, height} = Dimensions.get('window');
+const squareSize = Math.min(width, height) * 0.27;
 
+const shadowColor = 'rgba(151, 151, 151, 0.36)';
 const Album = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    axios({
+      method: 'get',
+      url: 'http://10.0.2.2:3000/api/v1/img/album',
 
-  const handleImagePress = image => {
-    setSelectedImage(image);
+      headers: {
+        Authorization:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTg5MDgwODEsImV4cCI6MTY5ODkxMTY4MX0.3wR8i0ma3fOnBaP_AZM45UF0xkFBlg00_kcLUl8l1bQ',
+      },
+      cancelToken: source.token,
+    })
+      .then(function (response) {
+        const extractedData = response.data.data.map(item => ({
+          album_id: item.album_id,
+          year: item.year,
+          url: `http://10.0.2.2:3000/${item.url}`,
+        }));
+        setData(extractedData);
+
+        console.log('앨범', data);
+        console.log(
+          response.data.data.map(item => ({
+            //url: item.url,
+            url: `http://10.0.2.2:3000/${item.url}`,
+          })),
+        );
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    return () => {
+      isMounted = false;
+      source.cancel('API 호출이 취소되었습니다.');
+    };
+  }, []);
+  const shadowColor = 'rgba(151, 151, 151, 0.36)';
+  const [selectedImage, setSelectedImage] = useState(null);
+  const handleImagePress = data => {
+    setSelectedImage(data);
   };
 
   const handleCloseModal = () => {
@@ -271,94 +314,98 @@ const Album = () => {
     handleCloseModal();
   };
 
+  console.log(data.filter(album => album.year === 2022));
+  console.log(data.filter(album => album.year === 2023));
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>마스외전 2023년</Text>
-          <Text style={styles.headerSubTitle}>111개</Text>
+          <Text style={styles.headerSubTitle}>
+            {data.filter(album => album.year === 2023).length} 개
+          </Text>
         </View>
         <View style={styles.divider} />
+
         <View style={styles.body}>
           <View style={styles.bodyContent}>
             <View style={styles.imageRowContainer}>
-              {albumImages.map(image => (
-                <TouchableOpacity
-                  style={styles.imageContainer}
-                  key={image.id}
-                  onPress={() => handleImagePress(image)}>
-                  <Image
-                    style={styles.imageContent}
-                    source={image.url}
-                    resizeMode="cover"
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
-            <View style={styles.imageRowContainer}>
-              {albumImages2.map(image => (
-                <TouchableOpacity
-                  style={styles.imageContainer}
-                  key={image.id}
-                  onPress={() => handleImagePress(image)}>
-                  <Image
-                    style={styles.imageContent}
-                    source={image.url}
-                    resizeMode="cover"
-                  />
-                </TouchableOpacity>
-              ))}
+              {data
+                .filter(album => album.year === 2023)
+                .map(image => (
+                  <Shadow
+                    distance="12"
+                    startColor={shadowColor}
+                    offset={[1, 1]}>
+                    <TouchableOpacity
+                      style={styles.imageContainer}
+                      key={image.album_id}
+                      onPress={() => {
+                        handleImagePress({
+                          uri: image.url,
+                        });
+                      }}>
+                      <Image
+                        style={styles.imageContent}
+                        source={{uri: image.url}}
+                        resizeMode="cover"
+                      />
+                    </TouchableOpacity>
+                  </Shadow>
+                ))}
             </View>
           </View>
         </View>
 
-        <View style={styles.header}>
+        <View style={[styles.header, styles.secondHeader]}>
           <Text style={styles.headerTitle}>마스외전 2022년</Text>
-          <Text style={styles.headerSubTitle}>111개</Text>
+          <Text style={styles.headerSubTitle}>
+            {data.filter(album => album.year === 2022).length} 개
+          </Text>
         </View>
         <View style={styles.divider} />
         <View style={styles.body}>
           <View style={styles.bodyContent}>
             <View style={styles.imageRowContainer}>
-              {albumImages.map(image => (
-                <TouchableOpacity
-                  style={styles.imageContainer}
-                  key={image.id}
-                  onPress={() => handleImagePress(image)}>
-                  <Image
-                    style={styles.imageContent}
-                    source={image.url}
-                    resizeMode="cover"
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
-            <View style={styles.imageRowContainer}>
-              {albumImages2.map(image => (
-                <TouchableOpacity
-                  style={styles.imageContainer}
-                  key={image.id}
-                  onPress={() => handleImagePress(image)}>
-                  <Image
-                    style={styles.imageContent}
-                    source={image.url}
-                    resizeMode="cover"
-                  />
-                </TouchableOpacity>
-              ))}
+              {data
+                .filter(album => album.year === 2022)
+                .map(image => (
+                  <Shadow
+                    distance="12"
+                    startColor={shadowColor}
+                    offset={[1, 1]}>
+                    <TouchableOpacity
+                      style={styles.imageContainer}
+                      key={image.album_id}
+                      onPress={() => {
+                        [
+                          handleImagePress({
+                            uri: image.url,
+                          }),
+                        ];
+                      }}>
+                      <Image
+                        style={styles.imageContent}
+                        source={{uri: image.url}}
+                        resizeMode="cover"
+                      />
+                    </TouchableOpacity>
+                  </Shadow>
+                ))}
             </View>
           </View>
         </View>
       </ScrollView>
-
+      <FAB />
       <Modal visible={!!selectedImage} transparent={true}>
         {selectedImage && (
           <TouchableWithoutFeedback onPress={handleModalPress}>
             <View style={styles.modalContainer}>
               <Image
-                source={selectedImage.url}
+                source={selectedImage}
                 style={styles.selectedImage}
-                resizeMode="contain"
+                resizeMode="cover"
               />
               <TouchableOpacity
                 style={styles.closeButtonArea}
@@ -379,18 +426,15 @@ const Album = () => {
 
 export default Album;
 
-const {width, height} = Dimensions.get('window');
-
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    padding: 20,
     flex: 1,
-    width: width,
-    height: height,
-    backgroundColor: 'white',
   },
   header: {
-    marginTop: 20,
-    marginHorizontal: 20,
     height: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -403,35 +447,35 @@ const styles = StyleSheet.create({
   headerSubTitle: {
     position: 'absolute',
     bottom: 0,
-    right: 0,
+    right: 5,
     fontSize: 12,
     fontWeight: 'normal',
     color: '#333333',
   },
-  body: {
-    marginHorizontal: 20,
+  secondHeader: {
+    marginTop: 25,
   },
-  bodyContent: {
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
+
   imageRowContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   imageContent: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 10,
+    flex: 1,
+    borderRadius: 8,
   },
   imageContainer: {
-    width: width * 0.27,
-    height: height * 0.15,
-    margin: 8,
-    elevation: 8,
+    width: squareSize,
+    height: squareSize,
+    // 3개의 이미지가 한 행에 들어가도록 설정
+    aspectRatio: 1, // 정사각형 형태로 유지
+    borderRadius: 10,
+    marginBottom: 14.5,
   },
   divider: {
     marginHorizontal: 20,
-    marginVertical: 10,
+    marginBottom: 15,
     borderBottomColor: '#E5E5E5',
     borderBottomWidth: 1,
   },
@@ -442,9 +486,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   selectedImage: {
-    width: '50%',
-    height: '50%',
+    width: squareSize * 3,
+    height: squareSize * 3,
     aspectRatio: 1,
+    borderRadius: 10,
   },
   closeButtonArea: {
     position: 'absolute',

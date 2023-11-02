@@ -1,10 +1,12 @@
-import React,{useState} from 'react';
-import {StyleSheet, View, FlatList,Image} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, FlatList, Image } from 'react-native';
 import ResumeBox from '../components/ResumeBox';
 import ResumeBoxMD from '../components/ResumeBoxMD';
 import FAB from '../components/FloatingMenu';
 import ResumeEditMode from "../components/ResumeEditMode";
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import SwiperFlatList from 'react-native-swiper-flatlist';
+import ResumeContents from './ResumeContents';
 
 
 
@@ -38,12 +40,17 @@ const DATA = [
     title: '보유기술',
   },
 ];
+const ResumeItem = (item) => (
+  <View>
+    <ResumeContents id={id} src={src} medal={medal} />
+  </View>
+);
 
 const Resume = () => {
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [resume, setResume] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
   const toggleModal = () => {
-    if(modalOpen){
+    if (modalOpen) {
       return false;
     }
     console.log('나는챌린')
@@ -53,11 +60,11 @@ const Resume = () => {
     });
   };
 
-const renderItem = ({ item }) => {
+  const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity 
-      onLongPress={toggleModal}
-      activeOpacity={100} 
+      <TouchableOpacity
+        onLongPress={toggleModal}
+        activeOpacity={100}
       >
         {modalOpen ? (
           <ResumeBoxMD item={item} />
@@ -76,26 +83,20 @@ const renderItem = ({ item }) => {
       {/* <TouchableOpacity 
         onPress={toggleModal}
         activeOpacity={100} > */}
-        <FlatList
-          data={DATA}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-        />
-        <FAB />
-        <ResumeEditMode
-          resume={resume}
-          isModalVisible={modalOpen}
-          setIsModalVisible={setModalOpen}
-        />
+      <SwiperFlatList
+        vertical={true}
+        data={DATA}
+        renderItem={renderItem}
+      />
       {/* </TouchableOpacity> */}
-  </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     width: 400,
-   // padding: 25,
+    // padding: 25,
     flex: 2,
     backgroundColor: '#F3F6FE',
   },

@@ -6,6 +6,7 @@ import {
   FlatList,
   SafeAreaView,
   TouchableOpacity,
+  Text,
 } from 'react-native';
 import {Shadow} from 'react-native-shadow-2';
 import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
@@ -13,6 +14,7 @@ import SectionChooseBtn from '../../components/commonComponent/SectionChooseBtn'
 import Title from '../../components/commonComponent/Title';
 import LogList from './LogList';
 import axios from 'axios';
+import {log} from 'react-native-reanimated';
 
 const styles = StyleSheet.create({
   container: {
@@ -75,11 +77,33 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#FDFDFD',
   },
+  item: {paddingVertical: 12, paddingHorizontal: 15},
+  log: {
+    paddingHorizontal: 15,
+  },
+  list: {
+    height: 41,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomColor: '#F5F5F5',
+    borderBottomWidth: 1,
+    backgroundColor: '#FDFDFD',
+  },
+  flatListContainer: {
+    flex: 1,
+  },
 });
 
 const MyPage = () => {
   const [myPage, setMyPage] = useState(true);
   const [data, setData] = useState([]);
+  let jsonArray = [];
+  let formattedDate = [];
+  const [logData, setLogData] = useState([]);
+  const [heartData, setHeartData] = useState([]);
+  const [reviewData, setReviewData] = useState([]);
+
   const [button1Pressed, setButton1Pressed] = useState(true);
   const [button2Pressed, setButton2Pressed] = useState(false);
   const [button3Pressed, setButton3Pressed] = useState(false);
@@ -95,7 +119,7 @@ const MyPage = () => {
 
       headers: {
         Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTgwMjQ4NzcsImV4cCI6MTY5ODAyODQ3N30.ig6B8bm5HrTn0coEG24hI5V1sfKLqNz6JbDTzifDrao',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTg4OTAyOTIsImV4cCI6MTY5ODg5Mzg5Mn0.T8S-NabhGfKvmHnux-74ccAXIHvVwol2poS2fX4PZvU',
       },
       cancelToken: source.token,
     })
@@ -106,46 +130,39 @@ const MyPage = () => {
           log_today: response.data.data.todayCount,
           log_total: response.data.data.totalCount,
 
-          visit_reg_date: response.data.data.visitLog.visit_reg_date,
+          visitLog: response.data.data.visitLog,
         };
-
         setData(extractedData);
 
-        console.log(extractedData);
-        // const fileIdData = response.data.data.map(item => ({
-        //   file_id: item.file_id,
-        // }));
-        // const fileIdLength = fileIdData.length;
-        // console.log(fileIdData);
-        // console.log(fileIdLength);
+        jsonArray = JSON.parse(extractedData.visitLog);
+        setLogData(jsonArray);
+        jsonArray = [extractedData.heart.replace(/"/g, '')];
+        setHeartData(jsonArray);
+        jsonArray = JSON.parse(extractedData.Reviewlike);
+        setReviewData(jsonArray);
+        if (Array.isArray(reviewData)) {
+          console.log(' 배열입니다.');
+        } else {
+          console.log('배열이 아닙니다.');
+        }
+        if (typeof reviewData === 'string') {
+          console.log('data.visitLog는 문자열입니다.');
+        } else if (Array.isArray(data.visitLog)) {
+          console.log('data.visitLog는 배열입니다.');
+        } else {
+          console.log('data.visitLog의 타입을 확인할 수 없습니다.');
+        }
 
-        //console.log(response);
-        // console.log(
-        //   'file_id--------------------------------------------------',
-        // );
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     file_id: item.file_id,
-        //   })),
-        // );
-        // console.log('ext--------------------------------------------------');
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     ext: item.ext,
-        //   })),
-        // );
-        // console.log('uri--------------------------------------------------');
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     url: item.url,
-        //   })),
-        // );
-        // console.log('del_yn--------------------------------------------------');
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     del_yn: item.del_yn,
-        //   })),
-        // );
+        console.log('jsonArray 개수:', data.Reviewlike);
+        console.log('jsonArray 개수:', data.Reviewlike);
+        //formattedDate = jsonArray.reg_date.slice(0, 10);
+
+        //console.log('데이터', data.visitLog);
+        //console.log(response.data);
+        //console.log(extractedData.visitLog);
+        //console.log(extractedData.visitLog.reg_date);
+        //console.log(extractedData.visitLog.name);
+        //console.log(extractedData.reg_date);
       })
       .catch(function (error) {
         console.log(error);
@@ -178,35 +195,43 @@ const MyPage = () => {
     setHiddenItem(false);
   }; // buttonPressed 1~3의 Pressed 여부로 나머지 버튼의 토글 여부를 결정
 
-  const ListLikeData = () => {
-    const LIST_LIKE_DATA = [
-      {
-        key: 1,
-        text: `김건우님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
-        date: '',
-        id: 2,
-      },
-      {
-        key: 2,
-        text: `장여운님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
-        date: '',
-        id: 2,
-      },
-      {
-        key: 3,
-        text: `김채린님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
-        date: '',
-        id: 2,
-      },
-      {
-        key: 4,
-        text: `임동현님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
-        date: '',
-        id: 2,
-      },
-    ];
-    return LIST_LIKE_DATA;
+  const toggleDelete = key => {
+    setData(prevData =>
+      prevData.map(item =>
+        item.key === key ? {...item, showDelete: !item.showDelete} : item,
+      ),
+    );
   };
+
+  // const ListLikeData = () => {
+  //   const LIST_LIKE_DATA = [
+  //     {
+  //       key: 1,
+  //       text: `김건우님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
+  //       date: '',
+  //       id: 2,
+  //     },
+  //     {
+  //       key: 2,
+  //       text: `장여운님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
+  //       date: '',
+  //       id: 2,
+  //     },
+  //     {
+  //       key: 3,
+  //       text: `김채린님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
+  //       date: '',
+  //       id: 2,
+  //     },
+  //     {
+  //       key: 4,
+  //       text: `임동현님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
+  //       date: '',
+  //       id: 2,
+  //     },
+  //   ];
+  //   return LIST_LIKE_DATA;
+  // };
 
   const ListWantData = () => {
     const LIST_WANT_DATA = [
@@ -275,7 +300,7 @@ const MyPage = () => {
     );
   };
 
-  const LikeWantList = ListData => {
+  const LikeWantList = (ListData, Like) => {
     return (
       <SafeAreaView style={styles.ListContainer}>
         <View>
@@ -283,14 +308,21 @@ const MyPage = () => {
             data={ListData.ListData}
             renderItem={({item}) => (
               <TouchableOpacity
-                activeOpacity={item.id == 2 ? 0.2 : 1}
                 onPress={() =>
-                  item.id == 2
+                  button2Pressed == true
                     ? setContentsViewPopVisible(!contentsViewPopVisible)
                     : null
                 }
                 style={styles.swipeListItem}>
-                <Title color={'black'}>{item.text}</Title>
+                {button2Pressed == true ? (
+                  <Title color={'black'}>
+                    {item}님이 회원님의 리뷰에 좋아요를 눌렀습니다.
+                  </Title>
+                ) : (
+                  <Title color={'black'}>
+                    {item}님이 회원님의 인터뷰 영상을 찜하였습니다.
+                  </Title>
+                )}
               </TouchableOpacity>
             )}
             keyExtractor={(item, key) => key}
@@ -341,20 +373,57 @@ const MyPage = () => {
 
           {button1Pressed && (
             <View style={styles.visitLogView}>
-              <LogList></LogList>
+              <View style={styles.flatListContainer}>
+                <FlatList
+                  data={logData}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({item}) => (
+                    <View style={styles.list}>
+                      <TouchableOpacity
+                        style={styles.item}
+                        onPress={() => [
+                          //toggleDelete(1)
+                        ]}>
+                        <Title color={'black'}>
+                          {item.name}님이 회원님을 방문하였습니다.
+                        </Title>
+                      </TouchableOpacity>
+                      <View style={styles.log}>
+                        {!item.showDelete && (
+                          <Title>{item.reg_date.slice(0, 10)}</Title>
+                        )}
+                      </View>
+                    </View>
+                  )}
+                />
+                {/* {item.showDelete && (
+                  <TouchableOpacity
+                    onPress={
+                      () => ''
+                      //toggleDelete(item.key)
+                    }>
+                    <View style={styles.deleteButton}>
+                      <Title color={'#FF3040'} fontSize={16} fontWeight={'700'}>
+                        삭제
+                      </Title>
+                    </View>
+                  </TouchableOpacity>
+                )} */}
+              </View>
             </View>
           )}
           {button2Pressed && (
             <View style={styles.visitLogView}>
               <LikeWantList
-                ListData={ListLikeData()}
+                ListData={heartData}
+                Like={true}
                 modalOpen={contentsViewPopVisible}
                 setModalOpen={setContentsViewPopVisible}></LikeWantList>
             </View>
           )}
           {button3Pressed && (
             <View style={styles.visitLogView}>
-              <LikeWantList ListData={ListWantData()}></LikeWantList>
+              <LikeWantList ListData={heartData} Like={false}></LikeWantList>
             </View>
           )}
         </View>
@@ -362,12 +431,8 @@ const MyPage = () => {
 
       <ContentsViewPop
         myPage={myPage}
-        title={'조호연'}
-        message={`안녕하세요 저는 조호연입니다.👋
-올려주신 이력서와 포트폴리오는 흥미롭게 보았습니다.\n
-하지만 수상내역 부분이 조금 부족한 듯 보여집니다.
-고로 해당 내용을 더 채워넣으시면 좋겠다는 생각이 들어 리뷰를 남기게 되었습니다.🌱\n
-궁금하신 사항은 akftjd100@naver.com 으로 문의주세요.📫`}
+        title={reviewData.name}
+        message={reviewData.content}
         contentsViewPopVisible={contentsViewPopVisible}
         setContentsViewPopVisible={setContentsViewPopVisible}></ContentsViewPop>
     </View>
