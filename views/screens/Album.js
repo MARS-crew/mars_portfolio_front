@@ -261,7 +261,7 @@ const Album = () => {
 
       headers: {
         Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTg5MDgwODEsImV4cCI6MTY5ODkxMTY4MX0.3wR8i0ma3fOnBaP_AZM45UF0xkFBlg00_kcLUl8l1bQ',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTg5Nzk2NjksImV4cCI6MTY5ODk4MzI2OX0.1HmuXGF5YApnu1WNT4KqsmF8Oru1mTWEp9_HjFWl5Zs',
       },
       cancelToken: source.token,
     })
@@ -337,10 +337,10 @@ const Album = () => {
                   <Shadow
                     distance="12"
                     startColor={shadowColor}
-                    offset={[1, 1]}>
+                    offset={[1, 1]}
+                    key={image.album_id}>
                     <TouchableOpacity
                       style={styles.imageContainer}
-                      key={image.album_id}
                       onPress={() => {
                         handleImagePress({
                           uri: image.url,
@@ -374,10 +374,10 @@ const Album = () => {
                   <Shadow
                     distance="12"
                     startColor={shadowColor}
-                    offset={[1, 1]}>
+                    offset={[1, 1]}
+                    key={image.album_id}>
                     <TouchableOpacity
                       style={styles.imageContainer}
-                      key={image.album_id}
                       onPress={() => {
                         [
                           handleImagePress({

@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   container: {
+    height: '100%',
+    width: '100%',
+    flex: 1,
     padding: 5,
     backgroundColor: '#fff',
   },
@@ -66,10 +69,10 @@ const Portfolio = () => {
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: 'http://10.0.2.2:3000/api/v1/portfolio/',
+      url: 'http://10.0.2.2:3000/api/v1/portfolio/46',
       headers: {
         Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTc2OTQ5NjgsImV4cCI6MTY5NzY5ODU2OH0.GJVZlxNlP7C2KyVSX8jBPb5jnyVMdVa4yIIGzLdD7qk',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTkxNjc1MjcsImV4cCI6MTY5OTE3MTEyN30.Hibg5uLUL35rH--ozPt2qTt_-oRFX_T5bYcV4-cYeJE',
       },
       cancelToken: source.token,
     })
@@ -82,48 +85,25 @@ const Portfolio = () => {
           reg_date: item.reg_date,
           mod_date: item.mod_date,
           kind: item.kind,
-
           file_id: item.file_id,
           ext: item.ext,
-          url: item.url,
+          url: `http://10.0.2.2:3000/${item.url.replace(
+            'http://localhost:3000/',
+            '',
+          )}`,
           del_yn: item.del_yn,
         }));
         setData(extractedData);
 
-        // const fileIdData = response.data.data.map(item => ({
-        //   file_id: item.file_id,
-        // }));
-        // const fileIdLength = fileIdData.length;
-        // console.log(fileIdData);
-        // console.log(fileIdLength);
-
-        //console.log(response);
-        // console.log(
-        //   'file_id--------------------------------------------------',
-        // );
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     file_id: item.file_id,
-        //   })),
-        // );
-        // console.log('ext--------------------------------------------------');
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     ext: item.ext,
-        //   })),
-        // );
-        // console.log('uri--------------------------------------------------');
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     url: item.url,
-        //   })),
-        // );
-        // console.log('del_yn--------------------------------------------------');
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     del_yn: item.del_yn,
-        //   })),
-        // );
+        console.log('uri--------------------------------------------------');
+        console.log(
+          response.data.data.map(item => ({
+            url: `http://10.0.2.2:3000/${item.url.replace(
+              'http://localhost:3000/',
+              '',
+            )}`,
+          })),
+        );
       })
       .catch(function (error) {
         console.log(error);
@@ -279,6 +259,8 @@ const Portfolio = () => {
             </Shadow>
 
             <DetailPop
+              id={1}
+              register={true}
               onModify={onModify}
               setDetailPopVisible={setDetailPopVisible}
               detailPopVisible={detailPopVisible}
