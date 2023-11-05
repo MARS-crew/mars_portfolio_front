@@ -21,7 +21,26 @@ import { help } from "yargs";
 import React,{useState} from "react";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+import axios from "axios";
+
 const ResumeBox = ({ item }) => {
+
+const getResume = async() => {
+    const headers = {
+        Authorization: 
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MTgsIm1lbWJlcl9pZCI6NDQsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi6rmA7LGE66awIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUEwV1JnQllHMmFrOWc5Q0dNTllCdUdfelVLRFhlY2JoSi02MEh6c3U3Z24tYTB4RWNDUjM3b0t1QXRWTFJnQVBLTGRid2ozc1ZnNVhDN1RRV1hYREU1NTVzcDdNVGx1bC1CTk8weEpZeTlKcXlfWE10dW9XdjRUQVY3cHpldjI2bVU0emtsVWIySUd6dTNTMmI0eHliN3lJY0ZiU3ZHYUNnWUtBYU1TQVJJU0ZRR09jTm5DX19XUUoxSXVKMk5WdXhIYVRWSUFldzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDVUMDM6MzE6MDUuMDAwWiJ9LCJpYXQiOjE2OTg4NDk4NDcsImV4cCI6MTY5ODg1MzQ0N30.a_XW6bHMPG3Eg3_0Ox-JxnCUUmcqPAhCBS9hKUOqxWA'
+    };
+    
+    try{
+        const result = await axios.get('http://10.0.2.2:3000/api/v1/resume/201',{headers})
+        console.log(result.data);
+    
+    }catch(error){
+        console.log(error)
+    }
+    }
+
+    getResume();
     const containerStyles = item.id === '1' ? { ...styles.container, marginTop: 20 } : 
     item.id === '7' ? { ...styles.container, marginBottom: 20 } : styles.container;
 
@@ -310,24 +329,6 @@ bunyaText :{
     marginTop:12,
     padding:6,
     borderRadius:5
-
-},
-careerContent: {
-    // 경력 컨텐츠 스타일
-},
-awardContent: {
-    // 수상내역 컨텐츠 스타일
-},
-interestContent: {
-    // 관심분야 컨텐츠 스타일
-},
-specialtyContent: {
-    // 전문분야 컨텐츠 스타일
-},
-skillContent: {
-    // 보유기술 컨텐츠 스타일
-},
-mainText:{
 
 },
 defaultText:{
