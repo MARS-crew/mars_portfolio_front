@@ -78,24 +78,21 @@ const choosePop = ({
 
   const sendDataToServer = async () => {
     try {
-      const response = await fetch('http://10.0.2.2:3000/api/v1/portfolio', {
+      const response = await fetch('http://10.0.2.2:3000/api/v1/portfolio/', {
         method: 'POST',
         headers: {
+          'Content-Type': 'multipart/form-data',
           Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTkxNjc1MjcsImV4cCI6MTY5OTE3MTEyN30.Hibg5uLUL35rH--ozPt2qTt_-oRFX_T5bYcV4-cYeJE',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTk0MDgyNjgsImV4cCI6MTY5OTQxMTg2OH0.R0F6TQ_pO4wmmF3KwgCgWfc39JkVvwD-FhVtXkMGMtU',
         },
-        body: JSON.stringify({
-          member_id: 46,
-          kind: id,
-          url: `http://10.0.2.2:3000/${portfolioUrl.replace(
-            'http://localhost:3000/',
-            '',
-          )}`,
-          title: title,
-          description: content,
-          ext: ext,
-        }),
+        body: portfolioUrl,
       });
+
+      // console.log('POST kind', id);
+      console.log('POST url', portfolioUrl);
+      //console.log('POST title', title);
+      // console.log('POST description', content);
+      //console.log('POST ext', ext);
 
       const data = await response.json();
       setPortfolioUrl('');
@@ -106,6 +103,8 @@ const choosePop = ({
     }
   };
 
+  const deleteData = async () => {};
+
   //공통 컴포넌트 츄즈 팝 스테이트 구분 컴포넌트: 확인 클릭 시
   const onDeleteORonModify = () => {
     if (popTitle === '수정된 내용을 삭제하시겠습니까?') {
@@ -115,6 +114,7 @@ const choosePop = ({
         setCheckDeletePopOkButton(true);
         deleteUrl();
       }
+      deleteData();
     } else if (popTitle === '수정된 내용을 저장하시겠습니까?') {
       if (portfolio == true) {
         setCheckChoosePopOkButton(true);
@@ -134,6 +134,7 @@ const choosePop = ({
         setTogleButton(false);
         setIsModalVisible(false);
       }
+      sendDataToServer();
     }
   };
 
@@ -178,12 +179,6 @@ const choosePop = ({
             background={'blue'}
             onPress={() => {
               check();
-              sendDataToServer();
-              console.log('POST kind', id);
-              console.log('POST url', portfolioUrl);
-              console.log('POST title', title);
-              console.log('POST description', content);
-              console.log('POST ext', ext);
             }}>
             확인
           </ChooseButton>

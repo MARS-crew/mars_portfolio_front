@@ -49,8 +49,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const DetailPopAttachment = code => {
+const DetailPopAttachment = (code, id) => {
   const [temporaryUrl, setTemporaryUrl] = useState(null);
+
+  const {title, setTitle} = useContext(MyContext);
+  const {content, setContent} = useContext(MyContext);
   const {portfolioUrl, setPortfolioUrl} = useContext(MyContext);
   const {ext, setExt} = useContext(MyContext);
 
@@ -64,8 +67,63 @@ const DetailPopAttachment = code => {
   const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
 
   // 갤러리에서 video나 photo 파일 선택
+  // const chooseFile = type => {
+  //   console.log(code);
+  //   let options;
+  //   if (code.code == 1 || code.code == 3) {
+  //     options = {
+  //       mediaType: 'photo',
+  //       maxWidth: 300,
+  //       maxHeight: 550,
+  //       quality: 1,
+  //     };
+  //   } else {
+  //     options = {
+  //       mediaType: 'video',
+  //       maxWidth: 300,
+  //       maxHeight: 550,
+  //       videoQuality: 'low',
+  //     };
+  //   }
+
+  //   launchImageLibrary(options, response => {
+  //     if (response === false) {
+  //       // 선택한 이미지가 없는 경우
+  //       console.log('User did not select an image');
+  //       return;
+  //     }
+
+  //     //console.log('Response = ', response);
+
+  //     if (response.assets && response.assets.length > 0) {
+  //       const asset = response['assets'][0];
+  //       // console.log('base64 -> ', asset.base64);
+  //       // console.log('uri -> ', asset.uri);
+  //       // console.log('width -> ', asset.width);
+  //       // console.log('height -> ', asset.height);
+  //       // console.log('fileSize -> ', asset.fileSize);
+  //       // console.log('type -> ', asset.type);
+  //       // console.log('fileName -> ', asset.fileName);
+  //       console.log('asset.uri:', asset.uri);
+  //       setPortfolioUrl(
+  //         // `http://localhost:3000/uploads/file/${asset.uri.substring(
+  //         //   asset.uri.lastIndexOf('/') + 1,
+  //         // )}`,
+  //         asset.uri,
+  //       );
+
+  //       //setExt(asset.uri.slice(-3));
+  //       setExt(asset.type);
+  //       //setUrl(temporaryUrl);
+
+  //       //setTemporaryUrl('');
+  //       //setIsEditing(true);
+  //     }
+  //   });
+  //   console.log('portfolioUrl:', portfolioUrl);
+  // };
+
   const chooseFile = type => {
-    console.log(code);
     let options;
     if (code.code == 1 || code.code == 3) {
       options = {
@@ -90,32 +148,46 @@ const DetailPopAttachment = code => {
         return;
       }
 
-      //console.log('Response = ', response);
-
       if (response.assets && response.assets.length > 0) {
-        const asset = response['assets'][0];
-        // console.log('base64 -> ', asset.base64);
-        // console.log('uri -> ', asset.uri);
-        // console.log('width -> ', asset.width);
-        // console.log('height -> ', asset.height);
-        // console.log('fileSize -> ', asset.fileSize);
-        // console.log('type -> ', asset.type);
-        // console.log('fileName -> ', asset.fileName);
+        const asset = response.assets[0];
+
+        // FormData 생성
+        const formdata = new FormData();
+        formdata.append('file', {
+          uri: asset.uri,
+          type: asset.type,
+          name: asset.fileName,
+        });
+
+        //formdata.append('service', 'profile');
+        //formdata.append('serviceId', data.id);
+
+        // 이제 formdata를 사용하여 업로드 등의 작업을 수행할 수 있습니다.
+
         console.log('asset.uri:', asset.uri);
-        setPortfolioUrl(
-          `http://localhost:3000/uploads/file/${asset.uri.substring(
-            asset.uri.lastIndexOf('/') + 1,
-          )}`,
-        );
 
-        setExt(asset.uri.slice(-3));
-        //setUrl(temporaryUrl);
+        console.log('asset.uri:', asset.type);
 
-        //setTemporaryUrl('');
-        //setIsEditing(true);
+        console.log('asset.uri:', asset.fileName);
+
+        setPortfolioUrl(formdata);
+        console.log('formdata:', portfolioUrl);
+        setExt(asset.type);
+
+        // if (Array.isArray(formdata)) {
+        //   console.log(' 배열입니다.');
+        // } else {
+        //   console.log('배열이 아닙니다.');
+        // }
+        // if (typeof formdata === 'string') {
+        //   console.log('data.visitLog는 문자열입니다.');
+        // } else if (Array.isArray(formdata)) {
+        //   console.log('data.visitLog는 배열입니다.');
+        // } else {
+        //   console.log('data.visitLog의 타입을 확인할 수 없습니다.');
+        // }
       }
     });
-    console.log('portfolioUrl:', portfolioUrl);
   };
 
   return (

@@ -98,6 +98,7 @@ const DetailPop = ({
   checkChoosePopOkButton,
   setCheckChoosePopOkButton,
   setTogleButton,
+  code,
   register,
 }) => {
   useEffect(() => {
@@ -114,7 +115,7 @@ const DetailPop = ({
   const [choosePopVisible, setChoosePopVisible] = useState(false);
   const [addPressedIf, SetAddPressedIf] = useState(true);
   // 포트폴리오 아이템에서 Add 버튼 클릭 시 등장하는 디테일 팝업 적용 후 확인을 눌렀는지 확인하는 스테이트
-
+  const [selectKind, setSelectKind] = useState('1');
   const {title, setTitle} = useContext(MyContext);
   const {content, setContent} = useContext(MyContext);
   const {portfolioUrl, setPortfolioUrl} = useContext(MyContext);
@@ -231,6 +232,8 @@ const DetailPop = ({
               title={'이미지'}
               buttonPressed={button1Pressed}
               onPress={() => [
+                setSelectKind('1'),
+
                 handleButtonPress('Photo'),
                 handleButton1Press(),
               ]}></SectionChooseBtn>
@@ -238,6 +241,8 @@ const DetailPop = ({
               title={'영상'}
               buttonPressed={button2Pressed}
               onPress={() => [
+                setSelectKind('2'),
+
                 handleButtonPress('Video'),
                 handleButton2Press(),
               ]}></SectionChooseBtn>
@@ -245,6 +250,8 @@ const DetailPop = ({
               title={'링크'}
               buttonPressed={button3Pressed}
               onPress={() => [
+                setSelectKind('3'),
+
                 handleButtonPress('Link'),
                 handleButton3Press(),
               ]}></SectionChooseBtn>
@@ -252,10 +259,10 @@ const DetailPop = ({
           {selectedButton !== 'Link' && (
             <View style={styles.TextInputContainer}>
               {selectedButton === 'Photo' && (
-                <DetailPopAttachment code={1}></DetailPopAttachment>
+                <DetailPopAttachment id={id} code={1}></DetailPopAttachment>
               )}
               {selectedButton === 'Video' && (
-                <DetailPopAttachment code={2}></DetailPopAttachment>
+                <DetailPopAttachment id={id} code={2}></DetailPopAttachment>
               )}
 
               <DetailInput
@@ -272,7 +279,7 @@ const DetailPop = ({
 
           {selectedButton === 'Link' && (
             <View style={styles.TextInputContainer}>
-              <DetailPopAttachment code={3}></DetailPopAttachment>
+              <DetailPopAttachment id={id} code={3}></DetailPopAttachment>
               <DetailInput
                 value={temporaryContent}
                 onChangeText={handleContentChange}
@@ -296,7 +303,9 @@ const DetailPop = ({
                 register ? setChoosePopVisible(true) : DetailPopCheck();
                 setTitle(temporaryTitle);
                 setContent(temporaryContent);
-
+                portfolioUrl.append('title', title);
+                portfolioUrl.append('description', content);
+                portfolioUrl.append('kind', selectKind);
                 setTemporaryTitle('');
                 setTemporaryContent('');
               }}>
