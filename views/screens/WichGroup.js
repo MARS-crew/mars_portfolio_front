@@ -1,6 +1,6 @@
-import "react-native-gesture-handler";
+import 'react-native-gesture-handler';
 import {React} from 'react';
-import { CubeNavigationHorizontal } from 'react-native-3dcube-navigation';
+import {CubeNavigationHorizontal} from 'react-native-3dcube-navigation';
 
 import Group from './Group';
 import ManyGroup from './ManyGroup';
@@ -60,12 +60,12 @@ const DATA = [
 
 const WhichGroup = () => {
   if (DATA.length <= 6) {
-    <GroupVideo data={DATA} />
-    return(
+    <GroupVideo data={DATA} />;
+    return (
       //<CubeNavigationHorizontal callBackAfterSwipe={callBackAfterSwipe}>
-        <Group data={DATA} />
+      <Group data={DATA} />
       //</CubeNavigationHorizontal>
-    ); 
+    );
   } else {
     return <ManyGroup data={DATA} />;
   }
