@@ -1,5 +1,5 @@
-import {React} from 'react';
-import {useContext} from 'react';
+import { React } from 'react';
+import { useContext, useRef, useEffect } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -13,7 +13,8 @@ import GroupVideoItem from '../components/GroupVideoItem';
 import FAB from '../components/FloatingMenu';
 import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import AppContext from '../../AppContext';
+// import AppContext from '../../AppContext';
+import { IndexProvider, useIndexContext } from '../../IndexContext';
 
 const DATA = [
   {
@@ -96,37 +97,63 @@ const DATA = [
   },
 ];
 
-const VideoItem = ({id, src, medal}) => (
+const VideoItem = ({ id, src, medal }) => (
   <View>
     <GroupVideoItem id={id} src={src} medal={medal} />
   </View>
 );
 
-const GroupVideo = ({data}) => {
+const GroupVideo = ({ data }) => {
   // console.log(swiperIndex)
-  const IndexData = useContext(AppContext);
+  // const IndexData = useContext(AppContext);
+  const { currentIndex, changeIndex } = useIndexContext();
+  const swiperRef = useRef(null);
+
+  // useEffect(() => {
+  //   if (swiperRef.current) {
+  //     swiperRef.current.scrollToIndex({
+  //       index: currentIndex,
+  //       animated: true,
+  //     });
+  //   }
+  // }, [currentIndex]);
+
+  useEffect(() => {
+    if (swiperRef.current) {
+      swiperRef.current.scrollToIndex({
+        index: currentIndex,
+        animated: true,
+      });
+    }
+  }, [currentIndex, swiperRef]);
+
+
   const height = Dimensions.get('window').height;
   const handleScroll = event => {
     const offsetY = event.nativeEvent.contentOffset.y;
-    const index = Math.round(offsetY / height);
-    IndexData.setIndexValue(index);
+    const newIndex = Math.round(offsetY / height);
+    // IndexData.setIndexValue(index);
+    changeIndex(newIndex);
+
     //console.log('스크롤 거리값:', Math.floor(offsetY));
     //console.log('세로 화면  값:', Math.floor(height));
-    console.log('인덱스 값 (전체 거리 /세로 1 화면):', offsetY / height);
+    // console.log('인덱스 값 (전체 거리 /세로 1 화면):', offsetY / height);
   };
 
-  console.log('2번 스크린 기수 비디오:', IndexData.swiperIndex);
+  console.log('2번 스크린 기수 비디오:', currentIndex);
 
   return (
     <SafeAreaView style={styles.containbox}>
       <SwiperFlatList
+        ref={swiperRef}
         vertical={true}
         data={DATA}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <VideoItem id={item.id} src={item.src} medal={item.medal} />
         )}
-        initialScrollIndex={IndexData.swiperIndex}
+        initialScrollIndex={currentIndex}
         hideShadow={true}
+        // onScroll={handleScroll}
         onScroll={handleScroll}
         numColumns={2}
       />
