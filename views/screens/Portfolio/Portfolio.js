@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   SafeAreaView,
@@ -14,9 +14,9 @@ import FAB from '../../components/FloatingMenu';
 import PortfolioItem from '../Portfolio/PortfolioItem';
 import DetailPop from './DetailPop';
 import axios from 'axios'; // axios import 합니다.
-import {Shadow} from 'react-native-shadow-2';
+import { Shadow } from 'react-native-shadow-2';
 import addBtn from '../../../assets/images/add.png';
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.4;
 
 const styles = StyleSheet.create({
@@ -72,7 +72,7 @@ const Portfolio = () => {
       url: 'http://10.0.2.2:3000/api/v1/portfolio/46',
       headers: {
         Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTk0MDgyNjgsImV4cCI6MTY5OTQxMTg2OH0.R0F6TQ_pO4wmmF3KwgCgWfc39JkVvwD-FhVtXkMGMtU',
+          'eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXRlIjoiMjAyMy0xMS0xNVQyMzo1NjowOS4wMDBaIn0sImlhdCI6MTcwMDEyNDk3MCwiZXhwIjoxNzAwMTI4NTcwfQ',
       },
       cancelToken: source.token,
     })
@@ -208,7 +208,7 @@ const Portfolio = () => {
   ]);
 
   // 플랫 리스트 데이터 item 수정 기능(개발 방식 검토중인 기능이므로 구현 미완료)
-  const onModify = ({code}) => {
+  const onModify = ({ code }) => {
     Alert.alert(
       '확인 테스트',
       'Props: onModify() \n\nPortfolio > PortfolioItem\n > PortfolioModal > DetailPop',
@@ -216,7 +216,7 @@ const Portfolio = () => {
   };
 
   // 플랫 리스트 데이터 item 삭제 기능(개발 방식 검토중인 기능이므로 구현 미완료)
-  const onDelete = ({code}) => {
+  const onDelete = ({ code }) => {
     Alert.alert(
       '삭제 테스트',
       'Props: onDelete() \n\nPortfolio > PortfolioItem\n > PortfolioModal ',

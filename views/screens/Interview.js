@@ -1,14 +1,18 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Animated,
   Dimensions,
   ScrollView,
   StyleSheet,
+  SafeAreaView,
   Text,
   View,
 } from 'react-native';
 import axios from 'axios';
 import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
+import SwiperFlatList from 'react-native-swiper-flatlist';
+import { useIndexContext } from '../../IndexContext';
+
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const yOffset = new Animated.Value(0);
@@ -23,10 +27,16 @@ const Screen = props => {
   );
 };
 
+const Item = ({ id, path }) => (
+  <View>
+    <InterviewContents id={id} path={path} />
+  </View>
+);
+
 const transitionAnimation = index => {
   return {
     transform: [
-      {perspective: 800},
+      { perspective: 800 },
       {
         scale: yOffset.interpolate({
           inputRange: [
@@ -67,6 +77,27 @@ const interviewFiles = [
 ];
 
 const Interview = () => {
+  const { currentIndex, changeIndex } = useIndexContext();
+  const swiperRef = useRef(null);
+
+  useEffect(() => {
+    if (swiperRef.current) {
+      swiperRef.current.scrolltoIndex({
+        index: currentIndex,
+        animated: true,
+      });
+    }
+  }, [currentIndex, swiperRef]);
+
+  const height = Dimensions.get('window').height;
+  const handleScroll = event => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const newIndex = Math.round(offsetY / height);
+    changeIndex(newIndex);
+  };
+  console.log('3번째 스크린 기수 인덱스: ', currentIndex);
+
+
   const [data, setData] = useState([]);
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -75,7 +106,7 @@ const Interview = () => {
       url: 'http://10.0.2.2:3000/api/v1/interview/',
       headers: {
         Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTgxMjgxMzQsImV4cCI6MTY5ODEzMTczNH0.-DUZG3W7gcVPzm3bH_SM9lyAJt5_kZnIqD5_SN4SyT0',
+          'eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXRlIjoiMjAyMy0xMS0xNVQyMzo1NjowOS4wMDBaIn0sImlhdCI6MTcwMDEyNDk3MCwiZXhwIjoxNzAwMTI4NTcwfQ',
       },
       cancelToken: source.token,
     })
@@ -128,7 +159,7 @@ const Interview = () => {
   return (
     <Animated.ScrollView
       scrollEventThrottle={16}
-      onScroll={Animated.event([{nativeEvent: {contentOffset: {y: yOffset}}}], {
+      onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: yOffset } } }], {
         useNativeDriver: true,
       })}
       pagingEnabled
@@ -139,10 +170,24 @@ const Interview = () => {
         </Screen>
       ))}
     </Animated.ScrollView>
+    // <SafeAreaView style="StyleSheet.container">
+    //   <SwiperFlatList
+    //     ref={swiperRef}
+    //     vertical={true}
+    //     data={interviewFiles}
+    //     renderItem={({ item }) => <Item id={item.id} path={item.url} />}
+    //     initialScrollIndex={currentIndex}
+    //     hideShadow={true}
+    //     onScroll={handleScroll}
+    //   />
+    // </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+  },
   scrollView: {
     flex: 1,
     flexDirection: 'column',

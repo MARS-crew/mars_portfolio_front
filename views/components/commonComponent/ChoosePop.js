@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useContext} from 'react';
-import {StyleSheet, Pressable, Text, View} from 'react-native';
-import {MyContext} from '../../../MyContext';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, Pressable, Text, View } from 'react-native';
+import { MyContext } from '../../../MyContext';
 import PublicModal from './PublicModal';
 import ChooseButton from './ChooseButton';
 
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
   },
-  chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 10},
+  chooseOkBtn: { backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 10 },
 });
 
 const choosePop = ({
@@ -71,10 +71,10 @@ const choosePop = ({
   temporaryContent,
   setTemporaryContent,
 }) => {
-  const {title, setTitle} = useContext(MyContext);
-  const {content, setContent} = useContext(MyContext);
-  const {portfolioUrl, setPortfolioUrl} = useContext(MyContext);
-  const {ext, setExt} = useContext(MyContext);
+  const { title, setTitle } = useContext(MyContext);
+  const { content, setContent } = useContext(MyContext);
+  const { portfolioUrl, setPortfolioUrl } = useContext(MyContext);
+  const { ext, setExt } = useContext(MyContext);
 
   const sendDataToServer = async () => {
     try {
@@ -83,7 +83,7 @@ const choosePop = ({
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTk0MDgyNjgsImV4cCI6MTY5OTQxMTg2OH0.R0F6TQ_pO4wmmF3KwgCgWfc39JkVvwD-FhVtXkMGMtU',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXR',
         },
         body: portfolioUrl,
       });
@@ -103,7 +103,7 @@ const choosePop = ({
     }
   };
 
-  const deleteData = async () => {};
+  const deleteData = async () => { };
 
   //공통 컴포넌트 츄즈 팝 스테이트 구분 컴포넌트: 확인 클릭 시
   const onDeleteORonModify = () => {

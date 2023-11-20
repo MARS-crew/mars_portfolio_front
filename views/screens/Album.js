@@ -201,7 +201,7 @@
 
 // export default Album;
 
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -215,7 +215,7 @@ import {
   Dimensions,
 } from 'react-native';
 import axios from 'axios';
-import {Shadow} from 'react-native-shadow-2';
+import { Shadow } from 'react-native-shadow-2';
 import FAB from '../components/FloatingMenu';
 
 const albumImages = [
@@ -247,7 +247,7 @@ const albumImages2 = [
     url: require('../../assets/images/album6.jpeg'),
   },
 ];
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.27;
 
 const shadowColor = 'rgba(151, 151, 151, 0.36)';
@@ -261,7 +261,7 @@ const Album = () => {
 
       headers: {
         Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTg5Nzk2NjksImV4cCI6MTY5ODk4MzI2OX0.1HmuXGF5YApnu1WNT4KqsmF8Oru1mTWEp9_HjFWl5Zs',
+          'eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXRlIjoiMjAyMy0xMS0xNVQyMzo1NjowOS4wMDBaIn0sImlhdCI6MTcwMDEyNDk3MCwiZXhwIjoxNzAwMTI4NTcwfQ',
       },
       cancelToken: source.token,
     })
@@ -303,7 +303,7 @@ const Album = () => {
   const closeButtonRef = useRef(null);
 
   const handleModalPress = event => {
-    const {target} = event.nativeEvent;
+    const { target } = event.nativeEvent;
 
     const isCloseButton = target === closeButtonRef.current;
 
@@ -348,7 +348,7 @@ const Album = () => {
                       }}>
                       <Image
                         style={styles.imageContent}
-                        source={{uri: image.url}}
+                        source={{ uri: image.url }}
                         resizeMode="cover"
                       />
                     </TouchableOpacity>
@@ -387,7 +387,7 @@ const Album = () => {
                       }}>
                       <Image
                         style={styles.imageContent}
-                        source={{uri: image.url}}
+                        source={{ uri: image.url }}
                         resizeMode="cover"
                       />
                     </TouchableOpacity>
