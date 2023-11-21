@@ -1,6 +1,11 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import 'react-native-gesture-handler';
 import {React} from 'react';
+import {useState, useEffect} from 'react';
 import {CubeNavigationHorizontal} from 'react-native-3dcube-navigation';
+import axios from 'axios';
+import {Platform, PermissionsAndroid} from 'react-native';
+import Geolocation from 'react-native-geolocation-service';
 
 import Group from './Group';
 import ManyGroup from './ManyGroup';
@@ -9,7 +14,6 @@ import GroupVideo from './GroupVideo';
 // const callBackAfterSwipe = () => {
 //   // 스와이프 후의 동작 정의
 // };
-
 const DATA = [
   {
     id: '1',
@@ -58,17 +62,19 @@ const DATA = [
   // },
 ];
 
-const WhichGroup = () => {
-  if (DATA.length <= 6) {
-    <GroupVideo data={DATA} />;
-    return (
-      //<CubeNavigationHorizontal callBackAfterSwipe={callBackAfterSwipe}>
-      <Group data={DATA} />
-      //</CubeNavigationHorizontal>
-    );
-  } else {
-    return <ManyGroup data={DATA} />;
-  }
+
+  console.log('여긴찍힘?');
+
+  // if (DATA.length <= 6) {
+  //   <GroupVideo data={setData} />;
+  return (
+    //<CubeNavigationHorizontal callBackAfterSwipe={callBackAfterSwipe}>
+    <Group data={setData} />
+    //</CubeNavigationHorizontal>
+  );
+  // } else {
+  //   return <ManyGroup data={DATA} />;
+  // }
 };
 
 export default WhichGroup;

@@ -18,7 +18,7 @@ const GroupItem = ({id, src}) => {
       <View>
         <ImageBackground source={src} style={styles.image}>
           <GroupLogo />
-          <Text style={styles.text}>{id}기</Text>
+          <Text style={styles.text}>{id}</Text>
           <LoginItem />
         </ImageBackground>
       </View>

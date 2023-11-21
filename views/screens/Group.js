@@ -1,7 +1,8 @@
 import {React} from 'react';
-import {StyleSheet, View, FlatList, SafeAreaView} from 'react-native';
+import {StyleSheet, View, FlatList, SafeAreaView, Text} from 'react-native';
 
 import GroupItem from '../components/GroupItem';
+import {SwiperFlatList} from 'react-native-swiper-flatlist';
 
 const Item = ({id, src, medal}) => (
   <View>
@@ -11,10 +12,11 @@ const Item = ({id, src, medal}) => (
 
 const Group = ({data}) => {
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
+    <SafeAreaView>
+      <SwiperFlatList
+        vertical={true}
         data={data}
-        renderItem={({item}) => <Item id={item.id} src={item.src}  />}
+        renderItem={({item}) => <Item id={item.name} src={item.url} />}
       />
     </SafeAreaView>
   );
