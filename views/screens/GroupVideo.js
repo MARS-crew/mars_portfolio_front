@@ -1,62 +1,9 @@
-import {React} from 'react';
+import {React, useState, useEffect} from 'react';
 import {StyleSheet, View, FlatList, SafeAreaView} from 'react-native';
+import axios from 'axios';
 
-//import ManyGroupItem from '../components/ManyGroupItem';
 import GroupVideoItem from '../components/GroupVideoItem';
 import FAB from '../components/FloatingMenu';
-
-const DATA = [
-  {
-    id: '1',
-    title: '1기',
-    src: require('../../assets/images/test_member1.jpeg'),
-    video: require('../../assets/images/GroupVideo.png'),
-    medal: 'y',
-  },
-  {
-    id: '2',
-    title: '2기',
-    src: require('../../assets/images/test_member4.jpeg'),
-    video: require('../../assets/images/GroupVideo.png'),
-    medal: 'n',
-  },
-  {
-    id: '3',
-    title: '3기',
-    src: require('../../assets/images/test_member3.jpeg'),
-    video: require('../../assets/images/GroupVideo.png'),
-    medal: 'n',
-  },
-  {
-    id: '4',
-    title: '4기',
-    src: require('../../assets/images/test_member4.jpeg'),
-    video: require('../../assets/images/GroupVideo.png'),
-    medal: 'n',
-  },
-  {
-    id: '5',
-    title: '5기',
-    src: require('../../assets/images/test_member1.jpeg'),
-    video: require('../../assets/images/GroupVideo.png'),
-    medal: 'n',
-  },
-  // {
-  //   id: '6',
-  //   title: '6기',
-  //   src: require('../../assets/images/Group.png'),
-  // },
-  // {
-  //   id: '7',
-  //   title: '7기',
-  //   src: require('../../assets/images/Group.png'),
-  // },
-  // {
-  //   id: '8',
-  //   title: '8기',
-  //   src: require('../../assets/images/Group.png'),
-  // },
-];
 
 const VideoItem = ({id, src, medal}) => (
   <View>
@@ -65,12 +12,42 @@ const VideoItem = ({id, src, medal}) => (
 );
 
 const GroupVideo = () => {
+  const [data, setData] = useState({});
+
+  const fetchData = async () => {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: 'https://f771-121-133-53-56.ngrok-free.app/api/v1/interview/',
+        headers: {
+          Authorization:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjEsIm1lbWJlcl9pZCI6NDcsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J207IS47KeEIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUQxTDZkWGhwNEtIbXNEcHRERGxDN2tScXN2bGh1akhuSnhXSWNsTjUtMEJ1VlpJTWpNSk1ILWZIWnZLQlNKMmpDZktZek04enJFQTNpbFZlT0s2VGN2d01qdTg3MHYwX1hOeUF4aUdqaTJzV0huSlZRX1pITTc2UE9xdHNSNGtHcGwzcWhDNFdvY1NGNTNURGF6bVZ2R2p5ZEgzQlIzYUNnWUtBYUFTQVJNU0ZRSEdYMk1pZU5RT2pUemxGdGJTa2d5RHlxX2lIZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMDhUMjI6MTU6MjMuMDAwWiJ9LCJpYXQiOjE3MDA2MzIyNDgsImV4cCI6MTcwMDYzNTg0OH0.KSWbbuuYS0TslpRWx8KIrL7zmcg42zzKWfGVWBCaups',
+        },
+      });
+
+      console.log(response.data);
+      const extractedData = response.data.data.map(item => ({
+        id: item.member_id, //멤버 아이디
+        url: item.url, //인터뷰
+      }));
+      setData(extractedData);
+
+      console.log(extractedData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    console.log(data);
+    fetchData();
+  }, [data]);
   return (
     <SafeAreaView style={styles.containbox}>
       <FlatList
-        data={DATA}
+        data={data}
         renderItem={({item}) => (
-          <VideoItem id={item.id} src={item.src} medal={item.medal} />
+          <VideoItem id={item.id} src={item.url} medal={item.medal} />
         )}
         numColumns={2}
       />
