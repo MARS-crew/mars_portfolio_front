@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginRight: 10,
-    fontWeight: 'bold',
     color: '#000000',
   },
   date: {
@@ -90,8 +89,8 @@ const ReviewItem = ({
   content,
   imageType,
   isLiked,
-  isEditing,
-  onModify,
+  currentReviewContent,
+  onEdit,
   onDelete,
 }) => {
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
@@ -102,83 +101,63 @@ const ReviewItem = ({
 
   const inputRef = useRef();
 
-  useEffect(() => {
-    if (isEditMode) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
-    }
-  }, [isEditMode]);
-
   return (
     <Shadow distance={0.1} startColor={shadowColor} offset={[0, 12]}>
       <View style={styles.container}>
-        {isEditMode ? (
-          <TextInput
-            style={styles.editReviewText}
-            value={reviewContent}
-            multiline={true}
-            onChangeText={text => setReviewContent(text)}
-            ref={ref => {
-              inputRef.current = ref;
-            }}
-          />
-        ) : (
-          <View style={styles.container2}>
-            <View>
-              <Image
-                style={styles.userImage}
-                source={
-                  imageType === 1
-                    ? require('../../../assets/images/iconSmile.png')
-                    : imageType === 2
-                    ? require('../../../assets/images/iconWonder.png')
-                    : imageType === 3
-                    ? require('../../../assets/images/iconSmile.png')
-                    : require('../../../assets/images/iconSmile.png')
-                }
-              />
-            </View>
-            <View style={styles.userContentContainer}>
-              <View style={styles.userContentContainerTop}>
-                <View style={styles.userContentContainerTopElement}>
-                  <Text style={styles.userName}>{writer}</Text>
-                  <Text style={styles.date}>{date}</Text>
-                </View>
-
-                <View style={styles.thumbImageContainer}>
-                  <TouchableOpacity
-                    onPress={() => setIsReviewLiked(!isReviewLiked)}>
-                    <Image
-                      style={styles.imageThumb}
-                      source={
-                        isReviewLiked
-                          ? require('../../../assets/images/thumb_active.png')
-                          : require('../../../assets/images/thumb_normal.png')
-                      }
-                    />
-                  </TouchableOpacity>
-                </View>
+        <View style={styles.container2}>
+          <View>
+            <Image
+              style={styles.userImage}
+              source={
+                imageType === 1
+                  ? require('../../../assets/images/iconSmile.png')
+                  : imageType === 2
+                  ? require('../../../assets/images/iconWonder.png')
+                  : imageType === 3
+                  ? require('../../../assets/images/iconSmile.png')
+                  : require('../../../assets/images/iconSmile.png')
+              }
+            />
+          </View>
+          <View style={styles.userContentContainer}>
+            <View style={styles.userContentContainerTop}>
+              <View style={styles.userContentContainerTopElement}>
+                <Text style={styles.userName}>{writer}</Text>
+                <Text style={styles.date}>{date}</Text>
               </View>
-              <View style={styles.userContentContainerBottom}>
+
+              <View style={styles.thumbImageContainer}>
                 <TouchableOpacity
-                  onPress={() => setContentsViewPopVisible(true)}
-                  onLongPress={
-                    () => setIsModalVisible(!isModalVisible) // 리뷰 수정 모당 출력
-                  }>
-                  <View style={styles.reviewTextContainer}>
-                    <Text
-                      style={styles.reviewText}
-                      numberOfLines={3}
-                      ellipsizeMode="tail">
-                      {reviewContent}
-                    </Text>
-                  </View>
+                  onPress={() => setIsReviewLiked(!isReviewLiked)}>
+                  <Image
+                    style={styles.imageThumb}
+                    source={
+                      isReviewLiked
+                        ? require('../../../assets/images/thumb_active.png')
+                        : require('../../../assets/images/thumb_normal.png')
+                    }
+                  />
                 </TouchableOpacity>
               </View>
             </View>
+            <View style={styles.userContentContainerBottom}>
+              <TouchableOpacity
+                onPress={() => setContentsViewPopVisible(true)}
+                onLongPress={
+                  () => setIsModalVisible(!isModalVisible) // 리뷰 수정 모달 출력
+                }>
+                <View style={styles.reviewTextContainer}>
+                  <Text
+                    style={styles.reviewText}
+                    numberOfLines={3}
+                    ellipsizeMode="tail">
+                    {reviewContent}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
-        )}
+        </View>
 
         <ContentsViewPop
           title={writer}
@@ -190,14 +169,22 @@ const ReviewItem = ({
         <EditMode
           review={review}
           id={id}
+          writer={writer}
+          reviewContent={reviewContent}
           onEdit={() => {
+            onEdit();
+            setIsModalVisible(!isModalVisible);
             setIsEditMode(!isEditMode);
           }}
+          onCancel={() => {
+            setIsModalVisible(!isModalVisible);
+          }}
           inputRef={inputRef}
-          onModify={onModify}
+          currentReviewContent={currentReviewContent}
           onDelete={onDelete}
           isModalVisible={isModalVisible}
-          setIsModalVisible={setIsModalVisible}></EditMode>
+          setIsModalVisible={setIsModalVisible}
+        />
       </View>
     </Shadow>
   );
