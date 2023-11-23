@@ -64,15 +64,15 @@ const transitionAnimation = index => {
 const interviewFiles = [
   {
     id: 1,
-    path: require('../../assets/videos/interviewVideo.mp4'),
+    path: '../../assets/videos/interviewVideo.mp4',
   },
   {
     id: 2,
-    path: '',
+    path: require('./interviewVideo.mp4'),
   },
   {
     id: 3,
-    path: '',
+    path: require('../../assets/video/mars_profil1.mp4'),
   },
 ];
 
@@ -81,8 +81,8 @@ const Interview = () => {
   const swiperRef = useRef(null);
 
   useEffect(() => {
-    if (swiperRef.current) {
-      swiperRef.current.scrolltoIndex({
+    if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
+      swiperRef.current.scrollToIndex({
         index: currentIndex,
         animated: true,
       });
@@ -93,8 +93,9 @@ const Interview = () => {
   const handleScroll = event => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const newIndex = Math.round(offsetY / height);
+    // IndexData.setIndexValue(index);
     changeIndex(newIndex);
-  };
+  }
   console.log('3번째 스크린 기수 인덱스: ', currentIndex);
 
 
@@ -106,7 +107,7 @@ const Interview = () => {
       url: 'http://10.0.2.2:3000/api/v1/interview/',
       headers: {
         Authorization:
-          'eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXRlIjoiMjAyMy0xMS0xNVQyMzo1NjowOS4wMDBaIn0sImlhdCI6MTcwMDEyNDk3MCwiZXhwIjoxNzAwMTI4NTcwfQ',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDA3MDAzODEsImV4cCI6MTcwMDcwMzk4MX0.648SL5NvfKCKtqHeCobRcZZWKqPbKwa4O-fIuNZARlY',
       },
       cancelToken: source.token,
     })
@@ -114,37 +115,16 @@ const Interview = () => {
         const extractedData = response.data.data.map(item => ({
           url: item.url,
         }));
-        setData(extractedData);
+        // setData(extractedData);
 
-        console.log(extractedData);
+        // console.log(extractedData);
 
-        //console.log(response);
-        // console.log(
-        //   'file_id--------------------------------------------------',
-        // );
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     file_id: item.file_id,
-        //   })),
-        // );
-        // console.log('ext--------------------------------------------------');
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     ext: item.ext,
-        //   })),
-        // );
-        // console.log('uri--------------------------------------------------');
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     url: item.url,
-        //   })),
-        // );
-        // console.log('del_yn--------------------------------------------------');
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     del_yn: item.del_yn,
-        //   })),
-        // );
+        const slicedData = extractedData.slice(1);
+
+        setData(slicedData);
+
+        console.log(slicedData);
+
       })
       .catch(function (error) {
         console.log(error);
@@ -157,30 +137,29 @@ const Interview = () => {
   }, []);
 
   return (
-    <Animated.ScrollView
-      scrollEventThrottle={16}
-      onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: yOffset } } }], {
-        useNativeDriver: true,
-      })}
-      pagingEnabled
-      style={styles.scrollView}>
-      {data.map((item, index) => (
-        <Screen key={index} index={index}>
-          <InterviewContents path={item.url} />
-        </Screen>
-      ))}
-    </Animated.ScrollView>
-    // <SafeAreaView style="StyleSheet.container">
-    //   <SwiperFlatList
-    //     ref={swiperRef}
-    //     vertical={true}
-    //     data={interviewFiles}
-    //     renderItem={({ item }) => <Item id={item.id} path={item.url} />}
-    //     initialScrollIndex={currentIndex}
-    //     hideShadow={true}
-    //     onScroll={handleScroll}
-    //   />
-    // </SafeAreaView>
+    // <Animated.ScrollView
+    //   ref={swiperRef}
+    //   scrollEventThrottle={16}
+    //   // onScroll={handleScroll}
+    //   pagingEnabled
+    //   style={styles.scrollView}>
+    //   {data.map((item, index) => (
+    //     <Animated.View key={index} index={index} style={[styles.screen, transitionAnimation(index)]}>
+    //       <InterviewContents path={item.url} />
+    //     </Animated.View>
+    //   ))}
+    // </Animated.ScrollView>
+    <SafeAreaView style={styles.container}>
+      <SwiperFlatList
+        ref={swiperRef}
+        vertical={true}
+        data={data}
+        renderItem={({ item }) => <InterviewContents id={item.id} path={item.url} />}
+        index={currentIndex}
+        onScroll={handleScroll}
+        hideShadow={true}
+      />
+    </SafeAreaView>
   );
 };
 

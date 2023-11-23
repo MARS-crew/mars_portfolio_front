@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   SafeAreaView,
@@ -16,6 +16,9 @@ import DetailPop from './DetailPop';
 import axios from 'axios'; // axios import 합니다.
 import { Shadow } from 'react-native-shadow-2';
 import addBtn from '../../../assets/images/add.png';
+import SwiperFlatList from 'react-native-swiper-flatlist';
+import { useIndexContext } from '../../../IndexContext';
+
 const { width, height } = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.4;
 
@@ -42,7 +45,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   gridItem: {
-    width: squareSize, // 두 항목이 한 줄에 올 수 있도록 너비를 조정
+    // width: squareSize, // 두 항목이 한 줄에 올 수 있도록 너비를 조정
+    // height: squareSize,
+    width: width / 2 - 20,
     height: squareSize,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
@@ -55,15 +60,83 @@ const styles = StyleSheet.create({
   },
 });
 
+const Item = ({ item, index, portfolio, onModify, onDelete, detailPopVisible, setDetailPopVisible }) => {
+  const shadowColor = 'rgba(151, 151, 151, 0.36)';
+  return (
+    <View style={styles.container}>
+      <SafeAreaView>
+        {/* <ScrollView> */}
+        <View style={styles.gridView}>
+          <View style={styles.gridItem} key={index}>
+            <PortfolioItem
+              portfolio={portfolio}
+              onModify={onModify}
+              onDelete={onDelete}
+              member_id={item.member_id}
+              id={item.portfolio_id}
+              title={item.title}
+              message={item.description}
+              reg_date={item.reg_date}
+              mod_date={item.mod_date}
+              code={item.kind}
+              file_id={item.file_id}
+              src={item.url}
+              ext={item.ext}
+              del_yn={item.del_yn}
+            />
+          </View>
+          <Shadow distance="12" startColor={shadowColor} offset={[15, 15]}>
+            <TouchableOpacity
+              style={styles.gridItem}
+              onPress={() => setDetailPopVisible(!detailPopVisible)}>
+              <View>
+                <Image source={addBtn} style={styles.content} />
+              </View>
+            </TouchableOpacity>
+          </Shadow>
+
+          <DetailPop
+            id={1}
+            register={true}
+            onModify={onModify}
+            setDetailPopVisible={setDetailPopVisible}
+            detailPopVisible={detailPopVisible}
+          />
+        </View>
+        {/* </ScrollView> */}
+      </SafeAreaView>
+    </View>
+  );
+};
+
 const Portfolio = () => {
+  const { currentIndex, changeIndex } = useIndexContext();
+  const swiperRef = useRef(null);
+  useEffect(() => {
+    if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
+      swiperRef.current.scrollToIndex({
+        index: currentIndex,
+        animated: true,
+      });
+    }
+  }, [currentIndex, swiperRef]);
+
+  const height = Dimensions.get('window').height;
+  const handleScroll = event => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const newIndex = Math.round(offsetY / height);
+    // IndexData.setIndexValue(index);
+    changeIndex(newIndex);
+  }
+  console.log('4번째 스크린 기수 인덱스: ', currentIndex);
+
+
   const [detailPopVisible, setDetailPopVisible] = useState(false);
   const [data, setData] = useState([]);
   const [fileIdLength, setFileIdLength] = useState(null);
   const [portfolio, setPortfolio] = useState(true); //포트폴리오 페이지인지 확인하는 스테이트
   const numColumns = 2;
   const itemWidth = (Dimensions.get('window').width - 20) / numColumns; // 각 항목의 너비 계산
-
-  const shadowColor = 'rgba(151, 151, 151, 0.36)';
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -72,7 +145,7 @@ const Portfolio = () => {
       url: 'http://10.0.2.2:3000/api/v1/portfolio/46',
       headers: {
         Authorization:
-          'eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXRlIjoiMjAyMy0xMS0xNVQyMzo1NjowOS4wMDBaIn0sImlhdCI6MTcwMDEyNDk3MCwiZXhwIjoxNzAwMTI4NTcwfQ',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDA3MDAzODEsImV4cCI6MTcwMDcwMzk4MX0.648SL5NvfKCKtqHeCobRcZZWKqPbKwa4O-fIuNZARlY',
       },
       cancelToken: source.token,
     })
@@ -222,54 +295,22 @@ const Portfolio = () => {
       'Props: onDelete() \n\nPortfolio > PortfolioItem\n > PortfolioModal ',
     );
   };
+  const shadowColor = 'rgba(151, 151, 151, 0.36)';
+
 
   return (
-    <View style={styles.container}>
-      <SafeAreaView>
-        <ScrollView>
-          <View style={styles.gridView}>
-            {data.map((item, index) => (
-              <View style={styles.gridItem} key={index}>
-                <PortfolioItem
-                  portfolio={portfolio}
-                  onModify={onModify}
-                  onDelete={onDelete}
-                  member_id={item.member_id}
-                  id={item.portfolio_id}
-                  title={item.title}
-                  message={item.description}
-                  reg_date={item.reg_date}
-                  mod_date={item.mod_date}
-                  code={item.kind}
-                  file_id={item.file_id}
-                  src={item.url}
-                  ext={item.ext}
-                  del_yn={item.del_yn}
-                />
-              </View>
-            ))}
-            <Shadow distance="12" startColor={shadowColor} offset={[15, 15]}>
-              <TouchableOpacity
-                style={styles.gridItem}
-                onPress={() => setDetailPopVisible(!detailPopVisible)}>
-                <View>
-                  <Image source={addBtn} style={styles.content} />
-                </View>
-              </TouchableOpacity>
-            </Shadow>
-
-            <DetailPop
-              id={1}
-              register={true}
-              onModify={onModify}
-              setDetailPopVisible={setDetailPopVisible}
-              detailPopVisible={detailPopVisible}
-            />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+    <SafeAreaView style={styles.container}>
+      <SwiperFlatList
+        ref={swiperRef}
+        vertical={true}
+        data={data}
+        renderItem={({ item, index }) => <Item item={item} portfolio={portfolio} onModify={onModify} onDelete={onDelete} index={index} detailPopVisible={detailPopVisible} setDetailPopVisible={setDetailPopVisible} />}
+        index={currentIndex}
+        onScroll={handleScroll}
+        hideShadow={true}
+      />
       <FAB />
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -75,7 +75,7 @@ const Group = ({ data, swiperIndex, setSwiperIndex }) => {
         vertical={true}
         data={data}
         renderItem={({ item }) => <Item id={item.id} src={item.src} />}
-        initialScrollIndex={currentIndex}
+        index={currentIndex}
         hideShadow={true}
         onScroll={handleScroll}
       />

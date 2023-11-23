@@ -10,9 +10,6 @@ import {
 
 import Splash from './views/screens/splash';
 import Login from './views/screens/Login';
-import Group from './views/screens/Group';
-import Member from './views/screens/Member';
-import Youtube from './views/screens/Youtube';
 import Resume from './views/screens/ResumeContents';
 import Portfolio from './views/screens/Portfolio/Portfolio';
 import Review from './views/screens/Review';
@@ -175,10 +172,10 @@ const HomeScreen = () => {
             <Interview />
           </Screen>
           <Screen text="Screen 4" index={3}>
-            <Resume />
+            <Portfolio options={{ headerShown: false }} />
           </Screen>
           <Screen text="Screen 5" index={4}>
-            <Portfolio options={{ headerShown: false }} />
+            <Resume />
           </Screen>
           <Screen text="Screen 6" index={5}>
             <Review />

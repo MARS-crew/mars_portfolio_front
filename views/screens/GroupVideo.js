@@ -109,14 +109,6 @@ const GroupVideo = ({ data }) => {
   const { currentIndex, changeIndex } = useIndexContext();
   const swiperRef = useRef(null);
 
-  // useEffect(() => {
-  //   if (swiperRef.current) {
-  //     swiperRef.current.scrollToIndex({
-  //       index: currentIndex,
-  //       animated: true,
-  //     });
-  //   }
-  // }, [currentIndex]);
 
   useEffect(() => {
     if (swiperRef.current) {
@@ -151,7 +143,7 @@ const GroupVideo = ({ data }) => {
         renderItem={({ item }) => (
           <VideoItem id={item.id} src={item.src} medal={item.medal} />
         )}
-        initialScrollIndex={currentIndex}
+        index={currentIndex}
         hideShadow={true}
         // onScroll={handleScroll}
         onScroll={handleScroll}
