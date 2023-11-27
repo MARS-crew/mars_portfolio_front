@@ -171,9 +171,9 @@ const DetailPopAttachment = (code, id) => {
         console.log('asset.uri:', asset.fileName);
 
         setPortfolioUrl(formdata);
-        console.log('formdata:', portfolioUrl);
-        setExt(asset.type);
 
+        setExt(asset.type);
+        console.log('formdata:', portfolioUrl._parts);
         // if (Array.isArray(formdata)) {
         //   console.log(' 배열입니다.');
         // } else {

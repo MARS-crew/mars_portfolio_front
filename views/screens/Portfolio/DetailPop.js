@@ -102,8 +102,9 @@ const DetailPop = ({
   register,
 }) => {
   useEffect(() => {
-    setTemporaryTitle('');
-    setTemporaryContent('');
+    //setTemporaryTitle('');
+    //setTemporaryContent('');
+    //setPortfolioUrl('');
 
     return () => {};
   }, [detailPopVisible]);
@@ -132,20 +133,20 @@ const DetailPop = ({
   };
 
   function selectedValue() {
-    if (id == 1) return 'Photo';
-    else if (id == 2) return 'Video';
-    else if (id == 3) return 'Link';
+    if (code == 1) return 'Photo';
+    else if (code == 2) return 'Video';
+    else if (code == 3) return 'Link';
     else return 'Photo';
   } // id값을 통해 사진 수정 시 초기 selected 값을 사진으로 적용하여 각 종류에 맞는 DetailPopup이 열려있도록 구현
 
   function selected1Pressed() {
-    if (id == 1) return true;
+    if (code == 1) return true;
   } // id값을 통해 Photo나 나머지 블럭에서 DetailPopup을 실행한 경우 Photo 버튼의 초기 색상을 설정
   function selected2Pressed() {
-    if (id == 2) return true;
+    if (code == 2) return true;
   }
   function selected3Pressed() {
-    if (id == 3) return true;
+    if (code == 3) return true;
   } // id값을 통해 buttonPressed 1~3의 Pressed 값을 useState 초기값으로 설정(버튼의 초기 색상을 담당)
 
   const handleButtonPress = buttonName => {
@@ -205,7 +206,6 @@ const DetailPop = ({
 
   return (
     <PublicModal
-      id={id}
       onModify={onModify}
       isModalVisible={detailPopVisible}
       setIsModalVisible={setDetailPopVisible}
@@ -220,8 +220,6 @@ const DetailPop = ({
           <TouchableOpacity
             onPress={() => {
               setDetailPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup X 닫기)
-              setTemporaryTitle('');
-              setTemporaryContent('');
             }}>
             <Image source={closeblack}></Image>
           </TouchableOpacity>
@@ -233,7 +231,6 @@ const DetailPop = ({
               buttonPressed={button1Pressed}
               onPress={() => [
                 setSelectKind('1'),
-
                 handleButtonPress('Photo'),
                 handleButton1Press(),
               ]}></SectionChooseBtn>
@@ -259,10 +256,10 @@ const DetailPop = ({
           {selectedButton !== 'Link' && (
             <View style={styles.TextInputContainer}>
               {selectedButton === 'Photo' && (
-                <DetailPopAttachment id={id} code={1}></DetailPopAttachment>
+                <DetailPopAttachment code={1}></DetailPopAttachment>
               )}
               {selectedButton === 'Video' && (
-                <DetailPopAttachment id={id} code={2}></DetailPopAttachment>
+                <DetailPopAttachment code={2}></DetailPopAttachment>
               )}
 
               <DetailInput
@@ -279,7 +276,7 @@ const DetailPop = ({
 
           {selectedButton === 'Link' && (
             <View style={styles.TextInputContainer}>
-              <DetailPopAttachment id={id} code={3}></DetailPopAttachment>
+              <DetailPopAttachment code={3}></DetailPopAttachment>
               <DetailInput
                 value={temporaryContent}
                 onChangeText={handleContentChange}
@@ -306,8 +303,8 @@ const DetailPop = ({
                 portfolioUrl.append('title', title);
                 portfolioUrl.append('description', content);
                 portfolioUrl.append('kind', selectKind);
-                setTemporaryTitle('');
-                setTemporaryContent('');
+                //setTemporaryTitle('');
+                //setTemporaryContent('');
               }}>
               확인
             </ChooseButton>
@@ -320,7 +317,7 @@ const DetailPop = ({
         setTemporaryTitle={setTemporaryTitle}
         temporaryContent={temporaryContent}
         setTemporaryContent={setTemporaryContent}
-        id={id}
+        code={code}
         popTitle="수정된 내용을 저장하시겠습니까?"
         onModify={onModify}
         portfolio={portfolio}
