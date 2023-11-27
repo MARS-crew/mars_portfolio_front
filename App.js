@@ -15,7 +15,7 @@ import Member from './views/screens/Member';
 import Youtube from './views/screens/Youtube';
 import Resume from './views/screens/ResumeContents';
 import Portfolio from './views/screens/Portfolio/Portfolio';
-import Review from './views/screens/Review';
+import Review from './views/screens/Review/Review';
 import MyPage from './views/screens/MyPage/MyPage';
 import Album from './views/screens/Album';
 import Interview from './views/screens/Interview';
@@ -29,8 +29,9 @@ import GroupVideo from './views/screens/GroupVideo';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppContext from './AppContext';
+// import AppContext from './AppContext`';
 import {MyProvider} from './MyContext';
+import {IndexProvider, useIndexContext} from './IndexContext';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -118,6 +119,7 @@ const App = () => {
 const HomeScreen = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
+  // const { currentIndex } = useIndexContext();
 
   useEffect(() => {
     AsyncStorage.getItem('isSplashVisible').then(value => {
@@ -136,17 +138,17 @@ const HomeScreen = () => {
   useEffect(() => {
     AsyncStorage.setItem('isSplashVisible', JSON.stringify(isSplashVisible));
   }, [isSplashVisible]);
+  // const [indexValue, setIndexValue] = useState(0);
 
-  const [indexValue, setIndexValue] = useState(0);
-
-  const userSettings = {
-    swiperIndex: indexValue,
-    setIndexValue,
-  };
+  // const userSettings = {
+  //   swiperIndex: indexValue,
+  //   setIndexValue,
+  // };
   // console.log(ind);
 
   return (
-    <AppContext.Provider value={userSettings}>
+    // <AppContext.Provider value={userSettings}>
+    <IndexProvider>
       <MyProvider>
         <Animated.ScrollView
           scrollEventThrottle={16}
@@ -185,7 +187,8 @@ const HomeScreen = () => {
           </Screen>
         </Animated.ScrollView>
       </MyProvider>
-    </AppContext.Provider>
+      {/* </AppContext.Provider> */}
+    </IndexProvider>
   );
 };
 
