@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   SafeAreaView,
@@ -14,13 +14,13 @@ import FAB from '../../components/FloatingMenu';
 import PortfolioItem from '../Portfolio/PortfolioItem';
 import DetailPop from './DetailPop';
 import axios from 'axios'; // axios import 합니다.
-import { Shadow } from 'react-native-shadow-2';
+import {Shadow} from 'react-native-shadow-2';
 import addBtn from '../../../assets/images/add.png';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import { useIndexContext } from '../../../IndexContext';
+import {useIndexContext} from '../../../IndexContext';
 
-const { width, height } = Dimensions.get('window');
-const squareSize = Math.min(width, height) * 0.4;
+const {width, height} = Dimensions.get('window');
+const squareSize = Math.min(width, height) * 0.4 - 5;
 
 const styles = StyleSheet.create({
   content: {
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   container: {
-    height: '100%',
+    height: height,
     width: '100%',
     flex: 1,
     padding: 5,
@@ -38,16 +38,13 @@ const styles = StyleSheet.create({
   },
   gridView: {
     padding: 5,
-    paddingTop: 10,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   gridItem: {
-    // width: squareSize, // 두 항목이 한 줄에 올 수 있도록 너비를 조정
-    // height: squareSize,
-    width: width / 2 - 20,
+    width: squareSize, // 두 항목이 한 줄에 올 수 있도록 너비를 조정
     height: squareSize,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
@@ -60,58 +57,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Item = ({ item, index, portfolio, onModify, onDelete, detailPopVisible, setDetailPopVisible, token }) => {
-  const shadowColor = 'rgba(151, 151, 151, 0.36)';
-  return (
-    <View style={styles.container}>
-      <SafeAreaView>
-        {/* <ScrollView> */}
-        <View style={styles.gridView}>
-          <View style={styles.gridItem} key={index}>
-            <PortfolioItem
-              portfolio={portfolio}
-              onModify={onModify}
-              onDelete={onDelete}
-              member_id={item.member_id}
-              id={item.portfolio_id}
-              title={item.title}
-              message={item.description}
-              reg_date={item.reg_date}
-              mod_date={item.mod_date}
-              code={item.kind}
-              file_id={item.file_id}
-              src={item.url}
-              ext={item.ext}
-              del_yn={item.del_yn}
-            />
-          </View>
-          <Shadow distance="12" startColor={shadowColor} offset={[15, 15]}>
-            <TouchableOpacity
-              style={styles.gridItem}
-              onPress={() => setDetailPopVisible(!detailPopVisible)}>
-              <View>
-                <Image source={addBtn} style={styles.content} />
-              </View>
-            </TouchableOpacity>
-          </Shadow>
-
-          <DetailPop
-            id={1}
-            register={true}
-            onModify={onModify}
-            setDetailPopVisible={setDetailPopVisible}
-            detailPopVisible={detailPopVisible}
-            token={token}
-          />
-        </View>
-        {/* </ScrollView> */}
-      </SafeAreaView>
-    </View>
-  );
-};
-
-const Portfolio = ({ token }) => {
-  const { currentIndex, changeIndex } = useIndexContext();
+const Portfolio = ({token}) => {
+  const {currentIndex, changeIndex} = useIndexContext();
   const swiperRef = useRef(null);
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
@@ -128,9 +75,8 @@ const Portfolio = ({ token }) => {
     const newIndex = Math.round(offsetY / height);
     // IndexData.setIndexValue(index);
     changeIndex(newIndex);
-  }
+  };
   console.log('4번째 스크린 기수 인덱스: ', currentIndex);
-
 
   const [detailPopVisible, setDetailPopVisible] = useState(false);
   const [data, setData] = useState([]);
@@ -171,7 +117,9 @@ const Portfolio = ({ token }) => {
 
         setData(slicedData);
 
-        console.log('portfolio--------------------------------------------------');
+        console.log(
+          'portfolio--------------------------------------------------',
+        );
         console.log(slicedData);
         // console.log(
         //   extractedData.map(item => ({
@@ -308,8 +256,65 @@ const Portfolio = ({ token }) => {
       'Props: onDelete() \n\nPortfolio > PortfolioItem\n > PortfolioModal ',
     );
   };
-  const shadowColor = 'rgba(151, 151, 151, 0.36)';
 
+  const Item = ({
+    item,
+    index,
+    portfolio,
+    onModify,
+    onDelete,
+    detailPopVisible,
+    setDetailPopVisible,
+    token,
+  }) => {
+    const shadowColor = 'rgba(151, 151, 151, 0.36)';
+    return (
+      <View style={styles.container}>
+        <SafeAreaView>
+          <ScrollView>
+            <View style={styles.gridView}>
+              {data.map((item, index) => (
+                <View style={styles.gridItem} key={index}>
+                  <PortfolioItem
+                    portfolio={portfolio}
+                    onModify={onModify}
+                    onDelete={onDelete}
+                    member_id={item.member_id}
+                    id={item.portfolio_id}
+                    title={item.title}
+                    message={item.description}
+                    reg_date={item.reg_date}
+                    mod_date={item.mod_date}
+                    code={item.kind}
+                    file_id={item.file_id}
+                    src={item.url}
+                    ext={item.ext}
+                    del_yn={item.del_yn}
+                  />
+                </View>
+              ))}
+              <Shadow distance="12" startColor={shadowColor} offset={[15, 15]}>
+                <TouchableOpacity
+                  style={styles.gridItem}
+                  onPress={() => setDetailPopVisible(!detailPopVisible)}>
+                  <View>
+                    <Image source={addBtn} style={styles.content} />
+                  </View>
+                </TouchableOpacity>
+              </Shadow>
+              <DetailPop
+                code={1}
+                register={true}
+                onModify={onModify}
+                setDetailPopVisible={setDetailPopVisible}
+                detailPopVisible={detailPopVisible}
+              />
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -317,7 +322,18 @@ const Portfolio = ({ token }) => {
         ref={swiperRef}
         vertical={true}
         data={data}
-        renderItem={({ item, index }) => <Item item={item} portfolio={portfolio} onModify={onModify} onDelete={onDelete} index={index} detailPopVisible={detailPopVisible} setDetailPopVisible={setDetailPopVisible} token={token} />}
+        renderItem={({item, index}) => (
+          <Item
+            item={item}
+            portfolio={portfolio}
+            onModify={onModify}
+            onDelete={onDelete}
+            index={index}
+            detailPopVisible={detailPopVisible}
+            setDetailPopVisible={setDetailPopVisible}
+            token={token}
+          />
+        )}
         index={currentIndex}
         onScroll={handleScroll}
         hideShadow={true}
