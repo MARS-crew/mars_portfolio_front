@@ -201,7 +201,7 @@
 
 // export default Album;
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -215,7 +215,7 @@ import {
   Dimensions,
 } from 'react-native';
 import axios from 'axios';
-import { Shadow } from 'react-native-shadow-2';
+import {Shadow} from 'react-native-shadow-2';
 import FAB from '../components/FloatingMenu';
 
 const albumImages = [
@@ -247,7 +247,7 @@ const albumImages2 = [
     url: require('../../assets/images/album6.jpeg'),
   },
 ];
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.27;
 
 const shadowColor = 'rgba(151, 151, 151, 0.36)';
@@ -303,7 +303,7 @@ const Album = () => {
   const closeButtonRef = useRef(null);
 
   const handleModalPress = event => {
-    const { target } = event.nativeEvent;
+    const {target} = event.nativeEvent;
 
     const isCloseButton = target === closeButtonRef.current;
 
@@ -348,7 +348,7 @@ const Album = () => {
                       }}>
                       <Image
                         style={styles.imageContent}
-                        source={{ uri: image.url }}
+                        source={{uri: image.url}}
                         resizeMode="cover"
                       />
                     </TouchableOpacity>
@@ -387,7 +387,7 @@ const Album = () => {
                       }}>
                       <Image
                         style={styles.imageContent}
-                        source={{ uri: image.url }}
+                        source={{uri: image.url}}
                         resizeMode="cover"
                       />
                     </TouchableOpacity>

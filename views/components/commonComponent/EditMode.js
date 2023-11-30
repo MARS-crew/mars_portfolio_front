@@ -51,6 +51,7 @@ const EditMode = ({
   //포트폴리오 프롭스
   portfolio,
   id,
+  code,
   onModify,
   onDelete,
   //인터뷰 프롭스
@@ -238,6 +239,7 @@ const EditMode = ({
 
           <DetailPop
             id={id}
+            code={code}
             onModify={onModify}
             checkChoosePopOkButton={checkChoosePopOkButton}
             setCheckChoosePopOkButton={setCheckChoosePopOkButton}
@@ -261,6 +263,7 @@ const EditMode = ({
             //포트폴리오
             portfolio={portfolio}
             id={id}
+            code={code}
             onModify={onModify}
             onDelete={onDelete}></ChoosePop>
           <ChoosePop
@@ -278,7 +281,8 @@ const EditMode = ({
             setIsEditing={setIsEditing}
             //포트폴리오
             portfolio={portfolio}
-            id={id}></ChoosePop>
+            id={id}
+            code={code}></ChoosePop>
         </Pressable>
       </TouchableOpacity>
     </Modal>

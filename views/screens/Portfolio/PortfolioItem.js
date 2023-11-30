@@ -109,7 +109,8 @@ const PortfolioItem = ({
           }></ContentsViewPop>
         <EditMode
           portfolio={portfolio}
-          id={code}
+          id={id}
+          code={code}
           onModify={onModify}
           onDelete={onDelete}
           isModalVisible={isModalVisible}

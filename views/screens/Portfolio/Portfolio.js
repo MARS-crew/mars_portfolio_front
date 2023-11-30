@@ -143,7 +143,7 @@ const Portfolio = ({ token }) => {
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: 'http://10.0.2.2:3000/api/v1/portfolio/46',
+      url: 'http://10.0.2.2:3000/api/v1/portfolio/',
       headers: {
         Authorization: token,
       },
@@ -294,7 +294,7 @@ const Portfolio = ({ token }) => {
   ]);
 
   // 플랫 리스트 데이터 item 수정 기능(개발 방식 검토중인 기능이므로 구현 미완료)
-  const onModify = ({ code }) => {
+  const onModify = id => {
     Alert.alert(
       '확인 테스트',
       'Props: onModify() \n\nPortfolio > PortfolioItem\n > PortfolioModal > DetailPop',
@@ -302,7 +302,7 @@ const Portfolio = ({ token }) => {
   };
 
   // 플랫 리스트 데이터 item 삭제 기능(개발 방식 검토중인 기능이므로 구현 미완료)
-  const onDelete = ({ code }) => {
+  const onDelete = id => {
     Alert.alert(
       '삭제 테스트',
       'Props: onDelete() \n\nPortfolio > PortfolioItem\n > PortfolioModal ',
