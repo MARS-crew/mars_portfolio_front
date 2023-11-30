@@ -21,7 +21,7 @@ const Item = ({ id, src, medal }) => (
   </View>
 );
 
-const Group = ({ data, swiperIndex, setSwiperIndex }) => {
+const Group = ({ data, token }) => {
   // const handleScroll = (event) => {
   //   const { height } = Dimensions.get('window'); // 화면의 높이 가져오기
   //   const offsetY = event.nativeEvent.contentOffset.y;

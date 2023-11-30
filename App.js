@@ -116,6 +116,7 @@ const App = () => {
 const HomeScreen = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDEwODU5MjQsImV4cCI6MTcwMTA4OTUyNH0.eBRo_tbcCG_f9BwA21WqtXlZK0WCQCFZoq_H12_YWT8';
   // const { currentIndex } = useIndexContext();
 
   useEffect(() => {
@@ -161,26 +162,26 @@ const HomeScreen = () => {
           <Splash isSplashVisible={isSplashVisible} />
           {isSplashVisible === false ? (
             <Screen text="Screen 1" index={0}>
-              <WhichGroup />
+              <WhichGroup token={token} />
             </Screen>
           ) : null}
           <Screen text="Screen 2" index={1}>
-            <GroupVideo />
+            <GroupVideo token={token} />
           </Screen>
           <Screen text="Screen 3" index={2}>
-            <Interview />
+            <Interview token={token} />
           </Screen>
           <Screen text="Screen 4" index={3}>
-            <Portfolio options={{ headerShown: false }} />
+            <Portfolio token={token} options={{ headerShown: false }} />
           </Screen>
           <Screen text="Screen 5" index={4}>
-            <Resume />
+            <Resume token={token} />
           </Screen>
           <Screen text="Screen 6" index={5}>
-            <Review />
+            <Review token={token} />
           </Screen>
           <Screen text="Screen 7" index={6}>
-            <MyPage options={{ headerShown: false }} />
+            <MyPage token={token} options={{ headerShown: false }} />
           </Screen>
         </Animated.ScrollView>
       </MyProvider>

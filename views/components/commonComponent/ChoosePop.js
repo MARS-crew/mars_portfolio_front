@@ -50,6 +50,8 @@ const choosePop = ({
   isModalVisible,
   choosePopVisible,
   setChoosePopVisible,
+
+  token,
   //인터뷰
   interview,
   handleSave,
@@ -83,7 +85,7 @@ const choosePop = ({
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXR',
+            token,
         },
         body: portfolioUrl,
       });

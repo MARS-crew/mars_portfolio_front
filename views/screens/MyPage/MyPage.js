@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const MyPage = () => {
+const MyPage = ({ token }) => {
   const [myPage, setMyPage] = useState(true);
   const [data, setData] = useState([]);
   let jsonArray = [];
@@ -103,6 +103,9 @@ const MyPage = () => {
   const [logData, setLogData] = useState([]);
   const [heartData, setHeartData] = useState([]);
   const [reviewData, setReviewData] = useState([]);
+  const [visitData, setVisitData] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [todayCount, setTodayCount] = useState(0);
 
   const [button1Pressed, setButton1Pressed] = useState(true);
   const [button2Pressed, setButton2Pressed] = useState(false);
@@ -118,43 +121,60 @@ const MyPage = () => {
       url: 'http://10.0.2.2:3000/api/v1/mypage/2/',
 
       headers: {
-        Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXR',
+        Authorization: token,
       },
       cancelToken: source.token,
     })
       .then(function (response) {
+        const data = response.data.data;
         const extractedData = {
           Reviewlike: response.data.data.Reviewlike,
           heart: response.data.data.heart,
           log_today: response.data.data.todayCount,
           log_total: response.data.data.totalCount,
-
           visitLog: response.data.data.visitLog,
+          totalCount: data.totalCount,
+          todayCount: data.todayCount,
         };
         setData(extractedData);
 
-        jsonArray = JSON.parse(extractedData.visitLog);
-        setLogData(jsonArray);
-        jsonArray = [extractedData.heart.replace(/"/g, '')];
-        setHeartData(jsonArray);
-        jsonArray = JSON.parse(extractedData.Reviewlike);
-        setReviewData(jsonArray);
-        if (Array.isArray(reviewData)) {
-          console.log(' 배열입니다.');
-        } else {
-          console.log('배열이 아닙니다.');
-        }
-        if (typeof reviewData === 'string') {
-          console.log('data.visitLog는 문자열입니다.');
-        } else if (Array.isArray(data.visitLog)) {
-          console.log('data.visitLog는 배열입니다.');
-        } else {
-          console.log('data.visitLog의 타입을 확인할 수 없습니다.');
-        }
+        console.log("마이페이지--------------");
+        console.log(extractedData);
 
-        console.log('jsonArray 개수:', data.Reviewlike);
-        console.log('jsonArray 개수:', data.Reviewlike);
+        setVisitData(extractedData.visitLog);
+        console.log("마이페이지.visitLog--------------");
+        setVisitData(extractedData.visitLog);
+        // console.log(extractedData.visitLog);
+        console.log(visitData);
+        console.log("마이페이지.reviewLikeLog--------------");
+        console.log(extractedData.Reviewlike);
+        console.log("마이페이지.heartLog--------------");
+        setHeartData(extractedData.heart);
+        console.log(heartData);
+
+        setTodayCount(extractedData.todayCount)
+        setTotalCount(extractedData.totalCount);
+        console.log("오늘 : " + todayCount + " 전체 : " + totalCount)
+
+        // jsonArray = [extractedData.heart.replace(/"/g, '')];
+        // setHeartData(jsonArray);
+        // jsonArray = JSON.parse(extractedData.Reviewlike);
+        // setReviewData(jsonArray);
+        // if (Array.isArray(reviewData)) {
+        //   console.log(' 배열입니다.');
+        // } else {
+        //   console.log('배열이 아닙니다.');
+        // }
+        // if (typeof reviewData === 'string') {
+        //   console.log('data.visitLog는 문자열입니다.');
+        // } else if (Array.isArray(data.visitLog)) {
+        //   console.log('data.visitLog는 배열입니다.');
+        // } else {
+        //   console.log('data.visitLog의 타입을 확인할 수 없습니다.');
+        // }
+
+        // console.log('jsonArray 개수:', data.Reviewlike);
+        // console.log('jsonArray 개수:', data.Reviewlike);
         //formattedDate = jsonArray.reg_date.slice(0, 10);
 
         //console.log('데이터', data.visitLog);
@@ -203,35 +223,35 @@ const MyPage = () => {
     );
   };
 
-  // const ListLikeData = () => {
-  //   const LIST_LIKE_DATA = [
-  //     {
-  //       key: 1,
-  //       text: `김건우님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
-  //       date: '',
-  //       id: 2,
-  //     },
-  //     {
-  //       key: 2,
-  //       text: `장여운님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
-  //       date: '',
-  //       id: 2,
-  //     },
-  //     {
-  //       key: 3,
-  //       text: `김채린님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
-  //       date: '',
-  //       id: 2,
-  //     },
-  //     {
-  //       key: 4,
-  //       text: `임동현님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
-  //       date: '',
-  //       id: 2,
-  //     },
-  //   ];
-  //   return LIST_LIKE_DATA;
-  // };
+  const ListLikeData = () => {
+    const LIST_LIKE_DATA = [
+      {
+        key: 1,
+        text: `김건우님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
+        date: '',
+        id: 2,
+      },
+      {
+        key: 2,
+        text: `장여운님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
+        date: '',
+        id: 2,
+      },
+      {
+        key: 3,
+        text: `김채린님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
+        date: '',
+        id: 2,
+      },
+      {
+        key: 4,
+        text: `임동현님이 회원님의 리뷰에 좋아요를 눌렀습니다.`,
+        date: '',
+        id: 2,
+      },
+    ];
+    return LIST_LIKE_DATA;
+  };
 
   const ListWantData = () => {
     const LIST_WANT_DATA = [
@@ -300,30 +320,34 @@ const MyPage = () => {
     );
   };
 
-  const LikeWantList = (ListData, Like) => {
+  // const LikeWantList = (ListData, Like) => {
+  const LikeWantList = (heartData) => {
     return (
       <SafeAreaView style={styles.ListContainer}>
         <View>
           <FlatList
-            data={ListData.ListData}
+            data={heartData}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() =>
-                  button2Pressed == true
-                    ? setContentsViewPopVisible(!contentsViewPopVisible)
-                    : null
-                }
-                style={styles.swipeListItem}>
-                {button2Pressed == true ? (
-                  <Title color={'black'}>
-                    {item}님이 회원님의 리뷰에 좋아요를 눌렀습니다.
-                  </Title>
-                ) : (
-                  <Title color={'black'}>
-                    {item}님이 회원님의 인터뷰 영상을 찜하였습니다.
-                  </Title>
-                )}
-              </TouchableOpacity>
+              // <TouchableOpacity
+              //   onPress={() =>
+              //     button2Pressed == true
+              //       ? setContentsViewPopVisible(!contentsViewPopVisible)
+              //       : null
+              //   }
+              //   style={styles.swipeListItem}>
+              //   {button2Pressed == true ? (
+              //     <Title color={'black'}>
+              //       {item}님이 회원님의 리뷰에 좋아요를 눌렀습니다.
+              //     </Title>
+              //   ) : (
+              //     <Title color={'black'}>
+              //       {item}님이 회원님의 인터뷰 영상을 찜하였습니다.
+              //     </Title>
+              //   )}
+              // </TouchableOpacity>
+              <Title color={'black'}>
+                {item}님이 회원님을 찜하셨습니다.
+              </Title>
             )}
             keyExtractor={(item, key) => key}
           />
@@ -342,11 +366,11 @@ const MyPage = () => {
         <View style={styles.visitContainer}>
           <VisitSubContainer
             title="오늘 방문자 수"
-            value={data.log_today}></VisitSubContainer>
+            value={data.todayCount}></VisitSubContainer>
           <View style={styles.visitSubCenterLine} />
           <VisitSubContainer
             title="누적 방문자 수"
-            value={data.log_total}></VisitSubContainer>
+            value={data.totalCount}></VisitSubContainer>
         </View>
       </Shadow>
 
@@ -375,7 +399,7 @@ const MyPage = () => {
             <View style={styles.visitLogView}>
               <View style={styles.flatListContainer}>
                 <FlatList
-                  data={logData}
+                  data={extractedData.visitLog}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => (
                     <View style={styles.list}>

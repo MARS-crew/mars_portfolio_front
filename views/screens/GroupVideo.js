@@ -103,7 +103,7 @@ const VideoItem = ({ id, src, medal }) => (
   </View>
 );
 
-const GroupVideo = ({ data }) => {
+const GroupVideo = ({ token }) => {
   // console.log(swiperIndex)
   // const IndexData = useContext(AppContext);
   const { currentIndex, changeIndex } = useIndexContext();

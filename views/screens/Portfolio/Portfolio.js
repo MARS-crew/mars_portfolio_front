@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Item = ({ item, index, portfolio, onModify, onDelete, detailPopVisible, setDetailPopVisible }) => {
+const Item = ({ item, index, portfolio, onModify, onDelete, detailPopVisible, setDetailPopVisible, token }) => {
   const shadowColor = 'rgba(151, 151, 151, 0.36)';
   return (
     <View style={styles.container}>
@@ -101,6 +101,7 @@ const Item = ({ item, index, portfolio, onModify, onDelete, detailPopVisible, se
             onModify={onModify}
             setDetailPopVisible={setDetailPopVisible}
             detailPopVisible={detailPopVisible}
+            token={token}
           />
         </View>
         {/* </ScrollView> */}
@@ -109,7 +110,7 @@ const Item = ({ item, index, portfolio, onModify, onDelete, detailPopVisible, se
   );
 };
 
-const Portfolio = () => {
+const Portfolio = ({ token }) => {
   const { currentIndex, changeIndex } = useIndexContext();
   const swiperRef = useRef(null);
   useEffect(() => {
@@ -144,8 +145,7 @@ const Portfolio = () => {
       method: 'get',
       url: 'http://10.0.2.2:3000/api/v1/portfolio/46',
       headers: {
-        Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDA3MDAzODEsImV4cCI6MTcwMDcwMzk4MX0.648SL5NvfKCKtqHeCobRcZZWKqPbKwa4O-fIuNZARlY',
+        Authorization: token,
       },
       cancelToken: source.token,
     })
@@ -166,17 +166,30 @@ const Portfolio = () => {
           )}`,
           del_yn: item.del_yn,
         }));
-        setData(extractedData);
+        // setData(extractedData);
+        const slicedData = extractedData.slice(1);
 
-        console.log('uri--------------------------------------------------');
-        console.log(
-          response.data.data.map(item => ({
-            url: `http://10.0.2.2:3000/${item.url.replace(
-              'http://localhost:3000/',
-              '',
-            )}`,
-          })),
-        );
+        setData(slicedData);
+
+        console.log('portfolio--------------------------------------------------');
+        console.log(slicedData);
+        // console.log(
+        //   extractedData.map(item => ({
+        //     member_id:
+        //     url: `http://10.0.2.2:3000/${item.url.replace(
+        //       'http://localhost:3000/',
+        //       '',
+        //     )}`,
+        //   })),
+        // );
+        // console.log(
+        //   response.data.data.map(item => ({
+        //     url: `http://10.0.2.2:3000/${item.url.replace(
+        //       'http://localhost:3000/',
+        //       '',
+        //     )}`,
+        //   })),
+        // );
       })
       .catch(function (error) {
         console.log(error);
@@ -304,7 +317,7 @@ const Portfolio = () => {
         ref={swiperRef}
         vertical={true}
         data={data}
-        renderItem={({ item, index }) => <Item item={item} portfolio={portfolio} onModify={onModify} onDelete={onDelete} index={index} detailPopVisible={detailPopVisible} setDetailPopVisible={setDetailPopVisible} />}
+        renderItem={({ item, index }) => <Item item={item} portfolio={portfolio} onModify={onModify} onDelete={onDelete} index={index} detailPopVisible={detailPopVisible} setDetailPopVisible={setDetailPopVisible} token={token} />}
         index={currentIndex}
         onScroll={handleScroll}
         hideShadow={true}

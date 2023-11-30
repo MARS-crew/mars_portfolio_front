@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import {
   View,
@@ -132,7 +132,7 @@ const Review = () => {
     setShowReviewInput(true);
   };
 
-  const currentReviewContent = ({content}) => {
+  const currentReviewContent = ({ content }) => {
     setReviewContent(content);
   };
 
@@ -147,7 +147,7 @@ const Review = () => {
       url: 'http://10.0.2.2:3000/api/v1/review/1',
 
       headers: {
-        Authorization: '',
+        Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDA3MDM4MTksImV4cCI6MTcwMDcwNzQxOX0.iKAfV2I6DfR1EHjVTEUl09ukGufxjnuDQ1eo8KIqvxQ',
       },
 
       cancelToken: source.token,
@@ -167,6 +167,15 @@ const Review = () => {
           }));
 
           setData(extractedData);
+          console.log('uri--------------------------------------------------');
+          console.log(
+            response.data.data.map(item => ({
+              url: `http://10.0.2.2:3000/${item.url.replace(
+                'http://localhost:3000/',
+                '',
+              )}`,
+            })),
+          );
         }
       })
 
@@ -215,7 +224,7 @@ const Review = () => {
         <View style={styles.itemView}>
           <FlatList
             data={data}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <ReviewItem
                 review={review}
                 id={item.review_id}
