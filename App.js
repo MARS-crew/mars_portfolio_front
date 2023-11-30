@@ -12,7 +12,7 @@ import Splash from './views/screens/splash';
 import Login from './views/screens/Login';
 import Resume from './views/screens/ResumeContents';
 import Portfolio from './views/screens/Portfolio/Portfolio';
-import Review from './views/screens/Review';
+import Review from './views/screens/Review/Review';
 import MyPage from './views/screens/MyPage/MyPage';
 import Album from './views/screens/Album';
 import Interview from './views/screens/Interview';
@@ -117,7 +117,6 @@ const HomeScreen = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
   // const { currentIndex } = useIndexContext();
-
 
   useEffect(() => {
     AsyncStorage.getItem('isSplashVisible').then(value => {
