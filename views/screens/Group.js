@@ -14,7 +14,7 @@ const Group = ({data}) => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={data}
-        renderItem={({item}) => <Item id={item.id} src={item.src}  />}
+        renderItem={({item}) => <Item id={item.id} src={item.src} />}
       />
     </SafeAreaView>
   );
