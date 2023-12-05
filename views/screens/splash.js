@@ -1,14 +1,14 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import LottieView from 'lottie-react-native';
 
-const Splash = ({isSplashVisible}) => {
+const Splash = ({ isSplashVisible }) => {
   if (!isSplashVisible) return null;
 
   return (
     <View>
       <LottieView
-        source={require('../../assets/lottie/spaceship.json')}
+        source={require('../../assets/lottie/Splash.json')}
         style={styles.lottie}
       />
     </View>

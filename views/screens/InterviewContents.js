@@ -88,9 +88,9 @@ const InterviewContents = ({ path }) => {
       setIsPlaying(false);
       return () => {
         setIsPlaying(false);
-      }
-    }, [])
-  )
+      };
+    }, []),
+  );
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.iconBar}>
@@ -111,47 +111,25 @@ const InterviewContents = ({ path }) => {
         <TouchableWithoutFeedback
           onPress={() => {
             doubleTap();
+            console.log(filePath);
           }}
           onLongPress={() => setModalOpen(true)}>
           {/* 저장된 video가 있으w면 video 출력. 없으면  마스외전 로고 출력*/}
-          {filePath ? (
-            typeof filePath === "string" ? (  //filepath가 string일때
-              <Video
-                ref={useRef(null)}
-                source={{ uri: filePath }}
-                style={[styles.content]}
-                controls={false}
-                resizeMode="cover"
-                repeat={true}
-                paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
-                onEnd={() => {
-                  setIsPlaying(false);
-                }}
-              />
-            ) : ( //filepath가 파일일때
-              <Video
-                ref={useRef(null)}
-                source={filePath}
-                style={[styles.content]}
-                controls={false}
-                resizeMode="cover"
-                repeat={true}
-                paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
-                onEnd={() => {
-                  setIsPlaying(false);
-                }}
-              />
-            )
-          ) : (
-            <Image
-              resizeMode="cover"
-              source={EmptyImg}
-              style={styles.content}
-              imageStyle={styles.imgStyle}
-            />
-          )}
+          <Video
+            ref={useRef(null)}
+            source={{ uri: filePath }}
+            style={[styles.content]}
+            controls={false}
+            resizeMode="cover"
+            repeat={true}
+            paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
+            onEnd={() => {
+              setIsPlaying(false);
+            }}
+          />
         </TouchableWithoutFeedback>
         {/* Animated로 변경, opacity 값 */}
+
         <Animated.View style={[styles.animate, heartStyle(opacity).heart]}>
           {heart ? (
             <Icon name="heart" size={100} color={'white'} />

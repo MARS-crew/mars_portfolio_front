@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Animated,
   Dimensions,
@@ -10,12 +10,9 @@ import {
 
 import Splash from './views/screens/splash';
 import Login from './views/screens/Login';
-import Group from './views/screens/Group';
-import Member from './views/screens/Member';
-import Youtube from './views/screens/Youtube';
-import Resume from './views/screens/Resume';
+import Resume from './views/screens/ResumeContents';
 import Portfolio from './views/screens/Portfolio/Portfolio';
-import Review from './views/screens/Review';
+import Review from './views/screens/Review/Review';
 import MyPage from './views/screens/MyPage/MyPage';
 import Album from './views/screens/Album';
 import Interview from './views/screens/Interview';
@@ -26,9 +23,12 @@ import Share from './views/screens/Share';
 
 import GroupVideo from './views/screens/GroupVideo';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AppContext from './AppContext`';
+import { MyProvider } from './MyContext';
+import { IndexProvider, useIndexContext } from './IndexContext';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -49,7 +49,7 @@ const Stack = createStackNavigator();
 const transitionAnimation = index => {
   return {
     transform: [
-      {perspective: 800},
+      { perspective: 800 },
       {
         scale: xOffset.interpolate({
           inputRange: [
@@ -91,22 +91,22 @@ const App = () => {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Help"
           component={Help}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Share"
           component={Share}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Album"
           component={Album}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -116,6 +116,8 @@ const App = () => {
 const HomeScreen = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDE2MjA4ODAsImV4cCI6MTcwMTYyNDQ4MH0.LkeqeB9wrUvdsaluv7XwRgI4taGrQNyfHYBhsV1AmXw';
+  // const { currentIndex } = useIndexContext();
 
   useEffect(() => {
     AsyncStorage.getItem('isSplashVisible').then(value => {
@@ -134,41 +136,57 @@ const HomeScreen = () => {
   useEffect(() => {
     AsyncStorage.setItem('isSplashVisible', JSON.stringify(isSplashVisible));
   }, [isSplashVisible]);
+  // const [indexValue, setIndexValue] = useState(0);
+
+  // const userSettings = {
+  //   swiperIndex: indexValue,
+  //   setIndexValue,
+  // };
+  // console.log(ind);
 
   return (
-    <Animated.ScrollView
-      scrollEventThrottle={16}
-      onScroll={Animated.event([{nativeEvent: {contentOffset: {x: xOffset}}}], {
-        useNativeDriver: true,
-      })}
-      horizontal
-      pagingEnabled
-      style={styles.scrollView}>
-      <Splash isSplashVisible={isSplashVisible} />
-      {isSplashVisible === false ? (
-        <Screen text="Screen 1" index={0}>
-          <WhichGroup />
-        </Screen>
-      ) : null}
-      <Screen text="Screen 2" index={1}>
-        <GroupVideo />
-      </Screen>
-      <Screen text="Screen 3" index={2}>
-        <Interview />
-      </Screen>
-      <Screen text="Screen 4" index={3}>
-        <Resume modalOpen={modalOpen} />
-      </Screen>
-      <Screen text="Screen 5" index={4}>
-        <Portfolio options={{headerShown: false}} />
-      </Screen>
-      <Screen text="Screen 6" index={5}>
-        <Review />
-      </Screen>
-      <Screen text="Screen 7" index={6}>
-        <MyPage options={{headerShown: false}} />
-      </Screen>
-    </Animated.ScrollView>
+    // <AppContext.Provider value={userSettings}>
+    <IndexProvider>
+      <MyProvider>
+        <Animated.ScrollView
+          scrollEventThrottle={16}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: xOffset } } }],
+            {
+              useNativeDriver: true,
+            },
+          )}
+          horizontal
+          pagingEnabled
+          style={styles.scrollView}>
+          <Splash isSplashVisible={isSplashVisible} />
+          {isSplashVisible === false ? (
+            <Screen text="Screen 1" index={0}>
+              <WhichGroup token={token} />
+            </Screen>
+          ) : null}
+          <Screen text="Screen 2" index={1}>
+            <GroupVideo token={token} />
+          </Screen>
+          <Screen text="Screen 3" index={2}>
+            <Interview token={token} />
+          </Screen>
+          <Screen text="Screen 4" index={3}>
+            <Portfolio token={token} options={{ headerShown: false }} />
+          </Screen>
+          <Screen text="Screen 5" index={4}>
+            <Resume token={token} />
+          </Screen>
+          <Screen text="Screen 6" index={5}>
+            <Review token={token} />
+          </Screen>
+          <Screen text="Screen 7" index={6}>
+            <MyPage token={token} options={{ headerShown: false }} />
+          </Screen>
+        </Animated.ScrollView>
+      </MyProvider>
+      {/* </AppContext.Provider> */}
+    </IndexProvider>
   );
 };
 

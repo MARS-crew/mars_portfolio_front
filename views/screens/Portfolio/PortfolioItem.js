@@ -43,8 +43,11 @@ const PortfolioItem = ({
   portfolio,
   id,
   title,
-  src,
   code,
+  file_id,
+  src,
+  ext,
+  del_yn,
   message,
   onModify,
   onDelete,
@@ -60,29 +63,34 @@ const PortfolioItem = ({
       <View style={[styles.gridItem]}>
         <TouchableOpacity
           onPress={() =>
-            id === '6'
-              ? setDetailPopVisible(!detailPopVisible)
-              : setContentsViewPopVisible(!contentsViewPopVisible)
+            // id === '6'
+            //   ? setDetailPopVisible(!detailPopVisible)
+            //   : setContentsViewPopVisible(!contentsViewPopVisible)
+            setContentsViewPopVisible(!contentsViewPopVisible)
           }
           onLongPress={() =>
-            id === '6'
-              ? setDetailPopVisible(!detailPopVisible)
-              : setIsModalVisible(!isModalVisible)
+            // id === '6'
+            //   ? setDetailPopVisible(!detailPopVisible)
+            //   : setIsModalVisible(!isModalVisible)
+            setIsModalVisible(!isModalVisible)
           }>
-          {code === '1' && (
+          {(code === 1 || code === 3) && (
+            <View>
+              <Image
+                source={{uri: src}}
+                style={[styles.content, styles.image]}
+              />
+            </View>
+          )}
+          {code === 2 && (
             <View>
               <Video
                 ref={useRef(null)}
-                source={src}
+                source={{uri: src}}
                 style={styles.content}
                 repeat={true}
                 resizeMode="contain"
               />
-            </View>
-          )}
-          {code !== '1' && (
-            <View>
-              <Image source={src} style={[styles.content, styles.image]} />
             </View>
           )}
         </TouchableOpacity>
@@ -102,6 +110,7 @@ const PortfolioItem = ({
         <EditMode
           portfolio={portfolio}
           id={id}
+          code={code}
           onModify={onModify}
           onDelete={onDelete}
           isModalVisible={isModalVisible}
