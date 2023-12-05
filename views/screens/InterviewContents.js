@@ -12,6 +12,7 @@ import {
   Dimensions,
   Image,
 } from 'react-native';
+import axios from 'axios';
 import Icon from 'react-native-vector-icons/AntDesign';
 import EmptyImg from '../../assets/images/Empty.png';
 import InterviewModal from '../components/InterviewModal';
@@ -19,7 +20,7 @@ import Video from 'react-native-video';
 import InterviewAlert from '../components/InterviewAlert';
 import { useFocusEffect } from '@react-navigation/native';
 
-const InterviewContents = ({ path }) => {
+const InterviewContents = ({ id, path, token }) => {
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
 
   const [heart, setHeart] = useState(false); // 하트 상태
@@ -55,12 +56,31 @@ const InterviewContents = ({ path }) => {
       }
     }
   };
+  //하트 상태 변경
+  const fetchHeart = async () => {
+    console.log('여기왔냐?')
+    try {
+      const response = await axios({
+        method: 'post',
+        url: 'http://192.168.0.2:3000/api/v1/interview/heart/'+id,
+        headers: {
+          Authorization: token
+        },
+      });
+      console.log(response.data);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   //찜 기능
   const toggleHeart = () => {
     //video 데이터가 없을 땐 찜 기능 안되도록
     if (filePath !== undefined) {
       setHeart(previousState => !previousState);
       fillHeart();
+      fetchHeart();
     } else {
       // Alert.alert('데이터가 없습니다.');
       setShowAlert(true);
@@ -95,7 +115,7 @@ const InterviewContents = ({ path }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.iconBar}>
         <TouchableOpacity onPress={toggleHeart} style={styles.icon}>
-          {heart ? (
+          {!heart ? (
             <Icon name="heart" size={30} color={'red'} />
           ) : (
             <Icon name="heart" size={30} color={'#E4E3E8'} />
