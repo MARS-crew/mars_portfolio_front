@@ -1,9 +1,9 @@
-import {React} from 'react';
+import { React } from 'react';
 
 import Group from './Group';
 import ManyGroup from './ManyGroup';
 import GroupVideo from './GroupVideo';
-import {set} from 'react-native-reanimated';
+import { set } from 'react-native-reanimated';
 //import { View } from 'react-native';
 
 const DATA = [
@@ -45,9 +45,9 @@ const DATA = [
   // },
 ];
 
-const WhichGroup = ({swiperIndex, setSwiperIndex}) => {
+const WhichGroup = ({ token }) => {
   if (DATA.length <= 6) {
-    return <Group data={DATA} />;
+    return <Group token={token} data={DATA} />;
   } else {
     return <ManyGroup data={DATA} />;
   }

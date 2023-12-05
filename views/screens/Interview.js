@@ -1,14 +1,18 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Animated,
   Dimensions,
   ScrollView,
   StyleSheet,
+  SafeAreaView,
   Text,
   View,
 } from 'react-native';
 import axios from 'axios';
 import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
+import SwiperFlatList from 'react-native-swiper-flatlist';
+import { useIndexContext } from '../../IndexContext';
+
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const yOffset = new Animated.Value(0);
@@ -23,10 +27,16 @@ const Screen = props => {
   );
 };
 
+const Item = ({ id, path }) => (
+  <View>
+    <InterviewContents id={id} path={path} />
+  </View>
+);
+
 const transitionAnimation = index => {
   return {
     transform: [
-      {perspective: 800},
+      { perspective: 800 },
       {
         scale: yOffset.interpolate({
           inputRange: [
@@ -54,19 +64,41 @@ const transitionAnimation = index => {
 const interviewFiles = [
   {
     id: 1,
-    path: require('../../assets/videos/interviewVideo.mp4'),
+    path: '../../assets/videos/interviewVideo.mp4',
   },
   {
     id: 2,
-    path: '',
+    path: require('./interviewVideo.mp4'),
   },
   {
     id: 3,
-    path: '',
+    path: require('../../assets/video/mars_profil1.mp4'),
   },
 ];
 
-const Interview = () => {
+const Interview = ({ token }) => {
+  const { currentIndex, changeIndex } = useIndexContext();
+  const swiperRef = useRef(null);
+
+  useEffect(() => {
+    if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
+      swiperRef.current.scrollToIndex({
+        index: currentIndex,
+        animated: true,
+      });
+    }
+  }, [currentIndex, swiperRef]);
+
+  const height = Dimensions.get('window').height;
+  const handleScroll = event => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const newIndex = Math.round(offsetY / height);
+    // IndexData.setIndexValue(index);
+    changeIndex(newIndex);
+  }
+  // console.log('3번째 스크린 기수 인덱스: ', currentIndex);
+
+
   const [data, setData] = useState([]);
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -74,8 +106,7 @@ const Interview = () => {
       method: 'get',
       url: 'http://10.0.2.2:3000/api/v1/interview/',
       headers: {
-        Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTgxMjgxMzQsImV4cCI6MTY5ODEzMTczNH0.-DUZG3W7gcVPzm3bH_SM9lyAJt5_kZnIqD5_SN4SyT0',
+        Authorization: token
       },
       cancelToken: source.token,
     })
@@ -83,37 +114,17 @@ const Interview = () => {
         const extractedData = response.data.data.map(item => ({
           url: item.url,
         }));
-        setData(extractedData);
+        // setData(extractedData);
 
-        console.log(extractedData);
+        // console.log(extractedData);
 
-        //console.log(response);
-        // console.log(
-        //   'file_id--------------------------------------------------',
-        // );
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     file_id: item.file_id,
-        //   })),
-        // );
-        // console.log('ext--------------------------------------------------');
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     ext: item.ext,
-        //   })),
-        // );
-        // console.log('uri--------------------------------------------------');
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     url: item.url,
-        //   })),
-        // );
-        // console.log('del_yn--------------------------------------------------');
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     del_yn: item.del_yn,
-        //   })),
-        // );
+        const slicedData = extractedData.slice(1);
+
+        setData(slicedData);
+
+        console.log("interview--------------------------------------------------');");
+        console.log(slicedData);
+
       })
       .catch(function (error) {
         console.log(error);
@@ -126,23 +137,36 @@ const Interview = () => {
   }, []);
 
   return (
-    <Animated.ScrollView
-      scrollEventThrottle={16}
-      onScroll={Animated.event([{nativeEvent: {contentOffset: {y: yOffset}}}], {
-        useNativeDriver: true,
-      })}
-      pagingEnabled
-      style={styles.scrollView}>
-      {data.map((item, index) => (
-        <Screen key={index} index={index}>
-          <InterviewContents path={item.url} />
-        </Screen>
-      ))}
-    </Animated.ScrollView>
+    // <Animated.ScrollView
+    //   ref={swiperRef}
+    //   scrollEventThrottle={16}
+    //   // onScroll={handleScroll}
+    //   pagingEnabled
+    //   style={styles.scrollView}>
+    //   {data.map((item, index) => (
+    //     <Animated.View key={index} index={index} style={[styles.screen, transitionAnimation(index)]}>
+    //       <InterviewContents path={item.url} />
+    //     </Animated.View>
+    //   ))}
+    // </Animated.ScrollView>
+    <SafeAreaView style={styles.container}>
+      <SwiperFlatList
+        ref={swiperRef}
+        vertical={true}
+        data={data}
+        renderItem={({ item }) => <InterviewContents id={item.id} path={item.url} />}
+        index={currentIndex}
+        onScroll={handleScroll}
+        hideShadow={true}
+      />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+  },
   scrollView: {
     flex: 1,
     flexDirection: 'column',

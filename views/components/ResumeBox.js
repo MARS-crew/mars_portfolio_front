@@ -20,6 +20,326 @@ import springboot_icon from '../../assets/images/devIcon/springboot.png'
 import { help } from "yargs";
 import React, { useState } from "react";
 import { TouchableOpacity } from 'react-native-gesture-handler';
+// {
+//     (item.id === '5' || item.id === '6' || item.id === '7') ? (
+//         <View style={styles.line2} />
+//     ) : (
+//         <View style={styles.line} />
+//     )
+// }
+const IntroContent = ({ item }) => {
+    const containerStyles = { ...styles.container, marginTop: 20 }
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View>
+                <Text style={styles.title}>간단소개</Text>
+                <View style={styles.line} />
+                <Text style={[styles.content, styles.introContent]}>
+                    <View>
+                        <Text style={styles.infoText}>{item.name}</Text>
+                        <View style={styles.icons}>
+                            <View style={styles.iconsText}>
+                                <Image
+                                    source={tel_icon}
+                                    style={styles.icon} />
+                                <Text style={styles.defaultText}>010-1111-2222</Text>
+                            </View>
+                            <View style={styles.iconsText} >
+                                <Image
+                                    source={home_icon}
+                                    style={styles.icon} />
+                                <Text style={styles.defaultText}>경기도</Text>
+                            </View>
+                            <View style={styles.iconsText}>
+                                <Image
+                                    source={main_icon}
+                                    style={styles.icon} />
+                                <Text style={styles.defaultText}>123@naver.com</Text>
+                            </View>
+                        </View>
+                    </View>
+                </Text>
+            </View>
+        </Shadow>
+    );
+}
+
+const InfoContent = ({ item }) => {
+    const containerStyles = { ...styles.container };
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View>
+                <Text style={styles.title}>기본정보</Text>
+                <View style={styles.line} />
+                <Text style={[styles.content, styles.basicInfoContent]}>
+                    <View>
+                        <View>
+                            <View style={styles.iconsText}>
+                                <Text style={styles.infoText}>회사명</Text>
+                                <Text style={styles.defaultText}>사원</Text>
+                            </View>
+                            <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
+                            <Text style={styles.defaultText2}>개발</Text>
+                        </View>
+                        <View style={styles.line} />
+                        <View>
+                            <View style={styles.iconsText}>
+                                <Text style={styles.infoText}>회사명</Text>
+                                <Text style={styles.defaultText}>사원</Text>
+                            </View>
+                            <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
+                            <Text style={styles.defaultText2}>개발</Text>
+                        </View>
+                    </View>
+                </Text>
+            </View>
+        </Shadow>
+    )
+}
+const CareerContent = ({ item }) => {
+    const containerStyles = { ...styles.container };
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View>
+                <Text style={styles.title}>경력</Text>
+                <View style={styles.line} />
+                <Text style={[styles.content, styles.careerContent]}>
+                    <View>
+                        <View style={styles.iconsText}>
+                            <Text style={styles.infoText}>회사명</Text>
+                            <Text style={styles.defaultText}>사원</Text>
+                        </View>
+                        <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
+                        <Text style={styles.defaultText2}>개발</Text>
+                    </View>
+                    <View style={styles.line} />
+                    <View>
+                        <View style={styles.iconsText}>
+                            <Text style={styles.infoText}>회사명</Text>
+                            <Text style={styles.defaultText}>사원</Text>
+                        </View>
+                        <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
+                        <Text style={styles.defaultText2}>개발</Text>
+                    </View>
+                </Text>
+            </View>
+        </Shadow>
+    )
+}
+
+const AwardContent = () => {
+    const containerStyles = { ...styles.container };
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View>
+                <Text style={styles.title}>수상내역</Text>
+                <View style={styles.line} />
+                <Text style={[styles.content, styles.careerContent]}>
+                    <View>
+                        <View>
+                            <View>
+                                <Text style={styles.infoText}>프로젝트 우수상</Text>
+                            </View>
+                            <Text style={styles.dateText}>2020.06.06</Text>
+                            <Text style={styles.defaultText2}>마스외전</Text>
+                        </View>
+                    </View>
+                </Text>
+            </View>
+        </Shadow>
+    );
+}
+
+const InterestContent = () => {
+    const containerStyles = { ...styles.container };
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View>
+                <Text style={styles.title}>관심분야</Text>
+                <View style={styles.line2} />
+                <Text style={[styles.content, styles.interestContent]}>
+                    <View>
+                        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
+                        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
+                    </View>
+                </Text>
+            </View>
+        </Shadow>
+    );
+}
+
+const SpecialityContent = () => {
+    const containerStyles = { ...styles.container };
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View>
+                <Text style={styles.title}>전문분야</Text>
+                <View style={styles.line2} />
+                <Text style={[styles.content, styles.specialtyContent]}>
+                    <View>
+                        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
+                        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
+                    </View>
+                </Text>
+            </View>
+        </Shadow>
+    );
+}
+
+const SkillContent = () => {
+    const [popupIcon, setPopupIcon] = useState('');
+    const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [detailPopVisible, setDetailPopVisible] = useState(false);
+
+    const handleIconClick = (id) => {
+        // 클릭하면 상세 팝업 가시성과 컨텐츠 뷰 팝업 가시성을 모두 반전시킴
+        setDetailPopVisible(!detailPopVisible);
+        setContentsViewPopVisible(!contentsViewPopVisible);
+
+        // 클릭한 아이콘의 아이디를 설정
+        setPopupIcon(id);
+    };
+
+    const handleClosePopup = () => {
+        setPopupIcon('');
+    };
+
+    const containerStyles = { ...styles.container, marginBottom: 20 };
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View>
+                <Text style={styles.title}>보유기술</Text>
+                <View style={styles.line2} />
+                <Text style={[styles.content, styles.skillContent]}>
+                    <View style={styles.devContainer}>
+                        {/* 자바 */}
+                        <TouchableOpacity onPress={() => handleIconClick('java')}>
+                            <View style={styles.devIcons}>
+                                <Image
+                                    source={java_icon}
+                                    style={styles.devIcon} />
+                                <Text style={styles.devIconText}>JAVA</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        {/* php */}
+                        <TouchableOpacity onPress={() => handleIconClick('php')}>
+                            <View style={styles.devIcons}>
+                                <Image
+                                    source={php_icon}
+                                    style={styles.devIcon} />
+                                <Text style={styles.devIconText}>PHP</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        {/* 리액트 */}
+                        <TouchableOpacity onPress={() => handleIconClick('react')}>
+                            <View style={styles.devIcons}>
+                                <Image
+                                    source={react_icon}
+                                    style={styles.devIcon} />
+                                <Text style={styles.devIconText}>React</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        {/* mysql */}
+                        <TouchableOpacity onPress={() => handleIconClick('mysql')}>
+                            <View style={styles.devIcons}>
+                                <Image
+                                    source={mysql_icon}
+                                    style={styles.devIcon} />
+                                <Text style={styles.devIconText}>MySQL</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        {/* 자바스크립트  */}
+                        <TouchableOpacity onPress={() => handleIconClick('js')}>
+                            <View style={styles.devIcons}>
+                                <Image
+                                    source={js_icon}
+                                    style={styles.devIcon} />
+                                <Text style={styles.devIconText}>JavaScript</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        {/* html */}
+                        <TouchableOpacity onPress={() => handleIconClick('html')}>
+                            <View style={styles.devIcons}>
+                                <Image
+                                    source={html5_icon}
+                                    style={styles.devIcon} />
+                                <Text style={styles.devIconText}>HTML5</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        {/* 팝업 */}
+                        {popupIcon !== '' && (
+                            <Id7Popup
+                                id={popupIcon}
+                                onClose={handleClosePopup}
+                                contentsViewPopVisible={contentsViewPopVisible}
+                                setContentsViewPopVisible={setContentsViewPopVisible}
+                                detailPopVisible={detailPopVisible} // 추가: 상세 팝업 가시성 상태를 전달
+                                setDetailPopVisible={setDetailPopVisible} // 추가: 상세 팝업 가시성 상태를 업데이트하는 함수를 전달
+                            />
+                        )}
+                    </View>
+                </Text>
+            </View>
+        </Shadow>
+    );
+
+}
 
 const ResumeBox = ({ item }) => {
     const containerStyles = item.id === '1' ? { ...styles.container, marginTop: 20 } :
@@ -216,22 +536,34 @@ const ResumeBox = ({ item }) => {
     }
 
     return (
-        <Shadow
-            style={[containerStyles]} // 추가 스타일 적용
-            radius={100}
-            offset={[1, 1]}
-            startColor={'rgba(151, 151, 151, 0.05)'}
-            endColor={'rgba(151, 151, 151, 0.01)'}
-            distance={8}
-        >
-            <Text style={styles.title}>{item.title}</Text>
-            {(item.id === '5' || item.id === '6' || item.id === '7') ? (
-                <View style={styles.line2} />
-            ) : (
-                <View style={styles.line} />
-            )}
-            <Text style={[styles.content, contentStyles]}>{content}</Text>
-        </Shadow>
+        // <Shadow
+        //     style={[containerStyles]} // 추가 스타일 적용
+        //     radius={100}
+        //     offset={[1, 1]}
+        //     startColor={'rgba(151, 151, 151, 0.05)'}
+        //     endColor={'rgba(151, 151, 151, 0.01)'}
+        //     distance={8}
+        // >
+        //     {/* <IntroContent />
+        //     <InfoContent /> */}
+        //     <Text style={styles.title}>{item.title}</Text>
+        //     {(item.id === '5' || item.id === '6' || item.id === '7') ? (
+        //         <View style={styles.line2} />
+        //     ) : (
+        //         <View style={styles.line} />
+        //     )}
+        //     <Text style={[styles.content, contentStyles]}>{content}</Text>
+
+        // </Shadow>
+        <View>
+            <IntroContent item={item} />
+            <InfoContent item={item} />
+            <CareerContent item={item} />
+            <AwardContent item={item} />
+            <InterestContent item={item} />
+            <SpecialityContent item={item} />
+            <SkillContent item={item} />
+        </View>
     );
 };
 

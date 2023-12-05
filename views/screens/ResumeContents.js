@@ -1,45 +1,70 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, FlatList, Image } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { StyleSheet, View, FlatList, Image, Dimensions } from 'react-native';
 import ResumeBox from '../components/ResumeBox';
 import ResumeBoxMD from '../components/ResumeBoxMD';
 import FAB from '../components/FloatingMenu';
 import ResumeEditMode from "../components/ResumeEditMode";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import SwiperFlatList from 'react-native-swiper-flatlist';
+import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
+import { useIndexContext } from '../../IndexContext';
 
 
 
 const DATA = [
   {
     id: '1',
-    title: '간단소개',
+    name: '이름1',
   },
   {
     id: '2',
-    title: '기본정보',
+    name: '이름2',
   },
   {
     id: '3',
-    title: '경력',
+    name: '이름3',
   },
-  {
-    id: '4',
-    title: '수상내역',
-  },
-  {
-    id: '5',
-    title: '관심분야',
-  },
-  {
-    id: '6',
-    title: '전문분야',
-  },
-  {
-    id: '7',
-    title: '보유기술',
-  },
+  // {
+  //   id: '4',
+  //   title: '수상내역',
+  // },
+  // {
+  //   id: '5',
+  //   title: '관심분야',
+  // },
+  // {
+  //   id: '6',
+  //   title: '전문분야',
+  // },
+  // {
+  //   id: '7',
+  //   title: '보유기술',
+  // },
 ];
 
-const ResumeContents = (swiperIndex, setSwiperIndex) => {
+const Resume = ({ }) => {
+  const { currentIndex, changeIndex } = useIndexContext();
+  const swiperRef = useRef(null);
+  useEffect(() => {
+    // if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
+    if (swiperRef.current > 0 && currentIndex !== undefined) {
+      swiperRef.current.scrollToIndex({
+        index: currentIndex,
+        animated: true,
+      });
+    }
+  }, [currentIndex, swiperRef]);
+
+  const height = Dimensions.get('window').height;
+  const handleScroll = event => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const newIndex = Math.round(offsetY / height);
+    // IndexData.setIndexValue(index);
+    changeIndex(newIndex);
+  };
+  // console.log('5번째 스크린 기수 인덱스: ', currentIndex);
+
+
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [resume, setResume] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
   const toggleModal = () => {
@@ -53,8 +78,11 @@ const ResumeContents = (swiperIndex, setSwiperIndex) => {
     });
   };
 
-  const renderItem = ({ item }) => {
+
+
+  const Item = ({ item }) => {
     return (
+      // <ScrollView>
       <TouchableOpacity
         onLongPress={toggleModal}
         activeOpacity={100}
@@ -65,6 +93,7 @@ const ResumeContents = (swiperIndex, setSwiperIndex) => {
           <ResumeBox item={item} />
         )}
       </TouchableOpacity>
+      // </ScrollView>
     );
   };
 
@@ -76,10 +105,12 @@ const ResumeContents = (swiperIndex, setSwiperIndex) => {
       {/* <TouchableOpacity 
         onPress={toggleModal}
         activeOpacity={100} > */}
-      <FlatList
+      <SwiperFlatList
         data={DATA}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
+        renderItem={({ item }) => (<Item item={item} />)}
+        // keyExtractor={item => item.id}
+        index={currentIndex}
+        onScroll={handleScroll}
       />
       <FAB />
       <ResumeEditMode
@@ -101,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ResumeContents;
+export default Resume;

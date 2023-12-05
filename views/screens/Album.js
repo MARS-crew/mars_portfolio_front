@@ -261,7 +261,7 @@ const Album = () => {
 
       headers: {
         Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjAsIm1lbWJlcl9pZCI6NDYsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7Zi465Sx7J20IiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUN5WG5uUWk5WF9sSGgwM0VERXlpRTNQMmZ3Q25IbGtkYmRIY2l4VGRzNTQtZDRKM285ckYzV2c2YnVGeEg3Yk9aLWxLQlNPNG1qUnpxd2Mzb2RMeF9nYmUzRmhYdElRQldyVEtldnItWS1BMTdxa0tfd2FGT1dfeV9JWjFpVncwRG9PcFZpa3JST0RMa3NqeGtuQWFHVDBfY0NUYUZSYUNnWUtBVFlTQVJNU0ZRR09jTm5DLWdONzNtNkdNQnpHeXA4S0o3b2x1ZzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDlUMDI6NDk6MjcuMDAwWiJ9LCJpYXQiOjE2OTg5MDgwODEsImV4cCI6MTY5ODkxMTY4MX0.3wR8i0ma3fOnBaP_AZM45UF0xkFBlg00_kcLUl8l1bQ',
+          'eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXRlIjoiMjAyMy0xMS0xNVQyMzo1NjowOS4wMDBaIn0sImlhdCI6MTcwMDEyNDk3MCwiZXhwIjoxNzAwMTI4NTcwfQ',
       },
       cancelToken: source.token,
     })
@@ -337,10 +337,10 @@ const Album = () => {
                   <Shadow
                     distance="12"
                     startColor={shadowColor}
-                    offset={[1, 1]}>
+                    offset={[1, 1]}
+                    key={image.album_id}>
                     <TouchableOpacity
                       style={styles.imageContainer}
-                      key={image.album_id}
                       onPress={() => {
                         handleImagePress({
                           uri: image.url,
@@ -374,10 +374,10 @@ const Album = () => {
                   <Shadow
                     distance="12"
                     startColor={shadowColor}
-                    offset={[1, 1]}>
+                    offset={[1, 1]}
+                    key={image.album_id}>
                     <TouchableOpacity
                       style={styles.imageContainer}
-                      key={image.album_id}
                       onPress={() => {
                         [
                           handleImagePress({

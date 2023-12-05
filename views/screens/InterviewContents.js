@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -17,9 +17,9 @@ import EmptyImg from '../../assets/images/Empty.png';
 import InterviewModal from '../components/InterviewModal';
 import Video from 'react-native-video';
 import InterviewAlert from '../components/InterviewAlert';
-import {useFocusEffect} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
-const InterviewContents = ({path}) => {
+const InterviewContents = ({ path }) => {
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
 
   const [heart, setHeart] = useState(false); // 하트 상태
@@ -117,7 +117,7 @@ const InterviewContents = ({path}) => {
           {/* 저장된 video가 있으w면 video 출력. 없으면  마스외전 로고 출력*/}
           <Video
             ref={useRef(null)}
-            source={{uri: filePath}}
+            source={{ uri: filePath }}
             style={[styles.content]}
             controls={false}
             resizeMode="cover"

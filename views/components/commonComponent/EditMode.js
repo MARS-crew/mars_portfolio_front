@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Modal,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   View,
   Image,
 } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 import DetailPop from '../../screens/Portfolio/DetailPop';
 import ChoosePop from './ChoosePop';
@@ -51,6 +51,7 @@ const EditMode = ({
   //포트폴리오 프롭스
   portfolio,
   id,
+  code,
   onModify,
   onDelete,
   //인터뷰 프롭스
@@ -176,7 +177,7 @@ const EditMode = ({
 
   // EditMode Button onPress 용 Props 컴포넌트 end------------------------------------------------------------------------------------------------------------------------
 
-  const EditModeSectionChooseBtn = ({ title, source, onPress }) => {
+  const EditModeSectionChooseBtn = ({title, source, onPress}) => {
     return (
       <TouchableOpacity style={styles.navBarView} onPress={onPress}>
         <View style={styles.navBarView}>
@@ -238,6 +239,7 @@ const EditMode = ({
 
           <DetailPop
             id={id}
+            code={code}
             onModify={onModify}
             checkChoosePopOkButton={checkChoosePopOkButton}
             setCheckChoosePopOkButton={setCheckChoosePopOkButton}
@@ -246,7 +248,7 @@ const EditMode = ({
             setDetailPopVisible={setDetailPopVisible}></DetailPop>
           <ChoosePop
             //공통
-            title="수정된 내용을 저장하시겠습니까?"
+            popTitle="수정된 내용을 저장하시겠습니까?"
             setTogleButton={setTogleButton}
             checkDeletePopOkButton={checkDeletePopOkButton}
             setCheckDeletePopOkButton={setCheckDeletePopOkButton}
@@ -261,11 +263,12 @@ const EditMode = ({
             //포트폴리오
             portfolio={portfolio}
             id={id}
+            code={code}
             onModify={onModify}
             onDelete={onDelete}></ChoosePop>
           <ChoosePop
             //공통
-            title="수정된 내용을 삭제하시겠습니까?"
+            popTitle="수정된 내용을 삭제하시겠습니까?"
             checkDeletePopOkButton={checkDeletePopOkButton}
             setCheckDeletePopOkButton={setCheckDeletePopOkButton}
             setIsModalVisible={setIsModalVisible}
@@ -278,7 +281,8 @@ const EditMode = ({
             setIsEditing={setIsEditing}
             //포트폴리오
             portfolio={portfolio}
-            id={id}></ChoosePop>
+            id={id}
+            code={code}></ChoosePop>
         </Pressable>
       </TouchableOpacity>
     </Modal>

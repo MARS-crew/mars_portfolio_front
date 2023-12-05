@@ -74,7 +74,7 @@ const PortfolioItem = ({
             //   : setIsModalVisible(!isModalVisible)
             setIsModalVisible(!isModalVisible)
           }>
-          {code === 1 && (
+          {(code === 1 || code === 3) && (
             <View>
               <Image
                 source={{uri: src}}
@@ -110,6 +110,7 @@ const PortfolioItem = ({
         <EditMode
           portfolio={portfolio}
           id={id}
+          code={code}
           onModify={onModify}
           onDelete={onDelete}
           isModalVisible={isModalVisible}
