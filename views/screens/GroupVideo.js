@@ -132,7 +132,7 @@ const GroupVideo = ({ token }) => {
     // console.log('인덱스 값 (전체 거리 /세로 1 화면):', offsetY / height);
   };
 
-  console.log('2번 스크린 기수 비디오:', currentIndex);
+  // console.log('2번 스크린 기수 비디오:', currentIndex);
 
   return (
     <SafeAreaView style={styles.containbox}>

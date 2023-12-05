@@ -67,7 +67,7 @@ const Group = ({ data, token }) => {
     // console.log('인덱스 값 (전체 거리 /세로 1 화면):', offsetY / height);
   };
 
-  console.log('1번 스크린 기수 비디오:', currentIndex);
+  // console.log('1번 스크린 기수 비디오:', currentIndex);
   return (
     <SafeAreaView style={StyleSheet.container}>
       <SwiperFlatList

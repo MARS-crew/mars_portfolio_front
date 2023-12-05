@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   SafeAreaView,
@@ -14,12 +14,12 @@ import FAB from '../../components/FloatingMenu';
 import PortfolioItem from '../Portfolio/PortfolioItem';
 import DetailPop from './DetailPop';
 import axios from 'axios'; // axios import 합니다.
-import {Shadow} from 'react-native-shadow-2';
+import { Shadow } from 'react-native-shadow-2';
 import addBtn from '../../../assets/images/add.png';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import {useIndexContext} from '../../../IndexContext';
+import { useIndexContext } from '../../../IndexContext';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.4 - 5;
 
 const styles = StyleSheet.create({
@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Portfolio = ({token}) => {
-  const {currentIndex, changeIndex} = useIndexContext();
+const Portfolio = ({ token }) => {
+  const { currentIndex, changeIndex } = useIndexContext();
   const swiperRef = useRef(null);
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
@@ -76,7 +76,7 @@ const Portfolio = ({token}) => {
     // IndexData.setIndexValue(index);
     changeIndex(newIndex);
   };
-  console.log('4번째 스크린 기수 인덱스: ', currentIndex);
+  // console.log('4번째 스크린 기수 인덱스: ', currentIndex);
 
   const [detailPopVisible, setDetailPopVisible] = useState(false);
   const [data, setData] = useState([]);
@@ -89,7 +89,7 @@ const Portfolio = ({token}) => {
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: 'http://10.0.2.2:3000/api/v1/portfolio/',
+      url: 'http://172.23.0.1:3000/api/v1/portfolio/',
       headers: {
         Authorization: token,
       },
@@ -113,31 +113,13 @@ const Portfolio = ({token}) => {
           del_yn: item.del_yn,
         }));
         // setData(extractedData);
-        const slicedData = extractedData.slice(1);
 
-        setData(slicedData);
+        setData(extractedData);
 
         console.log(
           'portfolio--------------------------------------------------',
         );
-        console.log(slicedData);
-        // console.log(
-        //   extractedData.map(item => ({
-        //     member_id:
-        //     url: `http://10.0.2.2:3000/${item.url.replace(
-        //       'http://localhost:3000/',
-        //       '',
-        //     )}`,
-        //   })),
-        // );
-        // console.log(
-        //   response.data.data.map(item => ({
-        //     url: `http://10.0.2.2:3000/${item.url.replace(
-        //       'http://localhost:3000/',
-        //       '',
-        //     )}`,
-        //   })),
-        // );
+        console.log(extractedData);
       })
       .catch(function (error) {
         console.log(error);
@@ -322,7 +304,7 @@ const Portfolio = ({token}) => {
         ref={swiperRef}
         vertical={true}
         data={data}
-        renderItem={({item, index}) => (
+        renderItem={({ item, index }) => (
           <Item
             item={item}
             portfolio={portfolio}

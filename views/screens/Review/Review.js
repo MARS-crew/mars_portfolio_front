@@ -13,6 +13,9 @@ import {
 
 import axios from 'axios';
 
+import SwiperFlatList from 'react-native-swiper-flatlist';
+import { useIndexContext } from '../../../IndexContext';
+
 import ReviewItem from '../Review/ReviewItem';
 
 import FloatingMenu from '../../components/FloatingMenu';
@@ -113,7 +116,27 @@ const styles = StyleSheet.create({
   },
 });
 
-const Review = () => {
+const Review = ({ token }) => {
+  const { currentIndex, changeIndex } = useIndexContext();
+  const swiperRef = useRef(null);
+  useEffect(() => {
+    if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
+      swiperRef.current.scrollToIndex({
+        index: currentIndex,
+        animated: true,
+      });
+    }
+  }, [currentIndex, swiperRef]);
+
+  const height = Dimensions.get('window').height;
+  const handleScroll = event => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const newIndex = Math.round(offsetY / height);
+    // IndexData.setIndexValue(index);
+    changeIndex(newIndex);
+  };
+
+
   const [data, setData] = useState([]);
 
   const [review, isReview] = useState(true);
@@ -147,7 +170,7 @@ const Review = () => {
       url: 'http://10.0.2.2:3000/api/v1/review/1',
 
       headers: {
-        Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDA3MDM4MTksImV4cCI6MTcwMDcwNzQxOX0.iKAfV2I6DfR1EHjVTEUl09ukGufxjnuDQ1eo8KIqvxQ',
+        Authorization: token,
       },
 
       cancelToken: source.token,

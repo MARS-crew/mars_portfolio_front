@@ -115,7 +115,7 @@ const MyPage = ({ token }) => {
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: 'http://10.0.2.2:3000/api/v1/mypage/2/',
+      url: 'http://10.0.2.2:3000/api/v1/mypage/1/',
 
       headers: {
         Authorization: token

@@ -96,7 +96,7 @@ const Interview = ({ token }) => {
     // IndexData.setIndexValue(index);
     changeIndex(newIndex);
   }
-  console.log('3번째 스크린 기수 인덱스: ', currentIndex);
+  // console.log('3번째 스크린 기수 인덱스: ', currentIndex);
 
 
   const [data, setData] = useState([]);

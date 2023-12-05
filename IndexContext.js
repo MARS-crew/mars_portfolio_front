@@ -8,9 +8,9 @@ const IndexProvider = ({ children }) => {
   const changeIndex = (newIndex) => {
     setCurrentIndex(newIndex);
   };
-  useEffect(() => {
-    console.log("현재페이지 : ", currentIndex);
-  }, [currentIndex]);
+  // useEffect(() => {
+  //   console.log("현재페이지 : ", currentIndex);
+  // }, [currentIndex]);
 
   return (
     <IndexContext.Provider value={{ currentIndex, changeIndex, }}>
