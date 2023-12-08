@@ -11,38 +11,56 @@ import { useIndexContext } from '../../IndexContext';
 
 
 
-const DATA = [
+const Title = [
   {
     id: '1',
-    name: '이름1',
+    name: '간단소개',
   },
   {
     id: '2',
-    name: '이름2',
+    name: '기본정보',
   },
   {
     id: '3',
-    name: '이름3',
+    name: '경력',
   },
-  // {
-  //   id: '4',
-  //   title: '수상내역',
-  // },
-  // {
-  //   id: '5',
-  //   title: '관심분야',
-  // },
-  // {
-  //   id: '6',
-  //   title: '전문분야',
-  // },
-  // {
-  //   id: '7',
-  //   title: '보유기술',
-  // },
+  {
+    id: '4',
+    title: '수상내역',
+  },
+  {
+    id: '5',
+    title: '관심분야',
+  },
+  {
+    id: '6',
+    title: '전문분야',
+  },
+  {
+    id: '7',
+    title: '보유기술',
+  },
 ];
 
+const DATA = [
+  {
+    id: "1",
+    name: "이화진"
+  }, {
+    id: "2",
+    name: "조호연"
+  },
+  {
+    id: "3",
+    name: "김건우"
+  },
+]
+
+
 const Resume = ({ }) => {
+
+
+
   const { currentIndex, changeIndex } = useIndexContext();
   const swiperRef = useRef(null);
   useEffect(() => {
@@ -105,10 +123,10 @@ const Resume = ({ }) => {
       {/* <TouchableOpacity 
         onPress={toggleModal}
         activeOpacity={100} > */}
-      <SwiperFlatList
+      <FlatList
         data={DATA}
         renderItem={({ item }) => (<Item item={item} />)}
-        // keyExtractor={item => item.id}
+        keyExtractor={item => item.id}
         index={currentIndex}
         onScroll={handleScroll}
       />

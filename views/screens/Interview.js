@@ -46,7 +46,7 @@ const Interview = ({ token }) => {
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: 'http://192.168.0.2:3000/api/v1/interview/',
+      url: 'http://172.20.10.4:3000/api/v1/interview/',
       headers: {
         Authorization: token
       },
@@ -55,13 +55,17 @@ const Interview = ({ token }) => {
       .then(function (response) {
         const extractedData = response.data.data.map(item => ({
           memberId: item.member_id, //사용자 아이디
-          url: item.url, //인터뷰 url
+          url: `http://10.0.2.2:3000/${item.url.replace(
+            'http://172.20.10.4:3000/',
+            '',
+          )}`, //인터뷰 url
           heart: item.heart, //찜하기 여부
         }));
-         setData(extractedData);
-         console.log('datadata::::'+extractedData[0].memberId);
-         console.log('datadata::::'+extractedData[0].url);
-         console.log('datadata::::'+extractedData[0].heart);
+        setData(extractedData);
+        console.log(extractedData);
+        console.log('datadata::::' + extractedData[0].memberId);
+        console.log('datadata::::' + extractedData[0].url);
+        console.log('datadata::::' + extractedData[0].heart);
       })
       .catch(function (error) {
         console.log(error);

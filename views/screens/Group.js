@@ -22,29 +22,9 @@ const Item = ({ id, src, medal }) => (
 );
 
 const Group = ({ data, token }) => {
-  // const handleScroll = (event) => {
-  //   const { height } = Dimensions.get('window'); // 화면의 높이 가져오기
-  //   const offsetY = event.nativeEvent.contentOffset.y;
-  //   const index = Math.floor(offsetY / height); // 스크롤 위치를 화면의 높이로 나누어 인덱스 계산
-  //   console.log('offsetY:', offsetY);
-  //   console.log('index:', index);
-  //   setSwiperIndex(index); // 계산된 인덱스를 상태로 설정
-  // };
-  //const {width, height} = Dimensions.get('window');
 
-  // console.log(swiperIndex)
-  // const IndexData = useContext(AppContext);
   const { currentIndex, changeIndex } = useIndexContext();
   const swiperRef = useRef(null);
-
-  // useEffect(() => {
-  //   if (swiperRef.current) {
-  //     swiperRef.current.scrollToIndex({
-  //       index: currentIndex,
-  //       animated: true,
-  //     });
-  //   }
-  // }, [currentIndex]);
 
   useEffect(() => {
     if (swiperRef.current) {
@@ -60,14 +40,10 @@ const Group = ({ data, token }) => {
   const handleScroll = event => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const newIndex = Math.round(offsetY / height);
-    // IndexData.setIndexValue(index);
     changeIndex(newIndex);
-    //console.log('스크롤 거리값:', Math.floor(offsetY));
-    //console.log('세로 화면  값:', Math.floor(height));
-    // console.log('인덱스 값 (전체 거리 /세로 1 화면):', offsetY / height);
+
   };
 
-  // console.log('1번 스크린 기수 비디오:', currentIndex);
   return (
     <SafeAreaView style={StyleSheet.container}>
       <SwiperFlatList

@@ -4,7 +4,6 @@ import {
     StyleSheet,
     Image,
     TextInput,
-    Button,
     Modal,
     Pressable,
 } from 'react-native';
@@ -24,7 +23,6 @@ import springboot_icon from '../../assets/images/devIcon/springboot.png';
 import write from '../../assets/images/write.png';
 import Postcode from '@actbase/react-daum-postcode';
 
-import { help } from 'yargs';
 import React, { useMemo, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 
@@ -39,6 +37,484 @@ const getTechIcon = (techName) => {
 
     }
 }
+
+const IntroContent = ({ item, setInputText }) => {
+    const containerStyles = { ...styles.container, marginTop: 20 }
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>간단소개</Text>
+                    <Image source={write} style={styles.writeImg} />
+                </View>
+                <View style={styles.line} />
+                <Text style={[styles.content, styles.introContent]}>
+                    <TextInput
+                        onChangeText={text => {
+                            setInputText(text);
+                        }}
+                        placeholder="소개글을 입력해주세요"
+                    />
+                </Text>
+            </View>
+        </Shadow>
+    );
+}
+
+const InfoContent = ({ item }) => {
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [selectedAddress, setSelectedAddress] = useState('');
+
+    const containerStyles = { ...styles.container };
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>기본정보</Text>
+                    <Image source={write} style={styles.writeImg} />
+                </View>
+                <View style={styles.line} />
+                <Text style={[styles.content, styles.basicInfoContent]}>
+                    <View>
+                        <Text style={styles.infoText}>{item.name}</Text>
+                        <View style={styles.icons}>
+                            <View style={styles.iconsText}>
+                                <Image
+                                    source={tel_icon}
+                                    style={styles.icon} />
+                                <Text style={styles.defaultText}>010-1111-2222</Text>
+                            </View>
+                            <View style={styles.iconsText} >
+                                <Image
+                                    source={home_icon}
+                                    style={styles.icon} />
+                                <Text style={styles.defaultText}>{selectedAddress}</Text>
+                                <TouchableOpacity
+                                    onPress={() => setModalVisible(true)}
+                                    style={styles.postcode}>
+                                    <Text>주소 등록</Text>
+                                </TouchableOpacity>
+                                <Pressable
+                                    onPress={() => {
+                                        setModalOpen(true);
+                                    }}>
+                                    <Modal
+                                        visible={isModalVisible}
+                                        transparent={true}
+                                        animationType="slide">
+                                        <View
+                                            style={{
+                                                flex: 1,
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                            }}>
+                                            <View
+                                                style={{
+                                                    width: 400,
+                                                    height: 470,
+                                                    backgroundColor: 'white',
+                                                    borderRadius: 10,
+                                                    padding: 20,
+                                                }}>
+                                                {/* <Text>{resume.introduce}</Text> */}
+                                                <TouchableOpacity
+                                                    onPress={() => setModalVisible(false)}
+                                                    style={{
+                                                        marginBottom: 0,
+                                                        alignSelf: 'flex-end',
+                                                        padding: 0,
+                                                        backgroundColor: '',
+                                                    }}>
+                                                    <Text>X</Text>
+                                                </TouchableOpacity>
+                                                <Postcode
+                                                    style={{ width: '100%', height: '100%' }}
+                                                    jsOptions={{ animation: true, hideMapBtn: true }}
+                                                    onSelected={data => {
+                                                        setSelectedAddress(data.address); // 선택한 주소 저장
+                                                        setModalVisible(false); // 모달 닫기
+                                                    }}
+                                                />
+                                                {/* <Text>선택한 주소: {selectedAddress}</Text> 선택한 주소 표시 */}
+                                            </View>
+                                        </View>
+                                    </Modal>
+                                </Pressable>
+                            </View>
+                            <View style={styles.iconsText}>
+                                <Image
+                                    source={main_icon}
+                                    style={styles.icon} />
+                                <Text style={styles.defaultText}>123@naver.com</Text>
+                            </View>
+                        </View>
+                    </View>
+                </Text>
+            </View>
+        </Shadow >
+    )
+}
+const CareerContent = ({ item }) => {
+    const containerStyles = { ...styles.container };
+    const [companyName, setcompanyName] = useState('');
+    const [tenureDate, settenureDate] = useState('');
+    const [companyRank, setCompanyRank] = useState('');
+    const [mainWork, setMainWork] = useState('');
+    const [savedCareer, setSavedCareer] = useState([]);
+
+    const submitBtn = () => {
+        if (companyName && tenureDate && companyRank && mainWork) {
+            const newContent = {
+                name: companyName,
+                date: tenureDate,
+                Rank: companyRank,
+                work: mainWork,
+            };
+
+            // 기존의 저장된 내용과 새로운 내용을 함께 저장
+            setSavedCareer(prevContents => [...prevContents, newContent]);
+
+            // 상태 변수 초기화
+            setcompanyName('');
+            settenureDate('');
+            setCompanyRank('');
+            setMainWork('');
+        }
+    };
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>경력</Text>
+                    <TouchableOpacity
+                        onPress={submitBtn}>
+                        <Image source={write} style={styles.writeImg} />
+                    </TouchableOpacity>
+                </View>
+                {savedCareer.map((content, index) => (
+                    <View key={index}>
+                        <View style={styles.line} />
+                        <View>
+                            <View style={styles.iconsText}>
+                                <Text style={styles.infoText}>{content.name}</Text>
+                                <Text style={styles.defaultText}>{content.Rank}</Text>
+                            </View>
+                            <Text style={styles.dateText}>{content.date}</Text>
+                            <Text style={styles.defaultText2}>{content.work}</Text>
+                        </View>
+                    </View>
+                ))}
+                <View>
+                    <View style={styles.line} />
+                    <TextInput
+                        style={styles.textInput}
+                        onChangeText={text => {
+                            setcompanyName(text);
+                        }}
+                        placeholder="회사명"
+                        value={companyName}
+                    />
+                    <TextInput
+                        style={styles.textInput}
+                        onChangeText={text => {
+                            settenureDate(text);
+                        }}
+                        placeholder="업무기간"
+                        value={tenureDate}
+                    />
+                    <TextInput
+                        style={styles.textInput}
+                        onChangeText={text => {
+                            setCompanyRank(text);
+                        }}
+                        placeholder="직급"
+                        value={companyRank}
+                    />
+                    <TextInput
+                        style={styles.textInput}
+                        onChangeText={text => {
+                            setMainWork(text);
+                        }}
+                        placeholder="주요업무"
+                        value={mainWork}
+                    />
+                </View>
+            </View>
+        </Shadow>
+    )
+}
+
+const AwardContent = () => {
+    const containerStyles = { ...styles.container };
+    const [awardName, setAwardName] = useState('');
+    const [awardDate, setAwardDate] = useState('');
+    const [awardOrganization, setAwardOrganization] = useState('');
+    const [savedContents, setSavedContents] = useState([]);
+
+    const submitBtn = () => {
+        if (awardName && awardDate && awardOrganization) {
+            const newContent = {
+                name: awardName,
+                date: awardDate,
+                organization: awardOrganization,
+            };
+
+            // 기존의 저장된 내용과 새로운 내용을 함께 저장
+            setSavedContents(prevContents => [...prevContents, newContent]);
+
+            // 상태 변수 초기화
+            setAwardName('');
+            setAwardDate('');
+            setAwardOrganization('');
+        }
+    };
+
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>수상내역</Text>
+                    <TouchableOpacity
+                        onPress={submitBtn}>
+                        <Image source={write} style={styles.writeImg} />
+                    </TouchableOpacity>
+                </View>
+                {savedContents.map((content, index) => (
+                    <View key={index}>
+                        <View style={styles.line} />
+                        <View>
+                            <Text style={styles.infoText}>{content.name}</Text>
+                        </View>
+                        <Text style={styles.dateText}>{content.date}</Text>
+                        <Text style={styles.defaultText2}>{content.organization}</Text>
+                    </View>
+                ))}
+                <View>
+                    <View style={styles.line} />
+                    <TextInput
+                        style={styles.textInput}
+                        onChangeText={text => {
+                            setAwardName(text);
+                        }}
+                        placeholder="수상명"
+                        value={awardName}
+                    />
+                    <TextInput
+                        style={styles.textInput}
+                        onChangeText={text => {
+                            setAwardDate(text);
+                        }}
+                        placeholder="수상한 날짜"
+                        value={awardDate}
+                    />
+                    <TextInput
+                        style={styles.textInput}
+                        onChangeText={text => {
+                            setAwardOrganization(text);
+                        }}
+                        placeholder="수상기관"
+                        value={awardOrganization}
+                    />
+                </View>
+            </View>
+        </Shadow>
+    );
+}
+
+const InterestContent = ({ interestBunya, setInterestBunya }) => {
+    const containerStyles = { ...styles.container };
+    const [detailPopVisible, setDetailPopVisible] = useState(false);
+
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>관심분야</Text>
+                    <TouchableOpacity
+                        onPress={() => setDetailPopVisible(true)}
+                    >
+                        <Image source={write} style={styles.writeImg} >
+                        </Image>
+                        {detailPopVisible ? (
+                            <ResumePopup
+                                id={item.id}
+                                setDetailPopVisible={setDetailPopVisible}
+                                interestBunya={interestBunya}
+                                setInterestBunya={setInterestBunya}
+                            />
+                        ) : null}
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.line2} />
+                <Text>
+                    {(interestBunya.length > 0)
+                        ?
+                        (
+                            <View style={styles.selectResult}>
+                                { /* {selectedFirst} {">"} {selectedSecond} {">"} {selectedThird} */}
+                                {interestBunya.map((bunya, index) => (
+                                    <View key={index}>
+                                        <Text style={styles.bunyaText}>
+                                            {bunya.selectedFirst} {">"} {bunya.selectedSecond} {">"} {bunya.selectedThird}
+                                        </Text>
+                                    </View>
+
+                                )
+                                )}
+                            </View>
+                        )
+                        : (null)
+                    }
+                </Text>
+            </View>
+        </Shadow>
+    );
+}
+
+const SpecialityContent = ({ specialityBunya, setSpecialityBunya }) => {
+    const containerStyles = { ...styles.container };
+    const [detailPopVisible, setDetailPopVisible] = useState(false);
+
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>전문분야</Text>
+                    <TouchableOpacity
+                        onPress={() => setDetailPopVisible(true)}
+                    >
+                        <Image source={write} style={styles.writeImg} >
+                        </Image>
+                        {detailPopVisible ? (
+                            <ResumePopup
+                                id={item.id}
+                                setDetailPopVisible={setDetailPopVisible}
+                                specialityBunya={specialityBunya}
+                                setSpecialityBunya={setSpecialityBunya}
+                            />
+                        ) : null}
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.line2} />
+                <Text>
+                    {(specialityBunya.length > 0)
+                        ?
+                        (
+                            <View style={styles.selectResult}>
+                                { /* {selectedFirst} {">"} {selectedSecond} {">"} {selectedThird} */}
+                                {specialityBunya.map((bunya, index) => (
+                                    <View key={index}>
+                                        <Text style={styles.bunyaText}>
+                                            {bunya.selectedFirst} {">"} {bunya.selectedSecond} {">"} {bunya.selectedThird}
+                                        </Text>
+                                    </View>
+
+                                )
+                                )}
+                            </View>
+                        )
+                        : (null)
+                    }
+                </Text>
+            </View>
+        </Shadow>
+    );
+}
+
+const SkillContent = () => {
+    const [detailPopVisible, setDetailPopVisible] = useState(false);
+    const [techInfo, setTechInfo] = useState([])
+
+
+    const containerStyles = { ...styles.container, marginBottom: 80 }
+    return (
+        <Shadow
+            style={[containerStyles]} // 추가 스타일 적용
+            radius={100}
+            offset={[1, 1]}
+            startColor={'rgba(151, 151, 151, 0.05)'}
+            endColor={'rgba(151, 151, 151, 0.01)'}
+            distance={8}
+        >
+            <View style={styles.devContainer}>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>보유기술</Text>
+                    <TouchableOpacity
+                        onPress={() => setDetailPopVisible(true)}
+                    >
+                        <Image source={write} style={styles.writeImg} >
+                        </Image>
+                        {detailPopVisible ? (
+                            <ResumePopup
+                                id={item.id}
+                                detailPopVisible={detailPopVisible}
+                                setDetailPopVisible={setDetailPopVisible}
+                                setTechInfo={setTechInfo}
+                            />
+                        ) : null}
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.line2} />
+                {techInfo.map((tech, index) => {
+                    return (
+                        <View key={index}
+                            style={styles.devIcons}>
+                            <Image source={getTechIcon(tech.techName)} style={styles.devIcon} />
+                            <Text style={styles.devIconText}>{tech.techName}</Text>
+
+                        </View>
+                    )
+                })}
+            </View>
+        </Shadow>
+    );
+
+}
+
+
 const ResumeBox = ({ item }) => {
     const containerStyles =
         item.id === '1'
@@ -51,12 +527,7 @@ const ResumeBox = ({ item }) => {
     let contentStyles = {}; // 컨텐츠 부분의 스타일
     const [inputText, setInputText] = useState('');
     const [resume, setResume] = useState({});
-    // const test = async () => {
-    //     const result = await axios.get("/api/v1/resume/123");
 
-    //     setResume(result.data.data)
-
-    // }
 
     const [selectedFirst, setSelectedFirst] = useState("");
     const [selectedSecond, setSelectedSecond] = useState("");
@@ -480,20 +951,29 @@ const ResumeBox = ({ item }) => {
     }
 
     return (
-        <Shadow
-            style={[containerStyles]} // 추가 스타일 적용
-            radius={100}
-            offset={[1, 1]}
-            startColor={'rgba(151, 151, 151, 0.05)'}
-            endColor={'rgba(151, 151, 151, 0.01)'}
-            distance={8}>
-            {/* {item.id === '5' || item.id === '6' || item.id === '7' ? (
-        <View style={styles.line2} />
-    ) : (
-        <View style={styles.line} />
-    )} */}
-            <Text style={[styles.content, contentStyles]}>{content}</Text>
-        </Shadow>
+        //     <Shadow
+        //         style={[containerStyles]} // 추가 스타일 적용
+        //         radius={100}
+        //         offset={[1, 1]}
+        //         startColor={'rgba(151, 151, 151, 0.05)'}
+        //         endColor={'rgba(151, 151, 151, 0.01)'}
+        //         distance={8}>
+        //         {/* {item.id === '5' || item.id === '6' || item.id === '7' ? (
+        //     <View style={styles.line2} />
+        // ) : (
+        //     <View style={styles.line} />
+        // )} */}
+        //         <Text style={[styles.content, contentStyles]}>{content}</Text>
+        //     </Shadow>
+        <View>
+            <IntroContent item={item} setInputText={setInputText} />
+            <InfoContent item={item} />
+            <CareerContent item={item} />
+            <AwardContent item={item} />
+            <InterestContent item={item} interestBunya={interestBunya} setInterestBunya={setInterestBunya} />
+            <SpecialityContent item={item} specialityBunya={specialityBunya} setSpecialityBunya={setSpecialityBunya} />
+            <SkillContent item={item} />
+        </View>
     );
 };
 

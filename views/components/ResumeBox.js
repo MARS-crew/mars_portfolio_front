@@ -42,29 +42,7 @@ const IntroContent = ({ item }) => {
                 <Text style={styles.title}>간단소개</Text>
                 <View style={styles.line} />
                 <Text style={[styles.content, styles.introContent]}>
-                    <View>
-                        <Text style={styles.infoText}>{item.name}</Text>
-                        <View style={styles.icons}>
-                            <View style={styles.iconsText}>
-                                <Image
-                                    source={tel_icon}
-                                    style={styles.icon} />
-                                <Text style={styles.defaultText}>010-1111-2222</Text>
-                            </View>
-                            <View style={styles.iconsText} >
-                                <Image
-                                    source={home_icon}
-                                    style={styles.icon} />
-                                <Text style={styles.defaultText}>경기도</Text>
-                            </View>
-                            <View style={styles.iconsText}>
-                                <Image
-                                    source={main_icon}
-                                    style={styles.icon} />
-                                <Text style={styles.defaultText}>123@naver.com</Text>
-                            </View>
-                        </View>
-                    </View>
+                    소개글을 입력해주세요
                 </Text>
             </View>
         </Shadow>
@@ -87,22 +65,26 @@ const InfoContent = ({ item }) => {
                 <View style={styles.line} />
                 <Text style={[styles.content, styles.basicInfoContent]}>
                     <View>
-                        <View>
+                        <Text style={styles.infoText}>{item.name}</Text>
+                        <View style={styles.icons}>
                             <View style={styles.iconsText}>
-                                <Text style={styles.infoText}>회사명</Text>
-                                <Text style={styles.defaultText}>사원</Text>
+                                <Image
+                                    source={tel_icon}
+                                    style={styles.icon} />
+                                <Text style={styles.defaultText}>010-1111-2222</Text>
                             </View>
-                            <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
-                            <Text style={styles.defaultText2}>개발</Text>
-                        </View>
-                        <View style={styles.line} />
-                        <View>
+                            <View style={styles.iconsText} >
+                                <Image
+                                    source={home_icon}
+                                    style={styles.icon} />
+                                <Text style={styles.defaultText}>경기도</Text>
+                            </View>
                             <View style={styles.iconsText}>
-                                <Text style={styles.infoText}>회사명</Text>
-                                <Text style={styles.defaultText}>사원</Text>
+                                <Image
+                                    source={main_icon}
+                                    style={styles.icon} />
+                                <Text style={styles.defaultText}>123@naver.com</Text>
                             </View>
-                            <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
-                            <Text style={styles.defaultText2}>개발</Text>
                         </View>
                     </View>
                 </Text>
@@ -372,7 +354,7 @@ const ResumeBox = ({ item }) => {
                         <Image
                             source={main_icon}
                             style={styles.icon} />
-                        <Text style={styles.defaultText}>123@naver.com</Text>
+                        <Text style={styles.defaultText}>nnnnnnniam1@gmail.com</Text>
                     </View>
                 </View>
             </View>
@@ -544,8 +526,6 @@ const ResumeBox = ({ item }) => {
         //     endColor={'rgba(151, 151, 151, 0.01)'}
         //     distance={8}
         // >
-        //     {/* <IntroContent />
-        //     <InfoContent /> */}
         //     <Text style={styles.title}>{item.title}</Text>
         //     {(item.id === '5' || item.id === '6' || item.id === '7') ? (
         //         <View style={styles.line2} />
