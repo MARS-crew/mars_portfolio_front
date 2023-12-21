@@ -10,7 +10,6 @@ import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
 import { useIndexContext } from '../../IndexContext';
 
 
-
 const Title = [
   {
     id: '1',
@@ -44,31 +43,29 @@ const Title = [
 
 const DATA = [
   {
-    id: "1",
+    id: "0",
     name: "이화진"
   }, {
-    id: "2",
+    id: "1",
     name: "조호연"
   },
   {
-    id: "3",
+    id: "2",
     name: "김건우"
   },
 ]
 
 
 const Resume = ({ }) => {
-
-
-
   const { currentIndex, changeIndex } = useIndexContext();
   const swiperRef = useRef(null);
+  const [itemHeights, setItemHeights] = useState({});
   useEffect(() => {
     // if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
     if (swiperRef.current > 0 && currentIndex !== undefined) {
       swiperRef.current.scrollToIndex({
         index: currentIndex,
-        animated: true,
+        animated: false,
       });
     }
   }, [currentIndex, swiperRef]);
@@ -79,6 +76,7 @@ const Resume = ({ }) => {
     const newIndex = Math.round(offsetY / height);
     // IndexData.setIndexValue(index);
     changeIndex(newIndex);
+    console.log(currentIndex);
   };
   // console.log('5번째 스크린 기수 인덱스: ', currentIndex);
 
@@ -96,9 +94,14 @@ const Resume = ({ }) => {
     });
   };
 
+  const keyExtractor = (item) => item.id;
+  const getItemLayout = (data, index) => (
+    { length: itemHeights[index], offset: itemHeights[index] * index, index }
+  );
 
 
-  const Item = ({ item }) => {
+
+  const Item = ({ item, index }) => {
     return (
       // <ScrollView>
       <TouchableOpacity
@@ -108,11 +111,23 @@ const Resume = ({ }) => {
         {modalOpen ? (
           <ResumeBoxMD item={item} />
         ) : (
+          // <View onLayout={(event) => handleItemLayout(event, index)}>
           <ResumeBox item={item} />
+          // </View>
         )}
       </TouchableOpacity>
       // </ScrollView>
     );
+  };
+
+  const handleItemLayout = (event, index) => {
+    const { height } = event.nativeEvent.layout;
+    // 각 항목의 높이 저장
+    setItemHeights((prevHeights) => {
+      const updatedHeights = [...prevHeights];
+      updatedHeights[index] = height;
+      return updatedHeights;
+    });
   };
 
   // ) <ResumeBox item={item} modalOpen={modalOpen} />; // Pass modalOpen as a prop
@@ -124,11 +139,16 @@ const Resume = ({ }) => {
         onPress={toggleModal}
         activeOpacity={100} > */}
       <FlatList
+        ref={swiperRef}
         data={DATA}
-        renderItem={({ item }) => (<Item item={item} />)}
-        keyExtractor={item => item.id}
-        index={currentIndex}
+        renderItem={({ item, index }) => (<Item item={item} index={index} />)}
+        keyExtractor={keyExtractor}
+        removeClippedSubviews={true}
+        // index={currentIndex}
+        initialScrollIndex={currentIndex}
         onScroll={handleScroll}
+      // getItemLayout={getItemLayout}
+      // getItemLayout={(item, index) => ({ length: height, offset: height * index, index })}
       />
       <FAB />
       <ResumeEditMode

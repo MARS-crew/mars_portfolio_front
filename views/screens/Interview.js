@@ -46,7 +46,7 @@ const Interview = ({ token }) => {
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: 'http://172.20.10.4:3000/api/v1/interview/',
+      url: 'http://172.30.1.60:3000/api/v1/interview/',
       headers: {
         Authorization: token
       },
