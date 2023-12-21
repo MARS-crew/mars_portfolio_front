@@ -17,8 +17,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 40,
     height: 40,
-    top: 10,
-    right: 0,
+    top: 15,
+    right: 5,
   },
 });
 export default MedalItem;
