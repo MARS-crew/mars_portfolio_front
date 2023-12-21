@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
 });
 
 const PortfolioItem = ({
+  member_id,
   portfolio,
   id,
   title,
@@ -51,7 +52,53 @@ const PortfolioItem = ({
   message,
   onModify,
   onDelete,
+  token,
 }) => {
+  // useEffect(() => {
+  //   const source = axios.CancelToken.source();
+  //   axios({
+  //     method: 'get',
+  //     url: `http://api.mars-port.duckdns.org/api/v1/portfolio`,
+  //     headers: {
+  //       Authorization: token,
+  //     },
+  //     cancelToken: source.token,
+  //   })
+  //     .then(function (response) {
+  //       const extractedData = response.data.data.map(item => ({
+  //         member_id: item.member_id,
+  //         portfolio_id: item.portfolio_id,
+  //         title: item.title,
+  //         description: item.description,
+  //         reg_date: item.reg_date,
+  //         mod_date: item.mod_date,
+  //         kind: item.kind,
+  //         file_id: item.file_id,
+  //         ext: item.ext,
+  //         url: `http://10.0.2.2:3000/${item.url.replace(
+  //           'http://172.20.10.4:3000/',
+  //           '',
+  //         )}`,
+  //         del_yn: item.del_yn,
+  //       }));
+  //       // setData(extractedData);
+
+  //       setData(extractedData);
+
+  //       console.log(
+  //         'portfolio--------------------------------------------------',
+  //       );
+  //       console.log(extractedData);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+
+  //   return () => {
+  //     isMounted = false;
+  //     source.cancel('API 호출이 취소되었습니다.');
+  //   };
+  // }, []);
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [detailPopVisible, setDetailPopVisible] = useState(false);
@@ -72,7 +119,10 @@ const PortfolioItem = ({
             // id === '6'
             //   ? setDetailPopVisible(!detailPopVisible)
             //   : setIsModalVisible(!isModalVisible)
-            setIsModalVisible(!isModalVisible)
+            [
+              console.log(member_id),
+              member_id == '46' ? setIsModalVisible(!isModalVisible) : '',
+            ]
           }>
           {(code === 1 || code === 3) && (
             <View>
@@ -114,11 +164,13 @@ const PortfolioItem = ({
           onModify={onModify}
           onDelete={onDelete}
           isModalVisible={isModalVisible}
-          setIsModalVisible={setIsModalVisible}></EditMode>
+          setIsModalVisible={setIsModalVisible}
+          token={token}></EditMode>
 
         <DetailPop
           id={id}
           onModify={onModify}
+          token={token}
           setDetailPopVisible={setDetailPopVisible}
           detailPopVisible={detailPopVisible}></DetailPop>
       </View>

@@ -1,5 +1,5 @@
-import { React } from 'react';
-import { useContext, useRef, useEffect } from 'react';
+import {React} from 'react';
+import {useContext, useRef, useEffect} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -14,101 +14,101 @@ import FAB from '../components/FloatingMenu';
 import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 // import AppContext from '../../AppContext';
-import { IndexProvider, useIndexContext } from '../../IndexContext';
+import {IndexProvider, useIndexContext} from '../../IndexContext';
 
 const DATA = [
   {
     id: '1',
-    title: '1기',
-    src: require('../../assets/images/test_member1.jpeg'),
+    title: '3기',
+    src: require('../../assets/images/Rectangle3_1.png'),
     video: require('../../assets/images/GroupVideo.png'),
     medal: 'y',
   },
   {
     id: '2',
-    title: '2기',
-    src: require('../../assets/images/test_member4.jpeg'),
+    title: '3기',
+    src: require('../../assets/images/Rectangle3_2.png'),
     video: require('../../assets/images/GroupVideo.png'),
     medal: 'n',
   },
   {
     id: '3',
     title: '3기',
-    src: require('../../assets/images/test_member3.jpeg'),
+    src: require('../../assets/images/Rectangle3_3.png'),
     video: require('../../assets/images/GroupVideo.png'),
     medal: 'n',
   },
   {
     id: '4',
-    title: '4기',
-    src: require('../../assets/images/test_member5.png'),
+    title: '3기',
+    src: require('../../assets/images/Rectangle3_4.png'),
     video: require('../../assets/images/GroupVideo.png'),
     medal: 'n',
   },
   {
     id: '5',
-    title: '5기',
-    src: require('../../assets/images/test_member1.jpeg'),
+    title: '4기',
+    src: require('../../assets/images/Rectangle.png'),
     video: require('../../assets/images/GroupVideo.png'),
     medal: 'n',
   },
   {
     id: '6',
-    title: '6기',
-    src: require('../../assets/images/test_member5.png'),
+    title: '4기',
+    src: require('../../assets/images/Rectangle.png'),
     video: require('../../assets/images/GroupVideo.png'),
   },
   {
     id: '7',
-    title: '7기',
-    src: require('../../assets/images/test_member4.jpeg'),
+    title: '4기',
+    src: require('../../assets/images/Rectangle.png'),
     video: require('../../assets/images/GroupVideo.png'),
   },
   {
     id: '8',
-    title: '8기',
-    src: require('../../assets/images/test_member4.jpeg'),
+    title: '4기',
+    src: require('../../assets/images/Rectangle.png'),
     video: require('../../assets/images/GroupVideo.png'),
   },
   {
     id: '9',
-    title: '9기',
-    src: require('../../assets/images/test_member5.png'),
+    title: '5기',
+    src: require('../../assets/images/Rectangle5_1.png'),
     video: require('../../assets/images/GroupVideo.png'),
     medal: 'n',
   },
   {
     id: '10',
-    title: '10기',
-    src: require('../../assets/images/test_member3.jpeg'),
+    title: '5기',
+    src: require('../../assets/images/Rectangle5_2.png'),
     video: require('../../assets/images/GroupVideo.png'),
   },
   {
     id: '11',
-    title: '11기',
-    src: require('../../assets/images/test_member3.jpeg'),
+    title: '5기',
+    src: require('../../assets/images/Rectangle5_3.png'),
     video: require('../../assets/images/GroupVideo.png'),
+    medal: 'y',
   },
   {
     id: '12',
-    title: '12기',
-    src: require('../../assets/images/test_member3.jpeg'),
+    title: '5기',
+    src: require('../../assets/images/Rectangle.png'),
     video: require('../../assets/images/GroupVideo.png'),
   },
 ];
 
-const VideoItem = ({ id, src, medal }) => (
+const VideoItem = ({id, src, medal}) => (
   <View>
     <GroupVideoItem id={id} src={src} medal={medal} />
   </View>
 );
 
-const GroupVideo = ({ token }) => {
+const GroupVideo = ({token}) => {
   // console.log(swiperIndex)
   // const IndexData = useContext(AppContext);
-  const { currentIndex, changeIndex } = useIndexContext();
+  const {currentIndex, changeIndex} = useIndexContext();
   const swiperRef = useRef(null);
-
 
   useEffect(() => {
     if (swiperRef.current) {
@@ -118,7 +118,6 @@ const GroupVideo = ({ token }) => {
       });
     }
   }, [currentIndex, swiperRef]);
-
 
   const height = Dimensions.get('window').height;
   const handleScroll = event => {
@@ -140,7 +139,7 @@ const GroupVideo = ({ token }) => {
         ref={swiperRef}
         vertical={true}
         data={DATA}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <VideoItem id={item.id} src={item.src} medal={item.medal} />
         )}
         index={currentIndex}

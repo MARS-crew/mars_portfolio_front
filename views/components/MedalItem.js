@@ -14,11 +14,11 @@ const MedalItem = () => {
 
 const styles = StyleSheet.create({
   medal: {
-    width: 30,
-    height: 43.16,
-    //right: 7,
-    top: 15,
-    left: 150,
+    position: 'absolute',
+    width: 40,
+    height: 40,
+    top: 10,
+    right: 0,
   },
 });
 export default MedalItem;

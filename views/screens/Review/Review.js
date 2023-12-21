@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 
 import {
   View,
@@ -14,7 +14,7 @@ import {
 import axios from 'axios';
 
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import { useIndexContext } from '../../../IndexContext';
+import {useIndexContext} from '../../../IndexContext';
 
 import ReviewItem from '../Review/ReviewItem';
 
@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Review = ({ token }) => {
-  const { currentIndex, changeIndex } = useIndexContext();
+const Review = ({token}) => {
+  const {currentIndex, changeIndex} = useIndexContext();
   const swiperRef = useRef(null);
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
@@ -135,7 +135,6 @@ const Review = ({ token }) => {
     // IndexData.setIndexValue(index);
     changeIndex(newIndex);
   };
-
 
   const [data, setData] = useState([]);
 
@@ -155,7 +154,7 @@ const Review = ({ token }) => {
     setShowReviewInput(true);
   };
 
-  const currentReviewContent = ({ content }) => {
+  const currentReviewContent = ({content}) => {
     setReviewContent(content);
   };
 
@@ -167,7 +166,7 @@ const Review = ({ token }) => {
     axios({
       method: 'get',
 
-      url: 'http://10.0.2.2:3000/api/v1/review/1',
+      url: 'http://api.mars-port.duckdns.org/api/v1/review/1',
 
       headers: {
         Authorization: token,
@@ -177,7 +176,7 @@ const Review = ({ token }) => {
     })
       .then(response => {
         if (isMounted) {
-          console.log('Success:', response.status);
+          //console.log('Success:', response.status);
 
           const extractedData = response.data.data.map(item => ({
             review_id: item.review_id,
@@ -190,24 +189,22 @@ const Review = ({ token }) => {
           }));
 
           setData(extractedData);
-          console.log('uri--------------------------------------------------');
-          console.log(
-            response.data.data.map(item => ({
-              url: `http://10.0.2.2:3000/${item.url.replace(
-                'http://localhost:3000/',
-                '',
-              )}`,
-            })),
-          );
+          // console.log('uri--------------------------------------------------');
+          // console.log(
+          //   response.data.data.map(item => ({
+          //     url: `http://10.0.2.2:3000/${item.url.replace(
+          //       'http://localhost:3000/',
+          //       '',
+          //     )}`,
+          //   })),
+          // );
         }
       })
 
       .catch(error => {
-        console.log('Error Message:', error.message);
-
-        console.log('Error Response:', error.response);
-
-        console.log('Error Request:', error.request);
+        // console.log('Error Message:', error.message);
+        // console.log('Error Response:', error.response);
+        // console.log('Error Request:', error.request);
       });
 
     return () => {
@@ -235,9 +232,9 @@ const Review = ({ token }) => {
         },
       });
 
-      console.log('Response', response.data);
+      // console.log('Response', response.data);
     } catch (error) {
-      console.error('Error', error);
+      //console.error('Error', error);
     }
   };
 
@@ -247,7 +244,7 @@ const Review = ({ token }) => {
         <View style={styles.itemView}>
           <FlatList
             data={data}
-            renderItem={({ item }) => (
+            renderItem={({item}) => (
               <ReviewItem
                 review={review}
                 id={item.review_id}

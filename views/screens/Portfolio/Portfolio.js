@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   SafeAreaView,
@@ -14,13 +14,16 @@ import FAB from '../../components/FloatingMenu';
 import PortfolioItem from '../Portfolio/PortfolioItem';
 import DetailPop from './DetailPop';
 import axios from 'axios'; // axios import 합니다.
-import { Shadow } from 'react-native-shadow-2';
+import {Shadow} from 'react-native-shadow-2';
 import addBtn from '../../../assets/images/add.png';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import { useIndexContext } from '../../../IndexContext';
+import {useIndexContext} from '../../../IndexContext';
 
-const { width, height } = Dimensions.get('window');
-const squareSize = Math.min(width, height) * 0.4 - 5;
+const {width, height} = Dimensions.get('window');
+const squareSize = Math.min(width, height) * 0.4;
+
+// const numColumns = 2;
+// const itemWidth = (Dimensions.get('window').width * 0.4) / numColumns; // 각 항목의 너비 계산
 
 const styles = StyleSheet.create({
   content: {
@@ -31,17 +34,16 @@ const styles = StyleSheet.create({
   },
   container: {
     height: height,
-    width: '100%',
+    width: width,
     flex: 1,
-    padding: 5,
     backgroundColor: '#fff',
   },
+
   gridView: {
-    padding: 5,
     flexDirection: 'row',
-    flexWrap: 'wrap',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    flexWrap: 'wrap',
+    margin: 9,
   },
   gridItem: {
     width: squareSize, // 두 항목이 한 줄에 올 수 있도록 너비를 조정
@@ -57,8 +59,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Portfolio = ({ token }) => {
-  const { currentIndex, changeIndex } = useIndexContext();
+const Portfolio = ({token}) => {
+  const {currentIndex, changeIndex} = useIndexContext();
   const swiperRef = useRef(null);
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
@@ -82,14 +84,15 @@ const Portfolio = ({ token }) => {
   const [data, setData] = useState([]);
   const [fileIdLength, setFileIdLength] = useState(null);
   const [portfolio, setPortfolio] = useState(true); //포트폴리오 페이지인지 확인하는 스테이트
-  const numColumns = 2;
-  const itemWidth = (Dimensions.get('window').width - 20) / numColumns; // 각 항목의 너비 계산
+  // const numColumns = 2;
+  // const itemWidth = (Dimensions.get('window').width - 10) / numColumns; // 각 항목의 너비 계산
+  const member_id = 46;
 
   useEffect(() => {
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: 'http://172.20.10.4:3000/api/v1/portfolio/',
+      url: `http://api.mars-port.duckdns.org/api/v1/portfolio/${member_id}`,
       headers: {
         Authorization: token,
       },
@@ -180,6 +183,7 @@ const Portfolio = ({ token }) => {
                     src={item.url}
                     ext={item.ext}
                     del_yn={item.del_yn}
+                    token={token}
                   />
                 </View>
               ))}
@@ -198,6 +202,7 @@ const Portfolio = ({ token }) => {
                 onModify={onModify}
                 setDetailPopVisible={setDetailPopVisible}
                 detailPopVisible={detailPopVisible}
+                token={token}
               />
             </View>
           </ScrollView>
@@ -212,7 +217,7 @@ const Portfolio = ({ token }) => {
         ref={swiperRef}
         vertical={true}
         data={data}
-        renderItem={({ item, index }) => (
+        renderItem={({item, index}) => (
           <Item
             item={item}
             portfolio={portfolio}

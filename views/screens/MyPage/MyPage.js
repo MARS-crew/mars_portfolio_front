@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -8,13 +8,13 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import { Shadow } from 'react-native-shadow-2';
+import {Shadow} from 'react-native-shadow-2';
 import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
 import SectionChooseBtn from '../../components/commonComponent/SectionChooseBtn';
 import Title from '../../components/commonComponent/Title';
 import LogList from './LogList';
 import axios from 'axios';
-import { log } from 'react-native-reanimated';
+import {log} from 'react-native-reanimated';
 
 const styles = StyleSheet.create({
   container: {
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 15,
   },
-  visitSubContainer: { alignItems: 'center', flex: 1 },
+  visitSubContainer: {alignItems: 'center', flex: 1},
   visitSubCenterLine: {
     borderRightColor: '#EEEEEE',
     borderRightWidth: 1,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#FDFDFD',
   },
-  item: { paddingVertical: 12, paddingHorizontal: 15 },
+  item: {paddingVertical: 12, paddingHorizontal: 15},
   log: {
     paddingHorizontal: 15,
   },
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const MyPage = ({ token }) => {
+const MyPage = ({token}) => {
   const [myPage, setMyPage] = useState(true);
   const [data, setData] = useState([]);
   let jsonArray = [];
@@ -115,9 +115,9 @@ const MyPage = ({ token }) => {
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: 'http://172.20.10.4:3000/api/v1/mypage/1',
+      url: 'http://api.mars-port.duckdns.org/api/v1/mypage/1',
       headers: {
-        Authorization: token
+        Authorization: token,
       },
       cancelToken: source.token,
     })
@@ -196,7 +196,7 @@ const MyPage = ({ token }) => {
   const toggleDelete = key => {
     setData(prevData =>
       prevData.map(item =>
-        item.key === key ? { ...item, showDelete: !item.showDelete } : item,
+        item.key === key ? {...item, showDelete: !item.showDelete} : item,
       ),
     );
   };
@@ -285,7 +285,7 @@ const MyPage = ({ token }) => {
     return LIST_WANT_DATA;
   };
 
-  const VisitSubContainer = ({ title, value }) => {
+  const VisitSubContainer = ({title, value}) => {
     return (
       <View style={styles.visitSubContainer}>
         <Title color={'black'} fontSize={16} fontWeight={'700'}>
@@ -304,7 +304,7 @@ const MyPage = ({ token }) => {
         <View>
           <FlatList
             data={ListData.ListData}
-            renderItem={({ item }) => (
+            renderItem={({item}) => (
               <TouchableOpacity
                 onPress={() =>
                   button2Pressed == true
@@ -375,7 +375,7 @@ const MyPage = ({ token }) => {
                 <FlatList
                   data={logData}
                   keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => (
+                  renderItem={({item}) => (
                     <View style={styles.list}>
                       <TouchableOpacity
                         style={styles.item}

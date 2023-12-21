@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, Pressable, Text, View } from 'react-native';
-import { MyContext } from '../../../MyContext';
+import React, {useState, useEffect, useContext} from 'react';
+import {StyleSheet, Pressable, Text, View} from 'react-native';
+import {MyContext} from '../../../MyContext';
 import PublicModal from './PublicModal';
 import ChooseButton from './ChooseButton';
 
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
   },
-  chooseOkBtn: { backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 10 },
+  chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 10},
 });
 
 const choosePop = ({
@@ -50,7 +50,6 @@ const choosePop = ({
   isModalVisible,
   choosePopVisible,
   setChoosePopVisible,
-
   token,
   //인터뷰
   interview,
@@ -74,21 +73,28 @@ const choosePop = ({
   temporaryContent,
   setTemporaryContent,
 }) => {
-  const { title, setTitle } = useContext(MyContext);
-  const { content, setContent } = useContext(MyContext);
-  const { portfolioUrl, setPortfolioUrl } = useContext(MyContext);
-  const { ext, setExt } = useContext(MyContext);
+  const {title, setTitle} = useContext(MyContext);
+  const {content, setContent} = useContext(MyContext);
+  const {portfolioUrl, setPortfolioUrl} = useContext(MyContext);
+  const {ext, setExt} = useContext(MyContext);
 
   const sendDataToServer = async () => {
+    portfolioUrl.append('title', title);
+    portfolioUrl.append('description', content);
+    portfolioUrl.append('kind', 1);
+    console.log(portfolioUrl);
     try {
-      const response = await fetch('http://172.20.10.4:3000/api/v1/portfolio/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDE5NDUwNTIsImV4cCI6MTcwMTk0ODY1Mn0.TLV_SoHyLaaCWCbpdgZZnipR8AAeOb3ZEzyNzs_A8iw',
-          body: portfolioUrl,
-        }
-      });
+      const response = await fetch(
+        'http://api.mars-port.duckdns.org/api/v1/portfolio',
+        {
+          method: 'POST',
+          headers: {
+            // 'Content-Type': 'multipart/form-data',
+            Authorization: token,
+            body: portfolioUrl,
+          },
+        },
+      );
 
       // console.log('POST kind', id);
       console.log('POST url', portfolioUrl._parts);
@@ -106,14 +112,18 @@ const choosePop = ({
   };
 
   const editDataToServer = async () => {
+    portfolioUrl.append('title', title);
+    portfolioUrl.append('description', content);
+    portfolioUrl.append('kind', 1);
+    console.log('수정', portfolioUrl);
     try {
       const response = await fetch(
-        `http://172.20.10.4:3000/api/v1/portfolio/${id}`,
+        `http://api.mars-port.duckdns.org/api/v1/portfolio/${id}`,
         {
           method: 'PUT',
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDE5NDUwNTIsImV4cCI6MTcwMTk0ODY1Mn0.TLV_SoHyLaaCWCbpdgZZnipR8AAeOb3ZEzyNzs_A8iw',
+            Authorization: token,
           },
           body: portfolioUrl,
         },
@@ -135,11 +145,11 @@ const choosePop = ({
   };
 
   const deleteData = async () => {
-    fetch(`http://172.20.10.4:3000/api/v1/portfolio/${id}`, {
+    fetch(`http://api.mars-port.duckdns.org/api/v1/portfolio/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDE5NDUwNTIsImV4cCI6MTcwMTk0ODY1Mn0.TLV_SoHyLaaCWCbpdgZZnipR8AAeOb3ZEzyNzs_A8iw',
+        Authorization: token,
       },
     })
       .then(response => {
@@ -174,9 +184,10 @@ const choosePop = ({
           deleteData();
         } else if (checkDeletePopOkButton == false) {
           editDataToServer();
-          console.log('임시 POST url', portfolioUrl._parts);
-          console.log('임시 POST Title', title);
-          console.log('임시 POST Content', content);
+          console.log(' POST url', portfolioUrl._parts);
+          console.log(' POST Title', title);
+          console.log(' POST Content', content);
+          //console.log('토큰', token);
         }
         setCheckDeletePopOkButton(false);
         setIsModalVisible(false);

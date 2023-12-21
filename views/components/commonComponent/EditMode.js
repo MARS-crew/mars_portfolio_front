@@ -61,6 +61,7 @@ const EditMode = ({
   filePath,
   setFilePath,
   setIsPlaying,
+  token,
 }) => {
   //공통 스테이트
   const [detailPopVisible, setDetailPopVisible] = useState(false);
@@ -245,7 +246,8 @@ const EditMode = ({
             setCheckChoosePopOkButton={setCheckChoosePopOkButton}
             detailPopVisible={detailPopVisible}
             setTogleButton={setTogleButton}
-            setDetailPopVisible={setDetailPopVisible}></DetailPop>
+            setDetailPopVisible={setDetailPopVisible}
+            token={token}></DetailPop>
           <ChoosePop
             //공통
             popTitle="수정된 내용을 저장하시겠습니까?"
@@ -265,7 +267,8 @@ const EditMode = ({
             id={id}
             code={code}
             onModify={onModify}
-            onDelete={onDelete}></ChoosePop>
+            onDelete={onDelete}
+            token={token}></ChoosePop>
           <ChoosePop
             //공통
             popTitle="수정된 내용을 삭제하시겠습니까?"
@@ -282,7 +285,8 @@ const EditMode = ({
             //포트폴리오
             portfolio={portfolio}
             id={id}
-            code={code}></ChoosePop>
+            code={code}
+            token={token}></ChoosePop>
         </Pressable>
       </TouchableOpacity>
     </Modal>

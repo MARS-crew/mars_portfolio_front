@@ -35,21 +35,19 @@ const GroupVideoItem = ({medal, src}) => {
 
 const styles = StyleSheet.create({
   outline: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    border: 0,
   },
   midLine: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    border: 0,
-  },
-  manyImage: {
     width: widthCol,
     height: heightCol,
-    borderColor: '#000000',
-    borderStyle: 'solid',
-    border: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  manyImage: {
+    width: width / 1.9,
+    height: height / 1.9,
   },
 });
 
