@@ -15,27 +15,46 @@ import react_icon from '../../assets/images/devIcon/react.png'
 import css3_icon from '../../assets/images/devIcon/css3.png'
 import html5_icon from '../../assets/images/devIcon/html5.png'
 import springboot_icon from '../../assets/images/devIcon/springboot.png'
+import axios from 'axios';
 
 
 
 import { help } from "yargs";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const fetchResume = async () => {
+const fetchResume = async ({ token }) => {
     try {
       const response = await axios({
-        method: 'post',
-        url: 'http://192.168.200.22:3000//api/v1/resume',
+        method: 'get',
+        url: 'http://192.168.200.22:3000/api/v1/resume',
         headers: {
           Authorization: token
         },
       });
-      console.log('resume:'+response.data);
+      console.log('resume:'+response.data.data[0].resume_id);
+
+      const extractedData = {
+        resume_id: response.data.data.resume_id, //이력서 아이디
+        introduce: response.data.data.introduce, //이력서 소개
+        addr: response.data.data.addr, //주소
+        detail_addr: response.data.data.detail_addr, //상세주소
+        email: response.data.data.email, //이메일
+        tel: response.data.data.tel, //전화번호
+        name: response.data.data.name, //이름
+        award_name: response.data.data.award_name, //수상이름
+        issuer: response.data.data.issuer, //표창기관
+        com_name: response.data.data.com_name, //회사이름
+        started_date: response.data.data.started_date, //회사 입사일
+        period: response.data.data.period, //재직기간
+        rank: response.data.data.rank, //직급
+        duty: response.data.data.duty, //업무
+        group_id: response.data.data.group_id, //그룹아이디
+      };
 
     } catch (error) {
       console.error('여기?'+error);
     }
-  };
+ };
 
 const IntroContent = ({ item }) => {
     const containerStyles = { ...styles.container, marginTop: 20 }
@@ -333,7 +352,12 @@ const SkillContent = () => {
 
 }
 
-const ResumeBox = ({ item }) => {
+const ResumeBox = ({ item, token }) => {
+    useEffect(() => {
+        // fetchResume 함수에 token을 객체 형태로 전달
+        fetchResume({token:token });
+    }, [token]); // token이 변경될 때마다 fetchResume 함수를 다시 호출합니다.
+
     return (
         <View>
             <IntroContent item={item} />

@@ -56,7 +56,7 @@ const DATA = [
 ]
 
 
-const Resume = ({ }) => {
+const Resume = ({token }) => {
   const { currentIndex, changeIndex } = useIndexContext();
   const swiperRef = useRef(null);
   const [itemHeights, setItemHeights] = useState({});
@@ -109,10 +109,10 @@ const Resume = ({ }) => {
         activeOpacity={100}
       >
         {modalOpen ? (
-          <ResumeBoxMD item={item} />
+          <ResumeBoxMD item={item} token={token}/>
         ) : (
           // <View onLayout={(event) => handleItemLayout(event, index)}>
-          <ResumeBox item={item} />
+          <ResumeBox item={item} token={token}/>
           // </View>
         )}
       </TouchableOpacity>
@@ -141,7 +141,7 @@ const Resume = ({ }) => {
       <FlatList
         ref={swiperRef}
         data={DATA}
-        renderItem={({ item, index }) => (<Item item={item} index={index} />)}
+        renderItem={({ item, index }) => (<Item item={item} index={index} token={token}/>)}
         keyExtractor={keyExtractor}
         removeClippedSubviews={true}
         // index={currentIndex}
