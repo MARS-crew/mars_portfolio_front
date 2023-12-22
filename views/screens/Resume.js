@@ -46,7 +46,7 @@ const ResumeItem = (item) => (
   </View>
 );
 
-const Resume = () => {
+const Resume = (token) => {
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [resume, setResume] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
   const toggleModal = () => {
@@ -60,16 +60,16 @@ const Resume = () => {
     });
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, token }) => {
     return (
       <TouchableOpacity
         onLongPress={toggleModal}
         activeOpacity={100}
       >
         {modalOpen ? (
-          <ResumeBoxMD item={item} />
+          <ResumeBoxMD item={item} token={token} />
         ) : (
-          <ResumeBox item={item} />
+          <ResumeBox item={item} token={token}/>
         )}
       </TouchableOpacity>
     );

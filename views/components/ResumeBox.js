@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from "react-native";
 import { Resume } from '../screens/ResumeContents'
 import Id7Popup from "./Id7Popup";
@@ -15,19 +16,10 @@ import css3_icon from '../../assets/images/devIcon/css3.png'
 import html5_icon from '../../assets/images/devIcon/html5.png'
 import springboot_icon from '../../assets/images/devIcon/springboot.png'
 
-
-
 import { help } from "yargs";
-import React, { useState } from "react";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-// {
-//     (item.id === '5' || item.id === '6' || item.id === '7') ? (
-//         <View style={styles.line2} />
-//     ) : (
-//         <View style={styles.line} />
-//     )
-// }
-const IntroContent = ({ item }) => {
+
+const IntroContent = ({ item, data }) => {
     const containerStyles = { ...styles.container, marginTop: 20 }
     return (
         <Shadow
@@ -42,14 +34,14 @@ const IntroContent = ({ item }) => {
                 <Text style={styles.title}>간단소개</Text>
                 <View style={styles.line} />
                 <Text style={[styles.content, styles.introContent]}>
-                    소개글을 입력해주세요
+                    {data}
                 </Text>
             </View>
         </Shadow>
     );
 }
 
-const InfoContent = ({ item }) => {
+const InfoContent = ({ item, name, tel, addr, email }) => {
     const containerStyles = { ...styles.container };
     return (
         <Shadow
@@ -65,25 +57,25 @@ const InfoContent = ({ item }) => {
                 <View style={styles.line} />
                 <Text style={[styles.content, styles.basicInfoContent]}>
                     <View>
-                        <Text style={styles.infoText}>{item.name}</Text>
+                        <Text style={styles.infoText}>{name}</Text>
                         <View style={styles.icons}>
                             <View style={styles.iconsText}>
                                 <Image
                                     source={tel_icon}
                                     style={styles.icon} />
-                                <Text style={styles.defaultText}>010-1111-2222</Text>
+                                <Text style={styles.defaultText}>{tel}</Text>
                             </View>
                             <View style={styles.iconsText} >
                                 <Image
                                     source={home_icon}
                                     style={styles.icon} />
-                                <Text style={styles.defaultText}>경기도</Text>
+                                <Text style={styles.defaultText}>{addr}</Text>
                             </View>
                             <View style={styles.iconsText}>
                                 <Image
                                     source={main_icon}
                                     style={styles.icon} />
-                                <Text style={styles.defaultText}>123@naver.com</Text>
+                                <Text style={styles.defaultText}>{email}</Text>
                             </View>
                         </View>
                     </View>
@@ -92,7 +84,7 @@ const InfoContent = ({ item }) => {
         </Shadow>
     )
 }
-const CareerContent = ({ item }) => {
+const CareerContent = ({ item, com_name, rank, started_date, period, duty }) => {
     const containerStyles = { ...styles.container };
     return (
         <Shadow
@@ -109,28 +101,20 @@ const CareerContent = ({ item }) => {
                 <Text style={[styles.content, styles.careerContent]}>
                     <View>
                         <View style={styles.iconsText}>
-                            <Text style={styles.infoText}>회사명</Text>
-                            <Text style={styles.defaultText}>사원</Text>
+                            <Text style={styles.infoText}>{com_name}</Text>
+                            <Text style={styles.defaultText}>{rank}</Text>
                         </View>
-                        <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
-                        <Text style={styles.defaultText2}>개발</Text>
+                        <Text style={styles.dateText}>{started_date} ~ 2023.06.06 ( {period} )</Text>
+                        <Text style={styles.defaultText2}>{duty}</Text>
                     </View>
                     <View style={styles.line} />
-                    <View>
-                        <View style={styles.iconsText}>
-                            <Text style={styles.infoText}>회사명</Text>
-                            <Text style={styles.defaultText}>사원</Text>
-                        </View>
-                        <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
-                        <Text style={styles.defaultText2}>개발</Text>
-                    </View>
                 </Text>
             </View>
         </Shadow>
     )
 }
 
-const AwardContent = () => {
+const AwardContent = ({award_name, date, issuer}) => {
     const containerStyles = { ...styles.container };
     return (
         <Shadow
@@ -148,10 +132,10 @@ const AwardContent = () => {
                     <View>
                         <View>
                             <View>
-                                <Text style={styles.infoText}>프로젝트 우수상</Text>
+                                <Text style={styles.infoText}>{award_name}</Text>
                             </View>
-                            <Text style={styles.dateText}>2020.06.06</Text>
-                            <Text style={styles.defaultText2}>마스외전</Text>
+                            <Text style={styles.dateText}>{date}</Text>
+                            <Text style={styles.defaultText2}>{issuer}</Text>
                         </View>
                     </View>
                 </Text>
@@ -323,16 +307,41 @@ const SkillContent = () => {
 
 }
 
-const ResumeBox = ({ item }) => {
+const ResumeBox = ({ item, data, index }) => {
+    if (!data || !data.data || !data.data[index]) {
+        return <View />;
+    }
+
+    const resumeItem = data.data[index];
+
+
     return (
         <View>
-            <IntroContent item={item} />
-            <InfoContent item={item} />
-            <CareerContent item={item} />
-            <AwardContent item={item} />
-            <InterestContent item={item} />
-            <SpecialityContent item={item} />
-            <SkillContent item={item} />
+            <IntroContent item={item} data={resumeItem.introduce} />
+            <InfoContent 
+                item={item} 
+                name={resumeItem.name} 
+                tel={resumeItem.tel} 
+                addr={resumeItem.addr} 
+                email={resumeItem.email} 
+            />
+            <CareerContent 
+                item={item} 
+                com_name={resumeItem.com_name} 
+                rank={resumeItem.rank} 
+                started_date={resumeItem.started_date} 
+                period={resumeItem.period} 
+                duty={resumeItem.duty} 
+            />
+            <AwardContent 
+                item={item} 
+                award_name={resumeItem.award_name}
+                date={resumeItem.date}
+                issuer={resumeItem.issuer}
+                 />
+            <InterestContent item={item} data={data} />
+            <SpecialityContent item={item} data={data} />
+            <SkillContent item={item} data={data} />
         </View>
     );
 };
