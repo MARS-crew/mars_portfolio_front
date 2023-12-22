@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from "react-native";
 import { Resume } from '../screens/ResumeContents'
 import Id7Popup from "./Id7Popup";
@@ -18,15 +19,24 @@ import springboot_icon from '../../assets/images/devIcon/springboot.png'
 
 
 import { help } from "yargs";
-import React, { useState } from "react";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-// {
-//     (item.id === '5' || item.id === '6' || item.id === '7') ? (
-//         <View style={styles.line2} />
-//     ) : (
-//         <View style={styles.line} />
-//     )
-// }
+
+const fetchResume = async () => {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: 'http://192.168.200.22:3000//api/v1/resume',
+        headers: {
+          Authorization: token
+        },
+      });
+      console.log('resume:'+response.data);
+
+    } catch (error) {
+      console.error('여기?'+error);
+    }
+  };
+
 const IntroContent = ({ item }) => {
     const containerStyles = { ...styles.container, marginTop: 20 }
     return (
