@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Animated,
   Dimensions,
@@ -29,6 +29,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // import AppContext from './AppContext`';
 import { MyProvider } from './MyContext';
 import { IndexProvider, useIndexContext } from './IndexContext';
+
+
+const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
+
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -86,38 +90,48 @@ const transitionAnimation = index => {
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Help"
-          component={Help}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Share"
-          component={Share}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Album"
-          component={Album}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <IndexProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Help"
+            component={Help}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Share"
+            component={Share}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Album"
+            component={Album}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </IndexProvider>
   );
 };
 
 const HomeScreen = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDE5NDUwNTIsImV4cCI6MTcwMTk0ODY1Mn0.TLV_SoHyLaaCWCbpdgZZnipR8AAeOb3ZEzyNzs_A8iw';
-  // const { currentIndex } = useIndexContext();
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDMyNDM0NjksImV4cCI6MTcwMzI0NzA2OX0.oQY65P8wrw2on8Q52UlngHjQGKRgCmGNNrhu-_6g2Sg';
+  const { horizontalIndex, changeHorizontalIndex } = useIndexContext();
+
+  const horizontalScrollRef = useRef(null);
+  useEffect(() => {
+    if (horizontalScrollRef.current) {
+      horizontalScrollRef.current.scrollTo({ x: horizontalIndex * SCREEN_WIDTH, animated: true });
+    }
+  }, [horizontalIndex, horizontalScrollRef]);
+
 
   useEffect(() => {
     AsyncStorage.getItem('isSplashVisible').then(value => {
@@ -143,50 +157,61 @@ const HomeScreen = () => {
   //   setIndexValue,
   // };
   // console.log(ind);
+  const handleScroll = event => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+
+    const newIndex = Math.round(offsetX / SCREEN_WIDTH);
+
+    // 변경된 인덱스를 처리하는 함수 호출
+    if (newIndex != horizontalIndex) {
+      changeHorizontalIndex(newIndex);
+    }
+
+  };
 
   return (
     // <AppContext.Provider value={userSettings}>
-    <IndexProvider>
-      <MyProvider>
-        <Animated.ScrollView
-          scrollEventThrottle={16}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: xOffset } } }],
-            {
-              useNativeDriver: true,
-            },
-          )}
-          horizontal
-          pagingEnabled
-          style={styles.scrollView}>
-          <Splash isSplashVisible={isSplashVisible} />
-          {isSplashVisible === false ? (
-            <Screen text="Screen 1" index={0}>
-              <WhichGroup token={token} />
-            </Screen>
-          ) : null}
-          <Screen text="Screen 2" index={1}>
-            <GroupVideo token={token} />
+    <MyProvider>
+      <AnimatedScrollView
+        ref={horizontalScrollRef}
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: xOffset } } }],
+          {
+            useNativeDriver: true,
+            listener: handleScroll,
+          },
+        )}
+        horizontal
+        pagingEnabled
+        style={styles.scrollView}
+      >
+        <Splash isSplashVisible={isSplashVisible} />
+        {isSplashVisible === false ? (
+          <Screen text="Screen 1" index={0}>
+            <WhichGroup token={token} />
           </Screen>
-          <Screen text="Screen 3" index={2}>
-            <Interview token={token} />
-          </Screen>
-          <Screen text="Screen 4" index={3}>
-            <Portfolio token={token} options={{ headerShown: false }} />
-          </Screen>
-          <Screen text="Screen 5" index={4}>
-            <Resume token={token} />
-          </Screen>
-          <Screen text="Screen 6" index={5}>
-            <Review token={token} />
-          </Screen>
-          <Screen text="Screen 7" index={6}>
-            <MyPage token={token} options={{ headerShown: false }} />
-          </Screen>
-        </Animated.ScrollView>
-      </MyProvider>
-      {/* </AppContext.Provider> */}
-    </IndexProvider>
+        ) : null}
+        <Screen text="Screen 2" index={1}>
+          <GroupVideo token={token} />
+        </Screen>
+        <Screen text="Screen 3" index={2}>
+          <Interview token={token} />
+        </Screen>
+        <Screen text="Screen 4" index={3}>
+          <Portfolio token={token} options={{ headerShown: false }} />
+        </Screen>
+        <Screen text="Screen 5" index={4}>
+          <Resume token={token} />
+        </Screen>
+        <Screen text="Screen 6" index={5}>
+          <Review token={token} />
+        </Screen>
+        <Screen text="Screen 7" index={6}>
+          <MyPage token={token} options={{ headerShown: false }} />
+        </Screen>
+      </AnimatedScrollView>
+    </MyProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Animated,
   Dimensions,
@@ -11,14 +11,14 @@ import {
 import axios from 'axios';
 import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import {useIndexContext} from '../../IndexContext';
+import { useIndexContext } from '../../IndexContext';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const yOffset = new Animated.Value(0);
 
-const Interview = ({token}) => {
-  const {currentIndex, changeIndex} = useIndexContext();
+const Interview = ({ token }) => {
+  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex } = useIndexContext();
   const swiperRef = useRef(null);
 
   useEffect(() => {
@@ -31,20 +31,23 @@ const Interview = ({token}) => {
   }, [currentIndex, swiperRef]);
 
   const height = Dimensions.get('window').height;
-  const handleScroll = event => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const newIndex = Math.round(offsetY / height);
-    // IndexData.setIndexValue(index);
-    changeIndex(newIndex);
+
+  const handleVerticalScroll = event => {
+    // const offsetY = event.nativeEvent.contentOffset.y;
+    // const newIndex = Math.round(offsetY / height);
+    // changeIndex(newIndex);
+    if (horizontalIndex !== 0 && horizontalIndex !== 1) {
+      changeHorizontalIndex(1);
+    }
   };
-  // console.log('3번째 스크린 기수 인덱스: ', currentIndex);
 
   const [data, setData] = useState([]);
   useEffect(() => {
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: 'http://api.mars-port.duckdns.org/api/v1/interview/',
+      // url: 'http://api.mars-port.duckdns.org/api/v1/interview/',
+      url: 'http://172.20.10.4:3000/api/v1/interview/',
       headers: {
         Authorization: token,
       },
@@ -81,11 +84,11 @@ const Interview = ({token}) => {
         ref={swiperRef}
         vertical={true}
         data={data}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <InterviewContents id={item.memberId} path={item.url} token={token} />
         )}
         index={currentIndex}
-        onScroll={handleScroll}
+        onScroll={handleVerticalScroll}
         hideShadow={true}
       />
     </SafeAreaView>

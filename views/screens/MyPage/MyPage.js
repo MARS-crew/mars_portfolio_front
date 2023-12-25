@@ -120,7 +120,8 @@ const MyPage = ({token}) => {
       try {
         const response = await axios({
           method: 'get',
-          url: 'http://api.mars-port.duckdns.org/api/v1/mypage/1',
+          // url: 'http://api.mars-port.duckdns.org/api/v1/mypage/1',
+          url: 'http://172.20.10.4:3000/api/v1/mypage/1',
           headers: {
             Authorization: token,
           },

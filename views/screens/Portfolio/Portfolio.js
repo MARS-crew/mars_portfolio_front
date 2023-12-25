@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   SafeAreaView,
@@ -14,12 +14,12 @@ import FAB from '../../components/FloatingMenu';
 import PortfolioItem from '../Portfolio/PortfolioItem';
 import DetailPop from './DetailPop';
 import axios from 'axios'; // axios import 합니다.
-import {Shadow} from 'react-native-shadow-2';
+import { Shadow } from 'react-native-shadow-2';
 import addBtn from '../../../assets/images/add.png';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import {useIndexContext} from '../../../IndexContext';
+import { useIndexContext } from '../../../IndexContext';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.4;
 
 // const numColumns = 2;
@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Portfolio = ({token}) => {
-  const {currentIndex, changeIndex} = useIndexContext();
+const Portfolio = ({ token }) => {
+  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex } = useIndexContext();
   const swiperRef = useRef(null);
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
@@ -72,11 +72,13 @@ const Portfolio = ({token}) => {
   }, [currentIndex, swiperRef]);
 
   const height = Dimensions.get('window').height;
-  const handleScroll = event => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const newIndex = Math.round(offsetY / height);
-    // IndexData.setIndexValue(index);
-    changeIndex(newIndex);
+  const handleVerticalScroll = event => {
+    // const offsetY = event.nativeEvent.contentOffset.y;
+    // const newIndex = Math.round(offsetY / height);
+    // changeIndex(newIndex);
+    if (horizontalIndex !== 0 && horizontalIndex !== 1) {
+      changeHorizontalIndex(1);
+    }
   };
   // console.log('4번째 스크린 기수 인덱스: ', currentIndex);
 
@@ -93,6 +95,7 @@ const Portfolio = ({token}) => {
     axios({
       method: 'get',
       url: `http://api.mars-port.duckdns.org/api/v1/portfolio/${member_id}`,
+      // url: `http://172.20.10.4:3000/api/v1/portfolio/${member_id}`,
       headers: {
         Authorization: token,
       },
@@ -217,7 +220,7 @@ const Portfolio = ({token}) => {
         ref={swiperRef}
         vertical={true}
         data={data}
-        renderItem={({item, index}) => (
+        renderItem={({ item, index }) => (
           <Item
             item={item}
             portfolio={portfolio}
@@ -230,7 +233,7 @@ const Portfolio = ({token}) => {
           />
         )}
         index={currentIndex}
-        onScroll={handleScroll}
+        onScroll={handleVerticalScroll}
         hideShadow={true}
       />
       <FAB />
