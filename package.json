@@ -18,6 +18,7 @@
     "@react-navigation/native": "6.1.9",
     "@react-navigation/stack": "6.3.20",
     "axios": "1.6.2",
+    "deprecated-react-native-prop-types": "5.0.0",
     "lottie-react-native": "^5.1.6",
     "react": "17.0.2",
     "react-native": "0.68.2",
