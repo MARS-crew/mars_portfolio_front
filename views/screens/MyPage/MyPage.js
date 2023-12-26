@@ -9,6 +9,7 @@ import {
   Text,
 } from 'react-native';
 import {Shadow} from 'react-native-shadow-2';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
 import SectionChooseBtn from '../../components/commonComponent/SectionChooseBtn';
 import Title from '../../components/commonComponent/Title';
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   list: {
-    height: 41,
+    height: 45,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -115,79 +116,88 @@ const MyPage = ({token}) => {
   const [hiddenItem, setHiddenItem] = useState(true);
   const shadowColor = 'rgba(151, 151, 151, 0.36)';
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios({
-          method: 'get',
-          url: 'http://api.mars-port.duckdns.org/api/v1/mypage/1',
-          headers: {
-            Authorization: token,
-          },
-        });
+  const fetchData = async () => {
+    try {
+      const response = await axios({
+        method: 'get',
+        // url: 'http://api.mars-port.duckdns.org/api/v1/mypage/1',
+        url: 'http://192.168.0.2:3000/api/v1/myPage/' + 47, //'로그인 한 본인 아이디'
+        headers: {
+          Authorization: token,
+        },
+      });
 
-        const extractedData = {
-          Reviewlike: response.data.data.Reviewlike,
-          heart: response.data.data.heart,
-          log_today: response.data.data.todayCount,
-          log_total: response.data.data.totalCount,
-          visitLog: response.data.data.visitLog,
-        };
+      const extractedData = {
+        Reviewlike: response.data.data.Reviewlike,
+        heart: response.data.data.heart,
+        log_today: response.data.data.todayCount,
+        log_total: response.data.data.totalCount,
+        visitLog: response.data.data.visitLog,
+      };
+      console.log(extractedData);
 
-        setData(extractedData);
+      setData(extractedData);
 
-        if (
-          !extractedData.visitLog ||
-          extractedData.visitLog.includes('방문자가 없습니다')
-        ) {
-          setNoLog(true);
-          setLogData(['방문자가 없습니다.']);
-          // console.log("방문자 없음");
-        } else {
-          setNoLog(false);
-          jsonArray = JSON.parse(extractedData.visitLog);
-          setLogData(jsonArray);
-        }
-
-        if (
-          !extractedData.heart ||
-          extractedData.heart.includes('찜한 사용자가 없습니다.')
-        ) {
-          setNoHert(true);
-          setHeartData(['좋아요가 없습니다.']);
-          // console.log("하트 없음");
-        } else {
-          setNoHert(false);
-          jsonArray = [JSON.parse(extractedData.heart)];
-          setHeartData(jsonArray);
-        }
-
-        if (
-          !extractedData.Reviewlike ||
-          extractedData.Reviewlike.includes(
-            '리뷰에 좋아요한 사용자가 없습니다.',
-          )
-        ) {
-          setNoReview(true);
-          setReviewData([extractedData.Reviewlike]);
-          // console.log("리뷰 없음");
-        } else {
-          setNoReview(false);
-          jsonArray = [JSON.parse(extractedData.Reviewlike)];
-          setReviewData(jsonArray);
-        }
-      } catch (error) {
-        console.log(error);
+      if (
+        !extractedData.visitLog ||
+        extractedData.visitLog.includes('방문자가 없습니다')
+      ) {
+        setNoLog(true);
+        setLogData(['방문자가 없습니다.']);
+        // console.log("방문자 없음");
+      } else {
+        setNoLog(false);
+        jsonArray = JSON.parse(extractedData.visitLog);
+        setLogData(jsonArray);
       }
-    };
 
+      if (
+        !extractedData.heart ||
+        extractedData.heart.includes('찜한 사용자가 없습니다.')
+      ) {
+        setNoHert(true);
+        setHeartData(['좋아요가 없습니다.']);
+        // console.log("하트 없음");
+      } else {
+        setNoHert(false);
+        jsonArray = [JSON.parse(extractedData.heart)];
+        setHeartData(jsonArray);
+      }
+
+      if (
+        !extractedData.Reviewlike ||
+        extractedData.Reviewlike.includes('리뷰에 좋아요한 사용자가 없습니다.')
+      ) {
+        setNoReview(true);
+        setReviewData([extractedData.Reviewlike]);
+        // console.log("리뷰 없음");
+      } else {
+        setNoReview(false);
+        jsonArray = [JSON.parse(extractedData.Reviewlike)];
+        setReviewData(jsonArray);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
-
     return () => {
       isMounted = false;
       // source.cancel('API 호출이 취소되었습니다.');
     };
-  }, [data]); // token이 의존성 배열에 들어가도록 수정
+  }, [token]); // token이 의존성 배열에 들어가도록 수정
+
+  const renderDeleteButton = () => (
+    <TouchableOpacity
+      onPress={() => console.log('삭제 처리 함수')}
+      style={{ backgroundColor: 'red', padding:10, justifyContent: 'center', alignItems: 'center', height: 45 }}
+    >
+      <Text style={{ color: 'white', fontSize: 14 }}>삭제</Text>
+    </TouchableOpacity>
+  );
+  
 
   const handleButton1Press = () => {
     setButton1Pressed(true);
@@ -210,13 +220,13 @@ const MyPage = ({token}) => {
     setHiddenItem(false);
   }; // buttonPressed 1~3의 Pressed 여부로 나머지 버튼의 토글 여부를 결정
 
-  const toggleDelete = key => {
-    setData(prevData =>
-      prevData.map(item =>
-        item.key === key ? {...item, showDelete: !item.showDelete} : item,
-      ),
-    );
-  };
+  // const toggleDelete = key => {
+  //   setData(prevData =>
+  //     prevData.map(item =>
+  //       item.key === key ? {...item, showDelete: !item.showDelete} : item,
+  //     ),
+  //   );
+  // };
 
   const VisitSubContainer = ({title, value}) => {
     return (
@@ -268,6 +278,23 @@ const MyPage = ({token}) => {
     );
   };
 
+  const renderItem = ({ item }) => (
+    <Swipeable renderRightActions={renderDeleteButton}>
+      <View style={styles.list}>
+        <TouchableOpacity style={styles.item}>
+          <Text style={{ color: 'black' }}>
+            {noLog ? `${item}` : `${item.name}님이 방문하였습니다.`}
+          </Text>
+        </TouchableOpacity>
+        {noLog ? null : (
+          <View style={styles.log}>
+            <Text>{item.reg_date.slice(0, 10)}</Text>
+          </View>
+        )}
+      </View>
+    </Swipeable>
+  );
+
   return (
     <View style={styles.container}>
       <Shadow
@@ -310,7 +337,7 @@ const MyPage = ({token}) => {
           {button1Pressed && (
             <View style={styles.visitLogView}>
               <View style={styles.flatListContainer}>
-                <FlatList
+                {/* <FlatList
                   data={logData}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({item}) => (
@@ -323,7 +350,7 @@ const MyPage = ({token}) => {
                         <Title color={'black'}>
                           {noLog
                             ? `${item}`
-                            : `${item.name}님이 회원님을 방문하였습니다.`}
+                            : `${item.name}님이 방문하였습니다.`}
                         </Title>
                       </TouchableOpacity>
                       {noLog ? null : (
@@ -335,6 +362,11 @@ const MyPage = ({token}) => {
                       )}
                     </View>
                   )}
+                /> */}
+                <FlatList
+                  data={logData}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={renderItem}
                 />
                 {/* {item.showDelete && (
                   <TouchableOpacity
