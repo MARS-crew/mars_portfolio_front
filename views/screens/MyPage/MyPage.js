@@ -191,11 +191,16 @@ const MyPage = ({token}) => {
 
   const handleDelete = async (visitId) => {
     try {
-      // 여기서 실제 삭제 API 요청을 구현합니다.
-      // 예시: axios.delete(`http://api.example.com/visit/${visitId}`);
-      console.log(`삭제 요청: visitId ${visitId}`);
+      // DELETE로 서버에서 항목 삭제
+      await axios({
+        method: 'delete',
+        url: `http://192.168.0.2:3000/api/v1/visit/delete/${visitId}`,
+        headers: {
+          Authorization: token,
+        },
+      });
   
-      // 삭제 후 로컬 데이터 갱신
+      // 로컬 상태에서 해당 항목 삭제
       const updatedLogData = logData.filter(item => item.visit_id !== visitId);
       setLogData(updatedLogData);
     } catch (error) {
@@ -211,6 +216,7 @@ const MyPage = ({token}) => {
       <Text style={{ color: 'white', fontSize: 14 }}>삭제</Text>
     </TouchableOpacity>
   );
+  
   
   const handleButton1Press = () => {
     setButton1Pressed(true);
@@ -232,14 +238,6 @@ const MyPage = ({token}) => {
     setButton3Pressed(true);
     setHiddenItem(false);
   }; // buttonPressed 1~3의 Pressed 여부로 나머지 버튼의 토글 여부를 결정
-
-  // const toggleDelete = key => {
-  //   setData(prevData =>
-  //     prevData.map(item =>
-  //       item.key === key ? {...item, showDelete: !item.showDelete} : item,
-  //     ),
-  //   );
-  // };
 
   const VisitSubContainer = ({title, value}) => {
     return (
@@ -350,50 +348,11 @@ const MyPage = ({token}) => {
           {button1Pressed && (
             <View style={styles.visitLogView}>
               <View style={styles.flatListContainer}>
-                {/* <FlatList
-                  data={logData}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({item}) => (
-                    <View style={styles.list}>
-                      <TouchableOpacity
-                        style={styles.item}
-                        onPress={() => [
-                          //toggleDelete(1)
-                        ]}>
-                        <Title color={'black'}>
-                          {noLog
-                            ? `${item}`
-                            : `${item.name}님이 방문하였습니다.`}
-                        </Title>
-                      </TouchableOpacity>
-                      {noLog ? null : (
-                        <View style={styles.log}>
-                          {!item.showDelete && (
-                            <Title>{item.reg_date.slice(0, 10)}</Title>
-                          )}
-                        </View>
-                      )}
-                    </View>
-                  )}
-                /> */}
                 <FlatList
                   data={logData}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={renderItem}
                 />
-                {/* {item.showDelete && (
-                  <TouchableOpacity
-                    onPress={
-                      () => ''
-                      //toggleDelete(item.key)
-                    }>
-                    <View style={styles.deleteButton}>
-                      <Title color={'#FF3040'} fontSize={16} fontWeight={'700'}>
-                        삭제
-                      </Title>
-                    </View>
-                  </TouchableOpacity>
-                )} */}
               </View>
             </View>
           )}
@@ -413,7 +372,6 @@ const MyPage = ({token}) => {
           )}
         </View>
       </Shadow>
-
       <ContentsViewPop
         myPage={myPage}
         title={reviewData.name}
