@@ -189,16 +189,29 @@ const MyPage = ({token}) => {
     };
   }, [token]); // token이 의존성 배열에 들어가도록 수정
 
-  const renderDeleteButton = () => (
+  const handleDelete = async (visitId) => {
+    try {
+      // 여기서 실제 삭제 API 요청을 구현합니다.
+      // 예시: axios.delete(`http://api.example.com/visit/${visitId}`);
+      console.log(`삭제 요청: visitId ${visitId}`);
+  
+      // 삭제 후 로컬 데이터 갱신
+      const updatedLogData = logData.filter(item => item.visit_id !== visitId);
+      setLogData(updatedLogData);
+    } catch (error) {
+      console.error('삭제 실패:', error);
+    }
+  };
+
+  const renderDeleteButton = (visitId) => (
     <TouchableOpacity
-      onPress={() => console.log('삭제 처리 함수')}
-      style={{ backgroundColor: 'red', padding:10, justifyContent: 'center', alignItems: 'center', height: 45 }}
+      onPress={() => handleDelete(visitId)}
+      style={{ backgroundColor: 'red', padding: 10, justifyContent: 'center', alignItems: 'center', height: 45 }}
     >
       <Text style={{ color: 'white', fontSize: 14 }}>삭제</Text>
     </TouchableOpacity>
   );
   
-
   const handleButton1Press = () => {
     setButton1Pressed(true);
     setButton2Pressed(false);
@@ -279,7 +292,7 @@ const MyPage = ({token}) => {
   };
 
   const renderItem = ({ item }) => (
-    <Swipeable renderRightActions={renderDeleteButton}>
+    <Swipeable renderRightActions={() => renderDeleteButton(item.visit_id)}>
       <View style={styles.list}>
         <TouchableOpacity style={styles.item}>
           <Text style={{ color: 'black' }}>
