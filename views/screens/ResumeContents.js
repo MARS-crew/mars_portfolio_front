@@ -66,7 +66,7 @@ const fetchResume = async ({token}) => {
         Authorization: token,
       },
     });
-    console.log('가가갸갹가가:', response.data);
+    
 
     const extractedData = {
     // ***** 아래 데이터 지우지 말아주세요 *****
@@ -88,7 +88,6 @@ const fetchResume = async ({token}) => {
       // group_id: response.data.data.group_id, //그룹아이디
       data: response.data.data
     };
-    console.log('제발제발제발'+extractedData.data[0].resume_id)
     return extractedData;
 
   } catch (error) {
