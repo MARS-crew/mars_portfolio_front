@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,13 +8,14 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import {Shadow} from 'react-native-shadow-2';
+import { Shadow } from 'react-native-shadow-2';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
 import SectionChooseBtn from '../../components/commonComponent/SectionChooseBtn';
 import Title from '../../components/commonComponent/Title';
 import LogList from './LogList';
 import axios from 'axios';
-import {log} from 'react-native-reanimated';
+import { log } from 'react-native-reanimated';
 
 const styles = StyleSheet.create({
   container: {
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 15,
   },
-  visitSubContainer: {alignItems: 'center', flex: 1},
+  visitSubContainer: { alignItems: 'center', flex: 1 },
   visitSubCenterLine: {
     borderRightColor: '#EEEEEE',
     borderRightWidth: 1,
@@ -77,12 +78,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#FDFDFD',
   },
-  item: {paddingVertical: 12, paddingHorizontal: 15},
+  item: { paddingVertical: 12, paddingHorizontal: 15 },
   log: {
     paddingHorizontal: 15,
   },
   list: {
-    height: 41,
+    height: 45,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const MyPage = ({token}) => {
+const MyPage = ({ token }) => {
   const [myPage, setMyPage] = useState(true);
   const [data, setData] = useState([]);
   let jsonArray = [];
@@ -115,80 +116,108 @@ const MyPage = ({token}) => {
   const [hiddenItem, setHiddenItem] = useState(true);
   const shadowColor = 'rgba(151, 151, 151, 0.36)';
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios({
-          method: 'get',
-          // url: 'http://api.mars-port.duckdns.org/api/v1/mypage/1',
-          url: 'http://172.20.10.4:3000/api/v1/mypage/1',
-          headers: {
-            Authorization: token,
-          },
-        });
 
-        const extractedData = {
-          Reviewlike: response.data.data.Reviewlike,
-          heart: response.data.data.heart,
-          log_today: response.data.data.todayCount,
-          log_total: response.data.data.totalCount,
-          visitLog: response.data.data.visitLog,
-        };
+  const fetchData = async () => {
+    try {
+      const response = await axios({
+        method: 'get',
+        // url: 'http://api.mars-port.duckdns.org/api/v1/mypage/1',
+        url: 'http://192.168.0.2:3000/api/v1/myPage/' + 47, //'로그인 한 본인 아이디'
+        headers: {
+          Authorization: token,
+        },
+      });
 
-        setData(extractedData);
+      const extractedData = {
+        Reviewlike: response.data.data.Reviewlike,
+        heart: response.data.data.heart,
+        log_today: response.data.data.todayCount,
+        log_total: response.data.data.totalCount,
+        visitLog: response.data.data.visitLog,
+      };
+      console.log(extractedData);
 
-        if (
-          !extractedData.visitLog ||
-          extractedData.visitLog.includes('방문자가 없습니다')
-        ) {
-          setNoLog(true);
-          setLogData(['방문자가 없습니다.']);
-          // console.log("방문자 없음");
-        } else {
-          setNoLog(false);
-          jsonArray = JSON.parse(extractedData.visitLog);
-          setLogData(jsonArray);
-        }
+      setData(extractedData);
 
-        if (
-          !extractedData.heart ||
-          extractedData.heart.includes('찜한 사용자가 없습니다.')
-        ) {
-          setNoHert(true);
-          setHeartData(['좋아요가 없습니다.']);
-          // console.log("하트 없음");
-        } else {
-          setNoHert(false);
-          jsonArray = [JSON.parse(extractedData.heart)];
-          setHeartData(jsonArray);
-        }
-
-        if (
-          !extractedData.Reviewlike ||
-          extractedData.Reviewlike.includes(
-            '리뷰에 좋아요한 사용자가 없습니다.',
-          )
-        ) {
-          setNoReview(true);
-          setReviewData([extractedData.Reviewlike]);
-          // console.log("리뷰 없음");
-        } else {
-          setNoReview(false);
-          jsonArray = [JSON.parse(extractedData.Reviewlike)];
-          setReviewData(jsonArray);
-        }
-      } catch (error) {
-        console.log(error);
+      if (
+        !extractedData.visitLog ||
+        extractedData.visitLog.includes('방문자가 없습니다')
+      ) {
+        setNoLog(true);
+        setLogData(['방문자가 없습니다.']);
+        // console.log("방문자 없음");
+      } else {
+        setNoLog(false);
+        jsonArray = JSON.parse(extractedData.visitLog);
+        setLogData(jsonArray);
       }
-    };
 
+      if (
+        !extractedData.heart ||
+        extractedData.heart.includes('찜한 사용자가 없습니다.')
+      ) {
+        setNoHert(true);
+        setHeartData(['좋아요가 없습니다.']);
+        // console.log("하트 없음");
+      } else {
+        setNoHert(false);
+        jsonArray = [JSON.parse(extractedData.heart)];
+        setHeartData(jsonArray);
+      }
+
+      if (
+        !extractedData.Reviewlike ||
+        extractedData.Reviewlike.includes('리뷰에 좋아요한 사용자가 없습니다.')
+      ) {
+        setNoReview(true);
+        setReviewData([extractedData.Reviewlike]);
+        // console.log("리뷰 없음");
+      } else {
+        setNoReview(false);
+        jsonArray = [JSON.parse(extractedData.Reviewlike)];
+        setReviewData(jsonArray);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
-
     return () => {
       isMounted = false;
       // source.cancel('API 호출이 취소되었습니다.');
     };
-  }, [data]); // token이 의존성 배열에 들어가도록 수정
+  }, [token]); // token이 의존성 배열에 들어가도록 수정
+
+  const handleDelete = async (visitId) => {
+    try {
+      // DELETE로 서버에서 항목 삭제
+      await axios({
+        method: 'delete',
+        url: `http://192.168.0.2:3000/api/v1/visit/delete/${visitId}`,
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      // 로컬 상태에서 해당 항목 삭제
+      const updatedLogData = logData.filter(item => item.visit_id !== visitId);
+      setLogData(updatedLogData);
+    } catch (error) {
+      console.error('삭제 실패:', error);
+    }
+  };
+
+  const renderDeleteButton = (visitId) => (
+    <TouchableOpacity
+      onPress={() => handleDelete(visitId)}
+      style={{ backgroundColor: 'red', padding: 10, justifyContent: 'center', alignItems: 'center', height: 45 }}
+    >
+      <Text style={{ color: 'white', fontSize: 14 }}>삭제</Text>
+    </TouchableOpacity>
+  );
+
 
   const handleButton1Press = () => {
     setButton1Pressed(true);
@@ -211,15 +240,7 @@ const MyPage = ({token}) => {
     setHiddenItem(false);
   }; // buttonPressed 1~3의 Pressed 여부로 나머지 버튼의 토글 여부를 결정
 
-  const toggleDelete = key => {
-    setData(prevData =>
-      prevData.map(item =>
-        item.key === key ? {...item, showDelete: !item.showDelete} : item,
-      ),
-    );
-  };
-
-  const VisitSubContainer = ({title, value}) => {
+  const VisitSubContainer = ({ title, value }) => {
     return (
       <View style={styles.visitSubContainer}>
         <Title color={'black'} fontSize={16} fontWeight={'700'}>
@@ -238,7 +259,7 @@ const MyPage = ({token}) => {
         <View>
           <FlatList
             data={ListData.ListData}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() =>
                   button2Pressed == true
@@ -268,6 +289,23 @@ const MyPage = ({token}) => {
       </SafeAreaView>
     );
   };
+
+  const renderItem = ({ item }) => (
+    <Swipeable renderRightActions={() => renderDeleteButton(item.visit_id)}>
+      <View style={styles.list}>
+        <TouchableOpacity style={styles.item}>
+          <Text style={{ color: 'black' }}>
+            {noLog ? `${item}` : `${item.name}님이 방문하였습니다.`}
+          </Text>
+        </TouchableOpacity>
+        {noLog ? null : (
+          <View style={styles.log}>
+            <Text>{item.reg_date.slice(0, 10)}</Text>
+          </View>
+        )}
+      </View>
+    </Swipeable>
+  );
 
   return (
     <View style={styles.container}>
@@ -314,42 +352,8 @@ const MyPage = ({token}) => {
                 <FlatList
                   data={logData}
                   keyExtractor={(item, index) => index.toString()}
-                  renderItem={({item}) => (
-                    <View style={styles.list}>
-                      <TouchableOpacity
-                        style={styles.item}
-                        onPress={() => [
-                          //toggleDelete(1)
-                        ]}>
-                        <Title color={'black'}>
-                          {noLog
-                            ? `${item}`
-                            : `${item.name}님이 회원님을 방문하였습니다.`}
-                        </Title>
-                      </TouchableOpacity>
-                      {noLog ? null : (
-                        <View style={styles.log}>
-                          {!item.showDelete && (
-                            <Title>{item.reg_date.slice(0, 10)}</Title>
-                          )}
-                        </View>
-                      )}
-                    </View>
-                  )}
+                  renderItem={renderItem}
                 />
-                {/* {item.showDelete && (
-                  <TouchableOpacity
-                    onPress={
-                      () => ''
-                      //toggleDelete(item.key)
-                    }>
-                    <View style={styles.deleteButton}>
-                      <Title color={'#FF3040'} fontSize={16} fontWeight={'700'}>
-                        삭제
-                      </Title>
-                    </View>
-                  </TouchableOpacity>
-                )} */}
               </View>
             </View>
           )}
@@ -369,7 +373,6 @@ const MyPage = ({token}) => {
           )}
         </View>
       </Shadow>
-
       <ContentsViewPop
         myPage={myPage}
         title={reviewData.name}

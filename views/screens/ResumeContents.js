@@ -36,7 +36,7 @@ const fetchResume = async ({ token }) => {
         Authorization: token,
       },
     });
-    console.log('가가갸갹가가:', response.data);
+
 
     const extractedData = {
       // ***** 아래 데이터 지우지 말아주세요 *****
@@ -59,6 +59,7 @@ const fetchResume = async ({ token }) => {
       data: response.data.data
     };
     console.log('제발제발제발' + extractedData.data[0].resume_id)
+
     return extractedData;
 
   } catch (error) {
