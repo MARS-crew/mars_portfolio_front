@@ -18,17 +18,17 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const yOffset = new Animated.Value(0);
 
 const Interview = ({ token }) => {
-  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex } = useIndexContext();
+  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId } = useIndexContext();
   const swiperRef = useRef(null);
 
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
       swiperRef.current.scrollToIndex({
-        index: currentIndex,
+        index: dataIndex,
         animated: true,
       });
     }
-  }, [currentIndex, swiperRef]);
+  }, [dataIndex, swiperRef]);
 
   const height = Dimensions.get('window').height;
 
@@ -87,7 +87,7 @@ const Interview = ({ token }) => {
         renderItem={({ item }) => (
           <InterviewContents id={item.memberId} path={item.url} token={token} />
         )}
-        index={currentIndex}
+        index={dataIndex}
         onScroll={handleVerticalScroll}
         hideShadow={true}
       />

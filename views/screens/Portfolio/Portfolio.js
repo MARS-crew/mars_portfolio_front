@@ -60,16 +60,16 @@ const styles = StyleSheet.create({
 });
 
 const Portfolio = ({ token }) => {
-  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex } = useIndexContext();
+  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId } = useIndexContext();
   const swiperRef = useRef(null);
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
       swiperRef.current.scrollToIndex({
-        index: currentIndex,
+        index: dataIndex,
         animated: true,
       });
     }
-  }, [currentIndex, swiperRef]);
+  }, [dataIndex, swiperRef]);
 
   const height = Dimensions.get('window').height;
   const handleVerticalScroll = event => {
@@ -232,7 +232,7 @@ const Portfolio = ({ token }) => {
             token={token}
           />
         )}
-        index={currentIndex}
+        index={dataIndex}
         onScroll={handleVerticalScroll}
         hideShadow={true}
       />

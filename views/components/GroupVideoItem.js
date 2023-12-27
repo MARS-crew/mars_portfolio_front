@@ -1,36 +1,38 @@
-import React from 'react';
-import {View, StyleSheet, ImageBackground, Dimensions} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, ImageBackground, Dimensions } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import MedalItem from './MedalItem';
+import { useIndexContext } from '../../IndexContext';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const widthCol = width / 2;
 const heightCol = height / 2;
-const GroupVideoItem = ({medal, src}) => {
-  if (medal == 'y') {
-    return (
-      <View style={styles.outline}>
-        <TouchableOpacity>
-          <View style={styles.midLine}>
-            <ImageBackground source={src} style={styles.manyImage}>
-              <MedalItem />
-            </ImageBackground>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  } else {
-    return (
-      <View style={styles.outline}>
-        <TouchableOpacity>
-          <View style={styles.midLine}>
-            <ImageBackground source={src} style={styles.manyImage} />
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
+const GroupVideoItem = ({ id, medal, src }) => {
+  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId } = useIndexContext();
+
+  const handlePress = () => {
+    if (selectedMemId !== id) {
+      changeSelectedMemId(id);
+      if (horizontalIndex !== 2) {
+        changeHorizontalIndex(2);
+      }
+    }
   }
+
+  return (
+    <View style={styles.outline}>
+      <TouchableOpacity onPress={handlePress}>
+        <View style={styles.midLine}>
+          <ImageBackground source={src} style={styles.manyImage}>
+            {medal === 'y' ? (
+              <MedalItem />
+            ) : null}
+          </ImageBackground>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({

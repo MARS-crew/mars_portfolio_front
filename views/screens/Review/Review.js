@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import {
   View,
@@ -14,7 +14,7 @@ import {
 import axios from 'axios';
 
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import {useIndexContext} from '../../../IndexContext';
+import { useIndexContext } from '../../../IndexContext';
 
 import ReviewItem from '../Review/ReviewItem';
 
@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Review = ({token}) => {
-  const {currentIndex, changeIndex} = useIndexContext();
+const Review = ({ token }) => {
+  const { currentIndex, changeIndex } = useIndexContext();
   const swiperRef = useRef(null);
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
@@ -133,7 +133,7 @@ const Review = ({token}) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const newIndex = Math.round(offsetY / height);
     // IndexData.setIndexValue(index);
-    changeIndex(newIndex);
+    // changeIndex(newIndex);
   };
 
   const [data, setData] = useState([]);
@@ -154,7 +154,7 @@ const Review = ({token}) => {
     setShowReviewInput(true);
   };
 
-  const currentReviewContent = ({content}) => {
+  const currentReviewContent = ({ content }) => {
     setReviewContent(content);
   };
 
@@ -244,7 +244,7 @@ const Review = ({token}) => {
         <View style={styles.itemView}>
           <FlatList
             data={data}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <ReviewItem
                 review={review}
                 id={item.review_id}

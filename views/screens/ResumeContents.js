@@ -68,17 +68,17 @@ const fetchResume = async ({ token }) => {
 };
 
 const Resume = ({ token }) => {
-  const { currentIndex, changeIndex } = useIndexContext();
+  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId } = useIndexContext();
   const swiperRef = useRef(null);
   const [itemHeights, setItemHeights] = useState({});
   const [resumeData, setResumeData] = useState(null);
   const height = Dimensions.get('window').height;
-  const handleScroll = event => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const newIndex = Math.round(offsetY / height);
-    changeIndex(newIndex);
-    console.log(currentIndex);
-  };
+  // const handleScroll = event => {
+  //   const offsetY = event.nativeEvent.contentOffset.y;
+  //   const newIndex = Math.round(offsetY / height);
+  //   changeIndex(newIndex);
+  //   console.log(currentIndex);
+  // };
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [resume, setResume] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
   const toggleModal = () => {
@@ -106,14 +106,14 @@ const Resume = ({ token }) => {
     fetchData();
   }, [token]);
 
-  useEffect(() => {
-    if (swiperRef.current > 0 && currentIndex !== undefined) {
-      swiperRef.current.scrollToIndex({
-        index: currentIndex,
-        animated: true,
-      });
-    }
-  }, [currentIndex, swiperRef]);
+  // useEffect(() => {
+  //   if (swiperRef.current > 0 && currentIndex !== undefined) {
+  //     swiperRef.current.scrollToIndex({
+  //       index: currentIndex,
+  //       animated: true,
+  //     });
+  //   }
+  // }, [currentIndex, swiperRef]);
 
   const Item = ({ item, index }) => {
     return (
@@ -132,20 +132,11 @@ const Resume = ({ token }) => {
     );
   };
 
-  const handleItemLayout = (event, index) => {
-    const { height } = event.nativeEvent.layout;
-    // 각 항목의 높이 저장
-    setItemHeights(prevHeights => {
-      const updatedHeights = [...prevHeights];
-      updatedHeights[index] = height;
-      return updatedHeights;
-    });
-  };
 
   return (
     <View style={styles.container}>
       <FlatList
-        ref={swiperRef}
+        // ref={swiperRef}
         vertical={true}
         data={DATA}
         renderItem={({ item, index, token }) => (
@@ -153,8 +144,8 @@ const Resume = ({ token }) => {
         )}
         keyExtractor={keyExtractor}
         removeClippedSubviews={true}
-        initialScrollIndex={currentIndex}
-        onScroll={handleScroll}
+      // initialScrollIndex={currentIndex}
+      // onScroll={handleScroll}
       />
       <FAB />
       <ResumeEditMode
