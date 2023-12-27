@@ -18,8 +18,9 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const yOffset = new Animated.Value(0);
 
 const Interview = ({ token }) => {
-  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId } = useIndexContext();
   const swiperRef = useRef(null);
+  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId } = useIndexContext();
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
@@ -32,16 +33,28 @@ const Interview = ({ token }) => {
 
   const height = Dimensions.get('window').height;
 
-  const handleVerticalScroll = event => {
-    // const offsetY = event.nativeEvent.contentOffset.y;
-    // const newIndex = Math.round(offsetY / height);
-    // changeIndex(newIndex);
-    if (horizontalIndex !== 0 && horizontalIndex !== 1) {
-      changeHorizontalIndex(1);
-    }
-  };
 
-  const [data, setData] = useState([]);
+  const handleVerticalScroll = event => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const newIndex = Math.round(offsetY / height);
+    const selectedData = data[newIndex];
+    if (selectedData) {
+      changeSelectedMemId(selectedData.memberId);
+    }
+    changeDataIndex(newIndex);
+    // if (horizontalIndex !== 0 && horizontalIndex !== 1) {
+    //   changeHorizontalIndex(1);
+    // }
+  };
+  useEffect(() => {
+    // selectedMemId에 해당하는 memberId를 찾기
+    const selectedDataIndex = data.findIndex(item => item.memberId === selectedMemId);
+    changeDataIndex(selectedDataIndex !== -1 ? selectedDataIndex : 0);
+
+    // dataIndex 업데이트
+    changeDataIndex(dataIndex);
+  }, [selectedMemId, data]);
+
   useEffect(() => {
     const source = axios.CancelToken.source();
     axios({
@@ -54,7 +67,9 @@ const Interview = ({ token }) => {
       cancelToken: source.token,
     })
       .then(function (response) {
+        console.log(response.data.data);
         const extractedData = response.data.data.map(item => ({
+          groupId: item.group_id, // 그룹 아이디
           memberId: item.member_id, //사용자 아이디
           url: `http://10.0.2.2:3000/${item.url.replace(
             'http://172.20.10.4:3000/',
@@ -63,10 +78,17 @@ const Interview = ({ token }) => {
           heart: item.heart, //찜하기 여부
         }));
         setData(extractedData);
-        console.log(extractedData);
-        console.log('datadata::::' + extractedData[0].memberId);
-        console.log('datadata::::' + extractedData[0].url);
-        console.log('datadata::::' + extractedData[0].heart);
+        // console.log(extractedData);
+        // console.log('datadata::::' + extractedData[0].memberId);
+        // console.log('datadata::::' + extractedData[0].url);
+        // console.log('datadata::::' + extractedData[0].heart);
+
+        const selectedDataIndex = data.findIndex(item => item.memberId === selectedMemId);
+        console.log(selectedDataIndex);
+        changeDataIndex(selectedDataIndex !== -1 ? selectedDataIndex : 0);
+
+        // dataIndex 업데이트
+        changeDataIndex(dataIndex);
       })
       .catch(function (error) {
         console.log(error);
@@ -76,7 +98,7 @@ const Interview = ({ token }) => {
       isMounted = false;
       source.cancel('API 호출이 취소되었습니다.');
     };
-  }, []);
+  }, [selectedMemId]);
 
   return (
     <SafeAreaView style={styles.container}>

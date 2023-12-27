@@ -59,32 +59,32 @@ const DATA = [
     video: require('../../assets/images/GroupVideo.png'),
   },
   {
-    id: 7,
+    id: 38,
     title: '4기',
     src: require('../../assets/images/Rectangle4_3.png'),
     video: require('../../assets/images/GroupVideo.png'),
   },
   {
-    id: 8,
+    id: 44,
     title: '4기',
     src: require('../../assets/images/Rectangle4_4.png'),
     video: require('../../assets/images/GroupVideo.png'),
   },
   {
-    id: 9,
+    id: 49,
     title: '5기',
     src: require('../../assets/images/Rectangle5_2.png'),
     video: require('../../assets/images/GroupVideo.png'),
     medal: 'n',
   },
   {
-    id: 10,
+    id: 39,
     title: '5기',
     src: require('../../assets/images/Rectangle5_1.png'),
     video: require('../../assets/images/GroupVideo.png'),
   },
   {
-    id: 11,
+    id: 47,
     title: '5기',
     src: require('../../assets/images/Rectangle5_3.png'),
     video: require('../../assets/images/GroupVideo.png'),
@@ -122,11 +122,11 @@ const GroupVideo = ({ token }) => {
   const handleScroll = event => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const newIndex = Math.round(offsetY / height);
-    console.log(newIndex, ", ", currentIndex);
     if (newIndex !== currentIndex) {
       changeIndex(newIndex);
     }
   };
+
   useEffect(() => {
     console.log("selectedMemId: ", selectedMemId);
   }, [selectedMemId]);
