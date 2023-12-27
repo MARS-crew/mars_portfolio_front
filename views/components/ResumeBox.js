@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, FlatList } from "react-native";
 import { Resume } from '../screens/ResumeContents'
 import Id7Popup from "./Id7Popup";
 import { Shadow } from 'react-native-shadow-2';
@@ -19,27 +19,27 @@ import springboot_icon from '../../assets/images/devIcon/springboot.png'
 import { help } from "yargs";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const IntroContent = ({ item, data }) => {
-    const containerStyles = { ...styles.container, marginTop: 20 }
-    return (
-        <Shadow
-            style={[containerStyles]}
-            radius={100}
-            offset={[1, 1]}
-            startColor={'rgba(151, 151, 151, 0.05)'}
-            endColor={'rgba(151, 151, 151, 0.01)'}
-            distance={8}
-        >
-            <View>
-                <Text style={styles.title}>간단소개</Text>
-                <View style={styles.line} />
-                <Text style={[styles.content, styles.introContent]}>
-                    {data}
-                </Text>
-            </View>
-        </Shadow>
-    );
-}
+// const IntroContent = ({ item, data }) => {
+//     const containerStyles = { ...styles.container, marginTop: 20 }
+//     return (
+//         <Shadow
+//             style={[containerStyles]}
+//             radius={100}
+//             offset={[1, 1]}
+//             startColor={'rgba(151, 151, 151, 0.05)'}
+//             endColor={'rgba(151, 151, 151, 0.01)'}
+//             distance={8}
+//         >
+//             <View>
+//                 <Text style={styles.title}>간단소개</Text>
+//                 <View style={styles.line} />
+//                 <Text style={[styles.content, styles.introContent]}>
+//                     {data}
+//                 </Text>
+//             </View>
+//         </Shadow>
+//     );
+// }
 
 const InfoContent = ({ item, name, tel, addr, email }) => {
     const containerStyles = { ...styles.container, marginTop: 20 };
@@ -84,115 +84,137 @@ const InfoContent = ({ item, name, tel, addr, email }) => {
         </Shadow>
     )
 }
-const CareerContent = ({ item, com_name, rank, started_date, period, duty }) => {
-    const containerStyles = { ...styles.container };
-    return (
-        <Shadow
-            style={[containerStyles]} // 추가 스타일 적용
-            radius={100}
-            offset={[1, 1]}
-            startColor={'rgba(151, 151, 151, 0.05)'}
-            endColor={'rgba(151, 151, 151, 0.01)'}
-            distance={8}
-        >
-            <View>
-                <Text style={styles.title}>경력</Text>
-                <View style={styles.line} />
-                <Text style={[styles.content, styles.careerContent]}>
-                    <View>
-                        <View style={styles.iconsText}>
-                            <Text style={styles.infoText}>{com_name}</Text>
-                            <Text style={styles.defaultText}>{rank}</Text>
-                        </View>
-                        <Text style={styles.dateText}>{started_date} ~ 2023.06.06 ( {period} )</Text>
-                        <Text style={styles.defaultText2}>{duty}</Text>
-                    </View>
-                    <View style={styles.line} />
-                </Text>
-            </View>
-        </Shadow>
-    )
-}
 
-const AwardContent = ({award_name, date, issuer}) => {
+const CareerItem = ({ career }) => {
+    return (
+        <View>
+            <Text style={styles.title}>경력</Text>
+            <View style={styles.line} />
+            <View style={styles.content}>
+                <View style={styles.iconsText}>
+                    <Text style={styles.infoText}>{career.com_name}</Text>
+                    <Text style={styles.defaultText}>{career.rank}</Text>
+                </View>
+                <Text style={styles.dateText}>{career.started_date} ~ 2023-06-06 ({career.period})</Text>
+                <Text style={styles.defaultText2}>{career.duty}</Text>
+            </View>
+            <View style={styles.line} />
+        </View>
+    );
+};
+
+const CareerContent = ({ item, carreer }) => {
     const containerStyles = { ...styles.container };
+    const careerData = JSON.parse(carreer);
+
     return (
         <Shadow
-            style={[containerStyles]} // 추가 스타일 적용
+            style={[containerStyles]}
             radius={100}
             offset={[1, 1]}
             startColor={'rgba(151, 151, 151, 0.05)'}
             endColor={'rgba(151, 151, 151, 0.01)'}
             distance={8}
         >
-            <View>
-                <Text style={styles.title}>수상내역</Text>
-                <View style={styles.line} />
-                <Text style={[styles.content, styles.careerContent]}>
-                    <View>
-                        <View>
-                            <View>
-                                <Text style={styles.infoText}>{award_name}</Text>
-                            </View>
-                            <Text style={styles.dateText}>{date}</Text>
-                            <Text style={styles.defaultText2}>{issuer}</Text>
-                        </View>
-                    </View>
-                </Text>
-            </View>
+            <FlatList
+                data={careerData}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => <CareerItem career={item} />}
+            />
         </Shadow>
     );
-}
+};
 
-const InterestContent = () => {
+// const AwardContent = ({award_name, date, issuer}) => {
+//     const containerStyles = { ...styles.container };
+//     return (
+//         <Shadow
+//             style={[containerStyles]} // 추가 스타일 적용
+//             radius={100}
+//             offset={[1, 1]}
+//             startColor={'rgba(151, 151, 151, 0.05)'}
+//             endColor={'rgba(151, 151, 151, 0.01)'}
+//             distance={8}
+//         >
+//             <View>
+//                 <Text style={styles.title}>수상내역</Text>
+//                 <View style={styles.line} />
+//                 <Text style={[styles.content, styles.careerContent]}>
+//                     <View>
+//                         <View>
+//                             <View>
+//                                 <Text style={styles.infoText}>{award_name}</Text>
+//                             </View>
+//                             <Text style={styles.dateText}>{date}</Text>
+//                             <Text style={styles.defaultText2}>{issuer}</Text>
+//                         </View>
+//                     </View>
+//                 </Text>
+//             </View>
+//         </Shadow>
+//     );
+// }
+
+// const InterestContent = () => {
+//     const containerStyles = { ...styles.container };
+//     return (
+//         <Shadow
+//             style={[containerStyles]} // 추가 스타일 적용
+//             radius={100}
+//             offset={[1, 1]}
+//             startColor={'rgba(151, 151, 151, 0.05)'}
+//             endColor={'rgba(151, 151, 151, 0.01)'}
+//             distance={8}
+//         >
+//             <View>
+//                 <Text style={styles.title}>관심분야</Text>
+//                 <View style={styles.line2} />
+//                 <Text style={[styles.content, styles.interestContent]}>
+//                     <View>
+//                         <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
+//                         <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
+//                     </View>
+//                 </Text>
+//             </View>
+//         </Shadow>
+//     );
+// }
+
+const SpecialityItem = ({ speciality }) => {
+    return (
+        <View style={styles.content}>
+            <Text style={styles.bunyaText}> 
+                {speciality.parent_category_id} > 
+                {speciality.middle_category_id} > 
+                {speciality.category_id} 
+            </Text>
+        </View>
+    );
+};
+
+const SpecialityContent = ({ specialities }) => {
     const containerStyles = { ...styles.container };
+    const specialData = JSON.parse(specialities);
+
     return (
         <Shadow
-            style={[containerStyles]} // 추가 스타일 적용
+            style={[containerStyles]}
             radius={100}
             offset={[1, 1]}
             startColor={'rgba(151, 151, 151, 0.05)'}
             endColor={'rgba(151, 151, 151, 0.01)'}
             distance={8}
         >
-            <View>
-                <Text style={styles.title}>관심분야</Text>
-                <View style={styles.line2} />
-                <Text style={[styles.content, styles.interestContent]}>
-                    <View>
-                        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-                        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-                    </View>
-                </Text>
-            </View>
+            <Text style={styles.title}>전문분야</Text>
+            <View style={styles.line2} />
+            <FlatList
+                data={specialData}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => <SpecialityItem speciality={item} />}
+            />
         </Shadow>
     );
-}
-
-const SpecialityContent = () => {
-    const containerStyles = { ...styles.container };
-    return (
-        <Shadow
-            style={[containerStyles]} // 추가 스타일 적용
-            radius={100}
-            offset={[1, 1]}
-            startColor={'rgba(151, 151, 151, 0.05)'}
-            endColor={'rgba(151, 151, 151, 0.01)'}
-            distance={8}
-        >
-            <View>
-                <Text style={styles.title}>전문분야</Text>
-                <View style={styles.line2} />
-                <Text style={[styles.content, styles.specialtyContent]}>
-                    <View>
-                        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-                        <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-                    </View>
-                </Text>
-            </View>
-        </Shadow>
-    );
-}
+};
 
 const SkillContent = () => {
     const [popupIcon, setPopupIcon] = useState('');
@@ -327,11 +349,7 @@ const ResumeBox = ({ item, data, index }) => {
             />
             <CareerContent 
                 item={item} 
-                com_name={resumeItem.com_name} 
-                rank={resumeItem.rank} 
-                started_date={resumeItem.started_date} 
-                period={resumeItem.period} 
-                duty={resumeItem.duty} 
+                carreer={resumeItem.career}
             />
             {/* <AwardContent 
                 item={item} 
@@ -339,8 +357,8 @@ const ResumeBox = ({ item, data, index }) => {
                 date={resumeItem.date}
                 issuer={resumeItem.issuer}
                  /> */}
-            <InterestContent item={item} data={data} />
-            <SpecialityContent item={item} data={data} />
+            {/* <InterestContent item={item} data={data} /> */}
+            <SpecialityContent item={item} specialities={resumeItem.specialities} />
             <SkillContent item={item} data={data} />
         </View>
     );

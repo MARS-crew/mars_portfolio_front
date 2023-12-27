@@ -61,7 +61,7 @@ const fetchResume = async ({token}) => {
   try {
     const response = await axios({
       method: 'get',
-      url: 'http://172.16.101.59:3000/api/v1/resume',
+      url: 'http://192.168.200.22:3000/api/v1/resume',
       headers: {
         Authorization: token,
       },
@@ -88,6 +88,7 @@ const fetchResume = async ({token}) => {
       // group_id: response.data.data.group_id, //그룹아이디
       data: response.data.data
     };
+     console.log(extractedData.data[0].specialities);
     return extractedData;
 
   } catch (error) {
