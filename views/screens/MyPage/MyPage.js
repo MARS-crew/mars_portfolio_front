@@ -121,7 +121,7 @@ const MyPage = ({token}) => {
       const response = await axios({
         method: 'get',
         // url: 'http://api.mars-port.duckdns.org/api/v1/mypage/1',
-        url: 'http://192.168.0.2:3000/api/v1/myPage/' + 47, //'로그인 한 본인 아이디'
+        url: 'http://172.16.101.59:3000/api/v1/myPage/' + 47, //'로그인 한 본인 아이디'
         headers: {
           Authorization: token,
         },
@@ -134,7 +134,6 @@ const MyPage = ({token}) => {
         log_total: response.data.data.totalCount,
         visitLog: response.data.data.visitLog,
       };
-      console.log(extractedData);
 
       setData(extractedData);
 
@@ -194,7 +193,7 @@ const MyPage = ({token}) => {
       // DELETE로 서버에서 항목 삭제
       await axios({
         method: 'delete',
-        url: `http://192.168.0.2:3000/api/v1/visit/delete/${visitId}`,
+        url: `http://172.16.101.59:3000/api/v1/visit/delete/${visitId}`,
         headers: {
           Authorization: token,
         },

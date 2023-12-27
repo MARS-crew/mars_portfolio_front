@@ -23,7 +23,7 @@ const IntroContent = ({ item, data }) => {
     const containerStyles = { ...styles.container, marginTop: 20 }
     return (
         <Shadow
-            style={[containerStyles]} // 추가 스타일 적용
+            style={[containerStyles]}
             radius={100}
             offset={[1, 1]}
             startColor={'rgba(151, 151, 151, 0.05)'}
@@ -42,7 +42,7 @@ const IntroContent = ({ item, data }) => {
 }
 
 const InfoContent = ({ item, name, tel, addr, email }) => {
-    const containerStyles = { ...styles.container };
+    const containerStyles = { ...styles.container, marginTop: 20 };
     return (
         <Shadow
             style={[containerStyles]} // 추가 스타일 적용
@@ -317,7 +317,7 @@ const ResumeBox = ({ item, data, index }) => {
 
     return (
         <View>
-            <IntroContent item={item} data={resumeItem.introduce} />
+            {/* <IntroContent item={item} data={resumeItem.introduce} /> */}
             <InfoContent 
                 item={item} 
                 name={resumeItem.name} 
@@ -333,12 +333,12 @@ const ResumeBox = ({ item, data, index }) => {
                 period={resumeItem.period} 
                 duty={resumeItem.duty} 
             />
-            <AwardContent 
+            {/* <AwardContent 
                 item={item} 
                 award_name={resumeItem.award_name}
                 date={resumeItem.date}
                 issuer={resumeItem.issuer}
-                 />
+                 /> */}
             <InterestContent item={item} data={data} />
             <SpecialityContent item={item} data={data} />
             <SkillContent item={item} data={data} />

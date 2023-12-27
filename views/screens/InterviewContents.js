@@ -58,16 +58,14 @@ const InterviewContents = ({ id, path, token }) => {
   };
   //하트 상태 변경
   const fetchHeart = async () => {
-    console.log('여기왔냐?')
     try {
       const response = await axios({
         method: 'post',
-        url: 'http://192.168.0.2:3000/api/v1/interview/heart/'+id,
+        url: 'http://172.16.101.59:3000/api/v1/interview/heart/'+id,
         headers: {
           Authorization: token
         },
       });
-      console.log(response.data);
 
     } catch (error) {
       console.error(error);
