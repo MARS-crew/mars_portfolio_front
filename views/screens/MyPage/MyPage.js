@@ -121,7 +121,7 @@ const MyPage = ({token}) => {
       const response = await axios({
         method: 'get',
         // url: 'http://api.mars-port.duckdns.org/api/v1/mypage/1',
-        url: 'http://172.16.101.59:3000/api/v1/myPage/' + 47, //'로그인 한 본인 아이디'
+        url: 'http://192.168.0.2:3000/api/v1/myPage/' + 47, //'로그인 한 본인 아이디'
         headers: {
           Authorization: token,
         },

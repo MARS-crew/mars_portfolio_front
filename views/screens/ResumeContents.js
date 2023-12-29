@@ -61,7 +61,7 @@ const fetchResume = async ({token}) => {
   try {
     const response = await axios({
       method: 'get',
-      url: 'http://192.168.200.22:3000/api/v1/resume',
+      url: 'http://192.168.0.2:3000/api/v1/resume',
       headers: {
         Authorization: token,
       },

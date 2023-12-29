@@ -42,7 +42,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 // }
 
 const InfoContent = ({ item, name, tel, addr, email }) => {
-    const containerStyles = { ...styles.container, marginTop: 20 };
+    const containerStyles = { ...styles.container, marginTop: 20};
     return (
         <Shadow
             style={[containerStyles]} // 추가 스타일 적용
@@ -55,8 +55,9 @@ const InfoContent = ({ item, name, tel, addr, email }) => {
             <View>
                 <Text style={styles.title}>기본정보</Text>
                 <View style={styles.line} />
+                <View style={{ marginTop: 10 }}>
                 <Text style={[styles.content, styles.basicInfoContent]}>
-                    <View>
+                    <View style={{ marginTop: 15 }}>
                         <Text style={styles.infoText}>{name}</Text>
                         <View style={styles.icons}>
                             <View style={styles.iconsText}>
@@ -80,6 +81,7 @@ const InfoContent = ({ item, name, tel, addr, email }) => {
                         </View>
                     </View>
                 </Text>
+                </View>
             </View>
         </Shadow>
     )
@@ -182,6 +184,7 @@ const CareerContent = ({ item, carreer }) => {
 
 const SpecialityItem = ({ speciality }) => {
     return (
+        // <View style={{ justifyContent: 'center' }}>
         <View style={styles.content}>
             <Text style={styles.bunyaText}> 
                 {speciality.parent_category_id} > 
@@ -189,6 +192,7 @@ const SpecialityItem = ({ speciality }) => {
                 {speciality.category_id} 
             </Text>
         </View>
+        // </View>
     );
 };
 
@@ -338,7 +342,7 @@ const ResumeBox = ({ item, data, index }) => {
 
 
     return (
-        <View>
+        <View style={styles.resumeBoxContainer}>
             {/* <IntroContent item={item} data={resumeItem.introduce} /> */}
             <InfoContent 
                 item={item} 
@@ -365,6 +369,11 @@ const ResumeBox = ({ item, data, index }) => {
 };
 
 const styles = StyleSheet.create({
+    resumeBoxContainer: {
+        // flex: 1,
+        // justifyContent: 'center', // 세로 방향 중앙 정렬
+        // alignItems: 'center', // 가로 방향 중앙 정렬
+    },
     container: {
         width: 360,
         margin: 1,
@@ -374,17 +383,15 @@ const styles = StyleSheet.create({
         color: 'white',
         borderStyle: 'solid',
         backgroundColor: '#ffffff',
-        marginBottom: 20,
+        marginBottom: 10,
         marginLeft: 20,
         marginRight: 20
     },
     title: {
         fontSize: 15,
         paddingLeft: 15,
-        paddingTop: 15,
-        //   paddingBottom: 12,
+        paddingTop: 10,
         fontWeight: 'bold',
-        //  marginBottom: 5,
         color: 'black',
     },
     line: {
@@ -392,7 +399,7 @@ const styles = StyleSheet.create({
         borderColor: '#F5F5F5',
         borderWidth: 0.2,
         marginTop: 12,
-        marginBottom: 15,
+        // marginBottom: 15,
     },
     line2: {
         width: '100%',
@@ -403,7 +410,8 @@ const styles = StyleSheet.create({
     },
     content: {
         // paddingTop: 15,
-        paddingLeft: 15,
+        marginLeft: 15,
+        marginRight:15,
         paddingBottom: 15,
     },
     introContent: {
