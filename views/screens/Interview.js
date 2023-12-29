@@ -41,39 +41,42 @@ const Interview = ({token}) => {
 
   const [data, setData] = useState([]);
   useEffect(() => {
-    const source = axios.CancelToken.source();
-    axios({
-      method: 'get',
-      url: 'http://api.mars-port.duckdns.org/api/v1/interview/',
-      headers: {
-        Authorization: token,
-      },
-      cancelToken: source.token,
-    })
-      .then(function (response) {
-        const extractedData = response.data.data.map(item => ({
-          memberId: item.member_id, //사용자 아이디
-          url: `http://10.0.2.2:3000/${item.url.replace(
-            'http://172.20.10.4:3000/',
-            '',
-          )}`, //인터뷰 url
-          heart: item.heart, //찜하기 여부
-        }));
-        setData(extractedData);
-        console.log(extractedData);
-        console.log('datadata::::' + extractedData[0].memberId);
-        console.log('datadata::::' + extractedData[0].url);
-        console.log('datadata::::' + extractedData[0].heart);
+    if (token) {
+      console.log(`Token 인터뷰 : ${token}`);
+      const source = axios.CancelToken.source();
+      axios({
+        method: 'get',
+        url: 'http://api.mars-port.duckdns.org/api/v1/interview/44',
+        headers: {
+          Authorization: token,
+        },
+        cancelToken: source.token,
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+        .then(function (response) {
+          const extractedData = response.data.data.map(item => ({
+            memberId: item.member_id, //사용자 아이디
+            url: `http://10.0.2.2:3000/${item.url.replace(
+              'http://172.20.10.4:3000/',
+              '',
+            )}`, //인터뷰 url
+            heart: item.heart, //찜하기 여부
+          }));
+          setData(extractedData);
+          console.log(extractedData);
+          console.log('datadata::::' + extractedData[0].memberId);
+          console.log('datadata::::' + extractedData[0].url);
+          console.log('datadata::::' + extractedData[0].heart);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
 
-    return () => {
-      isMounted = false;
-      source.cancel('API 호출이 취소되었습니다.');
-    };
-  }, []);
+      return () => {
+        isMounted = false;
+        source.cancel('API 호출이 취소되었습니다.');
+      };
+    }
+  }, [token]);
 
   return (
     <SafeAreaView style={styles.container}>

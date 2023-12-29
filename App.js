@@ -147,7 +147,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     if (token) {
-      console.log('Token: 그룹', token);
+      console.log('Token 메인: ', token);
     }
   }, [token]);
   // const [indexValue, setIndexValue] = useState(0);

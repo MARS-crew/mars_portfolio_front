@@ -86,9 +86,10 @@ const Portfolio = ({token}) => {
   const [portfolio, setPortfolio] = useState(true); //포트폴리오 페이지인지 확인하는 스테이트
   // const numColumns = 2;
   // const itemWidth = (Dimensions.get('window').width - 10) / numColumns; // 각 항목의 너비 계산
-  const member_id = 46;
+  const member_id = 44;
 
   useEffect(() => {
+    console.log(`Token 포트폴리오: ${token}`);
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
@@ -132,7 +133,7 @@ const Portfolio = ({token}) => {
       isMounted = false;
       source.cancel('API 호출이 취소되었습니다.');
     };
-  }, []);
+  }, [token]);
 
   // 플랫 리스트 데이터 item 수정 기능(개발 방식 검토중인 기능이므로 구현 미완료)
   const onModify = id => {

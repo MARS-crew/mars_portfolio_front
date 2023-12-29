@@ -182,6 +182,7 @@ const MyPage = ({token}) => {
   };
 
   useEffect(() => {
+    console.log(`Token 마이페이지: ${token}`);
     fetchData();
     return () => {
       isMounted = false;
@@ -189,7 +190,7 @@ const MyPage = ({token}) => {
     };
   }, [token]); // token이 의존성 배열에 들어가도록 수정
 
-  const handleDelete = async (visitId) => {
+  const handleDelete = async visitId => {
     try {
       // DELETE로 서버에서 항목 삭제
       await axios({
@@ -199,7 +200,7 @@ const MyPage = ({token}) => {
           Authorization: token,
         },
       });
-  
+
       // 로컬 상태에서 해당 항목 삭제
       const updatedLogData = logData.filter(item => item.visit_id !== visitId);
       setLogData(updatedLogData);
@@ -208,16 +209,20 @@ const MyPage = ({token}) => {
     }
   };
 
-  const renderDeleteButton = (visitId) => (
+  const renderDeleteButton = visitId => (
     <TouchableOpacity
       onPress={() => handleDelete(visitId)}
-      style={{ backgroundColor: 'red', padding: 10, justifyContent: 'center', alignItems: 'center', height: 45 }}
-    >
-      <Text style={{ color: 'white', fontSize: 14 }}>삭제</Text>
+      style={{
+        backgroundColor: 'red',
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 45,
+      }}>
+      <Text style={{color: 'white', fontSize: 14}}>삭제</Text>
     </TouchableOpacity>
   );
-  
-  
+
   const handleButton1Press = () => {
     setButton1Pressed(true);
     setButton2Pressed(false);
@@ -289,11 +294,11 @@ const MyPage = ({token}) => {
     );
   };
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({item}) => (
     <Swipeable renderRightActions={() => renderDeleteButton(item.visit_id)}>
       <View style={styles.list}>
         <TouchableOpacity style={styles.item}>
-          <Text style={{ color: 'black' }}>
+          <Text style={{color: 'black'}}>
             {noLog ? `${item}` : `${item.name}님이 방문하였습니다.`}
           </Text>
         </TouchableOpacity>

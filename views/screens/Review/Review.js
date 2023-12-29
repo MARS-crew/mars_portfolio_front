@@ -94,12 +94,6 @@ const Review = ({token}) => {
     }
   }, [currentIndex, swiperRef]);
 
-  useEffect(() => {
-    if (token) {
-      console.log('Token: 리뷰', token);
-    }
-  }, [token]);
-
   const height = Dimensions.get('window').height;
   const handleScroll = event => {
     const offsetY = event.nativeEvent.contentOffset.y;

@@ -10,7 +10,6 @@ import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
 import {useIndexContext} from '../../IndexContext';
 import axios from 'axios';
 
-
 const Title = [
   {
     id: '1',
@@ -66,10 +65,9 @@ const fetchResume = async ({token}) => {
         Authorization: token,
       },
     });
-    
 
     const extractedData = {
-    // ***** 아래 데이터 지우지 말아주세요 *****
+      // ***** 아래 데이터 지우지 말아주세요 *****
 
       // resume_id: response.data.data.resume_id, //이력서 아이디
       // introduce: response.data.data.introduce, //이력서 소개
@@ -86,10 +84,9 @@ const fetchResume = async ({token}) => {
       // rank: response.data.data.rank, //직급
       // duty: response.data.data.duty, //업무
       // group_id: response.data.data.group_id, //그룹아이디
-      data: response.data.data
+      data: response.data.data,
     };
     return extractedData;
-
   } catch (error) {
     console.error(error);
   }
@@ -125,14 +122,15 @@ const Resume = ({token}) => {
     offset: itemHeights[index] * index,
     index,
   });
-    
+
   useEffect(() => {
+    console.log(`Token 이력서: ${token}`);
     const fetchData = async () => {
-        const data = await fetchResume({ token });
-        setResumeData(data);
+      const data = await fetchResume({token});
+      setResumeData(data);
     };
     fetchData();
-}, [token]);
+  }, [token]);
 
   useEffect(() => {
     if (swiperRef.current > 0 && currentIndex !== undefined) {
@@ -143,22 +141,22 @@ const Resume = ({token}) => {
     }
   }, [currentIndex, swiperRef]);
 
-  const Item = ({ item, index }) => {
+  const Item = ({item, index}) => {
     return (
-        <TouchableOpacity onLongPress={toggleModal} activeOpacity={100}>
-            {modalOpen ? (
-                <ResumeBoxMD item={item} token={token} />
-            ) : (
-                <ResumeBox 
-                  item={item} 
-                  token={token}
-                  index={index}
-                  data={resumeData} 
-                  />
-            )}
-        </TouchableOpacity>
+      <TouchableOpacity onLongPress={toggleModal} activeOpacity={100}>
+        {modalOpen ? (
+          <ResumeBoxMD item={item} token={token} />
+        ) : (
+          <ResumeBox
+            item={item}
+            token={token}
+            index={index}
+            data={resumeData}
+          />
+        )}
+      </TouchableOpacity>
     );
-};
+  };
 
   const handleItemLayout = (event, index) => {
     const {height} = event.nativeEvent.layout;
