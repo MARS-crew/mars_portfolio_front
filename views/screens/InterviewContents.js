@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -18,9 +18,11 @@ import EmptyImg from '../../assets/images/Empty.png';
 import InterviewModal from '../components/InterviewModal';
 import Video from 'react-native-video';
 import InterviewAlert from '../components/InterviewAlert';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
+import {getVideoThumbnail} from 'react-native-video-thumbnails';
 
-const InterviewContents = ({ id, path, token }) => {
+const InterviewContents = ({id, path, token}) => {
+  const player = useRef(null);
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
 
   const [heart, setHeart] = useState(false); // 하트 상태
@@ -63,10 +65,9 @@ const InterviewContents = ({ id, path, token }) => {
         method: 'post',
         url: 'http://172.16.101.59:3000/api/v1/interview/heart/'+id,
         headers: {
-          Authorization: token
+          Authorization: token,
         },
       });
-
     } catch (error) {
       console.error(error);
     }
@@ -134,8 +135,8 @@ const InterviewContents = ({ id, path, token }) => {
           onLongPress={() => setModalOpen(true)}>
           {/* 저장된 video가 있으w면 video 출력. 없으면  마스외전 로고 출력*/}
           <Video
-            ref={useRef(null)}
-            source={{ uri: filePath }}
+            ref={player}
+            source={{uri: filePath}}
             style={[styles.content]}
             controls={false}
             resizeMode="cover"
@@ -143,6 +144,9 @@ const InterviewContents = ({ id, path, token }) => {
             paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
             onEnd={() => {
               setIsPlaying(false);
+            }}
+            onLoad={() => {
+              player.current.seek(0); // 로드가 완료되었을떄 첫 프레임이 썸네일처럼 보임
             }}
           />
         </TouchableWithoutFeedback>
