@@ -185,7 +185,7 @@ const CareerContent = ({ item, carreer }) => {
 const SpecialityItem = ({ speciality }) => {
     return (
         // <View style={{ justifyContent: 'center' }}>
-        <View style={styles.content}>
+        <View style={[styles.content,]}>
             <Text style={styles.bunyaText}> 
                 {speciality.parent_category_id} > 
                 {speciality.middle_category_id} > 
@@ -220,29 +220,34 @@ const SpecialityContent = ({ specialities }) => {
     );
 };
 
-const SkillContent = () => {
-    const [popupIcon, setPopupIcon] = useState('');
-    const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [detailPopVisible, setDetailPopVisible] = useState(false);
+const skillImages = {
+    'JAVA': require('../../assets/skills/java.png'),
+    'PHP': require('../../assets/skills/php.png'),
+    'JavaScript': require('../../assets/skills/js.png'),
+    'MySQL': require('../../assets/skills/mysql.png'),
+    'React': require('../../assets/skills/react.png'),
+    'HTML5': require('../../assets/skills/HTML5.png'),
+};
 
-    const handleIconClick = (id) => {
-        // 클릭하면 상세 팝업 가시성과 컨텐츠 뷰 팝업 가시성을 모두 반전시킴
-        setDetailPopVisible(!detailPopVisible);
-        setContentsViewPopVisible(!contentsViewPopVisible);
+const SkillItem = ({ skill }) => {
+    const skillImage = skillImages[skill.tec_name];
 
-        // 클릭한 아이콘의 아이디를 설정
-        setPopupIcon(id);
-    };
+    return (
+        <View style={styles.skillContainer}>
+            <Image source={skillImage} style={styles.skill}/>
+        </View>
+    );
+};
 
-    const handleClosePopup = () => {
-        setPopupIcon('');
-    };
 
-    const containerStyles = { ...styles.container, marginBottom: 20 };
+const SkillContent = ({ technology }) => {
+    const technologyData = JSON.parse(technology);
+    const containerStyles = { ...styles.container, paddingBottom: 12, };
+    console.log(technology)
+
     return (
         <Shadow
-            style={[containerStyles]} // 추가 스타일 적용
+            style={[containerStyles]}
             radius={100}
             offset={[1, 1]}
             startColor={'rgba(151, 151, 151, 0.05)'}
@@ -252,86 +257,19 @@ const SkillContent = () => {
             <View>
                 <Text style={styles.title}>보유기술</Text>
                 <View style={styles.line2} />
-                <Text style={[styles.content, styles.skillContent]}>
-                    <View style={styles.devContainer}>
-                        {/* 자바 */}
-                        <TouchableOpacity onPress={() => handleIconClick('java')}>
-                            <View style={styles.devIcons}>
-                                <Image
-                                    source={java_icon}
-                                    style={styles.devIcon} />
-                                <Text style={styles.devIconText}>JAVA</Text>
-                            </View>
-                        </TouchableOpacity>
-
-                        {/* php */}
-                        <TouchableOpacity onPress={() => handleIconClick('php')}>
-                            <View style={styles.devIcons}>
-                                <Image
-                                    source={php_icon}
-                                    style={styles.devIcon} />
-                                <Text style={styles.devIconText}>PHP</Text>
-                            </View>
-                        </TouchableOpacity>
-
-                        {/* 리액트 */}
-                        <TouchableOpacity onPress={() => handleIconClick('react')}>
-                            <View style={styles.devIcons}>
-                                <Image
-                                    source={react_icon}
-                                    style={styles.devIcon} />
-                                <Text style={styles.devIconText}>React</Text>
-                            </View>
-                        </TouchableOpacity>
-
-                        {/* mysql */}
-                        <TouchableOpacity onPress={() => handleIconClick('mysql')}>
-                            <View style={styles.devIcons}>
-                                <Image
-                                    source={mysql_icon}
-                                    style={styles.devIcon} />
-                                <Text style={styles.devIconText}>MySQL</Text>
-                            </View>
-                        </TouchableOpacity>
-
-                        {/* 자바스크립트  */}
-                        <TouchableOpacity onPress={() => handleIconClick('js')}>
-                            <View style={styles.devIcons}>
-                                <Image
-                                    source={js_icon}
-                                    style={styles.devIcon} />
-                                <Text style={styles.devIconText}>JavaScript</Text>
-                            </View>
-                        </TouchableOpacity>
-
-                        {/* html */}
-                        <TouchableOpacity onPress={() => handleIconClick('html')}>
-                            <View style={styles.devIcons}>
-                                <Image
-                                    source={html5_icon}
-                                    style={styles.devIcon} />
-                                <Text style={styles.devIconText}>HTML5</Text>
-                            </View>
-                        </TouchableOpacity>
-
-                        {/* 팝업 */}
-                        {popupIcon !== '' && (
-                            <Id7Popup
-                                id={popupIcon}
-                                onClose={handleClosePopup}
-                                contentsViewPopVisible={contentsViewPopVisible}
-                                setContentsViewPopVisible={setContentsViewPopVisible}
-                                detailPopVisible={detailPopVisible} // 추가: 상세 팝업 가시성 상태를 전달
-                                setDetailPopVisible={setDetailPopVisible} // 추가: 상세 팝업 가시성 상태를 업데이트하는 함수를 전달
-                            />
-                        )}
-                    </View>
-                </Text>
+                <FlatList
+                    data={technologyData}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => <SkillItem skill={item} />}
+                    horizontal={false}
+                    numColumns={2} // 두 열로 표시
+                    contentContainerStyle={styles.devContainer}
+                />
             </View>
         </Shadow>
     );
+};
 
-}
 
 const ResumeBox = ({ item, data, index }) => {
     if (!data || !data.data || !data.data[index]) {
@@ -363,16 +301,15 @@ const ResumeBox = ({ item, data, index }) => {
                  /> */}
             {/* <InterestContent item={item} data={data} /> */}
             <SpecialityContent item={item} specialities={resumeItem.specialities} />
-            <SkillContent item={item} data={data} />
+            <SkillContent item={item} technology={resumeItem.technology} />
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     resumeBoxContainer: {
-        // flex: 1,
-        // justifyContent: 'center', // 세로 방향 중앙 정렬
-        // alignItems: 'center', // 가로 방향 중앙 정렬
+        paddingTop: 10, 
+        paddingBottom: 10,
     },
     container: {
         width: 360,
@@ -399,17 +336,14 @@ const styles = StyleSheet.create({
         borderColor: '#F5F5F5',
         borderWidth: 0.2,
         marginTop: 12,
-        // marginBottom: 15,
     },
     line2: {
         width: '100%',
         borderColor: '#F5F5F5',
         borderWidth: 0.2,
         marginTop: 12,
-        //marginBottom:15,
     },
     content: {
-        // paddingTop: 15,
         marginLeft: 15,
         marginRight:15,
         paddingBottom: 15,
@@ -480,32 +414,13 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginBottom: 5,
     },
-    devIconText: {
-        justifyContent: 'center',
-        marginLeft: 5,
-        color: '#000000',
-        fontSize: 14,
+    skill: {
+        height: 30, 
+        resizeMode: 'contain', 
     },
-    devIcons: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#F5F4F9',
-        padding: 6,
-        borderRadius: 5,
-        marginTop: 12,
-        marginRight: 12,
-    },
-    devIcon: {
-        flexDirection: 'column',
-        width: 22,
-        height: 22,
-    },
-    devContainer: {
-        width: 320,
-        flex: 1,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-    },
+    skillContainer:{
+         marginTop: 12,
+    }
 });
 
 export default ResumeBox;

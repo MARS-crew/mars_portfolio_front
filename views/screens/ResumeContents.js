@@ -88,7 +88,9 @@ const fetchResume = async ({token}) => {
       // group_id: response.data.data.group_id, //그룹아이디
       data: response.data.data
     };
-     console.log(extractedData.data[0].specialities);
+    // const parseData = JSON.parse(extractedData);
+    //  console.log(extractedData.)
+     console.log(extractedData.data[0].technology);
     return extractedData;
 
   } catch (error) {
