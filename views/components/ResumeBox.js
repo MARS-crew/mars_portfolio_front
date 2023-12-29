@@ -42,7 +42,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 // }
 
 const InfoContent = ({ item, name, tel, addr, email }) => {
-    const containerStyles = { ...styles.container, marginTop: 20};
+    const containerStyles = { ...styles.container, marginTop: 20, paddingBottom: 12,};
     return (
         <Shadow
             style={[containerStyles]} // 추가 스타일 적용
@@ -187,9 +187,7 @@ const SpecialityItem = ({ speciality }) => {
         // <View style={{ justifyContent: 'center' }}>
         <View style={[styles.content,]}>
             <Text style={styles.bunyaText}> 
-                {speciality.parent_category_id} > 
-                {speciality.middle_category_id} > 
-                {speciality.category_id} 
+                {speciality.parent_category_id} > {speciality.middle_category_id} > {speciality.category_id} 
             </Text>
         </View>
         // </View>
@@ -197,7 +195,7 @@ const SpecialityItem = ({ speciality }) => {
 };
 
 const SpecialityContent = ({ specialities }) => {
-    const containerStyles = { ...styles.container };
+    const containerStyles = { ...styles.container,paddingBottom: 12, };
     const specialData = JSON.parse(specialities);
 
     return (
@@ -280,6 +278,7 @@ const ResumeBox = ({ item, data, index }) => {
 
 
     return (
+        <View style={{ flex: 1 }}>
         <View style={styles.resumeBoxContainer}>
             {/* <IntroContent item={item} data={resumeItem.introduce} /> */}
             <InfoContent 
@@ -303,10 +302,14 @@ const ResumeBox = ({ item, data, index }) => {
             <SpecialityContent item={item} specialities={resumeItem.specialities} />
             <SkillContent item={item} technology={resumeItem.technology} />
         </View>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
+    boxFrame:{
+        flex:1,
+    },
     resumeBoxContainer: {
         paddingTop: 10, 
         paddingBottom: 10,
@@ -346,7 +349,7 @@ const styles = StyleSheet.create({
     content: {
         marginLeft: 15,
         marginRight:15,
-        paddingBottom: 15,
+        paddingBottom: 0,
     },
     introContent: {
         color: '#D9D9D9',
