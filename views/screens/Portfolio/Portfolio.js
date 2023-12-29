@@ -92,7 +92,8 @@ const Portfolio = ({token}) => {
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: `http://api.mars-port.duckdns.org/api/v1/portfolio/${member_id}`,
+      url: `http://172.16.101.59:3000/api/v1/portfolio/${member_id}`,
+      // url: `http://api.mars-port.duckdns.org/api/v1/portfolio/${member_id}`,
       headers: {
         Authorization: token,
       },
@@ -115,14 +116,8 @@ const Portfolio = ({token}) => {
           )}`,
           del_yn: item.del_yn,
         }));
-        // setData(extractedData);
-
         setData(extractedData);
 
-        console.log(
-          'portfolio--------------------------------------------------',
-        );
-        console.log(extractedData);
       })
       .catch(function (error) {
         console.log(error);
