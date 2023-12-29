@@ -24,6 +24,9 @@ const LoginItem = () => {
 };
 
 const styles = StyleSheet.create({
+  itemArea: {
+    flex: 1,
+  },
   button: {
     width: 104,
     height: 38,
@@ -31,11 +34,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 2,
     borderStyle: 'solid',
-    top: 580,
-    left: 250,
+    bottom: 25,
+    right: 20,
     borderRadius: 24,
     borderColor: 'white',
     border: 2,
+    position: 'absolute',
     flexDirection: 'row',
   },
   text: {

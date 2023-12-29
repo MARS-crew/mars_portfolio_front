@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, {useState, useEffect, useContext, useCallback} from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
   },
-  chooseOkBtn: { backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 22 },
+  chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 22},
   inputRightMargin: {
     marginRight: 5,
     marginBottom: 0,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: 'row',
   },
-  PressedBtn: { borderBottomWidth: 2, borderColor: '#072AC8' },
+  PressedBtn: {borderBottomWidth: 2, borderColor: '#072AC8'},
 });
 
 import PublicModal from '../../components/commonComponent/PublicModal';
@@ -87,7 +87,7 @@ import SectionChooseBtn from '../../components/commonComponent/SectionChooseBtn'
 import ChoosePop from '../../components/commonComponent/ChoosePop';
 import ChooseButton from '../../components/commonComponent/ChooseButton';
 import closeblack from '../../../assets/images/closeblack.png';
-import { MyContext } from '../../../MyContext';
+import {MyContext} from '../../../MyContext';
 
 const DetailPop = ({
   id,
@@ -107,7 +107,7 @@ const DetailPop = ({
     //setTemporaryContent('');
     //setPortfolioUrl('');
 
-    return () => { };
+    return () => {};
   }, [detailPopVisible]);
 
   const [selectedButton, setSelectedButton] = useState(selectedValue());
@@ -118,9 +118,9 @@ const DetailPop = ({
   const [addPressedIf, SetAddPressedIf] = useState(true);
   // 포트폴리오 아이템에서 Add 버튼 클릭 시 등장하는 디테일 팝업 적용 후 확인을 눌렀는지 확인하는 스테이트
   const [selectKind, setSelectKind] = useState('1');
-  const { title, setTitle } = useContext(MyContext);
-  const { content, setContent } = useContext(MyContext);
-  const { portfolioUrl, setPortfolioUrl } = useContext(MyContext);
+  const {title, setTitle} = useContext(MyContext);
+  const {content, setContent} = useContext(MyContext);
+  const {portfolioUrl, setPortfolioUrl} = useContext(MyContext);
 
   const [temporaryTitle, setTemporaryTitle] = useState(null);
   const [temporaryContent, setTemporaryContent] = useState(null);
@@ -187,7 +187,7 @@ const DetailPop = ({
   };
   // DetailPop Button onPress 용 Props 컴포넌트 end------------------------------------------------------------------------------------------------------------------------
 
-  const DetailInput = ({ description, placeholder, value, onChangeText }) => {
+  const DetailInput = ({description, placeholder, value, onChangeText}) => {
     // 디테일 팝 섹션(이미지, 영상, 링크)별 페이지 속 인풋 구성요소 공통 컴포넌트
     const descriptionStyle = {
       height: description == true ? 100 : 45,
@@ -301,9 +301,10 @@ const DetailPop = ({
                 register ? setChoosePopVisible(true) : DetailPopCheck();
                 setTitle(temporaryTitle);
                 setContent(temporaryContent);
-                portfolioUrl.append('title', title);
-                portfolioUrl.append('description', content);
-                portfolioUrl.append('kind', selectKind);
+
+                console.log('title', title);
+                console.log('description', content);
+                console.log(portfolioUrl);
                 //setTemporaryTitle('');
                 //setTemporaryContent('');
               }}>
@@ -325,7 +326,8 @@ const DetailPop = ({
         addPressedIf={addPressedIf}
         choosePopVisible={choosePopVisible}
         setChoosePopVisible={setChoosePopVisible}
-        setDetailPopVisible={setDetailPopVisible}></ChoosePop>
+        setDetailPopVisible={setDetailPopVisible}
+        token={token}></ChoosePop>
     </PublicModal>
   );
 };

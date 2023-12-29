@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, useEffect } from 'react';
+import React, {useContext, useState, useRef, useEffect} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -12,18 +12,16 @@ import GroupItem from '../components/GroupItem';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
 // import AppContext from '../../AppContext';
-import { useIndexContext } from '../../IndexContext';
+import {useIndexContext} from '../../IndexContext';
 
-
-const Item = ({ id, src, medal }) => (
+const Item = ({id, src, medal}) => (
   <View>
     <GroupItem id={id} src={src} medal={medal} />
   </View>
 );
 
-const Group = ({ data, token }) => {
-
-  const { currentIndex, changeIndex } = useIndexContext();
+const Group = ({data, token}) => {
+  const {currentIndex, changeIndex} = useIndexContext();
   const swiperRef = useRef(null);
 
   useEffect(() => {
@@ -35,13 +33,11 @@ const Group = ({ data, token }) => {
     }
   }, [currentIndex, swiperRef]);
 
-
   const height = Dimensions.get('window').height;
   const handleScroll = event => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const newIndex = Math.round(offsetY / height);
     changeIndex(newIndex);
-
   };
 
   return (
@@ -50,7 +46,7 @@ const Group = ({ data, token }) => {
         ref={swiperRef}
         vertical={true}
         data={data}
-        renderItem={({ item }) => <Item id={item.id} src={item.src} />}
+        renderItem={({item}) => <Item id={item.id} src={item.src} />}
         index={currentIndex}
         hideShadow={true}
         onScroll={handleScroll}

@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from "react-native";
 import { Resume } from '../screens/ResumeContents'
 import Id7Popup from "./Id7Popup";
@@ -15,19 +16,10 @@ import css3_icon from '../../assets/images/devIcon/css3.png'
 import html5_icon from '../../assets/images/devIcon/html5.png'
 import springboot_icon from '../../assets/images/devIcon/springboot.png'
 
-
-
 import { help } from "yargs";
-import React, { useState } from "react";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-// {
-//     (item.id === '5' || item.id === '6' || item.id === '7') ? (
-//         <View style={styles.line2} />
-//     ) : (
-//         <View style={styles.line} />
-//     )
-// }
-const IntroContent = ({ item }) => {
+
+const IntroContent = ({ item, data }) => {
     const containerStyles = { ...styles.container, marginTop: 20 }
     return (
         <Shadow
@@ -42,14 +34,14 @@ const IntroContent = ({ item }) => {
                 <Text style={styles.title}>간단소개</Text>
                 <View style={styles.line} />
                 <Text style={[styles.content, styles.introContent]}>
-                    소개글을 입력해주세요
+                    {data}
                 </Text>
             </View>
         </Shadow>
     );
 }
 
-const InfoContent = ({ item }) => {
+const InfoContent = ({ item, name, tel, addr, email }) => {
     const containerStyles = { ...styles.container };
     return (
         <Shadow
@@ -65,25 +57,25 @@ const InfoContent = ({ item }) => {
                 <View style={styles.line} />
                 <Text style={[styles.content, styles.basicInfoContent]}>
                     <View>
-                        <Text style={styles.infoText}>{item.name}</Text>
+                        <Text style={styles.infoText}>{name}</Text>
                         <View style={styles.icons}>
                             <View style={styles.iconsText}>
                                 <Image
                                     source={tel_icon}
                                     style={styles.icon} />
-                                <Text style={styles.defaultText}>010-1111-2222</Text>
+                                <Text style={styles.defaultText}>{tel}</Text>
                             </View>
                             <View style={styles.iconsText} >
                                 <Image
                                     source={home_icon}
                                     style={styles.icon} />
-                                <Text style={styles.defaultText}>경기도</Text>
+                                <Text style={styles.defaultText}>{addr}</Text>
                             </View>
                             <View style={styles.iconsText}>
                                 <Image
                                     source={main_icon}
                                     style={styles.icon} />
-                                <Text style={styles.defaultText}>123@naver.com</Text>
+                                <Text style={styles.defaultText}>{email}</Text>
                             </View>
                         </View>
                     </View>
@@ -92,7 +84,7 @@ const InfoContent = ({ item }) => {
         </Shadow>
     )
 }
-const CareerContent = ({ item }) => {
+const CareerContent = ({ item, com_name, rank, started_date, period, duty }) => {
     const containerStyles = { ...styles.container };
     return (
         <Shadow
@@ -109,28 +101,20 @@ const CareerContent = ({ item }) => {
                 <Text style={[styles.content, styles.careerContent]}>
                     <View>
                         <View style={styles.iconsText}>
-                            <Text style={styles.infoText}>회사명</Text>
-                            <Text style={styles.defaultText}>사원</Text>
+                            <Text style={styles.infoText}>{com_name}</Text>
+                            <Text style={styles.defaultText}>{rank}</Text>
                         </View>
-                        <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
-                        <Text style={styles.defaultText2}>개발</Text>
+                        <Text style={styles.dateText}>{started_date} ~ 2023.06.06 ( {period} )</Text>
+                        <Text style={styles.defaultText2}>{duty}</Text>
                     </View>
                     <View style={styles.line} />
-                    <View>
-                        <View style={styles.iconsText}>
-                            <Text style={styles.infoText}>회사명</Text>
-                            <Text style={styles.defaultText}>사원</Text>
-                        </View>
-                        <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
-                        <Text style={styles.defaultText2}>개발</Text>
-                    </View>
                 </Text>
             </View>
         </Shadow>
     )
 }
 
-const AwardContent = () => {
+const AwardContent = ({award_name, date, issuer}) => {
     const containerStyles = { ...styles.container };
     return (
         <Shadow
@@ -148,10 +132,10 @@ const AwardContent = () => {
                     <View>
                         <View>
                             <View>
-                                <Text style={styles.infoText}>프로젝트 우수상</Text>
+                                <Text style={styles.infoText}>{award_name}</Text>
                             </View>
-                            <Text style={styles.dateText}>2020.06.06</Text>
-                            <Text style={styles.defaultText2}>마스외전</Text>
+                            <Text style={styles.dateText}>{date}</Text>
+                            <Text style={styles.defaultText2}>{issuer}</Text>
                         </View>
                     </View>
                 </Text>
@@ -323,226 +307,41 @@ const SkillContent = () => {
 
 }
 
-const ResumeBox = ({ item }) => {
-    const containerStyles = item.id === '1' ? { ...styles.container, marginTop: 20 } :
-        item.id === '7' ? { ...styles.container, marginBottom: 20 } : styles.container;
-
-    let content = null;
-    let contentStyles = {}; // 컨텐츠 부분의 스타일
-
-    if (item.id === '1') {
-        content = '소개글을 입력해주세요';
-        contentStyles = styles.introContent; // 소개글 컨텐츠 스타일
-    } else if (item.id === '2') {
-        content =
-            <View>
-                <Text style={styles.infoText}>이화진</Text>
-                <View style={styles.icons}>
-                    <View style={styles.iconsText}>
-                        <Image
-                            source={tel_icon}
-                            style={styles.icon} />
-                        <Text style={styles.defaultText}>010-1111-2222</Text>
-                    </View>
-                    <View style={styles.iconsText} >
-                        <Image
-                            source={home_icon}
-                            style={styles.icon} />
-                        <Text style={styles.defaultText}>경기도</Text>
-                    </View>
-                    <View style={styles.iconsText}>
-                        <Image
-                            source={main_icon}
-                            style={styles.icon} />
-                        <Text style={styles.defaultText}>nnnnnnniam1@gmail.com</Text>
-                    </View>
-                </View>
-            </View>
-            ;
-        contentStyles = styles.basicInfoContent; // 기본정보 컨텐츠 스타일
-    } else if (item.id === '3') {
-        content =
-            <View>
-                <View>
-                    <View style={styles.iconsText}>
-                        <Text style={styles.infoText}>회사명</Text>
-                        <Text style={styles.defaultText}>사원</Text>
-                    </View>
-                    <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
-                    <Text style={styles.defaultText2}>개발</Text>
-                </View>
-                <View style={styles.line} />
-                <View>
-                    <View style={styles.iconsText}>
-                        <Text style={styles.infoText}>회사명</Text>
-                        <Text style={styles.defaultText}>사원</Text>
-                    </View>
-                    <Text style={styles.dateText}>2020.06.06 ~ 2023.06.06 (3년 0개월)</Text>
-                    <Text style={styles.defaultText2}>개발</Text>
-                </View>
-            </View>
-            ;
-        contentStyles = styles.careerContent; // 경력 컨텐츠 스타일
-    } else if (item.id === '4') {
-        content =
-            <View>
-                <View>
-                    <View>
-                        <Text style={styles.infoText}>프로젝트 우수상</Text>
-                    </View>
-                    <Text style={styles.dateText}>2020.06.06</Text>
-                    <Text style={styles.defaultText2}>마스외전</Text>
-                </View>
-                {/* <View style={styles.line} />
-        <View>
-            <View>
-                <Text style={styles.infoText}>프로젝트 우수상</Text>
-            </View>
-            <Text style={styles.dateText}>2020.06.06</Text>
-            <Text style={styles.defaultText2}>마스외전</Text>
-        </View> */}
-            </View>
-            ;
-        contentStyles = styles.awardContent; // 수상내역 컨텐츠 스타일
-    } else if (item.id === '5') {
-        content =
-            <View>
-                <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-                <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-            </View>
-            ;
-        contentStyles = styles.interestContent; // 관심분야 컨텐츠 스타일
-    } else if (item.id === '6') {
-        content =
-            <View>
-                <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-                <Text style={styles.bunyaText}> IT > 인공지능 > 빅데이터 머신러닝 </Text>
-            </View>
-            ;
-        contentStyles = styles.specialtyContent; // 전문분야 컨텐츠 스타일
-    } else if (item.id === '7') {
-        const [popupIcon, setPopupIcon] = useState('');
-        const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
-        const [isModalVisible, setIsModalVisible] = useState(false);
-        const [detailPopVisible, setDetailPopVisible] = useState(false);
-
-        const handleIconClick = (id) => {
-            // 클릭하면 상세 팝업 가시성과 컨텐츠 뷰 팝업 가시성을 모두 반전시킴
-            setDetailPopVisible(!detailPopVisible);
-            setContentsViewPopVisible(!contentsViewPopVisible);
-
-            // 클릭한 아이콘의 아이디를 설정
-            setPopupIcon(id);
-        };
-
-        const handleClosePopup = () => {
-            setPopupIcon('');
-        };
-
-        content =
-            <View style={styles.devContainer}>
-
-                {/* 자바 */}
-                <TouchableOpacity onPress={() => handleIconClick('java')}>
-                    <View style={styles.devIcons}>
-                        <Image
-                            source={java_icon}
-                            style={styles.devIcon} />
-                        <Text style={styles.devIconText}>JAVA</Text>
-                    </View>
-                </TouchableOpacity>
-
-                {/* php */}
-                <TouchableOpacity onPress={() => handleIconClick('php')}>
-                    <View style={styles.devIcons}>
-                        <Image
-                            source={php_icon}
-                            style={styles.devIcon} />
-                        <Text style={styles.devIconText}>PHP</Text>
-                    </View>
-                </TouchableOpacity>
-
-                {/* 리액트 */}
-                <TouchableOpacity onPress={() => handleIconClick('react')}>
-                    <View style={styles.devIcons}>
-                        <Image
-                            source={react_icon}
-                            style={styles.devIcon} />
-                        <Text style={styles.devIconText}>React</Text>
-                    </View>
-                </TouchableOpacity>
-
-                {/* mysql */}
-                <TouchableOpacity onPress={() => handleIconClick('mysql')}>
-                    <View style={styles.devIcons}>
-                        <Image
-                            source={mysql_icon}
-                            style={styles.devIcon} />
-                        <Text style={styles.devIconText}>MySQL</Text>
-                    </View>
-                </TouchableOpacity>
-
-                {/* 자바스크립트  */}
-                <TouchableOpacity onPress={() => handleIconClick('js')}>
-                    <View style={styles.devIcons}>
-                        <Image
-                            source={js_icon}
-                            style={styles.devIcon} />
-                        <Text style={styles.devIconText}>JavaScript</Text>
-                    </View>
-                </TouchableOpacity>
-
-                {/* html */}
-                <TouchableOpacity onPress={() => handleIconClick('html')}>
-                    <View style={styles.devIcons}>
-                        <Image
-                            source={html5_icon}
-                            style={styles.devIcon} />
-                        <Text style={styles.devIconText}>HTML5</Text>
-                    </View>
-                </TouchableOpacity>
-
-                {/* 팝업 */}
-                {popupIcon !== '' && (
-                    <Id7Popup
-                        id={popupIcon}
-                        onClose={handleClosePopup}
-                        contentsViewPopVisible={contentsViewPopVisible}
-                        setContentsViewPopVisible={setContentsViewPopVisible}
-                        detailPopVisible={detailPopVisible} // 추가: 상세 팝업 가시성 상태를 전달
-                        setDetailPopVisible={setDetailPopVisible} // 추가: 상세 팝업 가시성 상태를 업데이트하는 함수를 전달
-                    />
-                )}
-            </View>
-        contentStyles = styles.skillContent; // 보유기술 컨텐츠 스타일
+const ResumeBox = ({ item, data, index }) => {
+    if (!data || !data.data || !data.data[index]) {
+        return <View />;
     }
 
-    return (
-        // <Shadow
-        //     style={[containerStyles]} // 추가 스타일 적용
-        //     radius={100}
-        //     offset={[1, 1]}
-        //     startColor={'rgba(151, 151, 151, 0.05)'}
-        //     endColor={'rgba(151, 151, 151, 0.01)'}
-        //     distance={8}
-        // >
-        //     <Text style={styles.title}>{item.title}</Text>
-        //     {(item.id === '5' || item.id === '6' || item.id === '7') ? (
-        //         <View style={styles.line2} />
-        //     ) : (
-        //         <View style={styles.line} />
-        //     )}
-        //     <Text style={[styles.content, contentStyles]}>{content}</Text>
+    const resumeItem = data.data[index];
 
-        // </Shadow>
+
+    return (
         <View>
-            <IntroContent item={item} />
-            <InfoContent item={item} />
-            <CareerContent item={item} />
-            <AwardContent item={item} />
-            <InterestContent item={item} />
-            <SpecialityContent item={item} />
-            <SkillContent item={item} />
+            <IntroContent item={item} data={resumeItem.introduce} />
+            <InfoContent 
+                item={item} 
+                name={resumeItem.name} 
+                tel={resumeItem.tel} 
+                addr={resumeItem.addr} 
+                email={resumeItem.email} 
+            />
+            <CareerContent 
+                item={item} 
+                com_name={resumeItem.com_name} 
+                rank={resumeItem.rank} 
+                started_date={resumeItem.started_date} 
+                period={resumeItem.period} 
+                duty={resumeItem.duty} 
+            />
+            <AwardContent 
+                item={item} 
+                award_name={resumeItem.award_name}
+                date={resumeItem.date}
+                issuer={resumeItem.issuer}
+                 />
+            <InterestContent item={item} data={data} />
+            <SpecialityContent item={item} data={data} />
+            <SkillContent item={item} data={data} />
         </View>
     );
 };
