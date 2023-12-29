@@ -62,7 +62,7 @@ const InterviewContents = ({ id, path, token }) => {
     try {
       const response = await axios({
         method: 'post',
-        url: 'http://192.168.0.2:3000/api/v1/interview/heart/'+id,
+        url: 'http://192.168.0.2:3000/api/v1/interview/heart/' + id,
         headers: {
           Authorization: token
         },

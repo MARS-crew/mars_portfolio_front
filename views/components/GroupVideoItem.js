@@ -9,14 +9,13 @@ const { width, height } = Dimensions.get('window');
 const widthCol = width / 2;
 const heightCol = height / 2;
 const GroupVideoItem = ({ id, medal, src }) => {
-  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId } = useIndexContext();
+  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId, selectedGroupId, changeSelectedGroupId } = useIndexContext();
 
   const handlePress = () => {
     if (selectedMemId !== id) {
       changeSelectedMemId(id);
-      if (horizontalIndex !== 2) {
-        changeHorizontalIndex(2);
-      }
+      changeHorizontalIndex(2);
+
     }
   }
 

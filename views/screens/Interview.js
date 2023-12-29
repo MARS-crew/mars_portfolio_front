@@ -9,8 +9,9 @@ import {
   View,
 } from 'react-native';
 import axios from 'axios';
-import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
 import SwiperFlatList from 'react-native-swiper-flatlist';
+import _, { first } from 'lodash';  // lodash 라이브러리 사용
+import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
 import { useIndexContext } from '../../IndexContext';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -19,8 +20,10 @@ const yOffset = new Animated.Value(0);
 
 const Interview = ({ token }) => {
   const swiperRef = useRef(null);
-  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId } = useIndexContext();
+  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedGroupId, changeSelectedGroupId, selectedMemId, changeSelectedMemId } = useIndexContext();
   const [data, setData] = useState([]);
+  const [prevSelectedGroupId, setPrevSelectedGroupId] = useState(selectedGroupId);
+  const [prevSelectedMemId, setPrevSelectedMemId] = useState(selectedMemId);
 
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
@@ -33,41 +36,54 @@ const Interview = ({ token }) => {
 
   const height = Dimensions.get('window').height;
 
-
+  // 스와이프 진행시 인덱스 변경
   const handleVerticalScroll = event => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const newIndex = Math.round(offsetY / height);
     const selectedData = data[newIndex];
-    if (selectedData) {
-      changeSelectedMemId(selectedData.memberId);
+    if (horizontalIndex == 2) {
+      if (selectedData) {
+        changeSelectedMemId(selectedData.memberId);
+        if (selectedData.groupId !== selectedGroupId) {
+          changeSelectedGroupId(selectedData.groupId);
+        }
+      }
+      changeDataIndex(newIndex);
     }
-    changeDataIndex(newIndex);
-    // if (horizontalIndex !== 0 && horizontalIndex !== 1) {
-    //   changeHorizontalIndex(1);
-    // }
+
   };
-  useEffect(() => {
-    // selectedMemId에 해당하는 memberId를 찾기
-    const selectedDataIndex = data.findIndex(item => item.memberId === selectedMemId);
-    changeDataIndex(selectedDataIndex !== -1 ? selectedDataIndex : 0);
-
-    // dataIndex 업데이트
-    changeDataIndex(dataIndex);
-  }, [selectedMemId, data]);
 
   useEffect(() => {
+    const findFirstMemberIndexInGroup = (groupId) => {
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].groupId === groupId) {
+          return i;
+        }
+      }
+      return -1;
+    };
+
+    const firstMemberIndex = findFirstMemberIndexInGroup(selectedGroupId);
+    changeSelectedMemId(firstMemberIndex !== -1 ? data[firstMemberIndex].memberId : 1);
+    changeDataIndex(firstMemberIndex !== -1 ? firstMemberIndex : 0);
+    setPrevSelectedMemId(selectedMemId);
+    setPrevSelectedGroupId(selectedGroupId);
+  }, [horizontalIndex, currentIndex]);
+
+
+  useEffect(() => {
+
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
       // url: 'http://api.mars-port.duckdns.org/api/v1/interview/',
-      url: 'http://172.20.10.4:3000/api/v1/interview/',
+      url: 'http://172.30.1.60:3000/api/v1/interview/',
       headers: {
         Authorization: token,
       },
       cancelToken: source.token,
     })
       .then(function (response) {
-        console.log(response.data.data);
         const extractedData = response.data.data.map(item => ({
           groupId: item.group_id, // 그룹 아이디
           memberId: item.member_id, //사용자 아이디
@@ -77,28 +93,29 @@ const Interview = ({ token }) => {
           )}`, //인터뷰 url
           heart: item.heart, //찜하기 여부
         }));
-        setData(extractedData);
-        // console.log(extractedData);
-        // console.log('datadata::::' + extractedData[0].memberId);
-        // console.log('datadata::::' + extractedData[0].url);
-        // console.log('datadata::::' + extractedData[0].heart);
 
-        const selectedDataIndex = data.findIndex(item => item.memberId === selectedMemId);
-        console.log(selectedDataIndex);
-        changeDataIndex(selectedDataIndex !== -1 ? selectedDataIndex : 0);
+        // 데이터를 그룹으로 나누고, 각 그룹 내에서 memberId를 기준으로 오름차순으로 정렬
+        const sortedAndGroupedData = _.chain(extractedData)
+          .sortBy('groupId', 'memberId')
+          .uniqBy('memberId')  // 중복 제거
+          .value();
 
-        // dataIndex 업데이트
-        changeDataIndex(dataIndex);
+        setData(Object.values(sortedAndGroupedData));
+        console.log(data);
+
       })
       .catch(function (error) {
-        console.log(error);
+        if (axios.isCancel(error)) {
+          console.log('Request canceled', error.message);  // 요청이 취소되었을 때의 로그
+        } else {
+          console.log(error);
+        }
       });
 
     return () => {
-      isMounted = false;
       source.cancel('API 호출이 취소되었습니다.');
     };
-  }, [selectedMemId]);
+  }, [token]);
 
   return (
     <SafeAreaView style={styles.container}>
