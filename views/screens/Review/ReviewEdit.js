@@ -11,54 +11,33 @@ import {
 } from 'react-native';
 
 import axios from 'axios';
-
 import ChoosePop from '../../components/commonComponent/ChoosePop';
-
 import Title from '../../components/commonComponent/Title';
-
 import cancelIcon from '../../../assets/images/cancelIcon.png';
-
 import deletedIcon from '../../../assets/images/deletedIcon.png';
-
 import saveIcon from '../../../assets/images/editIcon.png';
-
 import editingIcon from '../../../assets/images/editingIcon.png';
-
-import {log} from 'react-native-reanimated';
 
 const styles = StyleSheet.create({
   modalBackdropPress: {
     flex: 1,
-
     justifyContent: 'flex-end',
   },
-
   modalView: {
     alignItems: 'center',
-
     borderWidth: 2,
-
     borderTopLeftRadius: 10,
-
     borderTopRightRadius: 10,
-
     borderColor: '#EEE',
-
     backgroundColor: '#fff',
-
     flexDirection: 'row',
-
     justifyContent: 'space-around',
-
     display: 'flex',
-
     height: Dimensions.get('window').height / 12,
   },
-
   navBarView: {
     flexDirection: 'row',
   },
-
   image: {
     marginRight: 4,
   },
@@ -66,56 +45,52 @@ const styles = StyleSheet.create({
 
 const EditMode = ({
   //공통 프롭스
-
   id,
-
   writer,
-
   reviewContent,
-
   isModalVisible,
-
   setIsModalVisible,
-
   //리뷰 프롭스
-
   review,
-
   onEdit,
-
   onCancel,
-
   onDelete,
-
   inputRef,
-
   currentReviewContent,
+  token,
 }) => {
   //공통 스테이트
 
   const [detailPopVisible, setDetailPopVisible] = useState(false);
-
   const [removeChoosePopVisible, setRemoveChoosePopVisible] = useState(false);
-
   const [saveChoosePopVisible, setSaveChoosePopVisible] = useState(false);
-
   const [togleButton, setTogleButton] = useState(false);
-
   const [checkDeletePopOkButton, setCheckDeletePopOkButton] = useState(false); //삭제 츄즈 팝업에서 확인을 눌렀는지 감지하여 네비바의 저장을 눌렀을 시 ChoosePop이 뜨도록 함
-
   const [checkChoosePopOkButton, setCheckChoosePopOkButton] = useState(false); //디테일 팝업에서 확인을 눌렀는지 감지하여 네비바의 저장을 눌렀을 시 ChoosePop이 뜨도록 함
 
   // EditMode Button onPress 용 Props 컴포넌트 start------------------------------------------------------------------------------------------------------------------------
 
-  const editButton = () => {
+  const editButton = async () => {
     //수정 섹션을 클릭한 경우
-
     // onEdit();
-
     onEdit();
-
     console.log(reviewContent);
-
+    try {
+      const response = await axios({
+        method: 'put',
+        url: 'http://api.mars-port.duckdns.org/api/v1/review',
+        data: {
+          member_id: 1,
+          content: reviewContent,
+        },
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log('Response', response.data);
+    } catch (error) {
+      console.error('Error', error);
+    }
     // setTogleButton(false);
   };
 
@@ -123,10 +98,8 @@ const EditMode = ({
     //저장 섹션을 클릭한 경우
 
     // 리뷰 페이지에서 수정 후 저장 클릭 시
-
     if (review === true) {
       onEdit();
-
       setTogleButton(false);
     }
   };
@@ -135,22 +108,16 @@ const EditMode = ({
     try {
       const response = await axios({
         method: 'delete',
-
-        url: `http://10.0.2.2:3000/api/v1/review/${reviewId}`,
-
+        url: `http://api.mars-port.duckdns.org/v1/review/${reviewId}`,
         data: {
           // DELETE 요청의 본문에 member_id를 포함 (이 방식은 API 설계에 따라 달라질 수 있음)
-
           member_id: memberId,
         },
-
         headers: {
           'Content-Type': 'application/json',
-
-          Authorization: '',
+          Authorization: token,
         },
       });
-
       console.log('Delete response', response.data);
     } catch (error) {
       console.error('Error', error);
@@ -159,7 +126,6 @@ const EditMode = ({
 
   const cancelButton = () => {
     onCancel();
-
     setTogleButton(false);
   };
 
@@ -170,7 +136,6 @@ const EditMode = ({
       <TouchableOpacity style={styles.navBarView} onPress={onPress}>
         <View style={styles.navBarView}>
           <Image source={source} style={styles.image} />
-
           <Title color={'black'}>{title}</Title>
         </View>
       </TouchableOpacity>
@@ -237,7 +202,6 @@ const EditMode = ({
 
           <ChoosePop
             //공통
-
             title="수정된 내용을 저장하시겠습니까?"
             setTogleButton={setTogleButton}
             checkDeletePopOkButton={checkDeletePopOkButton}
