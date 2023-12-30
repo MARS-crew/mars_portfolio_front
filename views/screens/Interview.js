@@ -62,10 +62,6 @@ const Interview = ({token}) => {
             heart: item.heart, //찜하기 여부
           }));
           setData(extractedData);
-          console.log(extractedData);
-          console.log('datadata::::' + extractedData[0].memberId);
-          console.log('datadata::::' + extractedData[0].url);
-          console.log('datadata::::' + extractedData[0].heart);
         })
         .catch(function (error) {
           console.log(error);

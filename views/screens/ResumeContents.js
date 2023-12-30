@@ -60,7 +60,7 @@ const fetchResume = async ({token}) => {
   try {
     const response = await axios({
       method: 'get',
-      url: 'http://192.168.0.2:3000/api/v1/resume',
+      url: 'http://api.mars-port.duckdns.org/api/v1/resume/56',
       headers: {
         Authorization: token,
       },
@@ -86,6 +86,9 @@ const fetchResume = async ({token}) => {
       // group_id: response.data.data.group_id, //그룹아이디
       data: response.data.data,
     };
+    // const parseData = JSON.parse(extractedData);
+    //  console.log(extractedData.)
+    console.log(extractedData.data[0].technology);
     return extractedData;
   } catch (error) {
     console.error(error);
