@@ -1,10 +1,18 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity, Text, Image} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 const LoginItem = () => {
+  const navigation = useNavigation(); // 로그인 페이지로 넘기기 위한 네비게이션 객체
+
   return (
     <View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          // 로그인 페이지 이동
+          navigation.navigate('Login');
+        }}>
         <Text style={styles.text}>로그인</Text>
         <Image
           source={require('../../assets/images/LoginNextItem.png')}
@@ -16,6 +24,9 @@ const LoginItem = () => {
 };
 
 const styles = StyleSheet.create({
+  itemArea: {
+    flex: 1,
+  },
   button: {
     width: 104,
     height: 38,
@@ -23,11 +34,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 2,
     borderStyle: 'solid',
-    top: 580,
-    left: 250,
+    bottom: 25,
+    right: 20,
     borderRadius: 24,
     borderColor: 'white',
     border: 2,
+    position: 'absolute',
     flexDirection: 'row',
   },
   text: {

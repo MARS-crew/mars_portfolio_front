@@ -1,4 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
+
 import {
   View,
   StyleSheet,
@@ -11,11 +12,15 @@ import {
 } from 'react-native';
 
 // import ReviewHideModal from './ReviewHideModal';
+
 import {Shadow} from 'react-native-shadow-2';
+
 import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
+
 import EditMode from '../../screens/Review/ReviewEdit';
 
 const {width, height} = Dimensions.get('window');
+
 const shadowColor = 'rgba(151, 151, 151, 0.36)';
 
 const styles = StyleSheet.create({
@@ -92,13 +97,13 @@ const ReviewItem = ({
   currentReviewContent,
   onEdit,
   onDelete,
+  token,
 }) => {
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const [reviewContent, setReviewContent] = useState(content);
   const [isReviewLiked, setIsReviewLiked] = useState(isLiked);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-
   const inputRef = useRef();
 
   return (
@@ -119,6 +124,7 @@ const ReviewItem = ({
               }
             />
           </View>
+
           <View style={styles.userContentContainer}>
             <View style={styles.userContentContainerTop}>
               <View style={styles.userContentContainerTopElement}>
@@ -140,6 +146,7 @@ const ReviewItem = ({
                 </TouchableOpacity>
               </View>
             </View>
+
             <View style={styles.userContentContainerBottom}>
               <TouchableOpacity
                 onPress={() => setContentsViewPopVisible(true)}
@@ -184,6 +191,7 @@ const ReviewItem = ({
           onDelete={onDelete}
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
+          token={token}
         />
       </View>
     </Shadow>

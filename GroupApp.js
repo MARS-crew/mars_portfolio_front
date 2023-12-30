@@ -15,7 +15,7 @@ import Member from './views/screens/Member';
 import Youtube from './views/screens/Youtube';
 import Resume from './views/screens/Resume';
 import Portfolio from './views/screens/Portfolio/Portfolio';
-import Review from './views/screens/Review';
+import Review from './views/screens/Review/Review';
 import Album from './views/screens/Album';
 import Interview from './views/screens/Interview';
 import 'react-native-gesture-handler';
@@ -145,9 +145,9 @@ const HomeScreen = () => {
       style={styles.scrollView}>
       {/* <Splash isSplashVisible={isSplashVisible} />
       {isSplashVisible === false ? ( */}
-        <Screen text="Screen 1" index={0}>
-          <WhichGroup />
-        </Screen>
+      <Screen text="Screen 1" index={0}>
+        <WhichGroup />
+      </Screen>
       {/* ) : null} */}
       <Screen text="Screen 2" index={1}>
         <GroupVideo />

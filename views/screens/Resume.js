@@ -1,12 +1,12 @@
-import React,{useState} from 'react';
-import {StyleSheet, View, FlatList,Image} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, View, FlatList, Image} from 'react-native';
 import ResumeBox from '../components/ResumeBox';
 import ResumeBoxMD from '../components/ResumeBoxMD';
 import FAB from '../components/FloatingMenu';
-import ResumeEditMode from "../components/ResumeEditMode";
-import { TouchableOpacity } from 'react-native-gesture-handler';
-
-
+import ResumeEditMode from '../components/ResumeEditMode';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import SwiperFlatList from 'react-native-swiper-flatlist';
+import ResumeContents from './ResumeContents';
 
 const DATA = [
   {
@@ -38,31 +38,34 @@ const DATA = [
     title: '보유기술',
   },
 ];
+const ResumeItem = item => (
+  <View>
+    <ResumeContents id={id} src={src} medal={medal} />
+  </View>
+);
 
-const Resume = () => {
+const Resume = ({token}) => {
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [resume, setResume] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
+
   const toggleModal = () => {
-    if(modalOpen){
+    if (modalOpen) {
       return false;
     }
-    console.log('나는챌린')
-    setModalOpen((prev) => {
-      console.log("야호")
+    console.log('나는챌린');
+    setModalOpen(prev => {
+      console.log('야호');
       return !prev;
     });
   };
 
-const renderItem = ({ item }) => {
+  const renderItem = ({item, token}) => {
     return (
-      <TouchableOpacity 
-      onLongPress={toggleModal}
-      activeOpacity={100} 
-      >
+      <TouchableOpacity onLongPress={toggleModal} activeOpacity={100}>
         {modalOpen ? (
-          <ResumeBoxMD item={item} />
+          <ResumeBoxMD item={item} token={token} />
         ) : (
-          <ResumeBox item={item} />
+          <ResumeBox item={item} token={token} />
         )}
       </TouchableOpacity>
     );
@@ -70,32 +73,21 @@ const renderItem = ({ item }) => {
 
   // ) <ResumeBox item={item} modalOpen={modalOpen} />; // Pass modalOpen as a prop
 
-
   return (
     <View style={styles.container}>
       {/* <TouchableOpacity 
         onPress={toggleModal}
         activeOpacity={100} > */}
-        <FlatList
-          data={DATA}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-        />
-        <FAB />
-        <ResumeEditMode
-          resume={resume}
-          isModalVisible={modalOpen}
-          setIsModalVisible={setModalOpen}
-        />
+      <SwiperFlatList vertical={true} data={DATA} renderItem={renderItem} />
       {/* </TouchableOpacity> */}
-  </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     width: 400,
-   // padding: 25,
+    // padding: 25,
     flex: 2,
     backgroundColor: '#F3F6FE',
   },

@@ -15,23 +15,28 @@ import FAB from './FloatingMenu';
 const GroupItem = ({id, src}) => {
   return (
     <View>
-      <View>
+      <View style={styles.itemArea}>
         <ImageBackground source={src} style={styles.image}>
           <GroupLogo />
           <Text style={styles.text}>{id}기</Text>
           <LoginItem />
         </ImageBackground>
       </View>
-      <FAB />
+      {/* <FAB /> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  itemArea: {
+    flex: 1,
+    alignItems: 'center',
+  },
   image: {
-    width: Dimensions.get('window').width / 1,
+    objectFit: 'fill',
+
+    width: Dimensions.get('window').width * 1.03,
     height: Dimensions.get('window').height / 1,
-    resizeMode: 'contain',
   },
   text: {
     color: 'white',

@@ -51,6 +51,7 @@ const EditMode = ({
   //포트폴리오 프롭스
   portfolio,
   id,
+  code,
   onModify,
   onDelete,
   //인터뷰 프롭스
@@ -60,6 +61,7 @@ const EditMode = ({
   filePath,
   setFilePath,
   setIsPlaying,
+  token,
 }) => {
   //공통 스테이트
   const [detailPopVisible, setDetailPopVisible] = useState(false);
@@ -95,13 +97,6 @@ const EditMode = ({
 
       if (response.assets && response.assets.length > 0) {
         const asset = response['assets'][0];
-        console.log('base64 -> ', asset.base64);
-        console.log('uri -> ', asset.uri);
-        console.log('width -> ', asset.width);
-        console.log('height -> ', asset.height);
-        console.log('fileSize -> ', asset.fileSize);
-        console.log('type -> ', asset.type);
-        console.log('fileName -> ', asset.fileName);
 
         if (checkDeletePopOkButton == false) setChangeData(asset.uri);
         setTogleButton(true);
@@ -245,15 +240,17 @@ const EditMode = ({
 
           <DetailPop
             id={id}
+            code={code}
             onModify={onModify}
             checkChoosePopOkButton={checkChoosePopOkButton}
             setCheckChoosePopOkButton={setCheckChoosePopOkButton}
             detailPopVisible={detailPopVisible}
             setTogleButton={setTogleButton}
-            setDetailPopVisible={setDetailPopVisible}></DetailPop>
+            setDetailPopVisible={setDetailPopVisible}
+            token={token}></DetailPop>
           <ChoosePop
             //공통
-            title="수정된 내용을 저장하시겠습니까?"
+            popTitle="수정된 내용을 저장하시겠습니까?"
             setTogleButton={setTogleButton}
             checkDeletePopOkButton={checkDeletePopOkButton}
             setCheckDeletePopOkButton={setCheckDeletePopOkButton}
@@ -268,11 +265,13 @@ const EditMode = ({
             //포트폴리오
             portfolio={portfolio}
             id={id}
+            code={code}
             onModify={onModify}
-            onDelete={onDelete}></ChoosePop>
+            onDelete={onDelete}
+            token={token}></ChoosePop>
           <ChoosePop
             //공통
-            title="수정된 내용을 삭제하시겠습니까?"
+            popTitle="수정된 내용을 삭제하시겠습니까?"
             checkDeletePopOkButton={checkDeletePopOkButton}
             setCheckDeletePopOkButton={setCheckDeletePopOkButton}
             setIsModalVisible={setIsModalVisible}
@@ -285,7 +284,9 @@ const EditMode = ({
             setIsEditing={setIsEditing}
             //포트폴리오
             portfolio={portfolio}
-            id={id}></ChoosePop>
+            id={id}
+            code={code}
+            token={token}></ChoosePop>
         </Pressable>
       </TouchableOpacity>
     </Modal>

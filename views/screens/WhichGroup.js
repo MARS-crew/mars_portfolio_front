@@ -3,29 +3,16 @@ import {React} from 'react';
 import Group from './Group';
 import ManyGroup from './ManyGroup';
 import GroupVideo from './GroupVideo';
+import {set} from 'react-native-reanimated';
 //import { View } from 'react-native';
 
 const DATA = [
   {
-    id: '1',
-    title: '1기',
-    src: require('../../assets/images/Group.png'),
-    video: require('../../assets/images/GroupVideo.png'),
-    merdal: 'y',
-  },
-  {
-    id: '2',
-    title: '2기',
-    src: require('../../assets/images/Group.png'),
-    video: require('../../assets/images/GroupVideo.png'),
-    merdal: 'n',
-  },
-  {
     id: '3',
     title: '3기',
-    src: require('../../assets/images/Group.png'),
+    src: require('../../assets/images/Group3.png'),
     video: require('../../assets/images/GroupVideo.png'),
-    merdal: 'n',
+    merdal: 'y',
   },
   {
     id: '4',
@@ -39,7 +26,7 @@ const DATA = [
     title: '5기',
     src: require('../../assets/images/Group.png'),
     video: require('../../assets/images/GroupVideo.png'),
-    merdal: 'n',
+    merdal: 'y',
   },
   // {
   //   id: '6',
@@ -58,9 +45,9 @@ const DATA = [
   // },
 ];
 
-const WhichGroup = () => {
+const WhichGroup = ({token}) => {
   if (DATA.length <= 6) {
-    return <Group data={DATA} />;
+    return <Group token={token} data={DATA} />;
   } else {
     return <ManyGroup data={DATA} />;
   }

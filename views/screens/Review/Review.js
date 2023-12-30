@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import axios from 'axios';
 
+import SwiperFlatList from 'react-native-swiper-flatlist';
+import {useIndexContext} from '../../../IndexContext';
 import ReviewItem from '../Review/ReviewItem';
 import FloatingMenu from '../../components/FloatingMenu';
 
@@ -73,13 +75,32 @@ const styles = StyleSheet.create({
   },
 });
 
-const Review = () => {
+const Review = ({token}) => {
+  const {currentIndex, changeIndex} = useIndexContext();
+  const swiperRef = useRef(null);
   const [data, setData] = useState([]);
   const [review, isReview] = useState(true);
   const [showReviewInput, setShowReviewInput] = useState(false);
   const [reviewContent, setReviewContent] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
   const newReviewInputRef = useRef(null);
+
+  useEffect(() => {
+    if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
+      swiperRef.current.scrollToIndex({
+        index: currentIndex,
+        animated: true,
+      });
+    }
+  }, [currentIndex, swiperRef]);
+
+  const height = Dimensions.get('window').height;
+  const handleScroll = event => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const newIndex = Math.round(offsetY / height);
+    // IndexData.setIndexValue(index);
+    changeIndex(newIndex);
+  };
 
   const onEdit = () => {
     setIsEditMode(true);
@@ -91,53 +112,52 @@ const Review = () => {
   };
 
   useEffect(() => {
-    let isMounted = true;
-    const source = axios.CancelToken.source();
-    axios({
-      method: 'get',
-      url: 'http://10.0.2.2:3000/api/v1/review/1',
-      headers: {
-        Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MTksIm1lbWJlcl9pZCI6NDUsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi6rmA6rG07JqwIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUE0bGo4Q3ppTThic0NMWXNLSjFwWUZBRG1UTU5kZnRrLW9ub28yWUVWMjF2T2JlU0RJRENHQ1FpVk5INVVETjlzWWNLREZWN1otNDRNZHZxR2FGUnpfemZNWlBabDNNaV9Vei1hMzJlYWNoOHhOWGJVZmFFNGYzUE9yUDMzZC15M1NTTXVLcEtqZ3Z6Z0Z3YkhGbU1KcXhlZWJSWDUtYUNnWUtBUlVTQVJBU0ZRR09jTm5DMlRKTDd1cGVMOWZGYlNlTkxRWjh5dzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDZUMDE6MzY6MTQuMDAwWiJ9LCJpYXQiOjE3MDA2NjExOTYsImV4cCI6MTcwMDY2NDc5Nn0.81ZmpGFeefqaXSWsPKCIMgC3UjuHC--RWXkCGiachCY',
-      },
-      cancelToken: source.token,
-    })
-      .then(response => {
-        if (isMounted) {
+    if (token) {
+      const source = axios.CancelToken.source();
+
+      axios({
+        method: 'get',
+        url: 'http://api.mars-port.duckdns.org/api/v1/review/1',
+        headers: {
+          Authorization: token,
+        },
+        cancelToken: source.token,
+      })
+        .then(response => {
           console.log('Success:', response.status);
+
           const extractedData = response.data.data.map(item => ({
             review_id: item.review_id,
             member_id: item.member_id,
             content: item.content,
             reg_date: item.reg_date,
           }));
-          setData(extractedData);
-        }
-      })
-      .catch(error => {
-        console.log('Error Message:', error.message);
-        console.log('Error Response:', error.response);
-        console.log('Error Request:', error.request);
-      });
 
-    return () => {
-      isMounted = false;
-      source.cancel('API 호출이 취소되었습니다.');
-    };
-  }, []);
+          setData(extractedData);
+        })
+        .catch(error => {
+          console.log('Error Message:', error.message);
+          console.log('Error Response:', error.response);
+          console.log('Error Request:', error.request);
+        });
+
+      return () => {
+        source.cancel('API 호출이 취소되었습니다.');
+      };
+    }
+  }, [token]);
 
   const postReview = async reviewText => {
     try {
       const response = await axios({
         method: 'post',
-        url: 'http://10.0.2.2:3000/api/v1/review',
+        url: 'http://api.mars-port.duckdns.org/api/v1/review',
         data: {
           ref_member_id: 1,
           content: reviewText,
         },
         headers: {
-          Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MTksIm1lbWJlcl9pZCI6NDUsInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi6rmA6rG07JqwIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUE0bGo4Q3ppTThic0NMWXNLSjFwWUZBRG1UTU5kZnRrLW9ub28yWUVWMjF2T2JlU0RJRENHQ1FpVk5INVVETjlzWWNLREZWN1otNDRNZHZxR2FGUnpfemZNWlBabDNNaV9Vei1hMzJlYWNoOHhOWGJVZmFFNGYzUE9yUDMzZC15M1NTTXVLcEtqZ3Z6Z0Z3YkhGbU1KcXhlZWJSWDUtYUNnWUtBUlVTQVJBU0ZRR09jTm5DMlRKTDd1cGVMOWZGYlNlTkxRWjh5dzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTAtMDZUMDE6MzY6MTQuMDAwWiJ9LCJpYXQiOjE3MDA2NjExOTYsImV4cCI6MTcwMDY2NDc5Nn0.81ZmpGFeefqaXSWsPKCIMgC3UjuHC--RWXkCGiachCY',
+          Authorization: token,
         },
       });
       console.log('Response', response.data);
@@ -170,34 +190,6 @@ const Review = () => {
         </View>
       </SafeAreaView>
       {
-        // <View style={styles.inputReviewContainer}>
-        //   {showReviewInput ? (
-        //     <View style={styles.inputTextContainer}>
-        //       <TextInput
-        //         style={styles.inputTextArea}
-        //         ref={newReviewInputRef}
-        //         multiline={true}
-        //         onChangeText={text => setReviewContent(text)}
-        //         placeholder="멤버의 리뷰를 입력해주세요."
-        //         returnKeyType="done"
-        //       />
-        //       <TouchableOpacity
-        //         style={styles.inputReviewButton}
-        //         onPress={() => {
-        //           postReview(reviewContent);
-        //           setShowReviewInput(false);
-        //         }}>
-        //         <Text style={styles.text}>등록</Text>
-        //       </TouchableOpacity>
-        //     </View>
-        //   ) : (
-        //     <TouchableOpacity
-        //       style={styles.reviewInputButton}
-        //       onPress={() => setShowReviewInput(true)}>
-        //       <Text style={styles.text}>리뷰 등록하기</Text>
-        //     </TouchableOpacity>
-        //   )}
-        // </View>
         <View style={styles.inputReviewContainer}>
           <TextInput
             style={styles.inputTextArea}
@@ -213,7 +205,6 @@ const Review = () => {
             onPress={() => {
               if (isEditMode) {
                 // 편집 모드일 경우 업데이트 로직 실행
-                // 예: updateReview(reviewId, reviewContent);
               } else {
                 // 새 리뷰 등록 로직 실행
                 postReview(reviewContent);
@@ -224,8 +215,36 @@ const Review = () => {
             <Text style={styles.text}>{isEditMode ? '수정' : '등록'}</Text>
           </TouchableOpacity>
         </View>
-      }
 
+        // <View style={styles.inputReviewContainer}>
+        // {showReviewInput ? (
+        // <View style={styles.inputTextContainer}>
+        // <TextInput
+        // style={styles.inputTextArea}
+        // ref={newReviewInputRef}
+        // multiline={true}
+        // onChangeText={text => setReviewContent(text)}
+        // placeholder="멤버의 리뷰를 입력해주세요."
+        // returnKeyType="done"
+        // />
+        // <TouchableOpacity
+        // style={styles.inputReviewButton}
+        // onPress={() => {
+        // postReview(reviewContent);
+        // setShowReviewInput(false);
+        // }}>
+        // <Text style={styles.text}>등록</Text>
+        // </TouchableOpacity>
+        // </View>
+        // ) : (
+        // <TouchableOpacity
+        // style={styles.reviewInputButton}
+        // onPress={() => setShowReviewInput(true)}>
+        // <Text style={styles.text}>리뷰 등록하기</Text>
+        // </TouchableOpacity>
+        // )}
+        // </View>
+      }
       <FloatingMenu />
     </View>
   );

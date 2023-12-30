@@ -85,6 +85,7 @@ const ContentsViewPop = ({
   const handleLinkPress = () => {
     Linking.openURL(message);
   };
+
   return (
     <PublicModal
       animationType={'slide'}
@@ -102,6 +103,8 @@ const ContentsViewPop = ({
           <TouchableOpacity
             onPress={() => {
               setContentsViewPopVisible(false); // pickBtn: 모달 영역 안 (DetailPopup X 닫기)
+              console.log('src 컨텐츠팝', src);
+              console.log('code 컨텐츠팝', code);
             }}>
             <Image source={closeblack}></Image>
           </TouchableOpacity>
@@ -109,11 +112,18 @@ const ContentsViewPop = ({
 
         <View style={styles.contentView}>
           <View style={styles.imageView}>
-            {code === '1' && (
+            {code === 1 && (
+              <View>
+                <Image
+                  source={{uri: src}}
+                  style={[styles.content, styles.image]}
+                />
+              </View>
+            )}
+            {code === 2 && (
               <View>
                 <Video
-                  ref={useRef(null)}
-                  source={src}
+                  source={{uri: src}}
                   style={styles.content}
                   controls={true}
                   repeat={true}
@@ -121,22 +131,16 @@ const ContentsViewPop = ({
                 />
               </View>
             )}
-
-            {code !== '1' && (
+            {code === 3 && (
               <View>
-                {id === '3' && (
-                  <TouchableOpacity
-                    style={[styles.input, styles.linkView]}
-                    onPress={() => handleLinkPress()}>
-                    <Image
-                      source={src}
-                      style={[styles.content, styles.image]}
-                    />
-                  </TouchableOpacity>
-                )}
-                {id !== '3' && portfolio && (
-                  <Image source={src} style={[styles.content, styles.image]} />
-                )}
+                <TouchableOpacity
+                  style={[styles.input, styles.linkView]}
+                  onPress={() => handleLinkPress()}>
+                  <Image
+                    source={{uri: src}}
+                    style={[styles.content, styles.image]}
+                  />
+                </TouchableOpacity>
               </View>
             )}
           </View>

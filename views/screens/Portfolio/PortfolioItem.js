@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -40,15 +40,65 @@ const styles = StyleSheet.create({
 });
 
 const PortfolioItem = ({
+  member_id,
   portfolio,
   id,
   title,
-  src,
   code,
+  file_id,
+  src,
+  ext,
+  del_yn,
   message,
   onModify,
   onDelete,
+  token,
 }) => {
+  // useEffect(() => {
+  //   const source = axios.CancelToken.source();
+  //   axios({
+  //     method: 'get',
+  //     url: `http://api.mars-port.duckdns.org/api/v1/portfolio`,
+  //     headers: {
+  //       Authorization: token,
+  //     },
+  //     cancelToken: source.token,
+  //   })
+  //     .then(function (response) {
+  //       const extractedData = response.data.data.map(item => ({
+  //         member_id: item.member_id,
+  //         portfolio_id: item.portfolio_id,
+  //         title: item.title,
+  //         description: item.description,
+  //         reg_date: item.reg_date,
+  //         mod_date: item.mod_date,
+  //         kind: item.kind,
+  //         file_id: item.file_id,
+  //         ext: item.ext,
+  //         url: `http://10.0.2.2:3000/${item.url.replace(
+  //           'http://172.20.10.4:3000/',
+  //           '',
+  //         )}`,
+  //         del_yn: item.del_yn,
+  //       }));
+  //       // setData(extractedData);
+
+  //       setData(extractedData);
+
+  //       console.log(
+  //         'portfolio--------------------------------------------------',
+  //       );
+  //       console.log(extractedData);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+
+  //   return () => {
+  //     isMounted = false;
+  //     source.cancel('API 호출이 취소되었습니다.');
+  //   };
+  // }, []);
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [detailPopVisible, setDetailPopVisible] = useState(false);
@@ -60,29 +110,37 @@ const PortfolioItem = ({
       <View style={[styles.gridItem]}>
         <TouchableOpacity
           onPress={() =>
-            id === '6'
-              ? setDetailPopVisible(!detailPopVisible)
-              : setContentsViewPopVisible(!contentsViewPopVisible)
+            // id === '6'
+            //   ? setDetailPopVisible(!detailPopVisible)
+            //   : setContentsViewPopVisible(!contentsViewPopVisible)
+            setContentsViewPopVisible(!contentsViewPopVisible)
           }
           onLongPress={() =>
-            id === '6'
-              ? setDetailPopVisible(!detailPopVisible)
-              : setIsModalVisible(!isModalVisible)
+            // id === '6'
+            //   ? setDetailPopVisible(!detailPopVisible)
+            //   : setIsModalVisible(!isModalVisible)
+            [
+              console.log(member_id),
+              member_id == '46' ? setIsModalVisible(!isModalVisible) : '',
+            ]
           }>
-          {code === '1' && (
+          {(code === 1 || code === 3) && (
+            <View>
+              <Image
+                source={{uri: src}}
+                style={[styles.content, styles.image]}
+              />
+            </View>
+          )}
+          {code === 2 && (
             <View>
               <Video
                 ref={useRef(null)}
-                source={src}
+                source={{uri: src}}
                 style={styles.content}
                 repeat={true}
                 resizeMode="contain"
               />
-            </View>
-          )}
-          {code !== '1' && (
-            <View>
-              <Image source={src} style={[styles.content, styles.image]} />
             </View>
           )}
         </TouchableOpacity>
@@ -102,14 +160,17 @@ const PortfolioItem = ({
         <EditMode
           portfolio={portfolio}
           id={id}
+          code={code}
           onModify={onModify}
           onDelete={onDelete}
           isModalVisible={isModalVisible}
-          setIsModalVisible={setIsModalVisible}></EditMode>
+          setIsModalVisible={setIsModalVisible}
+          token={token}></EditMode>
 
         <DetailPop
           id={id}
           onModify={onModify}
+          token={token}
           setDetailPopVisible={setDetailPopVisible}
           detailPopVisible={detailPopVisible}></DetailPop>
       </View>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -12,14 +12,17 @@ import {
   Dimensions,
   Image,
 } from 'react-native';
+import axios from 'axios';
 import Icon from 'react-native-vector-icons/AntDesign';
 import EmptyImg from '../../assets/images/Empty.png';
 import InterviewModal from '../components/InterviewModal';
 import Video from 'react-native-video';
 import InterviewAlert from '../components/InterviewAlert';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
+import {getVideoThumbnail} from 'react-native-video-thumbnails';
 
-const InterviewContents = ({ path }) => {
+const InterviewContents = ({id, path, token}) => {
+  const player = useRef(null);
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
 
   const [heart, setHeart] = useState(false); // 하트 상태
@@ -55,12 +58,28 @@ const InterviewContents = ({ path }) => {
       }
     }
   };
+  //하트 상태 변경
+  const fetchHeart = async () => {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: 'http://172.16.101.59:3000/api/v1/interview/heart/'+id,
+        headers: {
+          Authorization: token,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   //찜 기능
   const toggleHeart = () => {
     //video 데이터가 없을 땐 찜 기능 안되도록
     if (filePath !== undefined) {
       setHeart(previousState => !previousState);
       fillHeart();
+      fetchHeart();
     } else {
       // Alert.alert('데이터가 없습니다.');
       setShowAlert(true);
@@ -88,14 +107,14 @@ const InterviewContents = ({ path }) => {
       setIsPlaying(false);
       return () => {
         setIsPlaying(false);
-      }
-    }, [])
-  )
+      };
+    }, []),
+  );
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.iconBar}>
         <TouchableOpacity onPress={toggleHeart} style={styles.icon}>
-          {heart ? (
+          {!heart ? (
             <Icon name="heart" size={30} color={'red'} />
           ) : (
             <Icon name="heart" size={30} color={'#E4E3E8'} />
@@ -111,47 +130,28 @@ const InterviewContents = ({ path }) => {
         <TouchableWithoutFeedback
           onPress={() => {
             doubleTap();
+            console.log(filePath);
           }}
           onLongPress={() => setModalOpen(true)}>
           {/* 저장된 video가 있으w면 video 출력. 없으면  마스외전 로고 출력*/}
-          {filePath ? (
-            typeof filePath === "string" ? (  //filepath가 string일때
-              <Video
-                ref={useRef(null)}
-                source={{ uri: filePath }}
-                style={[styles.content]}
-                controls={false}
-                resizeMode="cover"
-                repeat={true}
-                paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
-                onEnd={() => {
-                  setIsPlaying(false);
-                }}
-              />
-            ) : ( //filepath가 파일일때
-              <Video
-                ref={useRef(null)}
-                source={filePath}
-                style={[styles.content]}
-                controls={false}
-                resizeMode="cover"
-                repeat={true}
-                paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
-                onEnd={() => {
-                  setIsPlaying(false);
-                }}
-              />
-            )
-          ) : (
-            <Image
-              resizeMode="cover"
-              source={EmptyImg}
-              style={styles.content}
-              imageStyle={styles.imgStyle}
-            />
-          )}
+          <Video
+            ref={player}
+            source={{uri: filePath}}
+            style={[styles.content]}
+            controls={false}
+            resizeMode="cover"
+            repeat={true}
+            paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
+            onEnd={() => {
+              setIsPlaying(false);
+            }}
+            onLoad={() => {
+              player.current.seek(0); // 로드가 완료되었을떄 첫 프레임이 썸네일처럼 보임
+            }}
+          />
         </TouchableWithoutFeedback>
         {/* Animated로 변경, opacity 값 */}
+
         <Animated.View style={[styles.animate, heartStyle(opacity).heart]}>
           {heart ? (
             <Icon name="heart" size={100} color={'white'} />

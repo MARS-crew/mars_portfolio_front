@@ -1,5 +1,6 @@
+import React, {useState, useEffect, useContext} from 'react';
 import {StyleSheet, Pressable, Text, View} from 'react-native';
-
+import {MyContext} from '../../../MyContext';
 import PublicModal from './PublicModal';
 import ChooseButton from './ChooseButton';
 
@@ -43,12 +44,13 @@ const styles = StyleSheet.create({
 
 const choosePop = ({
   //공통
-  title,
+  popTitle,
   setTogleButton,
   setIsModalVisible,
   isModalVisible,
   choosePopVisible,
   setChoosePopVisible,
+  token,
   //인터뷰
   interview,
   handleSave,
@@ -59,35 +61,140 @@ const choosePop = ({
   //포트폴리오
   portfolio,
   id,
+  code,
   setDetailPopVisible,
   onModify,
   onDelete,
   setCheckChoosePopOkButton,
   addPressedIf,
+
+  temporaryTitle,
+  setTemporaryTitle,
+  temporaryContent,
+  setTemporaryContent,
 }) => {
+  const {title, setTitle} = useContext(MyContext);
+  const {content, setContent} = useContext(MyContext);
+  const {portfolioUrl, setPortfolioUrl} = useContext(MyContext);
+  const {ext, setExt} = useContext(MyContext);
+
+  const sendDataToServer = async () => {
+    portfolioUrl.append('title', title);
+    portfolioUrl.append('description', content);
+    portfolioUrl.append('kind', 1);
+    console.log(portfolioUrl);
+    try {
+      const response = await fetch(
+        'http://api.mars-port.duckdns.org/api/v1/portfolio',
+        {
+          method: 'POST',
+          headers: {
+            // 'Content-Type': 'multipart/form-data',
+            Authorization: token,
+            body: portfolioUrl,
+          },
+        },
+      );
+
+      // console.log('POST kind', id);
+      console.log('POST url', portfolioUrl._parts);
+      //console.log('POST title', title);
+      // console.log('POST description', content);
+      //console.log('POST ext', ext);
+
+      const data = await response.json();
+      setPortfolioUrl('');
+      console.log('서버 응답:', data);
+    } catch (error) {
+      setPortfolioUrl('');
+      console.error('에러 발생:', error);
+    }
+  };
+
+  const editDataToServer = async () => {
+    portfolioUrl.append('title', title);
+    portfolioUrl.append('description', content);
+    portfolioUrl.append('kind', 1);
+    console.log('수정', portfolioUrl);
+    try {
+      const response = await fetch(
+        `http://api.mars-port.duckdns.org/api/v1/portfolio/${id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: token,
+          },
+          body: portfolioUrl,
+        },
+      );
+
+      // console.log('POST kind', id);
+      console.log('POST url', portfolioUrl);
+      //console.log('POST title', title);
+      // console.log('POST description', content);
+      //console.log('POST ext', ext);
+
+      const data = await response.json();
+      setPortfolioUrl('');
+      console.log('서버 응답:', data);
+    } catch (error) {
+      setPortfolioUrl('');
+      console.error('에러 발생:', error);
+    }
+  };
+
+  const deleteData = async () => {
+    fetch(`http://api.mars-port.duckdns.org/api/v1/portfolio/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Data deleted successfully:', data);
+        // 성공적으로 삭제됐을 때 실행할 코드
+      })
+      .catch(error => {
+        console.error('Error deleting data:', error);
+      });
+  };
+
   //공통 컴포넌트 츄즈 팝 스테이트 구분 컴포넌트: 확인 클릭 시
   const onDeleteORonModify = () => {
-    if (title === '수정된 내용을 삭제하시겠습니까?') {
+    if (popTitle === '수정된 내용을 삭제하시겠습니까?') {
       if (portfolio == true) {
         setCheckDeletePopOkButton(true);
+        console.log(id);
       } else if (interview == true) {
         setCheckDeletePopOkButton(true);
         deleteUrl();
       }
-    } else if (title === '수정된 내용을 저장하시겠습니까?') {
+    } else if (popTitle === '수정된 내용을 저장하시겠습니까?') {
       if (portfolio == true) {
         setCheckChoosePopOkButton(true);
         if (checkDeletePopOkButton == true) {
-          onDelete(id);
+          deleteData();
         } else if (checkDeletePopOkButton == false) {
-          onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
+          editDataToServer();
+          console.log(' POST url', portfolioUrl._parts);
+          console.log(' POST Title', title);
+          console.log(' POST Content', content);
+          //console.log('토큰', token);
         }
         setCheckDeletePopOkButton(false);
         setIsModalVisible(false);
         setTogleButton(false);
       } else if (addPressedIf == true) {
         setDetailPopVisible(false);
-        onModify(id); //개발 방식 검토중인 기능이므로 구현 미완료
+        sendDataToServer();
       } else if (interview == true) {
         if (checkDeletePopOkButton == false) handleSave();
         setTogleButton(false);
@@ -106,15 +213,15 @@ const choosePop = ({
     if (portfolio == true) {
       if (setTogleButton == true) setTogleButton(false);
     }
-    onDeleteORonModify();
     setChoosePopVisible(false);
+
+    onDeleteORonModify();
   };
 
   // ChoosePop Button onPress 용 Props 컴포넌트 end------------------------------------------------------------------------------------------------------------------------
 
   return (
     <PublicModal
-      id={id}
       onDelete={portfolio == true ? onDelete : null}
       onModify={portfolio == true ? onModify : null}
       isModalVisible={choosePopVisible}
@@ -122,7 +229,7 @@ const choosePop = ({
       <Pressable
         onPress={() => setChoosePopVisible(true)} // Pressable: Modal 영역 안 클릭 시 Modal 유지 구현을 위해 Pressable로 감싸서 적용
         style={styles.modalView}>
-        <Text style={styles.modalTitle}>{title}</Text>
+        <Text style={styles.modalTitle}>{popTitle}</Text>
         <View style={styles.chooseContainer}>
           {alert ? null : (
             <ChooseButton
