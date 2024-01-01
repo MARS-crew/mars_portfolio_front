@@ -107,9 +107,11 @@ const Review = ({token}) => {
     setShowReviewInput(true);
   };
 
-  const currentReviewContent = ({content}) => {
-    setReviewContent(content);
-  };
+  //todo id랑 member_id도 이렇게 받아와야 하지 않을까...
+
+  useEffect(() => {
+    console.log('currentReviewContent: ', reviewContent);
+  }, [reviewContent]);
 
   useEffect(() => {
     if (token) {
@@ -166,6 +168,25 @@ const Review = ({token}) => {
     }
   };
 
+  const updateReview = async (reviewId, member_id, reviewContent) => {
+    try {
+      const response = await axios({
+        method: 'put',
+        url: `http://api.mars-port.duckdns.org/api/v1/review/${reviewId}`,
+        data: {
+          member_id: member_id,
+          content: reviewContent,
+        },
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log('Response', response.data);
+    } catch (error) {
+      console.error('Error', error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <SafeAreaView>
@@ -182,7 +203,8 @@ const Review = ({token}) => {
                 imageType={item.imageType}
                 isLiked={item.isLiked}
                 onEdit={onEdit}
-                currentReviewContent={currentReviewContent}
+                currentReviewContent={setReviewContent}
+                token={token}
               />
             )}
             keyExtractor={(item, index) => index}
@@ -205,6 +227,7 @@ const Review = ({token}) => {
             onPress={() => {
               if (isEditMode) {
                 // 편집 모드일 경우 업데이트 로직 실행
+                updateReview(48, 65, reviewContent);
               } else {
                 // 새 리뷰 등록 로직 실행
                 postReview(reviewContent);

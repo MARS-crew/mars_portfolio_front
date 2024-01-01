@@ -68,6 +68,7 @@ const Login = () => {
                     // 토큰 가져오기
                     const cookie = response.headers.get('set-cookie');
 
+                    console.log(`로그인 결과`);
                     // 순수 토큰값을 가져오기 위한 전처리, 넘어오는 토큰 데이터의 형식이 'token={순수 토큰값}; Path' 형식으로 들어옴
                     const token = cookie.split('token=')[1].split(';')[0];
 

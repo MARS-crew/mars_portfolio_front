@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {
   Modal,
@@ -67,31 +67,14 @@ const EditMode = ({
   const [togleButton, setTogleButton] = useState(false);
   const [checkDeletePopOkButton, setCheckDeletePopOkButton] = useState(false); //삭제 츄즈 팝업에서 확인을 눌렀는지 감지하여 네비바의 저장을 눌렀을 시 ChoosePop이 뜨도록 함
   const [checkChoosePopOkButton, setCheckChoosePopOkButton] = useState(false); //디테일 팝업에서 확인을 눌렀는지 감지하여 네비바의 저장을 눌렀을 시 ChoosePop이 뜨도록 함
-
   // EditMode Button onPress 용 Props 컴포넌트 start------------------------------------------------------------------------------------------------------------------------
 
-  const editButton = async () => {
+  const editButton = async reviewContent => {
     //수정 섹션을 클릭한 경우
     // onEdit();
+    console.log('reviewContent', reviewContent);
     onEdit();
-    console.log(reviewContent);
-    try {
-      const response = await axios({
-        method: 'put',
-        url: 'http://api.mars-port.duckdns.org/api/v1/review',
-        data: {
-          member_id: 1,
-          content: reviewContent,
-        },
-        headers: {
-          Authorization: token,
-        },
-      });
-      console.log('Response', response.data);
-    } catch (error) {
-      console.error('Error', error);
-    }
-    // setTogleButton(false);
+    currentReviewContent(reviewContent);
   };
 
   const saveButton = () => {
@@ -108,7 +91,7 @@ const EditMode = ({
     try {
       const response = await axios({
         method: 'delete',
-        url: `http://api.mars-port.duckdns.org/v1/review/${reviewId}`,
+        url: `http://api.mars-port.duckdns.org/api/v1/review/${reviewId}`,
         data: {
           // DELETE 요청의 본문에 member_id를 포함 (이 방식은 API 설계에 따라 달라질 수 있음)
           member_id: memberId,
@@ -119,6 +102,7 @@ const EditMode = ({
         },
       });
       console.log('Delete response', response.data);
+      console.log('review deleted: ', token);
     } catch (error) {
       console.error('Error', error);
     }
@@ -167,9 +151,7 @@ const EditMode = ({
               title={'수정'}
               source={editingIcon}
               onPress={() => {
-                editButton();
-
-                currentReviewContent(reviewContent);
+                editButton(reviewContent);
               }}
             />
           )}
