@@ -8,6 +8,7 @@ const IndexProvider = ({ children }) => {
   const [dataIndex, setDataIndex] = useState(0);
   const [selectedMemId, setSelectedMemId] = useState(1);
   const [selectedGroupId, setSelectedGroupId] = useState(3);
+  const [selectedMember, setSelectedMember] = useState(false);
 
 
   const changeIndex = (newIndex) => {
@@ -25,8 +26,11 @@ const IndexProvider = ({ children }) => {
   const changeSelectedGroupId = (newId) => {
     setSelectedGroupId(newId);
   }
+  const changeSelectedMember = (bool) => {
+    setSelectedMember(bool);
+  }
   useEffect(() => {
-    console.log("현재 수직 인덱스 : ", currentIndex, " | 현재 수평 인덱스 : ", horizontalIndex, " | 선택된 그룹 : ", selectedGroupId, " | 선택된 멤버 : ", selectedMemId, " | 데이터인덱스 : ", dataIndex);
+    console.log("수직 인덱스 : ", currentIndex, " | 수평 인덱스 : ", horizontalIndex, " | 선택된 그룹 : ", selectedGroupId, " | 선택된 멤버 : ", selectedMemId, " | 데이터인덱스 : ", dataIndex);
   }, [currentIndex, horizontalIndex, selectedGroupId, selectedMemId, dataIndex]);
 
   return (
@@ -36,7 +40,8 @@ const IndexProvider = ({ children }) => {
         horizontalIndex, changeHorizontalIndex,
         dataIndex, changeDataIndex,
         selectedMemId, changeSelectedMemId,
-        selectedGroupId, changeSelectedGroupId
+        selectedGroupId, changeSelectedGroupId,
+        selectedMember, changeSelectedMember
       }}>
       {children}
     </IndexContext.Provider>

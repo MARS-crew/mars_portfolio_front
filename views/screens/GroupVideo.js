@@ -116,6 +116,7 @@ const GroupVideo = ({ token }) => {
     .value();
 
   const groups = Object.values(sortedAndGroupedData);
+
   useEffect(() => {
     if (swiperRef.current) {
       swiperRef.current.scrollToIndex({
@@ -131,10 +132,8 @@ const GroupVideo = ({ token }) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const newIndex = Math.round(offsetY / height);
     if (newIndex !== currentIndex) {
-      changeIndex(newIndex);
       if (newIndex < groups.length) {
         const newGroup = groups[newIndex][0].group;
-
         if (newGroup !== selectedGroupId) {
           changeSelectedGroupId(newGroup);
         }
@@ -146,6 +145,7 @@ const GroupVideo = ({ token }) => {
       const selectedGroupIndex = groups.findIndex(group => group[0].group == selectedGroupId);
       if (selectedGroupIndex !== -1 && currentIndex !== selectedGroupIndex) {
         changeIndex(selectedGroupIndex);
+        console.log("ㅁㅁ");
       }
     }
   }, [selectedGroupId, groups]);
