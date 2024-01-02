@@ -78,6 +78,10 @@ const choosePop = ({
   const {portfolioUrl, setPortfolioUrl} = useContext(MyContext);
   const {ext, setExt} = useContext(MyContext);
 
+  useEffect(() => {
+    console.log(`editToken ${token}`);
+  }, [token]);
+
   const sendDataToServer = async () => {
     portfolioUrl.append('title', title);
     portfolioUrl.append('description', content);
