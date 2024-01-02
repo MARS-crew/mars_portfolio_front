@@ -78,16 +78,19 @@ const Interview = ({ token }) => {
       setPrevSelectedMemId(selectedMemId);
       setPrevSelectedGroupId(selectedGroupId);
     }
-    // if (horizontalIndex == 2 && selectedMember) {
-    //   console.log("zz");
-    //   const memberIndex = data.findIndex(member => member.memberId === selectedMemId);
-    //   changeDataIndex(memberIndex);
-    //   changeSelectedMember(false);
-    // }
 
   }, [horizontalIndex, currentIndex]);
 
-
+  useEffect(() => {
+    if (selectedMember) {
+      if (horizontalIndex == 2 && selectedMember) {
+        console.log("zz");
+        const memberIndex = data.findIndex(member => member.memberId === selectedMemId);
+        changeDataIndex(memberIndex);
+        changeSelectedMember(false);
+      }
+    }
+  }, [selectedMember]);
 
 
 
