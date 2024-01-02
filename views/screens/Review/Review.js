@@ -117,8 +117,12 @@ const styles = StyleSheet.create({
 });
 
 const Review = ({ token }) => {
-  const { currentIndex, changeIndex } = useIndexContext();
-  const swiperRef = useRef(null);
+  const { currentIndex, changeIndex,
+    horizontalIndex, changeHorizontalIndex,
+    dataIndex, changeDataIndex,
+    selectedGroupId, changeSelectedGroupId,
+    selectedMemId, changeSelectedMemId,
+    selectedMember, changeSelectedMember } = useIndexContext();
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
       swiperRef.current.scrollToIndex({
