@@ -123,14 +123,6 @@ const Review = ({ token }) => {
     selectedGroupId, changeSelectedGroupId,
     selectedMemId, changeSelectedMemId,
     selectedMember, changeSelectedMember } = useIndexContext();
-  useEffect(() => {
-    if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
-      swiperRef.current.scrollToIndex({
-        index: currentIndex,
-        animated: true,
-      });
-    }
-  }, [currentIndex, swiperRef]);
 
   const height = Dimensions.get('window').height;
   const handleScroll = event => {
@@ -170,7 +162,8 @@ const Review = ({ token }) => {
     axios({
       method: 'get',
 
-      url: 'http://api.mars-port.duckdns.org/api/v1/review/1',
+      // url: `http://api.mars-port.duckdns.org/api/v1/review/${selectedMemId}`,
+      url: `http://172.20.10.4:3000/api/v1/review/${selectedMemId}`,
 
       headers: {
         Authorization: token,
@@ -226,7 +219,7 @@ const Review = ({ token }) => {
         url: 'http://10.0.2.2:3000/api/v1/review',
 
         data: {
-          ref_member_id: 1,
+          ref_member_id: selected,
 
           content: reviewText,
         },
