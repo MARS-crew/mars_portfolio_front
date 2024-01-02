@@ -90,8 +90,12 @@ const Portfolio = ({ token }) => {
 
   const [detailPopVisible, setDetailPopVisible] = useState(false);
   const [data, setData] = useState([]);
-  const [portfolio, setPortfolio] = useState(true);
-  const member_id = 46;
+
+  const [fileIdLength, setFileIdLength] = useState(null);
+  const [portfolio, setPortfolio] = useState(true); //포트폴리오 페이지인지 확인하는 스테이트
+  // const numColumns = 2;
+  // const itemWidth = (Dimensions.get('window').width - 10) / numColumns; // 각 항목의 너비 계산
+  const member_id = 44;
 
   const transformDataForSwiper = data => {
     const transformedData = data.map(groupItems =>
@@ -114,11 +118,13 @@ const Portfolio = ({ token }) => {
   };
 
   useEffect(() => {
+    console.log(`Token 포트폴리오: ${token}`);
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
       // url: `http://api.mars-port.duckdns.org:3000/api/v1/portfolio`,
       url: `http://172.20.10.4:3000/api/v1/portfolio`,
+
       headers: {
         Authorization: token,
       },
@@ -142,6 +148,7 @@ const Portfolio = ({ token }) => {
           )}`,
           del_yn: item.del_yn,
         }));
+
         const sortedAndGroupedData = _.chain(extractedData)
           .sortBy('group_id, member_id')
           .groupBy('member_id')
@@ -154,6 +161,7 @@ const Portfolio = ({ token }) => {
 
         console.log('portfolio--------------------------------------------------');
         console.log(groups);
+
       })
       .catch(function (error) {
         console.log(error);
@@ -162,7 +170,7 @@ const Portfolio = ({ token }) => {
     return () => {
       source.cancel('API 호출이 취소되었습니다.');
     };
-  }, []);
+  }, [token]);
 
   const onModify = id => {
     Alert.alert(

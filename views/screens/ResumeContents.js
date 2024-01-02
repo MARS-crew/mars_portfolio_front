@@ -11,6 +11,36 @@ import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
 
+const Title = [
+  {
+    id: '1',
+    name: '간단소개',
+  },
+  {
+    id: '2',
+    name: '기본정보',
+  },
+  {
+    id: '3',
+    name: '경력',
+  },
+  {
+    id: '4',
+    title: '수상내역',
+  },
+  {
+    id: '5',
+    title: '관심분야',
+  },
+  {
+    id: '6',
+    title: '전문분야',
+  },
+  {
+    id: '7',
+    title: '보유기술',
+  },
+];
 
 const DATA = [
   {
@@ -31,12 +61,12 @@ const fetchResume = async ({ token }) => {
   try {
     const response = await axios({
       method: 'get',
-      url: 'http://172.20.10.4:3000/api/v1/resume',
+      url: 'http://api.mars-port.duckdns.org/api/v1/resume/56',
+      // url: 'http://172.20.10.4:3000/api/v1/resume',
       headers: {
         Authorization: token,
       },
     });
-
 
     const extractedData = {
       // ***** 아래 데이터 지우지 말아주세요 *****
@@ -56,12 +86,14 @@ const fetchResume = async ({ token }) => {
       // rank: response.data.data.rank, //직급
       // duty: response.data.data.duty, //업무
       // group_id: response.data.data.group_id, //그룹아이디
-      data: response.data.data
+      data: response.data.data,
     };
-    console.log('제발제발제발' + extractedData.data[0].resume_id)
+
+    // const parseData = JSON.parse(extractedData);
+    //  console.log(extractedData.)
+    console.log(extractedData.data[0].technology);
 
     return extractedData;
-
   } catch (error) {
     console.error(error);
   }
@@ -99,6 +131,15 @@ const Resume = ({ token }) => {
   });
 
   useEffect(() => {
+    console.log(`Token 이력서: ${token}`);
+    const fetchData = async () => {
+      const data = await fetchResume({ token });
+      setResumeData(data);
+    };
+    fetchData();
+  }, [token]);
+
+  useEffect(() => {
     const fetchData = async () => {
       const data = await fetchResume({ token });
       setResumeData(data);
@@ -130,6 +171,16 @@ const Resume = ({ token }) => {
         )}
       </TouchableOpacity>
     );
+  };
+
+  const handleItemLayout = (event, index) => {
+    const { height } = event.nativeEvent.layout;
+    // 각 항목의 높이 저장
+    setItemHeights(prevHeights => {
+      const updatedHeights = [...prevHeights];
+      updatedHeights[index] = height;
+      return updatedHeights;
+    });
   };
 
 

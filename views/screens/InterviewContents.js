@@ -63,13 +63,11 @@ const InterviewContents = ({ id, path, token }) => {
     try {
       const response = await axios({
         method: 'post',
-
         url: 'http://api.mars-port.duckdns.org/api/v1/interview/heart/' + id,
         headers: {
           Authorization: token,
         },
       });
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }

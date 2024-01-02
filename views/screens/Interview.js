@@ -92,58 +92,47 @@ const Interview = ({ token }) => {
 
 
   useEffect(() => {
-    const source = axios.CancelToken.source();
+    if (token) {
+      console.log(`Token 인터뷰 : ${token}`);
+      const source = axios.CancelToken.source();
+      axios({
+        method: 'get',
+        // url: 'http://api.mars-port.duckdns.org/api/v1/interview/44',
+        url: 'http://172.20.10.4:3000/api/v1/interview/',
+        headers: {
+          Authorization: token,
+        },
+        cancelToken: source.token,
+      })
+        .then(function (response) {
+          const extractedData = response.data.data.map(item => ({
+            groupId: item.group_id,
+            memberId: item.member_id, //사용자 아이디
+            url: `http://10.0.2.2:3000/${item.url.replace(
+              'http://172.20.10.4:3000/',
+              '',
+            )}`, //인터뷰 url
+            heart: item.heart, //찜하기 여부
+          }));
+          // setData(extractedData);
+          const sortedAndGroupedData = _.chain(extractedData)
+            .sortBy('groupId', 'memberId')
+            .uniqBy('memberId')
+            .value();
 
-    const fetchData = async () => {
-      try {
-        const response = await axios({
-          method: 'get',
-          // url: `http://api.mars-port.duckdns.org:3000/api/v1/interview`,
-          url: 'http://172.20.10.4:3000/api/v1/interview/',
-          headers: {
-            Authorization: token,
-          },
-          cancelToken: source.token,
+          setData(Object.values(sortedAndGroupedData));
+          console.log(data);
+        })
+        .catch(function (error) {
+          console.log(error);
         });
 
-        const extractedData = response.data.data.map(item => ({
-          groupId: item.group_id,
-          memberId: item.member_id,
-          url: `http://10.0.2.2:3000/${item.url.replace(
-            'http://172.20.10.4:3000/',
-            '',
-          )}`,
-          heart: item.heart,
-        }));
-
-        const sortedAndGroupedData = _.chain(extractedData)
-          .sortBy('groupId', 'memberId')
-          .uniqBy('memberId')
-          .value();
-
-        setData(Object.values(sortedAndGroupedData));
-        console.log(data);
-      } catch (error) {
-        if (axios.isCancel(error)) {
-          console.log('Request canceled', error.message);
-        } else {
-          console.log(error);
-        }
-      } finally {
+      return () => {
+        isMounted = false;
         source.cancel('API 호출이 취소되었습니다.');
-      }
-    };
-
-    fetchData();
-
-    // Cleanup function
-    return () => {
-      // Cancel the API call if the component is unmounted
-      console.log('Component unmounted. Cancelling API call.');
-      source.cancel('API 호출이 취소되었습니다.');
-    };
+      };
+    }
   }, [token]);
-
 
   return (
     <SafeAreaView style={styles.container}>

@@ -78,6 +78,9 @@ const ContentsViewPop = ({
   setContentsViewPopVisible,
   //마이페이지 프롭스
   myPage,
+  //리뷰 프롭스
+  userName,
+  reviewText,
 }) => {
   const handleLinkPress = () => {
     Linking.openURL(message);

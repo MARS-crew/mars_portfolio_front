@@ -121,8 +121,8 @@ const MyPage = ({ token }) => {
     try {
       const response = await axios({
         method: 'get',
-        // url: 'http://api.mars-port.duckdns.org/api/v1/mypage/1',
-        url: 'http://172.20.10.4:3000/api/v1/myPage/' + 47, //'로그인 한 본인 아이디'
+        url: 'http://api.mars-port.duckdns.org/api/v1/mypage/1',
+        // url: 'http://172.20.10.4:3000/api/v1/myPage/' + 47, //'로그인 한 본인 아이디'
         headers: {
           Authorization: token,
         },
@@ -135,7 +135,6 @@ const MyPage = ({ token }) => {
         log_total: response.data.data.totalCount,
         visitLog: response.data.data.visitLog,
       };
-      console.log(extractedData);
 
       setData(extractedData);
 
@@ -183,6 +182,7 @@ const MyPage = ({ token }) => {
   };
 
   useEffect(() => {
+    console.log(`Token 마이페이지: ${token}`);
     fetchData();
     return () => {
       isMounted = false;
@@ -190,12 +190,12 @@ const MyPage = ({ token }) => {
     };
   }, [token]); // token이 의존성 배열에 들어가도록 수정
 
-  const handleDelete = async (visitId) => {
+  const handleDelete = async visitId => {
     try {
       // DELETE로 서버에서 항목 삭제
       await axios({
         method: 'delete',
-        url: `http://192.168.0.2:3000/api/v1/visit/delete/${visitId}`,
+        url: `http://172.16.101.59:3000/api/v1/visit/delete/${visitId}`,
         headers: {
           Authorization: token,
         },
@@ -209,16 +209,19 @@ const MyPage = ({ token }) => {
     }
   };
 
-  const renderDeleteButton = (visitId) => (
+  const renderDeleteButton = visitId => (
     <TouchableOpacity
       onPress={() => handleDelete(visitId)}
-      style={{ backgroundColor: 'red', padding: 10, justifyContent: 'center', alignItems: 'center', height: 45 }}
-    >
+      style={{
+        backgroundColor: 'red',
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 45,
+      }}>
       <Text style={{ color: 'white', fontSize: 14 }}>삭제</Text>
     </TouchableOpacity>
   );
-
-
   const handleButton1Press = () => {
     setButton1Pressed(true);
     setButton2Pressed(false);
