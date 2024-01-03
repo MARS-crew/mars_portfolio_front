@@ -26,130 +26,84 @@ const shadowColor = 'rgba(151, 151, 151, 0.36)';
 const styles = StyleSheet.create({
   userImage: {
     width: 35,
-
     height: 35,
-
     marginRight: 10,
   },
-
   imageThumb: {
     width: 18,
-
     height: 18,
   },
-
   userName: {
     fontSize: 16,
-
     fontWeight: 'bold',
-
     marginRight: 10,
-
     color: '#000000',
   },
-
   date: {
     marginTop: 2,
-
     fontSize: 12,
-
     color: '#9e9e9e',
   },
-
   reviewText: {
     fontSize: 14,
-
     color: '#000000',
   },
-
   container: {
     width: '100%',
-
     height: 150,
-
     padding: 15,
-
     marginVertical: 10,
-
     backgroundColor: '#fff',
-
     borderWidth: 1,
-
     borderRadius: 10,
-
     flexDirection: 'row',
-
     borderColor: '#cccccc',
   },
-
   container2: {
     width: '100%',
-
     flexDirection: 'row',
-
     borderColor: '#cccccc',
   },
-
   userContentContainer: {
     flex: 1,
   },
-
   userContentContainerTop: {
     flexDirection: 'row',
   },
-
   userContentContainerBottom: {
     marginTop: 10,
   },
-
   userContentContainerTopElement: {
     flex: 1,
   },
-
   reviewTextContainer: {
     height: '100%',
   },
-
   editReviewText: {
     width: '100%',
-
     textAlignVertical: 'top',
-
     textAlign: 'left',
   },
 });
 
 const ReviewItem = ({
   review,
-
   id,
-
   writer,
-
   date,
-
   content,
-
   imageType,
-
   isLiked,
-
   currentReviewContent,
-
   onEdit,
-
   onDelete,
+  token,
 }) => {
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
-
   const [reviewContent, setReviewContent] = useState(content);
-
   const [isReviewLiked, setIsReviewLiked] = useState(isLiked);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
-
   const [isEditMode, setIsEditMode] = useState(false);
-
   const inputRef = useRef();
 
   return (
@@ -175,7 +129,6 @@ const ReviewItem = ({
             <View style={styles.userContentContainerTop}>
               <View style={styles.userContentContainerTopElement}>
                 <Text style={styles.userName}>{writer}</Text>
-
                 <Text style={styles.date}>{date}</Text>
               </View>
 
@@ -227,9 +180,7 @@ const ReviewItem = ({
           reviewContent={reviewContent}
           onEdit={() => {
             onEdit();
-
             setIsModalVisible(!isModalVisible);
-
             setIsEditMode(!isEditMode);
           }}
           onCancel={() => {
@@ -240,6 +191,7 @@ const ReviewItem = ({
           onDelete={onDelete}
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
+          token={token}
         />
       </View>
     </Shadow>

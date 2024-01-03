@@ -3,7 +3,7 @@ import {TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
 
 const LoginButton = props => {
   return (
-    <TouchableOpacity style={styles.button}>
+    <TouchableOpacity style={styles.button} onPress={props.handleLoginPress}>
       <Image source={props.src} style={styles.image} />
       <Text style={styles.title}>{props.title}</Text>
     </TouchableOpacity>

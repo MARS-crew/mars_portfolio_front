@@ -1,16 +1,45 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, View, FlatList, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, FlatList, Image, Dimensions } from 'react-native';
 import ResumeBox from '../components/ResumeBox';
 import ResumeBoxMD from '../components/ResumeBoxMD';
 import FAB from '../components/FloatingMenu';
-import ResumeEditMode from "../components/ResumeEditMode";
+import ResumeEditMode from '../components/ResumeEditMode';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import { useIndexContext } from '../../IndexContext';
 import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
+import { useIndexContext } from '../../IndexContext';
 import axios from 'axios';
 
-const { width, height } = Dimensions.get('window');
-
+const Title = [
+  {
+    id: '1',
+    name: '간단소개',
+  },
+  {
+    id: '2',
+    name: '기본정보',
+  },
+  {
+    id: '3',
+    name: '경력',
+  },
+  {
+    id: '4',
+    title: '수상내역',
+  },
+  {
+    id: '5',
+    title: '관심분야',
+  },
+  {
+    id: '6',
+    title: '전문분야',
+  },
+  {
+    id: '7',
+    title: '보유기술',
+  },
+];
 
 const DATA = [
   {
@@ -31,12 +60,11 @@ const fetchResume = async ({ token }) => {
   try {
     const response = await axios({
       method: 'get',
-      url: 'http://172.20.10.4:3000/api/v1/resume',
+      url: 'http://api.mars-port.duckdns.org/api/v1/resume',
       headers: {
         Authorization: token,
       },
     });
-
 
     const extractedData = {
       // ***** 아래 데이터 지우지 말아주세요 *****
@@ -56,29 +84,29 @@ const fetchResume = async ({ token }) => {
       // rank: response.data.data.rank, //직급
       // duty: response.data.data.duty, //업무
       // group_id: response.data.data.group_id, //그룹아이디
-      data: response.data.data
+      data: response.data.data,
     };
-    console.log('제발제발제발' + extractedData.data[0].resume_id)
-
+    // const parseData = JSON.parse(extractedData);
+    //  console.log(extractedData.)
+    console.log(extractedData.data[0].technology);
     return extractedData;
-
   } catch (error) {
     console.error(error);
   }
 };
 
 const Resume = ({ token }) => {
-  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId } = useIndexContext();
+  const { currentIndex, changeIndex } = useIndexContext();
   const swiperRef = useRef(null);
   const [itemHeights, setItemHeights] = useState({});
   const [resumeData, setResumeData] = useState(null);
   const height = Dimensions.get('window').height;
-  // const handleScroll = event => {
-  //   const offsetY = event.nativeEvent.contentOffset.y;
-  //   const newIndex = Math.round(offsetY / height);
-  //   changeIndex(newIndex);
-  //   console.log(currentIndex);
-  // };
+  const handleScroll = event => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const newIndex = Math.round(offsetY / height);
+    changeIndex(newIndex);
+    console.log(currentIndex);
+  };
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [resume, setResume] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
   const toggleModal = () => {
@@ -92,28 +120,25 @@ const Resume = ({ token }) => {
     });
   };
   const keyExtractor = item => item.id;
-  const getItemLayout = (data, index) => ({
-    length: itemHeights[index],
-    offset: itemHeights[index] * index,
-    index,
-  });
 
   useEffect(() => {
+    console.log(`Token 이력서: ${token}`);
     const fetchData = async () => {
       const data = await fetchResume({ token });
       setResumeData(data);
+      console.log("data ", data);
     };
     fetchData();
   }, [token]);
 
-  // useEffect(() => {
-  //   if (swiperRef.current > 0 && currentIndex !== undefined) {
-  //     swiperRef.current.scrollToIndex({
-  //       index: currentIndex,
-  //       animated: true,
-  //     });
-  //   }
-  // }, [currentIndex, swiperRef]);
+  useEffect(() => {
+    if (swiperRef.current > 0 && currentIndex !== undefined) {
+      swiperRef.current.scrollToIndex({
+        index: currentIndex,
+        animated: false,
+      });
+    }
+  }, [currentIndex, swiperRef]);
 
   const Item = ({ item, index }) => {
     return (
@@ -132,20 +157,30 @@ const Resume = ({ token }) => {
     );
   };
 
+  const handleItemLayout = (event, index) => {
+    const { height } = event.nativeEvent.layout;
+    // 각 항목의 높이 저장
+    setItemHeights(prevHeights => {
+      const updatedHeights = [...prevHeights];
+      updatedHeights[index] = height;
+      return updatedHeights;
+    });
+  };
 
   return (
     <View style={styles.container}>
       <FlatList
-        // ref={swiperRef}
-        vertical={true}
+        ref={swiperRef}
         data={DATA}
         renderItem={({ item, index, token }) => (
           <Item item={item} index={index} token={token} />
         )}
         keyExtractor={keyExtractor}
         removeClippedSubviews={true}
-      // initialScrollIndex={currentIndex}
-      // onScroll={handleScroll}
+        initialScrollIndex={currentIndex}
+        onScroll={handleScroll}
+      // listKey={(item, index) => `swiperFlatList_${index}_${item[0].member_id}`}
+
       />
       <FAB />
       <ResumeEditMode

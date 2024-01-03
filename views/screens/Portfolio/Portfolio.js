@@ -78,8 +78,6 @@ const Portfolio = ({ token }) => {
     if (horizontalIndex == 3) {
       if (selectedData) {
         changeSelectedMemId(selectedData[0].member_id);
-        console.log("cc");
-        console.log(selectedData);
         if (selectedData[0].group_id !== selectedGroupId) {
           changeSelectedGroupId(selectedData[0].group_id);
         }
@@ -90,8 +88,9 @@ const Portfolio = ({ token }) => {
 
   const [detailPopVisible, setDetailPopVisible] = useState(false);
   const [data, setData] = useState([]);
-  const [portfolio, setPortfolio] = useState(true);
-  const member_id = 46;
+
+  const [fileIdLength, setFileIdLength] = useState(null);
+  const [portfolio, setPortfolio] = useState(true); //포트폴리오 페이지인지 확인하는 스테이트
 
   const transformDataForSwiper = data => {
     const transformedData = data.map(groupItems =>
@@ -114,11 +113,11 @@ const Portfolio = ({ token }) => {
   };
 
   useEffect(() => {
+    console.log(`Token 포트폴리오: ${token}`);
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      // url: `http://api.mars-port.duckdns.org:3000/api/v1/portfolio`,
-      url: `http://172.20.10.4:3000/api/v1/portfolio`,
+      url: `http://api.mars-port.duckdns.org/api/v1/portfolio/`,
       headers: {
         Authorization: token,
       },
@@ -151,9 +150,6 @@ const Portfolio = ({ token }) => {
         const groups = Object.values(sortedAndGroupedData);
         const transformedData = transformDataForSwiper(groups);
         setData(transformedData);
-
-        console.log('portfolio--------------------------------------------------');
-        console.log(groups);
       })
       .catch(function (error) {
         console.log(error);
@@ -162,7 +158,7 @@ const Portfolio = ({ token }) => {
     return () => {
       source.cancel('API 호출이 취소되었습니다.');
     };
-  }, []);
+  }, [token]);
 
   const onModify = id => {
     Alert.alert(
@@ -178,66 +174,6 @@ const Portfolio = ({ token }) => {
     );
   };
 
-  const Item = ({
-    item: groupItem,
-    index,
-    portfolio,
-    onModify,
-    onDelete,
-    detailPopVisible,
-    setDetailPopVisible,
-    token,
-  }) => {
-    const shadowColor = 'rgba(151, 151, 151, 0.36)';
-    return (
-      <View style={styles.container}>
-        <SafeAreaView>
-          <ScrollView>
-            <View style={styles.gridView}>
-              {/* {groupItems.map((singleItem, index) => ( */}
-              <View style={styles.gridItem} key={groupItem.member_id}>
-                <PortfolioItem
-                  portfolio={portfolio}
-                  onModify={onModify}
-                  onDelete={onDelete}
-                  member_id={groupItem.member_id}
-                  id={groupItem.portfolio_id}
-                  title={groupItem.title}
-                  message={groupItem.description}
-                  reg_date={groupItem.reg_date}
-                  mod_date={groupItem.mod_date}
-                  code={groupItem.kind}
-                  file_id={groupItem.file_id}
-                  src={groupItem.url}
-                  ext={groupItem.ext}
-                  del_yn={groupItem.del_yn}
-                  token={token}
-                />
-              </View>
-              {/* ))} */}
-              <Shadow distance="12" startColor={shadowColor} offset={[15, 15]}>
-                <TouchableOpacity
-                  style={styles.gridItem}
-                  onPress={() => setDetailPopVisible(!detailPopVisible)}>
-                  <View>
-                    <Image source={addBtn} style={styles.content} />
-                  </View>
-                </TouchableOpacity>
-              </Shadow>
-              <DetailPop
-                code={1}
-                register={true}
-                onModify={onModify}
-                setDetailPopVisible={setDetailPopVisible}
-                detailPopVisible={detailPopVisible}
-                token={token}
-              />
-            </View>
-          </ScrollView>
-        </SafeAreaView>
-      </View>
-    );
-  };
   const shadowColor = 'rgba(151, 151, 151, 0.36)';
 
   const renderItem = ({ item: groupItems }) => (
@@ -246,7 +182,7 @@ const Portfolio = ({ token }) => {
         <ScrollView>
           <View style={styles.gridView}>
             {groupItems.map(singleItem => (
-              <View style={styles.gridItem} key={singleItem.portfolio_id}>
+              <View style={styles.gridItem} key={singleItem.portfolio_id.toString()}>
                 <PortfolioItem
                   portfolio={portfolio}
                   onModify={onModify}
@@ -299,6 +235,7 @@ const Portfolio = ({ token }) => {
         index={dataIndex}
         onScroll={handleVerticalScroll}
         hideShadow
+        listKey={(item, index) => `swiperFlatList_${index}_${item[0].member_id}`}
       />
       <FAB />
     </SafeAreaView>
