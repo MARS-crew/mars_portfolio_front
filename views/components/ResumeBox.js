@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, FlatList } from "react-native";
+import { View, Text, StyleSheet, Image, FlatList, Dimensions } from "react-native";
 import { Resume } from '../screens/ResumeContents'
 import Id7Popup from "./Id7Popup";
 import { Shadow } from 'react-native-shadow-2';
@@ -18,6 +18,9 @@ import springboot_icon from '../../assets/images/devIcon/springboot.png'
 
 import { help } from "yargs";
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 // const IntroContent = ({ item, data }) => {
 //     const containerStyles = { ...styles.container, marginTop: 20 }
@@ -213,6 +216,8 @@ const SpecialityContent = ({ specialities }) => {
                 data={specialData}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => <SpecialityItem speciality={item} />}
+                listKey={(item, index) => `swiperFlatList_${item.member_id}_${item.specialty_id}`}
+
             />
         </Shadow>
     );
@@ -241,7 +246,7 @@ const SkillItem = ({ skill }) => {
 const SkillContent = ({ technology }) => {
     const technologyData = JSON.parse(technology);
     const containerStyles = { ...styles.container, paddingBottom: 12, };
-    console.log(technology)
+    // console.log(technology)
 
     return (
         <Shadow
@@ -262,6 +267,9 @@ const SkillContent = ({ technology }) => {
                     horizontal={false}
                     numColumns={2} // 두 열로 표시
                     contentContainerStyle={styles.devContainer}
+                    listKey={(item, index) => `swiperFlatList_${item.member_id}_${item.technology_id}`}
+
+
                 />
             </View>
         </Shadow>
@@ -270,37 +278,41 @@ const SkillContent = ({ technology }) => {
 
 
 const ResumeBox = ({ item, data, index }) => {
-    if (!data || !data.data || !data.data[index]) {
-        return <View />;
-    }
+    // if (!data || !data.data || !data.data[index]) {
+    //     return <View />;
+    // }
 
-    const resumeItem = data.data[index];
+    // const resumeItem = data.data[index];
 
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.boxFrame}>
             <View style={styles.resumeBoxContainer}>
                 {/* <IntroContent item={item} data={resumeItem.introduce} /> */}
                 <InfoContent
                     item={item}
-                    name={resumeItem.name}
-                    tel={resumeItem.tel}
-                    addr={resumeItem.addr}
-                    email={resumeItem.email}
+                    // name={item.name}
+                    // tel={item.tel}
+                    // addr={item.addr}
+                    // email={item.email}
+                    name={item.name}
+                    tel={item.tel}
+                    addr={item.addr}
+                    email={item.email}
                 />
                 <CareerContent
                     item={item}
-                    carreer={resumeItem.career}
+                    carreer={item.career}
                 />
                 {/* <AwardContent 
                 item={item} 
-                award_name={resumeItem.award_name}
-                date={resumeItem.date}
-                issuer={resumeItem.issuer}
+                award_name={item.award_name}
+                date={item.date}
+                issuer={item.issuer}
                  /> */}
                 {/* <InterestContent item={item} data={data} /> */}
-                <SpecialityContent item={item} specialities={resumeItem.specialities} />
-                <SkillContent item={item} technology={resumeItem.technology} />
+                <SpecialityContent item={item} specialities={item.specialities} />
+                <SkillContent item={item} technology={item.technology} />
             </View>
         </View>
     );
@@ -309,6 +321,8 @@ const ResumeBox = ({ item, data, index }) => {
 const styles = StyleSheet.create({
     boxFrame: {
         flex: 1,
+        height: SCREEN_HEIGHT,
+
     },
     resumeBoxContainer: {
         paddingTop: 10,

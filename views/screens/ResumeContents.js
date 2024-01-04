@@ -4,11 +4,14 @@ import ResumeBox from '../components/ResumeBox';
 import ResumeBoxMD from '../components/ResumeBoxMD';
 import FAB from '../components/FloatingMenu';
 import ResumeEditMode from '../components/ResumeEditMode';
+import _ from 'lodash';  // lodash 라이브러리 사용
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
 import { useIndexContext } from '../../IndexContext';
 import axios from 'axios';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const Title = [
   {
@@ -60,7 +63,8 @@ const fetchResume = async ({ token }) => {
   try {
     const response = await axios({
       method: 'get',
-      url: 'http://api.mars-port.duckdns.org/api/v1/resume',
+      // url: 'http://api.mars-port.duckdns.org/api/v1/resume',
+      url: 'http://172.20.10.4:3000/api/v1/resume',
       headers: {
         Authorization: token,
       },
@@ -88,7 +92,8 @@ const fetchResume = async ({ token }) => {
     };
     // const parseData = JSON.parse(extractedData);
     //  console.log(extractedData.)
-    console.log(extractedData.data[0].technology);
+    // console.log(extractedData.data[0].technology);
+
     return extractedData;
   } catch (error) {
     console.error(error);
@@ -96,16 +101,31 @@ const fetchResume = async ({ token }) => {
 };
 
 const Resume = ({ token }) => {
-  const { currentIndex, changeIndex } = useIndexContext();
-  const swiperRef = useRef(null);
+  const { currentIndex, changeIndex,
+    horizontalIndex, changeHorizontalIndex,
+    dataIndex, changeDataIndex,
+    selectedGroupId, changeSelectedGroupId,
+    selectedMemId, changeSelectedMemId,
+    selectedMember, changeSelectedMember } = useIndexContext(); const swiperRef = useRef(null);
   const [itemHeights, setItemHeights] = useState({});
-  const [resumeData, setResumeData] = useState(null);
+  const [resumeData, setResumeData] = useState([]);
   const height = Dimensions.get('window').height;
-  const handleScroll = event => {
+  // 스와이프 진행시 인덱스 변경
+  const handleVerticalScroll = event => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const newIndex = Math.round(offsetY / height);
-    changeIndex(newIndex);
-    console.log(currentIndex);
+    const selectedData = resumeData[newIndex];
+
+    if (horizontalIndex == 4) {
+      if (selectedData) {
+        changeSelectedMemId(selectedData.member_id);
+        console.log("dd");
+        if (selectedData.group_id !== selectedGroupId) {
+          changeSelectedGroupId(selectedData.group_id);
+        }
+      }
+      changeDataIndex(newIndex);
+    }
   };
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [resume, setResume] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
@@ -125,11 +145,17 @@ const Resume = ({ token }) => {
     console.log(`Token 이력서: ${token}`);
     const fetchData = async () => {
       const data = await fetchResume({ token });
-      setResumeData(data);
-      console.log("data ", data);
+      const sortedAndGroupedData = _.chain(data['data'])
+        .sortBy(['group_id, member_id'])
+        .value();
+      setResumeData(sortedAndGroupedData);
+      console.log(sortedAndGroupedData);
     };
     fetchData();
   }, [token]);
+  useEffect(() => {
+    console.log("dasta: ", resumeData);
+  }, [resumeData]);
 
   useEffect(() => {
     if (swiperRef.current > 0 && currentIndex !== undefined) {
@@ -157,29 +183,21 @@ const Resume = ({ token }) => {
     );
   };
 
-  const handleItemLayout = (event, index) => {
-    const { height } = event.nativeEvent.layout;
-    // 각 항목의 높이 저장
-    setItemHeights(prevHeights => {
-      const updatedHeights = [...prevHeights];
-      updatedHeights[index] = height;
-      return updatedHeights;
-    });
-  };
+
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <SwiperFlatList
         ref={swiperRef}
-        data={DATA}
+        vertical={true}
+        data={resumeData}
         renderItem={({ item, index, token }) => (
           <Item item={item} index={index} token={token} />
         )}
-        keyExtractor={keyExtractor}
-        removeClippedSubviews={true}
-        initialScrollIndex={currentIndex}
-        onScroll={handleScroll}
-      // listKey={(item, index) => `swiperFlatList_${index}_${item[0].member_id}`}
+        // keyExtractor={keyExtractor}
+        index={dataIndex}
+        onScroll={handleVerticalScroll}
+        listKey={(item, index) => `swiperFlatList_${index}_${item.resume_id}`}
 
       />
       <FAB />
