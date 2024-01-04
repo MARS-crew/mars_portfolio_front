@@ -128,7 +128,7 @@ const MyPage = ({ token }) => {
     try {
       const response = await axios({
         method: 'get',
-        url: 'http://api.mars-port.duckdns.org/api/v1/mypage/' + selectedMemId,
+        url: 'http://api.mars-port.duckdns.org/api/v1/mypage/' + selectedMemId, // 로그인할때 로그인 멤버아이디값가져오기
         headers: {
           Authorization: token,
         },
@@ -228,7 +228,6 @@ const MyPage = ({ token }) => {
       <Text style={{ color: 'white', fontSize: 14 }}>삭제</Text>
     </TouchableOpacity>
   );
-
   const handleButton1Press = () => {
     setButton1Pressed(true);
     setButton2Pressed(false);

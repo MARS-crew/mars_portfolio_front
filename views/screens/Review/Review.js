@@ -89,7 +89,6 @@ const Review = ({ token }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const newReviewInputRef = useRef(null);
 
-
   const onEdit = () => {
     setIsEditMode(true);
     setShowReviewInput(true);

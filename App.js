@@ -127,24 +127,12 @@ const App = () => {
 };
 
 const HomeScreen = () => {
-  const { token } = useToken(
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDQyNzkwMTIsImV4cCI6MTcwNDI4MjYxMn0.c9PDaviyLbHGBz4C8dfH97SvAqmQCAQAG-KXqneEAMg',
-  );
+
+  const { token } = useToken();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
-  // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InNuc19pZCI6MjMsIm1lbWJlcl9pZCI6NDksInR5cGUiOiJnb29nbGUiLCJuYW1lIjoi7J2R7J6JIiwiYWNjZXNzX3Rva2VuIjoieWEyOS5hMEFmQl9ieUFZOXJJMktuYzZjNnh2QW5sWGhqZjRFOFZOaEZRRXZQeS1oT2hzZDE1LVNka1lDSGZ0YVUxaXJXV1FsNGRSa3RXTnliM3BUX0FUNGtxU09VY0oycDV2ek5Cb0tSZnBsdHUyNE1GNE5vMkZaeTRDRWR4akRuRVJEdExfam5wQ2RPTXpERXRqQlZpdmd6RU84M3o0a3hoU0ZGQ2ZtaF92YUNnWUtBZjhTQVJJU0ZRSEdYMk1pRVpVS2xYYmRHY1Jyb09FZElnVDhYdzAxNzEiLCJyZWZyZXNoX3Rva2VuIjpudWxsLCJhdXRoX2NvZGUiOm51bGwsImNvbm5lY3RfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiJ9LCJpYXQiOjE3MDQyMDE2NjEsImV4cCI6MTcwNDIwNTI2MX0.5o8VNBGNw8ruqnEYKKsTL-mtoldmw6edi39WPugSas4';
-  const {
-    currentIndex,
-    changeIndex,
-    horizontalIndex,
-    changeHorizontalIndex,
-    dataIndex,
-    changeDataIndex,
-    selectedMemId,
-    changeSelectedMemId,
-    selectedGroupId,
-  } = useIndexContext();
+  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId, selectedGroupId } = useIndexContext();
   const [oldIndex, setOldIndex] = useState(horizontalIndex);
   const horizontalScrollRef = useRef(null);
 
@@ -235,6 +223,7 @@ const HomeScreen = () => {
             <MyPage token={token} options={{ headerShown: false }} />
           </Screen>
         </AnimatedScrollView>
+
       </MyProvider>
     </TokenProvider>
   );
