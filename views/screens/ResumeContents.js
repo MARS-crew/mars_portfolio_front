@@ -11,8 +11,6 @@ import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
 import { useIndexContext } from '../../IndexContext';
 import axios from 'axios';
 
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-
 const Title = [
   {
     id: '1',
@@ -146,10 +144,9 @@ const Resume = ({ token }) => {
     const fetchData = async () => {
       const data = await fetchResume({ token });
       const sortedAndGroupedData = _.chain(data['data'])
-        .sortBy(['group_id, member_id'])
+        .sortBy(['group_id', 'member_id'])
         .value();
       setResumeData(sortedAndGroupedData);
-      console.log(sortedAndGroupedData);
     };
     fetchData();
   }, [token]);
