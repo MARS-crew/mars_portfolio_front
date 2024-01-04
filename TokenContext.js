@@ -1,14 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {createContext, useState, useContext} from 'react';
+import React, { createContext, useState, useContext } from 'react';
 
 const TokenContext = createContext({
   token: null,
-  storeToken: () => {},
+  storeToken: () => { },
 });
 
 export const useToken = () => useContext(TokenContext);
 
-export const TokenProvider = ({children}) => {
+export const TokenProvider = ({ children }) => {
   const [token, setToken] = useState(null);
 
   const storeToken = async newToken => {
@@ -21,7 +21,7 @@ export const TokenProvider = ({children}) => {
   };
 
   return (
-    <TokenContext.Provider value={{token, storeToken}}>
+    <TokenContext.Provider value={{ token, storeToken }}>
       {children}
     </TokenContext.Provider>
   );

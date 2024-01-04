@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Animated,
   Dimensions,
@@ -23,14 +23,16 @@ import Share from './views/screens/Share';
 
 import GroupVideo from './views/screens/GroupVideo';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {useNavigation} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import AppContext from './AppContext`';
-import {MyProvider} from './MyContext';
-import {IndexProvider, useIndexContext} from './IndexContext';
-import {TokenProvider, useToken} from './TokenContext';
+import { MyProvider } from './MyContext';
+import { IndexProvider, useIndexContext } from './IndexContext';
+import { TokenProvider, useToken } from './TokenContext';
+
+const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -51,7 +53,7 @@ const Stack = createStackNavigator();
 const transitionAnimation = index => {
   return {
     transform: [
-      {perspective: 800},
+      { perspective: 800 },
       {
         scale: xOffset.interpolate({
           inputRange: [
@@ -88,44 +90,60 @@ const transitionAnimation = index => {
 
 const App = () => {
   return (
-    <TokenProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Help"
-            component={Help}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Share"
-            component={Share}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Album"
-            component={Album}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{headerShown: false}}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </TokenProvider>
+    <IndexProvider>
+      <TokenProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Help"
+              component={Help}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Share"
+              component={Share}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Album"
+              component={Album}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </TokenProvider>
+    </IndexProvider>
   );
 };
 
 const HomeScreen = () => {
+
+  const { token } = useToken();
+
   const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
-  const {token} = useToken();
+  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId, selectedGroupId } = useIndexContext();
+  const [oldIndex, setOldIndex] = useState(horizontalIndex);
+  const horizontalScrollRef = useRef(null);
+
+  useEffect(() => {
+    if (horizontalScrollRef.current) {
+      horizontalScrollRef.current.scrollTo({
+        x: horizontalIndex * SCREEN_WIDTH,
+        animated: true,
+      });
+    }
+  }, [horizontalIndex, horizontalScrollRef]);
 
   useEffect(() => {
     AsyncStorage.getItem('isSplashVisible').then(value => {
@@ -153,68 +171,72 @@ const HomeScreen = () => {
   }, [token]);
   // const [indexValue, setIndexValue] = useState(0);
 
-  // const userSettings = {
-  //   swiperIndex: indexValue,
-  //   setIndexValue,
-  // };
-  // console.log(ind);
+  const handleScroll = event => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+
+    const newIndex = Math.round(offsetX / SCREEN_WIDTH);
+    // 변경된 인덱스를 처리하는 함수 호출
+    if (oldIndex !== newIndex) {
+      changeHorizontalIndex(newIndex);
+      setOldIndex(newIndex);
+      // console.log("newIndex: ", newIndex, ", oldIndex: ", oldIndex, ", horizontalIndex: ", horizontalIndex);
+    }
+  };
 
   return (
     <TokenProvider>
-      <IndexProvider>
-        <MyProvider>
-          <Animated.ScrollView
-            scrollEventThrottle={16}
-            onScroll={Animated.event(
-              [{nativeEvent: {contentOffset: {x: xOffset}}}],
-              {
-                useNativeDriver: true,
-              },
-            )}
-            horizontal
-            pagingEnabled
-            style={styles.scrollView}>
-            <Splash isSplashVisible={isSplashVisible} />
-            {token ? ( // 로그인 전이면 그룹 페이지만, 로그인 후면 전체 페이지
-              <>
-                {isSplashVisible === false ? (
-                  <Screen text="Screen 1" index={0}>
-                    <WhichGroup token={token} />
-                  </Screen>
-                ) : null}
-                <Screen text="Screen 2" index={1}>
-                  <GroupVideo token={token} />
+      <MyProvider>
+        <AnimatedScrollView
+          ref={horizontalScrollRef}
+          scrollEventThrottle={16}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: xOffset } } }],
+            {
+              useNativeDriver: true,
+              listener: handleScroll,
+            },
+          )}
+          horizontal
+          pagingEnabled
+          style={styles.scrollView}>
+          {token ? ( // 로그인 전이면 그룹 페이지만, 로그인 후면 전체 페이지
+            <>
+              {isSplashVisible === false ? (
+                <Screen text="Screen 1" index={0}>
+                  <WhichGroup token={token} />
                 </Screen>
-                <Screen text="Screen 3" index={2}>
-                  <Interview token={token} />
+              ) : null}
+              <Screen text="Screen 2" index={1}>
+                <GroupVideo token={token} />
+              </Screen>
+              <Screen text="Screen 3" index={2}>
+                <Interview token={token} />
+              </Screen>
+              <Screen text="Screen 4" index={3}>
+                <Portfolio token={token} options={{ headerShown: false }} />
+              </Screen>
+              <Screen text="Screen 5" index={4}>
+                <Resume token={token} />
+              </Screen>
+              <Screen text="Screen 6" index={5}>
+                <Review token={token} />
+              </Screen>
+              <Screen text="Screen 7" index={6}>
+                <MyPage token={token} options={{ headerShown: false }} />
+              </Screen>
+            </>
+          ) : (
+            <>
+              {isSplashVisible === false ? (
+                <Screen text="Screen 1" index={0}>
+                  <WhichGroup token={token} />
                 </Screen>
-                <Screen text="Screen 4" index={3}>
-                  <Portfolio token={token} options={{headerShown: false}} />
-                </Screen>
-                <Screen text="Screen 5" index={4}>
-                  <Resume token={token} />
-                </Screen>
-                <Screen text="Screen 6" index={5}>
-                  <Review token={token} />
-                </Screen>
-                <Screen text="Screen 7" index={6}>
-                  <MyPage token={token} options={{headerShown: false}} />
-                </Screen>
-              </>
-            ) : (
-              <>
-                {isSplashVisible === false ? (
-                  <Screen text="Screen 1" index={0}>
-                    <WhichGroup token={token} />
-                  </Screen>
-                ) : null}
-              </>
-            )}
-          </Animated.ScrollView>
-        </MyProvider>
-        {/* </AppContext.Provider> */}
-      </IndexProvider>
-    </TokenProvider>
+              ) : null}
+            </>
+          )}
+        </AnimatedScrollView>
+      </MyProvider>
+    </TokenProvider >
   );
 };
 

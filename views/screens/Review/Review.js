@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import {useIndexContext} from '../../../IndexContext';
+import { useIndexContext } from '../../../IndexContext';
 import ReviewItem from '../Review/ReviewItem';
 import FloatingMenu from '../../components/FloatingMenu';
 
@@ -75,9 +75,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const Review = ({token}) => {
-  const {currentIndex, changeIndex} = useIndexContext();
-  const swiperRef = useRef(null);
+const Review = ({ token }) => {
+  const { currentIndex, changeIndex,
+    horizontalIndex, changeHorizontalIndex,
+    dataIndex, changeDataIndex,
+    selectedGroupId, changeSelectedGroupId,
+    selectedMemId, changeSelectedMemId,
+    selectedMember, changeSelectedMember } = useIndexContext(); const swiperRef = useRef(null);
   const [data, setData] = useState([]);
   const [review, isReview] = useState(true);
   const [showReviewInput, setShowReviewInput] = useState(false);
@@ -85,26 +89,13 @@ const Review = ({token}) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const newReviewInputRef = useRef(null);
 
-  useEffect(() => {
-    if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
-      swiperRef.current.scrollToIndex({
-        index: currentIndex,
-        animated: true,
-      });
-    }
-  }, [currentIndex, swiperRef]);
-
-  const height = Dimensions.get('window').height;
-  const handleScroll = event => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const newIndex = Math.round(offsetY / height);
-    // IndexData.setIndexValue(index);
-    changeIndex(newIndex);
-  };
-
   const onEdit = () => {
     setIsEditMode(true);
     setShowReviewInput(true);
+  };
+
+  const currentReviewContent = ({ content }) => {
+    setReviewContent(content);
   };
 
   //todo id랑 member_id도 이렇게 받아와야 하지 않을까...
@@ -119,7 +110,7 @@ const Review = ({token}) => {
 
       axios({
         method: 'get',
-        url: 'http://api.mars-port.duckdns.org/api/v1/review/1',
+        url: `http://api.mars-port.duckdns.org/api/v1/review/${selectedMemId}`,
         headers: {
           Authorization: token,
         },
@@ -134,20 +125,20 @@ const Review = ({token}) => {
             content: item.content,
             reg_date: item.reg_date,
           }));
-
           setData(extractedData);
         })
         .catch(error => {
-          console.log('Error Message:', error.message);
+          // console.log('Error Message:', error.message);
           console.log('Error Response:', error.response);
-          console.log('Error Request:', error.request);
+          // console.log('Error Request:', error.request);
+          setData([]);
         });
 
       return () => {
         source.cancel('API 호출이 취소되었습니다.');
       };
     }
-  }, [token]);
+  }, [token, selectedMemId]);
 
   const postReview = async reviewText => {
     try {
@@ -155,7 +146,7 @@ const Review = ({token}) => {
         method: 'post',
         url: 'http://api.mars-port.duckdns.org/api/v1/review',
         data: {
-          ref_member_id: 1,
+          ref_member_id: selected,
           content: reviewText,
         },
         headers: {
@@ -191,24 +182,27 @@ const Review = ({token}) => {
     <View style={styles.container}>
       <SafeAreaView>
         <View style={styles.itemView}>
-          <FlatList
-            data={data}
-            renderItem={({item}) => (
-              <ReviewItem
-                review={review}
-                id={item.review_id}
-                writer={item.member_id}
-                date={item.reg_date}
-                content={item.content}
-                imageType={item.imageType}
-                isLiked={item.isLiked}
-                onEdit={onEdit}
-                currentReviewContent={setReviewContent}
-                token={token}
-              />
-            )}
-            keyExtractor={(item, index) => index}
-          />
+          {data.length > 0 ? (
+            <FlatList
+              data={data}
+              renderItem={({ item }) => (
+                <ReviewItem
+                  review={review}
+                  id={item.review_id}
+                  writer={item.member_id}
+                  date={item.reg_date}
+                  content={item.content}
+                  imageType={item.imageType}
+                  isLiked={item.isLiked}
+                  onEdit={onEdit}
+                  currentReviewContent={setReviewContent}
+                  token={token}
+                />
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          ) : null
+          }
         </View>
       </SafeAreaView>
       {

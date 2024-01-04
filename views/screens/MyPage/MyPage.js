@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,14 +8,15 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import {Shadow} from 'react-native-shadow-2';
+import { Shadow } from 'react-native-shadow-2';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
 import SectionChooseBtn from '../../components/commonComponent/SectionChooseBtn';
 import Title from '../../components/commonComponent/Title';
 import LogList from './LogList';
 import axios from 'axios';
-import {log} from 'react-native-reanimated';
+import { log } from 'react-native-reanimated';
+import { useIndexContext } from '../../../IndexContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 15,
   },
-  visitSubContainer: {alignItems: 'center', flex: 1},
+  visitSubContainer: { alignItems: 'center', flex: 1 },
   visitSubCenterLine: {
     borderRightColor: '#EEEEEE',
     borderRightWidth: 1,
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#FDFDFD',
   },
-  item: {paddingVertical: 12, paddingHorizontal: 15},
+  item: { paddingVertical: 12, paddingHorizontal: 15 },
   log: {
     paddingHorizontal: 15,
   },
@@ -96,7 +97,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const MyPage = ({token}) => {
+const MyPage = ({ token }) => {
+  const { currentIndex, changeIndex,
+    horizontalIndex, changeHorizontalIndex,
+    dataIndex, changeDataIndex,
+    selectedGroupId, changeSelectedGroupId,
+    selectedMemId, changeSelectedMemId,
+    selectedMember, changeSelectedMember } = useIndexContext();
   const [myPage, setMyPage] = useState(true);
   const [data, setData] = useState([]);
   let jsonArray = [];
@@ -116,12 +123,12 @@ const MyPage = ({token}) => {
   const [hiddenItem, setHiddenItem] = useState(true);
   const shadowColor = 'rgba(151, 151, 151, 0.36)';
 
+
   const fetchData = async () => {
     try {
       const response = await axios({
         method: 'get',
-        url: 'http://api.mars-port.duckdns.org/api/v1/mypage/1',
-        // url: 'http://192.168.0.2:3000/api/v1/myPage/' + 47, //'로그인 한 본인 아이디'
+        url: 'http://api.mars-port.duckdns.org/api/v1/mypage/' + selectedMemId, // 로그인할때 로그인 멤버아이디값가져오기
         headers: {
           Authorization: token,
         },
@@ -218,10 +225,9 @@ const MyPage = ({token}) => {
         alignItems: 'center',
         height: 45,
       }}>
-      <Text style={{color: 'white', fontSize: 14}}>삭제</Text>
+      <Text style={{ color: 'white', fontSize: 14 }}>삭제</Text>
     </TouchableOpacity>
   );
-
   const handleButton1Press = () => {
     setButton1Pressed(true);
     setButton2Pressed(false);
@@ -243,7 +249,7 @@ const MyPage = ({token}) => {
     setHiddenItem(false);
   }; // buttonPressed 1~3의 Pressed 여부로 나머지 버튼의 토글 여부를 결정
 
-  const VisitSubContainer = ({title, value}) => {
+  const VisitSubContainer = ({ title, value }) => {
     return (
       <View style={styles.visitSubContainer}>
         <Title color={'black'} fontSize={16} fontWeight={'700'}>
@@ -262,7 +268,7 @@ const MyPage = ({token}) => {
         <View>
           <FlatList
             data={ListData.ListData}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() =>
                   button2Pressed == true
@@ -293,11 +299,11 @@ const MyPage = ({token}) => {
     );
   };
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <Swipeable renderRightActions={() => renderDeleteButton(item.visit_id)}>
       <View style={styles.list}>
         <TouchableOpacity style={styles.item}>
-          <Text style={{color: 'black'}}>
+          <Text style={{ color: 'black' }}>
             {noLog ? `${item}` : `${item.name}님이 방문하였습니다.`}
           </Text>
         </TouchableOpacity>
