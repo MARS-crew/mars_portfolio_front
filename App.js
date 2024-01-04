@@ -163,6 +163,7 @@ const HomeScreen = () => {
     AsyncStorage.setItem('isSplashVisible', JSON.stringify(isSplashVisible));
   }, [isSplashVisible]);
 
+  // 토큰값 수신 확인 및 반영
   useEffect(() => {
     if (token) {
       console.log('Token 메인: ', token);
@@ -198,34 +199,44 @@ const HomeScreen = () => {
           horizontal
           pagingEnabled
           style={styles.scrollView}>
-          <Splash isSplashVisible={isSplashVisible} />
-          {isSplashVisible === false ? (
-            <Screen text="Screen 1" index={0}>
-              <WhichGroup token={token} />
-            </Screen>
-          ) : null}
-          <Screen text="Screen 2" index={1}>
-            <GroupVideo token={token} />
-          </Screen>
-          <Screen text="Screen 3" index={2}>
-            <Interview token={token} />
-          </Screen>
-          <Screen text="Screen 4" index={3}>
-            <Portfolio token={token} options={{ headerShown: false }} />
-          </Screen>
-          <Screen text="Screen 5" index={4}>
-            <Resume token={token} />
-          </Screen>
-          <Screen text="Screen 6" index={5}>
-            <Review token={token} />
-          </Screen>
-          <Screen text="Screen 7" index={6}>
-            <MyPage token={token} options={{ headerShown: false }} />
-          </Screen>
+          {token ? ( // 로그인 전이면 그룹 페이지만, 로그인 후면 전체 페이지
+            <>
+              {isSplashVisible === false ? (
+                <Screen text="Screen 1" index={0}>
+                  <WhichGroup token={token} />
+                </Screen>
+              ) : null}
+              <Screen text="Screen 2" index={1}>
+                <GroupVideo token={token} />
+              </Screen>
+              <Screen text="Screen 3" index={2}>
+                <Interview token={token} />
+              </Screen>
+              <Screen text="Screen 4" index={3}>
+                <Portfolio token={token} options={{ headerShown: false }} />
+              </Screen>
+              <Screen text="Screen 5" index={4}>
+                <Resume token={token} />
+              </Screen>
+              <Screen text="Screen 6" index={5}>
+                <Review token={token} />
+              </Screen>
+              <Screen text="Screen 7" index={6}>
+                <MyPage token={token} options={{ headerShown: false }} />
+              </Screen>
+            </>
+          ) : (
+            <>
+              {isSplashVisible === false ? (
+                <Screen text="Screen 1" index={0}>
+                  <WhichGroup token={token} />
+                </Screen>
+              ) : null}
+            </>
+          )}
         </AnimatedScrollView>
-
       </MyProvider>
-    </TokenProvider>
+    </TokenProvider >
   );
 };
 
