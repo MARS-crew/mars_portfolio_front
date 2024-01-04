@@ -140,14 +140,26 @@ const GroupVideo = ({ token }) => {
       }
     }
   };
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (selectedMemId !== -1) {
+  //     const selectedGroupIndex = groups.findIndex(group => group[0].group == selectedGroupId);
+  //     if (selectedGroupIndex !== -1 && currentIndex !== selectedGroupIndex) {
+  //       changeIndex(selectedGroupIndex);
+  //     }
+  //   }
+  // }, [selectedGroupId, groups]);
+
+  const selectedGroupFechData = async () => {
     if (selectedMemId !== -1) {
       const selectedGroupIndex = groups.findIndex(group => group[0].group == selectedGroupId);
       if (selectedGroupIndex !== -1 && currentIndex !== selectedGroupIndex) {
         changeIndex(selectedGroupIndex);
-        console.log("ㅁㅁ");
       }
     }
+  };
+
+  useEffect(() => {
+    selectedGroupFechData();
   }, [selectedGroupId, groups]);
 
   const renderGroup = ({ item: groupItems }) => (

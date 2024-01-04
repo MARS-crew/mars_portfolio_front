@@ -129,7 +129,6 @@ const MyPage = ({ token }) => {
       const response = await axios({
         method: 'get',
         url: 'http://api.mars-port.duckdns.org/api/v1/mypage/' + selectedMemId,
-        // url: 'http://172.20.10.4:3000/api/v1/myPage/' + selectedMemId, //'로그인 한 본인 아이디'
         headers: {
           Authorization: token,
         },

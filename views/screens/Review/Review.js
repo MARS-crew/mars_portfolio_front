@@ -89,22 +89,6 @@ const Review = ({ token }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const newReviewInputRef = useRef(null);
 
-  useEffect(() => {
-    if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
-      swiperRef.current.scrollToIndex({
-        index: currentIndex,
-        animated: true,
-      });
-    }
-  }, [currentIndex, swiperRef]);
-
-  const height = Dimensions.get('window').height;
-  const handleScroll = event => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const newIndex = Math.round(offsetY / height);
-    // IndexData.setIndexValue(index);
-    // changeIndex(newIndex);
-  };
 
   const onEdit = () => {
     setIsEditMode(true);
@@ -128,8 +112,6 @@ const Review = ({ token }) => {
       axios({
         method: 'get',
         url: `http://api.mars-port.duckdns.org/api/v1/review/${selectedMemId}`,
-        // url: `http://172.20.10.4:3000/api/v1/review/${selectedMemId}`,
-
         headers: {
           Authorization: token,
         },
@@ -144,20 +126,20 @@ const Review = ({ token }) => {
             content: item.content,
             reg_date: item.reg_date,
           }));
-
           setData(extractedData);
         })
         .catch(error => {
-          console.log('Error Message:', error.message);
+          // console.log('Error Message:', error.message);
           console.log('Error Response:', error.response);
-          console.log('Error Request:', error.request);
+          // console.log('Error Request:', error.request);
+          setData([]);
         });
 
       return () => {
         source.cancel('API 호출이 취소되었습니다.');
       };
     }
-  }, [token]);
+  }, [token, selectedMemId]);
 
   const postReview = async reviewText => {
     try {
@@ -201,24 +183,27 @@ const Review = ({ token }) => {
     <View style={styles.container}>
       <SafeAreaView>
         <View style={styles.itemView}>
-          <FlatList
-            data={data}
-            renderItem={({ item }) => (
-              <ReviewItem
-                review={review}
-                id={item.review_id}
-                writer={item.member_id}
-                date={item.reg_date}
-                content={item.content}
-                imageType={item.imageType}
-                isLiked={item.isLiked}
-                onEdit={onEdit}
-                currentReviewContent={setReviewContent}
-                token={token}
-              />
-            )}
-            keyExtractor={(item, index) => index}
-          />
+          {data.length > 0 ? (
+            <FlatList
+              data={data}
+              renderItem={({ item }) => (
+                <ReviewItem
+                  review={review}
+                  id={item.review_id}
+                  writer={item.member_id}
+                  date={item.reg_date}
+                  content={item.content}
+                  imageType={item.imageType}
+                  isLiked={item.isLiked}
+                  onEdit={onEdit}
+                  currentReviewContent={setReviewContent}
+                  token={token}
+                />
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          ) : null
+          }
         </View>
       </SafeAreaView>
       {

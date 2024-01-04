@@ -61,8 +61,7 @@ const fetchResume = async ({ token }) => {
   try {
     const response = await axios({
       method: 'get',
-      // url: 'http://api.mars-port.duckdns.org/api/v1/resume',
-      url: 'http://172.20.10.4:3000/api/v1/resume',
+      url: 'http://api.mars-port.duckdns.org/api/v1/resume',
       headers: {
         Authorization: token,
       },
@@ -105,9 +104,9 @@ const Resume = ({ token }) => {
     selectedGroupId, changeSelectedGroupId,
     selectedMemId, changeSelectedMemId,
     selectedMember, changeSelectedMember } = useIndexContext(); const swiperRef = useRef(null);
-  const [itemHeights, setItemHeights] = useState({});
   const [resumeData, setResumeData] = useState([]);
   const height = Dimensions.get('window').height;
+
   // 스와이프 진행시 인덱스 변경
   const handleVerticalScroll = event => {
     const offsetY = event.nativeEvent.contentOffset.y;
@@ -117,7 +116,6 @@ const Resume = ({ token }) => {
     if (horizontalIndex == 4) {
       if (selectedData) {
         changeSelectedMemId(selectedData.member_id);
-        console.log("dd");
         if (selectedData.group_id !== selectedGroupId) {
           changeSelectedGroupId(selectedData.group_id);
         }
@@ -150,18 +148,15 @@ const Resume = ({ token }) => {
     };
     fetchData();
   }, [token]);
-  useEffect(() => {
-    console.log("dasta: ", resumeData);
-  }, [resumeData]);
 
   useEffect(() => {
-    if (swiperRef.current > 0 && currentIndex !== undefined) {
+    if (swiperRef.current && resumeData.length > 0 && currentIndex !== undefined) {
       swiperRef.current.scrollToIndex({
-        index: currentIndex,
-        animated: false,
+        index: dataIndex,
+        animated: true,
       });
     }
-  }, [currentIndex, swiperRef]);
+  }, [dataIndex, swiperRef]);
 
   const Item = ({ item, index }) => {
     return (

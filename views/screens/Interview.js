@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import _, { first } from 'lodash';  // lodash 라이브러리 사용
+import _ from 'lodash';  // lodash 라이브러리 사용
 import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
 import { useIndexContext } from '../../IndexContext';
 import { TokenProvider, useToken } from '../../TokenContext';
@@ -50,10 +50,9 @@ const Interview = ({ token }) => {
     const newIndex = Math.round(offsetY / height);
     const selectedData = data[newIndex];
 
-    if (horizontalIndex == 2) {
+    if (horizontalIndex == 2 && !selectedMember) {
       if (selectedData) {
         changeSelectedMemId(selectedData.memberId);
-        console.log("dd");
         if (selectedData.groupId !== selectedGroupId) {
           changeSelectedGroupId(selectedData.groupId);
         }
@@ -73,7 +72,7 @@ const Interview = ({ token }) => {
       return -1;
     };
 
-    if (horizontalIndex == 1) {
+    if (horizontalIndex == 1 && !selectedMember) {
       const firstMemberIndex = findFirstMemberIndexInGroup(selectedGroupId);
       changeSelectedMemId(firstMemberIndex !== -1 ? data[firstMemberIndex].memberId : 1);
       changeDataIndex(firstMemberIndex !== -1 ? firstMemberIndex : 0);
@@ -83,16 +82,13 @@ const Interview = ({ token }) => {
 
   }, [horizontalIndex, currentIndex]);
 
-  // useEffect(() => {
-  //   if (selectedMember) {
-  //     if (horizontalIndex == 2 && selectedMember) {
-  //       console.log("zz");
-  //       const memberIndex = data.findIndex(member => member.memberId === selectedMemId);
-  //       changeDataIndex(memberIndex);
-  //       changeSelectedMember(false);
-  //     }
-  //   }
-  // }, [selectedMember]);
+  useEffect(() => {
+    if (selectedMember) {
+      const memberIndex = data.findIndex(member => member.memberId === selectedMemId);
+      changeDataIndex(memberIndex);
+      changeSelectedMember(false);
+    }
+  }, [selectedMember]);
 
 
 
@@ -102,8 +98,7 @@ const Interview = ({ token }) => {
       const source = axios.CancelToken.source();
       axios({
         method: 'get',
-        // url: 'http://api.mars-port.duckdns.org/api/v1/interview/',
-        url: 'http://172.20.10.4:3000/api/v1/interview/',
+        url: 'http://api.mars-port.duckdns.org/api/v1/interview/',
         headers: {
           Authorization: token,
         },
@@ -126,7 +121,6 @@ const Interview = ({ token }) => {
             .value();
 
           setData(Object.values(sortedAndGroupedData));
-          console.log(sortedAndGroupedData);
         })
         .catch(function (error) {
           console.log(error);
