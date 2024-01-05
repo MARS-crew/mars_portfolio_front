@@ -4,6 +4,7 @@ import WebView from 'react-native-webview';
 import LoginButton from '../components/LoginButton';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useToken } from '../../TokenContext';
+import { useUser } from '../../LoginUserContext';
 
 // 디바이스 크기
 const width = Dimensions.get('window').width;
@@ -14,6 +15,7 @@ const Login = () => {
   const [loginUrl, setLoginUrl] = useState(''); // 접속 url 설정을 위한 변수
   const navigation = useNavigation(); // 로그인 성공 후 로그인 페이지를 호출하기 이전 페이지(그룹)로 넘기기 위한 네비게이션 객체
   const { token, storeToken } = useToken();
+  const { user, storeUser } = useUser();
 
   // 로그인 버튼 클릭 핸들러 - 각 버튼 유형에 대응하여 url 할당
   const handleLoginPress = type => {
@@ -75,6 +77,7 @@ const Login = () => {
                     console.log('Token 로그인: ', token);
                     // 토큰 저장
                     storeToken(token);
+                    storeUser(token);
                   })
                   .catch(error => {
                     console.error('Error:', error);

@@ -31,6 +31,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MyProvider } from './MyContext';
 import { IndexProvider, useIndexContext } from './IndexContext';
 import { TokenProvider, useToken } from './TokenContext';
+import { UserProvider, useUser } from './LoginUserContext';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
@@ -92,35 +93,37 @@ const App = () => {
   return (
     <IndexProvider>
       <TokenProvider>
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen
-              name="Home"
-              component={HomeScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Help"
-              component={Help}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Share"
-              component={Share}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Album"
-              component={Album}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Login"
-              component={Login}
-              options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <UserProvider>
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Help"
+                component={Help}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Share"
+                component={Share}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Album"
+                component={Album}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </UserProvider>
       </TokenProvider>
     </IndexProvider>
   );
