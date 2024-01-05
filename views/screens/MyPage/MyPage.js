@@ -17,6 +17,7 @@ import LogList from './LogList';
 import axios from 'axios';
 import { log } from 'react-native-reanimated';
 import { useIndexContext } from '../../../IndexContext';
+import { useUser } from '../../../LoginUserContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -104,6 +105,8 @@ const MyPage = ({ token }) => {
     selectedGroupId, changeSelectedGroupId,
     selectedMemId, changeSelectedMemId,
     selectedMember, changeSelectedMember } = useIndexContext();
+
+  const { user, storeUser } = useUser();
   const [myPage, setMyPage] = useState(true);
   const [data, setData] = useState([]);
   let jsonArray = [];
@@ -128,7 +131,7 @@ const MyPage = ({ token }) => {
     try {
       const response = await axios({
         method: 'get',
-        url: 'http://api.mars-port.duckdns.org/api/v1/mypage/' + selectedMemId, // 로그인할때 로그인 멤버아이디값가져오기
+        url: 'http://api.mars-port.duckdns.org/api/v1/mypage/' + user, // 로그인할때 로그인 멤버아이디값가져오기
         headers: {
           Authorization: token,
         },
