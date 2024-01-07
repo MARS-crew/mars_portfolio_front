@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react';
-import { SafeAreaView, StyleSheet, View, Image, Dimensions } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {SafeAreaView, StyleSheet, View, Image, Dimensions} from 'react-native';
 import WebView from 'react-native-webview';
 import LoginButton from '../components/LoginButton';
-import { useNavigation, CommonActions } from '@react-navigation/native';
-import { useToken } from '../../TokenContext';
-import { useUser } from '../../LoginUserContext';
+import {useNavigation, CommonActions} from '@react-navigation/native';
+import {useUserInfo} from '../../UserInfoContext';
+import axios from 'axios';
 
 // 디바이스 크기
 const width = Dimensions.get('window').width;
@@ -14,8 +14,11 @@ const Login = () => {
   const [showWebView, setShowWebView] = useState(false); // WebView 표시 여부 상태
   const [loginUrl, setLoginUrl] = useState(''); // 접속 url 설정을 위한 변수
   const navigation = useNavigation(); // 로그인 성공 후 로그인 페이지를 호출하기 이전 페이지(그룹)로 넘기기 위한 네비게이션 객체
-  const { token, storeToken } = useToken();
-  const { user, storeUser } = useUser();
+  const [userInfoData, setUserInfoData] = useState('');
+  const {token, storeToken} = useUserInfo();
+  const {name, storeName} = useUserInfo();
+  const {id, storeId} = useUserInfo();
+  const {email, storeEmail} = useUserInfo();
 
   // 로그인 버튼 클릭 핸들러 - 각 버튼 유형에 대응하여 url 할당
   const handleLoginPress = type => {
@@ -44,22 +47,28 @@ const Login = () => {
     setShowWebView(true); // WebView를 표시하도록 상태 업데이트
   };
 
-  // // 받아온 토큰값을 저장하기 위한 함수
-  // const storeToken = async token => {
-  //   try {
-  //     await AsyncStorage.setItem('userToken', token);
-  //   } catch (error) {
-  //     console.error('Error storing the token', error);
-  //   }
-  // };
+  useEffect(() => {
+    if (Array.isArray(userInfoData)) {
+      const id = JSON.stringify(userInfoData.map(item => item.member_id));
+      const name = JSON.stringify(userInfoData.map(item => item.name));
+      const email = JSON.stringify(userInfoData.map(item => item.email));
+      storeId(id);
+      storeName(name);
+      storeEmail(email);
+      // storeName(userInfoData.map(item => item.name.toString()));
+      // storeEmail(userInfoData.map(item => item.email.toString()));
+    } else {
+      console.log('Data is not an array');
+    }
+  }, [userInfoData]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       {showWebView ? ( // 웹뷰 표시 상태일 경우
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{flex: 1}}>
           <WebView
-            source={{ uri: loginUrl }}
-            style={{ width: width, height: height }}
+            source={{uri: loginUrl}}
+            style={{width: width, height: height}}
             onNavigationStateChange={event => {
               // 백단의 응답 url에 따라 이후 이벤트 대응(백에서 성공 시 /main으로 넘기고 실패할 경우에는 /login으로 넘김)
               if (event.url === 'http://api.mars-port.duckdns.org/main') {
@@ -70,14 +79,41 @@ const Login = () => {
                     // 토큰 가져오기
                     const cookie = response.headers.get('set-cookie');
 
-                    console.log(`로그인 결과`);
                     // 순수 토큰값을 가져오기 위한 전처리, 넘어오는 토큰 데이터의 형식이 'token={순수 토큰값}; Path' 형식으로 들어옴
                     const token = cookie.split('token=')[1].split(';')[0];
-
-                    console.log('Token 로그인: ', token);
                     // 토큰 저장
                     storeToken(token);
-                    storeUser(token);
+
+                    const source = axios.CancelToken.source();
+
+                    axios({
+                      method: 'get',
+                      url: `http://api.mars-port.duckdns.org/api/v1/userbytoken`,
+                      headers: {
+                        Authorization: token,
+                      },
+                      cancelToken: source.token,
+                    })
+                      .then(response => {
+                        console.log('Success:', response.status);
+                        //todo
+                        const extractedData = response.data.data.map(item => ({
+                          member_id: item.member_id,
+                          email: item.email,
+                          name: item.name,
+                        }));
+
+                        setUserInfoData(extractedData);
+                      })
+                      .catch(error => {
+                        console.log('Error Message(getuser):', error.message);
+                        console.log('Error Response(getuser):', error.response);
+                        console.log('Error Request(getuser):', error.request);
+                      });
+
+                    return () => {
+                      source.cancel('API 호출이 취소되었습니다.');
+                    };
                   })
                   .catch(error => {
                     console.error('Error:', error);

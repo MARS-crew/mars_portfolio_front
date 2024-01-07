@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Animated,
   Dimensions,
@@ -10,26 +10,35 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import _ from 'lodash';  // lodash 라이브러리 사용
+import _ from 'lodash'; // lodash 라이브러리 사용
 import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
-import { useIndexContext } from '../../IndexContext';
-import { TokenProvider, useToken } from '../../TokenContext';
+import {useIndexContext} from '../../IndexContext';
+import {UserInfoProvider, useUserInfo} from '../../UserInfoContext';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const yOffset = new Animated.Value(0);
 
-const Interview = ({ token }) => {
+const Interview = ({token}) => {
   const swiperRef = useRef(null);
-  // const { token } = useToken();
-  const { currentIndex, changeIndex,
-    horizontalIndex, changeHorizontalIndex,
-    dataIndex, changeDataIndex,
-    selectedGroupId, changeSelectedGroupId,
-    selectedMemId, changeSelectedMemId,
-    selectedMember, changeSelectedMember } = useIndexContext();
+  // const { token } = useUserInfo();
+  const {
+    currentIndex,
+    changeIndex,
+    horizontalIndex,
+    changeHorizontalIndex,
+    dataIndex,
+    changeDataIndex,
+    selectedGroupId,
+    changeSelectedGroupId,
+    selectedMemId,
+    changeSelectedMemId,
+    selectedMember,
+    changeSelectedMember,
+  } = useIndexContext();
   const [data, setData] = useState([]);
-  const [prevSelectedGroupId, setPrevSelectedGroupId] = useState(selectedGroupId);
+  const [prevSelectedGroupId, setPrevSelectedGroupId] =
+    useState(selectedGroupId);
   const [prevSelectedMemId, setPrevSelectedMemId] = useState(selectedMemId);
   const [check, setCheck] = useState(!selectedMember);
 
@@ -61,9 +70,8 @@ const Interview = ({ token }) => {
     }
   };
 
-
   useEffect(() => {
-    const findFirstMemberIndexInGroup = (groupId) => {
+    const findFirstMemberIndexInGroup = groupId => {
       for (let i = 0; i < data.length; i++) {
         if (data[i].groupId === groupId) {
           return i;
@@ -74,23 +82,24 @@ const Interview = ({ token }) => {
 
     if (horizontalIndex == 1 && !selectedMember) {
       const firstMemberIndex = findFirstMemberIndexInGroup(selectedGroupId);
-      changeSelectedMemId(firstMemberIndex !== -1 ? data[firstMemberIndex].memberId : 1);
+      changeSelectedMemId(
+        firstMemberIndex !== -1 ? data[firstMemberIndex].memberId : 1,
+      );
       changeDataIndex(firstMemberIndex !== -1 ? firstMemberIndex : 0);
       setPrevSelectedMemId(selectedMemId);
       setPrevSelectedGroupId(selectedGroupId);
     }
-
   }, [horizontalIndex, currentIndex]);
 
   useEffect(() => {
     if (selectedMember) {
-      const memberIndex = data.findIndex(member => member.memberId === selectedMemId);
+      const memberIndex = data.findIndex(
+        member => member.memberId === selectedMemId,
+      );
       changeDataIndex(memberIndex);
       changeSelectedMember(false);
     }
   }, [selectedMember]);
-
-
 
   useEffect(() => {
     if (token) {
@@ -139,7 +148,7 @@ const Interview = ({ token }) => {
         ref={swiperRef}
         vertical={true}
         data={data}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <InterviewContents id={item.memberId} path={item.url} token={token} />
         )}
         index={dataIndex}

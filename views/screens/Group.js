@@ -14,9 +14,9 @@ import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
 // import AppContext from '../../AppContext';
 import {useIndexContext} from '../../IndexContext';
 
-const Item = ({id, src, medal}) => (
+const Item = ({id, src, medal, token}) => (
   <View>
-    <GroupItem id={id} src={src} medal={medal} />
+    <GroupItem id={id} src={src} medal={medal} token={token} />
   </View>
 );
 
@@ -46,7 +46,9 @@ const Group = ({data, token}) => {
         ref={swiperRef}
         vertical={true}
         data={data}
-        renderItem={({item}) => <Item id={item.id} src={item.src} />}
+        renderItem={({item}) => (
+          <Item id={item.id} src={item.src} token={token} />
+        )}
         index={currentIndex}
         hideShadow={true}
         onScroll={handleScroll}

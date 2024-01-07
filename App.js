@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Animated,
   Dimensions,
@@ -23,15 +23,15 @@ import Share from './views/screens/Share';
 
 import GroupVideo from './views/screens/GroupVideo';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useNavigation } from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import AppContext from './AppContext`';
-import { MyProvider } from './MyContext';
-import { IndexProvider, useIndexContext } from './IndexContext';
-import { TokenProvider, useToken } from './TokenContext';
-import { UserProvider, useUser } from './LoginUserContext';
+import {MyProvider} from './MyContext';
+import {IndexProvider, useIndexContext} from './IndexContext';
+import {UserInfoProvider, useUserInfo} from './UserInfoContext';
+import Logout from './views/screens/Logout';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
@@ -54,7 +54,7 @@ const Stack = createStackNavigator();
 const transitionAnimation = index => {
   return {
     transform: [
-      { perspective: 800 },
+      {perspective: 800},
       {
         scale: xOffset.interpolate({
           inputRange: [
@@ -92,50 +92,61 @@ const transitionAnimation = index => {
 const App = () => {
   return (
     <IndexProvider>
-      <TokenProvider>
-        <UserProvider>
-          <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen
-                name="Home"
-                component={HomeScreen}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Help"
-                component={Help}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Share"
-                component={Share}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Album"
-                component={Album}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{ headerShown: false }}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </UserProvider>
-      </TokenProvider>
+      <UserInfoProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Help"
+              component={Help}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Share"
+              component={Share}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Album"
+              component={Album}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Logout"
+              component={Logout}
+              options={{headerShown: false}}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </UserInfoProvider>
     </IndexProvider>
   );
 };
 
 const HomeScreen = () => {
-
-  const { token } = useToken();
-
+  const {token, id, name, email} = useUserInfo();
   const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
-  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId, selectedGroupId } = useIndexContext();
+  const {
+    currentIndex,
+    changeIndex,
+    horizontalIndex,
+    changeHorizontalIndex,
+    dataIndex,
+    changeDataIndex,
+    selectedMemId,
+    changeSelectedMemId,
+    selectedGroupId,
+  } = useIndexContext();
   const [oldIndex, setOldIndex] = useState(horizontalIndex);
   const horizontalScrollRef = useRef(null);
 
@@ -170,8 +181,14 @@ const HomeScreen = () => {
   useEffect(() => {
     if (token) {
       console.log('Token 메인: ', token);
+      console.log(`id: ${id}, name: ${name}, email: ${email}`);
     }
-  }, [token]);
+  }, [token, id, name, email]);
+
+  // 사용자 정보 수신 확인
+  useEffect(() => {
+    console.log(`id: ${id}, name: ${name}, email: ${email}`);
+  }, [id, name, email]);
   // const [indexValue, setIndexValue] = useState(0);
 
   const handleScroll = event => {
@@ -187,13 +204,13 @@ const HomeScreen = () => {
   };
 
   return (
-    <TokenProvider>
+    <UserInfoProvider>
       <MyProvider>
         <AnimatedScrollView
           ref={horizontalScrollRef}
           scrollEventThrottle={16}
           onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: xOffset } } }],
+            [{nativeEvent: {contentOffset: {x: xOffset}}}],
             {
               useNativeDriver: true,
               listener: handleScroll,
@@ -216,7 +233,7 @@ const HomeScreen = () => {
                 <Interview token={token} />
               </Screen>
               <Screen text="Screen 4" index={3}>
-                <Portfolio token={token} options={{ headerShown: false }} />
+                <Portfolio token={token} options={{headerShown: false}} />
               </Screen>
               <Screen text="Screen 5" index={4}>
                 <Resume token={token} />
@@ -225,7 +242,7 @@ const HomeScreen = () => {
                 <Review token={token} />
               </Screen>
               <Screen text="Screen 7" index={6}>
-                <MyPage token={token} options={{ headerShown: false }} />
+                <MyPage token={token} options={{headerShown: false}} />
               </Screen>
             </>
           ) : (
@@ -239,7 +256,7 @@ const HomeScreen = () => {
           )}
         </AnimatedScrollView>
       </MyProvider>
-    </TokenProvider >
+    </UserInfoProvider>
   );
 };
 

@@ -12,14 +12,14 @@ import GroupLogo from './GroupLogo';
 import LoginItem from './LoginItem';
 import FAB from './FloatingMenu';
 
-const GroupItem = ({id, src}) => {
+const GroupItem = ({id, src, token}) => {
   return (
     <View>
       <View style={styles.itemArea}>
         <ImageBackground source={src} style={styles.image}>
           <GroupLogo />
           <Text style={styles.text}>{id}기</Text>
-          <LoginItem />
+          <LoginItem token={token} />
         </ImageBackground>
       </View>
       {/* <FAB /> */}
