@@ -128,30 +128,37 @@ const Login = () => {
       ) : (
         <View style={styles.contain}>
           <Image
-            source={require('../../assets/images/logo.png')}
+            source={require('../../assets/images/login_main_logo.png')}
             style={styles.image}
           />
-          <LoginButton
-            title={'페이스북'}
-            src={require('../../assets/images/facebook.png')}
-            handleLoginPress={() => handleLoginPress('facebook')} // 각각의 로그인 형식으로 매개변수 전달
-          />
-          <LoginButton
-            title={'구글'}
-            src={require('../../assets/images/google.png')}
-            handleLoginPress={() => handleLoginPress('google')} // 각각의 로그인 형식으로 매개변수 전달
-          />
-          <LoginButton
-            title={'네이버'}
-            src={require('../../assets/images/naver.png')}
-            handleLoginPress={() => handleLoginPress('naver')} // 각각의 로그인 형식으로 매개변수 전달
-          />
-          <LoginButton
-            title={'카카오'}
-            src={require('../../assets/images/kakao.png')}
-            handleLoginPress={() => handleLoginPress('kakao')} // 각각의 로그인 형식으로 매개변수 전달
-          />
-          <View style={styles.marginView} />
+          <View style={styles.marginView}>
+            <LoginButton
+              title={'구글로 로그인'}
+              src={require('../../assets/images/google.png')}
+              handleLoginPress={() => handleLoginPress('google')} // 각각의 로그인 형식으로 매개변수 전달
+            />
+            <LoginButton
+              background={'#FFCD00'}
+              title={'카카오로 로그인'}
+              src={require('../../assets/images/kakao.png')}
+              handleLoginPress={() => handleLoginPress('kakao')} // 각각의 로그인 형식으로 매개변수 전달
+            />
+
+            <LoginButton
+              background={'#00C35A'}
+              title={'네이버로 로그인'}
+              color={'white'}
+              src={require('../../assets/images/naver.png')}
+              handleLoginPress={() => handleLoginPress('naver')} // 각각의 로그인 형식으로 매개변수 전달
+            />
+            <LoginButton
+              background={'#1877F2'}
+              title={'페이스북으로 로그인'}
+              color={'white'}
+              src={require('../../assets/images/facebook.png')}
+              handleLoginPress={() => handleLoginPress('facebook')} // 각각의 로그인 형식으로 매개변수 전달
+            />
+          </View>
         </View>
       )}
     </View>
@@ -160,18 +167,20 @@ const Login = () => {
 const styles = StyleSheet.create({
   contain: {
     backgroundColor: '#FFFF',
-    width: '100%',
-    height: '100%',
+    flex: 1,
+    paddingHorizontal: 50,
+
     alignItems: 'center',
-    marginBottom: 0,
   },
   image: {
-    width: 400,
-    height: 400,
-    resizeMode: 'contain',
+    width: 90,
+    height: 90,
+
+    marginTop: 196,
+    marginBottom: 85,
   },
   marginView: {
-    margin: 40,
+    marginBottom: 196,
   },
 });
 

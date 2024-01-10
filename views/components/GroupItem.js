@@ -14,15 +14,13 @@ import FAB from './FloatingMenu';
 
 const GroupItem = ({id, src, token}) => {
   return (
-    <View>
-      <View style={styles.itemArea}>
-        <ImageBackground source={src} style={styles.image}>
-          <GroupLogo />
-          <Text style={styles.text}>{id}기</Text>
-          <LoginItem token={token} />
-        </ImageBackground>
-      </View>
-      {/* <FAB /> */}
+    <View style={styles.itemArea}>
+      <ImageBackground source={src} style={styles.image}>
+        <GroupLogo />
+        <Text style={styles.text}>{id}기</Text>
+      </ImageBackground>
+
+      <LoginItem token={token} />
     </View>
   );
 };
@@ -30,11 +28,10 @@ const GroupItem = ({id, src, token}) => {
 const styles = StyleSheet.create({
   itemArea: {
     flex: 1,
-    alignItems: 'center',
   },
-  image: {
-    objectFit: 'fill',
 
+  image: {
+    left: -5,
     width: Dimensions.get('window').width * 1.03,
     height: Dimensions.get('window').height / 1,
   },
