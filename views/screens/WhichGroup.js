@@ -1,56 +1,38 @@
-import {React} from 'react';
-
+import React, { useEffect, useState } from 'react';
+import axios from 'axios'; // axios를 import 하세요.
 import Group from './Group';
-import ManyGroup from './ManyGroup';
-import GroupVideo from './GroupVideo';
-import {set} from 'react-native-reanimated';
-//import { View } from 'react-native';
-
-const DATA = [
-  {
-    id: '3',
-    title: '3기',
-    src: require('../../assets/images/Group3.png'),
-    video: require('../../assets/images/GroupVideo.png'),
-    merdal: 'y',
-  },
-  {
-    id: '4',
-    title: '4기',
-    src: require('../../assets/images/Group.png'),
-    video: require('../../assets/images/GroupVideo.png'),
-    merdal: 'n',
-  },
-  {
-    id: '5',
-    title: '5기',
-    src: require('../../assets/images/Group.png'),
-    video: require('../../assets/images/GroupVideo.png'),
-    merdal: 'y',
-  },
-  // {
-  //   id: '6',
-  //   title: '6기',
-  //   src: require('../../assets/images/Group.png'),
-  // },
-  // {
-  //   id: '7',
-  //   title: '7기',
-  //   src: require('../../assets/images/Group.png'),
-  // },
-  // {
-  //   id: '8',
-  //   title: '8기',
-  //   src: require('../../assets/images/Group.png'),
-  // },
-];
 
 const WhichGroup = ({token}) => {
-  if (DATA.length <= 6) {
-    return <Group token={token} data={DATA} />;
-  } else {
-    return <ManyGroup data={DATA} />;
-  }
+  const [data, setData] = useState();
+  const [fileData, setFileData] = useState(null);
+
+
+  const fetchGroup = async () => {
+    console.log('fetchGroup 실행');
+    if (!token) {
+      setFileData([]);
+      return;
+    }
+
+    try {
+      const response = await axios({
+        method: 'get',
+        url: 'http://api.mars-port.duckdns.org/api/v1/img/group',
+        headers: { Authorization: token },
+      });
+      console.log('데이터:', response.data);
+      setFileData(response.data.data); 
+    } catch (error) {
+      console.error('에러:', error);
+      setFileData([]); 
+    }
+  };
+
+  useEffect(() => {
+    fetchGroup();
+  }, [token]);
+
+  return <Group token={token} fileData={fileData} />;
 };
 
 export default WhichGroup;

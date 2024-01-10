@@ -32,6 +32,7 @@ import {MyProvider} from './MyContext';
 import {IndexProvider, useIndexContext} from './IndexContext';
 import {UserInfoProvider, useUserInfo} from './UserInfoContext';
 import Logout from './views/screens/Logout';
+import LoginGo from './views/screens/LoginGo';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
@@ -248,8 +249,8 @@ const HomeScreen = () => {
           ) : (
             <>
               {isSplashVisible === false ? (
-                <Screen text="Screen 1" index={0}>
-                  <WhichGroup token={token} />
+                <Screen text="Screen 0" index={0}>
+                    <LoginGo token={token} />
                 </Screen>
               ) : null}
             </>

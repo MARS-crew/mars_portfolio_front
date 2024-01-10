@@ -11,7 +11,6 @@ import {
 import GroupItem from '../components/GroupItem';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
-// import AppContext from '../../AppContext';
 import {useIndexContext} from '../../IndexContext';
 
 const Item = ({id, src, medal, token}) => (
@@ -20,18 +19,18 @@ const Item = ({id, src, medal, token}) => (
   </View>
 );
 
-const Group = ({data, token}) => {
-  const {currentIndex, changeIndex} = useIndexContext();
+const Group = ({ data, token, fileData }) => {
+  const { currentIndex, changeIndex } = useIndexContext();
   const swiperRef = useRef(null);
 
   useEffect(() => {
-    if (swiperRef.current) {
+    if (swiperRef.current && fileData && fileData.length > 0) {
       swiperRef.current.scrollToIndex({
         index: currentIndex,
         animated: true,
       });
     }
-  }, [currentIndex, swiperRef]);
+  }, [currentIndex, fileData]);
 
   const height = Dimensions.get('window').height;
   const handleScroll = event => {
@@ -40,43 +39,23 @@ const Group = ({data, token}) => {
     changeIndex(newIndex);
   };
 
+  if (!fileData || fileData.length === 0) {
+    return <View><Text>Loading...</Text></View>;
+  }
+
   return (
-    <SafeAreaView style={StyleSheet.container}>
+    <SafeAreaView style={styles.container}>
       <SwiperFlatList
         ref={swiperRef}
         vertical={true}
-        data={data}
-        renderItem={({item}) => (
-          <Item id={item.id} src={item.src} token={token} />
+        data={fileData}
+        renderItem={({ item }) => (
+          <Item id={item.group_id} src={item.url} token={token} />
         )}
         index={currentIndex}
         hideShadow={true}
         onScroll={handleScroll}
       />
-      {/* <SwiperFlatList
-        vertical={true}
-        onScroll={handleScroll}
-        initialScrollIndex={3} // 0부터 시작하므로 두 번째 페이지는 인덱스 1입니다.
-        data={[
-          {key: '1', text: 'Page 1'},
-          {key: '2', text: 'Page 2'},
-          {key: '3', text: 'Page 3'},
-          {key: '4', text: 'Page 4'},
-        ]}
-        renderItem={({item}) => (
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: width,
-              height: height,
-              backgroundColor: 'skyblue',
-            }}>
-            <Text>{item.text}</Text>
-          </View>
-        )}
-      /> */}
     </SafeAreaView>
   );
 };
