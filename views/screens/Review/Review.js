@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import { useIndexContext } from '../../../IndexContext';
+import {useIndexContext} from '../../../IndexContext';
 import ReviewItem from '../Review/ReviewItem';
 import FloatingMenu from '../../components/FloatingMenu';
 
@@ -75,17 +75,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const Review = ({ token }) => {
-  const { currentIndex, changeIndex,
-    horizontalIndex, changeHorizontalIndex,
-    dataIndex, changeDataIndex,
-    selectedGroupId, changeSelectedGroupId,
-    selectedMemId, changeSelectedMemId,
-    selectedMember, changeSelectedMember } = useIndexContext(); const swiperRef = useRef(null);
+const Review = ({token, currentUserId}) => {
+  const {selectedMemId} = useIndexContext();
   const [data, setData] = useState([]);
   const [review, isReview] = useState(true);
   const [showReviewInput, setShowReviewInput] = useState(false);
   const [reviewContent, setReviewContent] = useState('');
+  const [reviewId, setReviewId] = useState(0);
   const [isEditMode, setIsEditMode] = useState(false);
   const newReviewInputRef = useRef(null);
 
@@ -94,15 +90,15 @@ const Review = ({ token }) => {
     setShowReviewInput(true);
   };
 
-  const currentReviewContent = ({ content }) => {
-    setReviewContent(content);
-  };
-
   //todo id랑 member_id도 이렇게 받아와야 하지 않을까...
 
   useEffect(() => {
     console.log('currentReviewContent: ', reviewContent);
   }, [reviewContent]);
+
+  useEffect(() => {
+    console.log('currentReviewId: ', reviewId);
+  }, [reviewId]);
 
   useEffect(() => {
     if (token) {
@@ -121,6 +117,7 @@ const Review = ({ token }) => {
 
           const extractedData = response.data.data.map(item => ({
             review_id: item.review_id,
+            name: item.name,
             member_id: item.member_id,
             content: item.content,
             reg_date: item.reg_date,
@@ -128,9 +125,7 @@ const Review = ({ token }) => {
           setData(extractedData);
         })
         .catch(error => {
-          // console.log('Error Message:', error.message);
           console.log('Error Response:', error.response);
-          // console.log('Error Request:', error.request);
           setData([]);
         });
 
@@ -146,7 +141,7 @@ const Review = ({ token }) => {
         method: 'post',
         url: 'http://api.mars-port.duckdns.org/api/v1/review',
         data: {
-          ref_member_id: selected,
+          ref_member_id: selectedMemId,
           content: reviewText,
         },
         headers: {
@@ -185,24 +180,24 @@ const Review = ({ token }) => {
           {data.length > 0 ? (
             <FlatList
               data={data}
-              renderItem={({ item }) => (
+              renderItem={({item}) => (
                 <ReviewItem
                   review={review}
                   id={item.review_id}
-                  writer={item.member_id}
+                  writer={item.name}
                   date={item.reg_date}
                   content={item.content}
                   imageType={item.imageType}
                   isLiked={item.isLiked}
                   onEdit={onEdit}
+                  currentReviewId={setReviewId}
                   currentReviewContent={setReviewContent}
                   token={token}
                 />
               )}
               keyExtractor={(item, index) => index.toString()}
             />
-          ) : null
-          }
+          ) : null}
         </View>
       </SafeAreaView>
       {
@@ -221,7 +216,7 @@ const Review = ({ token }) => {
             onPress={() => {
               if (isEditMode) {
                 // 편집 모드일 경우 업데이트 로직 실행
-                updateReview(48, 65, reviewContent);
+                updateReview(reviewId, currentUserId, reviewContent);
               } else {
                 // 새 리뷰 등록 로직 실행
                 postReview(reviewContent);

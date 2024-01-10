@@ -56,6 +56,7 @@ const EditMode = ({
   onCancel,
   onDelete,
   inputRef,
+  currentReviewId,
   currentReviewContent,
   token,
 }) => {
@@ -69,11 +70,13 @@ const EditMode = ({
   const [checkChoosePopOkButton, setCheckChoosePopOkButton] = useState(false); //디테일 팝업에서 확인을 눌렀는지 감지하여 네비바의 저장을 눌렀을 시 ChoosePop이 뜨도록 함
   // EditMode Button onPress 용 Props 컴포넌트 start------------------------------------------------------------------------------------------------------------------------
 
-  const editButton = async reviewContent => {
+  const editButton = (reviewId, reviewContent) => {
     //수정 섹션을 클릭한 경우
     // onEdit();
     console.log('reviewContent', reviewContent);
+    console.log('reviewId', reviewId);
     onEdit();
+    currentReviewId(reviewId);
     currentReviewContent(reviewContent);
   };
 
@@ -137,7 +140,6 @@ const EditMode = ({
       <TouchableOpacity
         onPress={() => {
           console.log('inputRef', inputRef.current);
-
           inputRef.current.focus();
         }} // modalBackdropPress: 모달 영역 밖 클릭 시 Bottom Nav(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
         style={styles.modalBackdropPress}>
@@ -151,11 +153,10 @@ const EditMode = ({
               title={'수정'}
               source={editingIcon}
               onPress={() => {
-                editButton(reviewContent);
+                editButton(id, reviewContent);
               }}
             />
           )}
-
           {togleButton === true && (
             <EditModeSectionChooseBtn
               title={'저장'}
@@ -165,7 +166,6 @@ const EditMode = ({
               }}
             />
           )}
-
           <EditModeSectionChooseBtn
             title={'삭제'}
             source={deletedIcon}
@@ -173,7 +173,6 @@ const EditMode = ({
               deletedButton(id, writer);
             }}
           />
-
           <EditModeSectionChooseBtn
             title={'취소'}
             source={cancelIcon}
@@ -181,7 +180,6 @@ const EditMode = ({
               cancelButton();
             }}
           />
-
           <ChoosePop
             //공통
             title="수정된 내용을 저장하시겠습니까?"
@@ -193,16 +191,13 @@ const EditMode = ({
             choosePopVisible={saveChoosePopVisible}
             setChoosePopVisible={setSaveChoosePopVisible}
             //리뷰
-
             review={review}
             id={id}
             onModify={onEdit}
             onDelete={onDelete}
           />
-
           <ChoosePop
             //공통
-
             title="수정된 내용을 삭제하시겠습니까?"
             checkDeletePopOkButton={checkDeletePopOkButton}
             setCheckDeletePopOkButton={setCheckDeletePopOkButton}
@@ -211,7 +206,6 @@ const EditMode = ({
             choosePopVisible={removeChoosePopVisible}
             setChoosePopVisible={setRemoveChoosePopVisible}
             //리뷰
-
             review={review}
             id={id}
           />

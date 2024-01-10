@@ -240,7 +240,7 @@ const HomeScreen = () => {
                 <Resume token={token} />
               </Screen>
               <Screen text="Screen 6" index={5}>
-                <Review token={token} />
+                <Review token={token} currentUserId={id} />
               </Screen>
               <Screen text="Screen 7" index={6}>
                 <MyPage token={token} options={{headerShown: false}} />
