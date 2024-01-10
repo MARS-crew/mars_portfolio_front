@@ -94,6 +94,7 @@ const ReviewItem = ({
   content,
   imageType,
   isLiked,
+  currentReviewId,
   currentReviewContent,
   onEdit,
   onDelete,
@@ -187,6 +188,7 @@ const ReviewItem = ({
             setIsModalVisible(!isModalVisible);
           }}
           inputRef={inputRef}
+          currentReviewId={currentReviewId}
           currentReviewContent={currentReviewContent}
           onDelete={onDelete}
           isModalVisible={isModalVisible}
