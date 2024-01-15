@@ -102,7 +102,6 @@ const ReviewItem = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const inputRef = useRef();
-  console.log(`islike ${isLiked}`);
   return (
     <Shadow distance={0.1} startColor={shadowColor} offset={[0, 12]}>
       <View style={styles.container}>
