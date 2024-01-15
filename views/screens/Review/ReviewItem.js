@@ -95,6 +95,8 @@ const ReviewItem = ({
   onDelete,
   token,
   setReviewLike,
+  memberId,
+  currentUserId,
 }) => {
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const [reviewContent, setReviewContent] = useState(content);
@@ -102,6 +104,7 @@ const ReviewItem = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const inputRef = useRef();
+
   return (
     <Shadow distance={0.1} startColor={shadowColor} offset={[0, 12]}>
       <View style={styles.container}>
@@ -124,7 +127,9 @@ const ReviewItem = ({
           <View style={styles.userContentContainer}>
             <View style={styles.userContentContainerTop}>
               <View style={styles.userContentContainerTopElement}>
-                <Text style={styles.userName}>{writer}</Text>
+                <Text style={styles.userName}>
+                  {JSON.parse(currentUserId)[0] === memberId ? '나' : writer}
+                </Text>
                 <Text style={styles.date}>{date}</Text>
               </View>
               <View style={styles.thumbImageContainer}>

@@ -229,6 +229,8 @@ const Review = ({token, currentUserId}) => {
                   currentReviewContent={setReviewContent}
                   token={token}
                   setReviewLike={setReviewLike}
+                  memberId={item.member_id}
+                  currentUserId={currentUserId}
                 />
               )}
               keyExtractor={item => item.review_id.toString()}
