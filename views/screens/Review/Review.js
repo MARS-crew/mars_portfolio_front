@@ -90,8 +90,6 @@ const Review = ({token, currentUserId}) => {
     setShowReviewInput(true);
   };
 
-  //todo id랑 member_id도 이렇게 받아와야 하지 않을까...
-
   useEffect(() => {
     console.log('currentReviewContent: ', reviewContent);
   }, [reviewContent]);
@@ -101,41 +99,44 @@ const Review = ({token, currentUserId}) => {
   }, [reviewId]);
 
   useEffect(() => {
-    if (token) {
-      const source = axios.CancelToken.source();
+    if (!token) return;
 
-      axios({
-        method: 'get',
-        url: `http://api.mars-port.duckdns.org/api/v1/review/${selectedMemId}`,
-        headers: {
-          Authorization: token,
-        },
-        cancelToken: source.token,
+    const source = axios.CancelToken.source();
+
+    axios({
+      method: 'get',
+      url: `http://api.mars-port.duckdns.org/api/v1/review/${selectedMemId}`,
+      headers: {
+        Authorization: token,
+      },
+      cancelToken: source.token,
+    })
+      .then(response => {
+        console.log('Success:', response.status);
+
+        const extractedData = response.data.data.map(item => ({
+          review_id: item.review_id,
+          name: item.name,
+          member_id: item.member_id,
+          content: item.content,
+          reg_date: item.reg_date,
+          is_liked: item.is_liked,
+        }));
+        setData(extractedData);
       })
-        .then(response => {
-          console.log('Success:', response.status);
+      .catch(error => {
+        console.log('Error Response:', error.response);
+        setData([]);
+      });
 
-          const extractedData = response.data.data.map(item => ({
-            review_id: item.review_id,
-            name: item.name,
-            member_id: item.member_id,
-            content: item.content,
-            reg_date: item.reg_date,
-          }));
-          setData(extractedData);
-        })
-        .catch(error => {
-          console.log('Error Response:', error.response);
-          setData([]);
-        });
-
-      return () => {
-        source.cancel('API 호출이 취소되었습니다.');
-      };
-    }
+    return () => {
+      source.cancel('API 호출이 취소되었습니다.');
+    };
   }, [token, selectedMemId]);
 
   const postReview = async reviewText => {
+    if (reviewText == '' || !token) return;
+
     try {
       const response = await axios({
         method: 'post',
@@ -148,13 +149,17 @@ const Review = ({token, currentUserId}) => {
           Authorization: token,
         },
       });
-      console.log('Response', response.data);
+      const newReview = response.data.data;
+      setData(currentData => [newReview, ...currentData]);
+      setReviewContent('');
     } catch (error) {
       console.error('Error', error);
     }
   };
 
   const updateReview = async (reviewId, member_id, reviewContent) => {
+    if (reviewText == '' || !token) return;
+
     try {
       const response = await axios({
         method: 'put',
@@ -167,7 +172,34 @@ const Review = ({token, currentUserId}) => {
           Authorization: token,
         },
       });
-      console.log('Response', response.data);
+      const updatedReview = response.data.data;
+      setData(
+        currentData => console.log(currentData),
+        currentData.map(
+          item.review_id === reviewId ? {...item, ...updatedReview} : item,
+        ),
+      );
+    } catch (error) {
+      console.error('Error', error);
+    }
+  };
+
+  const setReviewLike = async ref_review_id => {
+    if (!token) return;
+
+    try {
+      const response = await axios({
+        method: 'post',
+        url: 'http://api.mars-port.duckdns.org/api/v1/review/like',
+        data: {
+          member_id: currentUserId,
+          ref_review_id: ref_review_id,
+        },
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log('성공', response.status);
     } catch (error) {
       console.error('Error', error);
     }
@@ -180,6 +212,9 @@ const Review = ({token, currentUserId}) => {
           {data.length > 0 ? (
             <FlatList
               data={data}
+              initialNumToRender={10}
+              maxToRenderPerBatch={5}
+              windowSize={5}
               renderItem={({item}) => (
                 <ReviewItem
                   review={review}
@@ -188,14 +223,15 @@ const Review = ({token, currentUserId}) => {
                   date={item.reg_date}
                   content={item.content}
                   imageType={item.imageType}
-                  isLiked={item.isLiked}
+                  isLiked={item.is_liked}
                   onEdit={onEdit}
                   currentReviewId={setReviewId}
                   currentReviewContent={setReviewContent}
                   token={token}
+                  setReviewLike={setReviewLike}
                 />
               )}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={item => item.review_id.toString()}
             />
           ) : null}
         </View>
@@ -227,35 +263,6 @@ const Review = ({token, currentUserId}) => {
             <Text style={styles.text}>{isEditMode ? '수정' : '등록'}</Text>
           </TouchableOpacity>
         </View>
-
-        // <View style={styles.inputReviewContainer}>
-        // {showReviewInput ? (
-        // <View style={styles.inputTextContainer}>
-        // <TextInput
-        // style={styles.inputTextArea}
-        // ref={newReviewInputRef}
-        // multiline={true}
-        // onChangeText={text => setReviewContent(text)}
-        // placeholder="멤버의 리뷰를 입력해주세요."
-        // returnKeyType="done"
-        // />
-        // <TouchableOpacity
-        // style={styles.inputReviewButton}
-        // onPress={() => {
-        // postReview(reviewContent);
-        // setShowReviewInput(false);
-        // }}>
-        // <Text style={styles.text}>등록</Text>
-        // </TouchableOpacity>
-        // </View>
-        // ) : (
-        // <TouchableOpacity
-        // style={styles.reviewInputButton}
-        // onPress={() => setShowReviewInput(true)}>
-        // <Text style={styles.text}>리뷰 등록하기</Text>
-        // </TouchableOpacity>
-        // )}
-        // </View>
       }
       <FloatingMenu />
     </View>

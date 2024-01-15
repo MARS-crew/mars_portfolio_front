@@ -11,16 +11,11 @@ import {
   TextInput,
 } from 'react-native';
 
-// import ReviewHideModal from './ReviewHideModal';
-
 import {Shadow} from 'react-native-shadow-2';
-
 import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
-
 import EditMode from '../../screens/Review/ReviewEdit';
 
 const {width, height} = Dimensions.get('window');
-
 const shadowColor = 'rgba(151, 151, 151, 0.36)';
 
 const styles = StyleSheet.create({
@@ -99,6 +94,7 @@ const ReviewItem = ({
   onEdit,
   onDelete,
   token,
+  setReviewLike,
 }) => {
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const [reviewContent, setReviewContent] = useState(content);
@@ -106,7 +102,7 @@ const ReviewItem = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const inputRef = useRef();
-
+  console.log(`islike ${isLiked}`);
   return (
     <Shadow distance={0.1} startColor={shadowColor} offset={[0, 12]}>
       <View style={styles.container}>
@@ -132,14 +128,16 @@ const ReviewItem = ({
                 <Text style={styles.userName}>{writer}</Text>
                 <Text style={styles.date}>{date}</Text>
               </View>
-
               <View style={styles.thumbImageContainer}>
                 <TouchableOpacity
-                  onPress={() => setIsReviewLiked(!isReviewLiked)}>
+                  onPress={() => {
+                    setIsReviewLiked(!isReviewLiked);
+                    setReviewLike(id);
+                  }}>
                   <Image
                     style={styles.imageThumb}
                     source={
-                      isReviewLiked
+                      isReviewLiked == 1
                         ? require('../../../assets/images/thumb_active.png')
                         : require('../../../assets/images/thumb_normal.png')
                     }
@@ -147,7 +145,6 @@ const ReviewItem = ({
                 </TouchableOpacity>
               </View>
             </View>
-
             <View style={styles.userContentContainerBottom}>
               <TouchableOpacity
                 onPress={() => setContentsViewPopVisible(true)}

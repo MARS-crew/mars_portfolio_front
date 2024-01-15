@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     width: 124,
     height: 21,
-    whiteSpace: 'nowrap',
   },
 });
 
