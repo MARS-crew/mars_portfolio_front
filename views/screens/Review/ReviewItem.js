@@ -97,6 +97,7 @@ const ReviewItem = ({
   setReviewLike,
   memberId,
   currentUserId,
+  deleteReview,
 }) => {
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const [reviewContent, setReviewContent] = useState(content);
@@ -195,6 +196,7 @@ const ReviewItem = ({
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           token={token}
+          deleteReview={deleteReview}
         />
       </View>
     </Shadow>
