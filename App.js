@@ -242,15 +242,17 @@ const HomeScreen = () => {
               <Screen text="Screen 6" index={5}>
                 <Review token={token} currentUserId={id} />
               </Screen>
-              <Screen text="Screen 7" index={6}>
-                <MyPage token={token} options={{headerShown: false}} />
-              </Screen>
+              {id === selectedMemId ? (
+                <Screen text="Screen 7" index={6}>
+                  <MyPage token={token} options={{headerShown: false}} />
+                </Screen>
+              ) : null}
             </>
           ) : (
             <>
               {isSplashVisible === false ? (
                 <Screen text="Screen 0" index={0}>
-                    <LoginGo token={token} />
+                  <LoginGo token={token} />
                 </Screen>
               ) : null}
             </>

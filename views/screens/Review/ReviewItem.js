@@ -107,10 +107,11 @@ const ReviewItem = ({
   const inputRef = useRef();
 
   const isUsersReview = () => {
-    if (token) {
-      return JSON.parse(currentUserId)[0] === memberId ? '나' : writer;
+    if (token && currentUserId != null) {
+      const name = JSON.parse(currentUserId)[0] === memberId ? '나' : writer;
+      return name;
     } else {
-      return '';
+      return writer;
     }
   };
 
