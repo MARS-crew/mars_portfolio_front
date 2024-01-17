@@ -106,6 +106,14 @@ const ReviewItem = ({
   const [isEditMode, setIsEditMode] = useState(false);
   const inputRef = useRef();
 
+  const isUsersReview = () => {
+    if (token) {
+      return JSON.parse(currentUserId)[0] === memberId ? '나' : writer;
+    } else {
+      return '';
+    }
+  };
+
   return (
     <Shadow distance={0.1} startColor={shadowColor} offset={[0, 12]}>
       <View style={styles.container}>
@@ -128,9 +136,7 @@ const ReviewItem = ({
           <View style={styles.userContentContainer}>
             <View style={styles.userContentContainerTop}>
               <View style={styles.userContentContainerTopElement}>
-                <Text style={styles.userName}>
-                  {JSON.parse(currentUserId)[0] === memberId ? '나' : writer}
-                </Text>
+                <Text style={styles.userName}>{isUsersReview()}</Text>
                 <Text style={styles.date}>{date}</Text>
               </View>
               <View style={styles.thumbImageContainer}>
@@ -170,7 +176,7 @@ const ReviewItem = ({
         </View>
 
         <ContentsViewPop
-          title={writer}
+          title={isUsersReview()}
           message={content}
           contentsViewPopVisible={contentsViewPopVisible}
           setContentsViewPopVisible={setContentsViewPopVisible}
