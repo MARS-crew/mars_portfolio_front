@@ -150,6 +150,7 @@ const Review = ({token, currentUserId}) => {
         },
       });
       const newReview = response.data.data;
+      newReview.name = '나';
       setData(currentData => [newReview, ...currentData]);
       setReviewContent('');
     } catch (error) {
@@ -158,7 +159,7 @@ const Review = ({token, currentUserId}) => {
   };
 
   const updateReview = async (reviewId, member_id, reviewContent) => {
-    if (reviewText == '' || !token) return;
+    if (reviewContent == '' || !token) return;
 
     try {
       const response = await axios({
@@ -167,18 +168,57 @@ const Review = ({token, currentUserId}) => {
         data: {
           member_id: member_id,
           content: reviewContent,
+          ref_member_id: selectedMemId,
         },
         headers: {
           Authorization: token,
         },
       });
-      const updatedReview = response.data.data;
-      setData(
-        currentData => console.log(currentData),
-        currentData.map(
-          item.review_id === reviewId ? {...item, ...updatedReview} : item,
-        ),
-      );
+      setData([]);
+      const extractedData = Array.isArray(response.data.data)
+        ? response.data.data.map(item => ({
+            review_id: item.review_id,
+            name: item.name,
+            member_id: item.member_id,
+            content: item.content,
+            reg_date: item.reg_date,
+            is_liked: item.is_liked,
+          }))
+        : [];
+      setData(extractedData);
+      setReviewContent('');
+    } catch (error) {
+      console.error('Error', error);
+    }
+  };
+
+  const deleteReview = async (reviewId, memberId) => {
+    if (!token) return;
+    try {
+      const response = await axios({
+        method: 'delete',
+        url: `http://api.mars-port.duckdns.org/api/v1/review/${reviewId}`,
+        data: {
+          member_id: memberId,
+          ref_member_id: selectedMemId,
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
+      });
+      setData([]);
+      const extractedData = Array.isArray(response.data.data)
+        ? response.data.data.map(item => ({
+            review_id: item.review_id,
+            name: item.name,
+            member_id: item.member_id,
+            content: item.content,
+            reg_date: item.reg_date,
+            is_liked: item.is_liked,
+          }))
+        : [];
+      setData(extractedData);
     } catch (error) {
       console.error('Error', error);
     }
@@ -231,6 +271,7 @@ const Review = ({token, currentUserId}) => {
                   setReviewLike={setReviewLike}
                   memberId={item.member_id}
                   currentUserId={currentUserId}
+                  deleteReview={deleteReview}
                 />
               )}
               keyExtractor={item => item.review_id.toString()}

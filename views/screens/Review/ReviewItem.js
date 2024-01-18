@@ -97,6 +97,7 @@ const ReviewItem = ({
   setReviewLike,
   memberId,
   currentUserId,
+  deleteReview,
 }) => {
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const [reviewContent, setReviewContent] = useState(content);
@@ -104,6 +105,15 @@ const ReviewItem = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const inputRef = useRef();
+
+  const isUsersReview = () => {
+    if (token && currentUserId != null) {
+      const name = JSON.parse(currentUserId)[0] === memberId ? '나' : writer;
+      return name;
+    } else {
+      return writer;
+    }
+  };
 
   return (
     <Shadow distance={0.1} startColor={shadowColor} offset={[0, 12]}>
@@ -127,9 +137,7 @@ const ReviewItem = ({
           <View style={styles.userContentContainer}>
             <View style={styles.userContentContainerTop}>
               <View style={styles.userContentContainerTopElement}>
-                <Text style={styles.userName}>
-                  {JSON.parse(currentUserId)[0] === memberId ? '나' : writer}
-                </Text>
+                <Text style={styles.userName}>{isUsersReview()}</Text>
                 <Text style={styles.date}>{date}</Text>
               </View>
               <View style={styles.thumbImageContainer}>
@@ -169,7 +177,7 @@ const ReviewItem = ({
         </View>
 
         <ContentsViewPop
-          title={writer}
+          title={isUsersReview()}
           message={content}
           contentsViewPopVisible={contentsViewPopVisible}
           setContentsViewPopVisible={setContentsViewPopVisible}
@@ -195,6 +203,7 @@ const ReviewItem = ({
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           token={token}
+          deleteReview={deleteReview}
         />
       </View>
     </Shadow>
