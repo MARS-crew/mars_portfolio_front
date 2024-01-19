@@ -7,22 +7,38 @@ import {
   Dimensions,
   View,
 } from 'react-native';
+import {Shadow} from 'react-native-shadow-2';
 
 const LoginButton = props => {
+  const shadowColor = 'rgba(151, 151, 151, 0.36)';
   const chooseOkTextStyle = {
-    color: props.color == '' ? '##F5F5F5' : props.color, // 프롭스 값으로 텍스트 색상 설정
+    color: props.color == '' ? '#F5F5F5' : props.color, // 프롭스 값으로 텍스트 색상 설정
   };
+
   const chooseOkBtnStyle = {
-    backgroundColor: props.background == '' ? 'black' : props.background, // 프롭스 값으로 텍스트 색상 설정
+    backgroundColor: props.background, // 프롭스 값으로 텍스트 색상 설정
+    borderWidth: props.background == 'white' ? 1 : 0,
+    borderColor: '#F5F5F5',
   };
   return (
     <View>
-      <TouchableOpacity
-        style={[styles.button, chooseOkBtnStyle]}
-        onPress={props.handleLoginPress}>
-        <Image source={props.src} style={styles.image} />
-        <Text style={[styles.title, chooseOkTextStyle]}>{props.title}</Text>
-      </TouchableOpacity>
+      <Shadow
+        style={{
+          width: 335,
+          height: 50,
+          marginBottom: 18,
+          borderRadius: 25,
+        }}
+        distance={10}
+        Color={shadowColor}
+        offset={[1, 1]}>
+        <TouchableOpacity
+          style={[styles.button, chooseOkBtnStyle]}
+          onPress={props.handleLoginPress}>
+          <Image source={props.src} style={styles.image} />
+          <Text style={[styles.title, chooseOkTextStyle]}>{props.title}</Text>
+        </TouchableOpacity>
+      </Shadow>
     </View>
   );
 };
@@ -31,9 +47,7 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 15,
     borderRadius: 25,
-    width: Dimensions.get('window').width / 1.1,
     paddingVertical: 15,
     flexDirection: 'row',
   },
@@ -45,10 +59,9 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    fontWeight: '700',
+    fontWeight: '900',
     fontSize: 16,
-    width: 124,
-    height: 21,
+    flex: 1,
   },
 });
 

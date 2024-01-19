@@ -133,6 +133,7 @@ const Login = () => {
           />
           <View style={styles.marginView}>
             <LoginButton
+              background={'white'}
               title={'구글로 로그인'}
               src={require('../../assets/images/google.png')}
               handleLoginPress={() => handleLoginPress('google')} // 각각의 로그인 형식으로 매개변수 전달
