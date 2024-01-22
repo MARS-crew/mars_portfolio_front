@@ -17,10 +17,14 @@ import InterviewAlert from './InterviewAlert';
 import cancelIcon from '../../assets/images/cancelIcon.png';
 import deletedIcon from '../../assets/images/deletedIcon.png';
 import editingIcon from '../../assets/images/editingIcon.png';
+import axios from 'axios';
+import { method } from 'lodash';
 
 const InterviewModal = ({
+  token,
   modalOpen,
   setModalOpen,
+  interviewId,
   heart,
   setHeart,
   filePath,
@@ -36,9 +40,52 @@ const InterviewModal = ({
   const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
 
 
+
+  const retrieveNewUrl = async (file) => {
+    await fetch(
+      `http://api.mars-port.duckdns.org/api/v1/presignedUrl?name=${file.uri}}`
+    )
+      .then((response) => {
+        response.json().then((jsonData) => {
+          const presignedUrl = jsonData.presignedUrl;
+          const uniqueFileName = jsonData.uniqueFileName;
+          console.log("presignedUrl: ", presignedUrl);
+          console.log("uniqueFileName: ", uniqueFileName);
+
+          console.log("uploadFileToServer 실행");
+          uploadFileToServer(file, presignedUrl, uniqueFileName);
+        });
+      })
+      .catch((e) => {
+        console.error(e);
+      })
+  };
+
+  const uploadFileToServer = async (file, presignedUrl, uniqueUrl) => {
+
+    fetch(presignedUrl, {
+      method: 'PUT',
+      body: file,
+    })
+      .then(() => {
+        const fileInfo = {
+          name: file.fileName,
+          ext: file.type,
+          url: 'https://minio.mars-port.duckdns.org/mars-data/' + uniqueUrl,
+        };
+        console.log('uploadFile: ', JSON.stringify(fileInfo));
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+  }
+
+
+
   const handleCancel = () => {
     if (isEditing) {
       setFilePath(prevFile);
+
     }
     setModalOpen(false);
     setIsEditing(false);
@@ -46,16 +93,20 @@ const InterviewModal = ({
   };
 
   const showDelete = () => {
-    if (filePath === false) {
-      // Alert.alert('삭제할 데이터가 없습니다.');
+    if (!filePath) {
       setDeleteAlertVisible(true);
     } else {
-      setDeletePopVisible(!deletePopVisible);
+      const isImage = !filePath.endsWith('.mp4');
+      if (isImage) {
+        setDeleteAlertVisible(true);
+      } else {
+        setDeletePopVisible(!deletePopVisible);
+      }
     }
   };
 
   // 갤러리에서 video 파일 선택
-  const chooseFile = type => {
+  const chooseFile = async (type) => {
     let options = {
       mediaType: 'video',
       maxWidth: 300,
@@ -63,14 +114,23 @@ const InterviewModal = ({
       videoQuality: 'low',
       // quality: 1,
     };
-    launchImageLibrary(options, response => {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        launchImageLibrary(options, result => {
+          if (result) {
+            resolve(result);
+          } else {
+            reject(false);
+          }
+        });
+      });
       if (response === false) {
         // 선택한 이미지가 없는 경우
         console.log('User did not select an image');
         return;
       }
 
-      console.log('Response = ', response);
+      // console.log('response = ', response);
 
       if (response.assets && response.assets.length > 0) {
         const asset = response['assets'][0];
@@ -81,13 +141,35 @@ const InterviewModal = ({
         // console.log('fileSize -> ', asset.fileSize);
         // console.log('type -> ', asset.type);
         // console.log('fileName -> ', asset.fileName);
-
+        console.log(asset.base64);
         setPrevFile(filePath);  // 수정 시 수정 전 내용 저장
         setChangeData(asset.uri);
         setFilePath(asset.uri);
         setIsEditing(true);
+        try {
+          console.log("retrieveNewUrl 실행");
+          retrieveNewUrl(asset);
+          // const presignedUrlResponse = await fetch(
+          //   'http://api.mars-port.duckdns.org/api/v1/presignedUrl?name=' + asset.fileName
+          // );
+          // const presignedUrlData = await presignedUrlResponse.json();
+          // console.log("presignedUrlData.presignedUrl: ", presignedUrlData.presignedUrl, "| presignedUrlData.uniqueFileName: ", presignedUrlData.uniqueFileName)
+
+          // // 파일 업로드
+          // await uploadFileToServer(
+          //   {
+          //     uri: asset.uri,
+          //     type: 'multipart/form-data',
+          //     name: asset.fileName,
+          //   },
+          //   presignedUrlData.presignedUrl, presignedUrlData.uniqueFileName, 'FileUploadResult');
+        } catch (error) {
+          console.error('Error uploading file to server:', error);
+        }
       }
-    });
+    } catch (error) {
+      console.log("Error in chooseFile: ", error);
+    }
   };
 
   return (
@@ -154,6 +236,8 @@ const InterviewModal = ({
             prevFile={prevFile}
           />
           <InterviewSavePop
+            token={token}
+            interviewId={interviewId}
             savePopVisible={savePopVisible}
             setSavePopVisible={setSavePopVisible}
             setIsEditing={setIsEditing}

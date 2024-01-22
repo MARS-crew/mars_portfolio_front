@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import axios from 'axios';
 
 const InterviewSavePop = ({
   savePopVisible,
@@ -21,8 +22,17 @@ const InterviewSavePop = ({
   changeHeart,
   setPrevFile,
   prevFile,
+  token,
+  interviewId,
 }) => {
   const handleSave = () => {
+    const source = axios.CancelToken.source();
+
+    axios({
+      method: 'put',
+      url: 'http://api.mars-port.duckdns.org/api/vi/interview'
+    })
+    
     setIsEditing(false);
     setModalOpen(false);
     setIsPlaying(true);

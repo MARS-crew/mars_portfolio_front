@@ -108,6 +108,7 @@ const Interview = ({ token }) => {
       axios({
         method: 'get',
         url: 'http://api.mars-port.duckdns.org/api/v1/interview/',
+        // url: 'http://localhost:3000/api/v1/interview/',
         headers: {
           Authorization: token,
         },
@@ -148,7 +149,12 @@ const Interview = ({ token }) => {
         vertical={true}
         data={data}
         renderItem={({ item }) => (
-          <InterviewContents interviewId={item.interviewId} id={item.memberId} path={item.url} token={token} />
+          <InterviewContents
+            interviewId={item.interviewId}
+            id={item.memberId}
+            path={item.url}
+            token={token}
+          />
         )}
         index={dataIndex}
         onScroll={handleVerticalScroll}

@@ -71,7 +71,7 @@ const DATA = [
     video: require('../../assets/images/GroupVideo.png'),
   },
   {
-    id: 49,
+    id: 73,
     group: 5,
     src: require('../../assets/images/Rectangle5_2.png'),
     video: require('../../assets/images/GroupVideo.png'),
@@ -91,7 +91,7 @@ const DATA = [
     medal: 'y',
   },
   {
-    id: 50,
+    id: 55555,
     group: 5,
     src: require('../../assets/images/Rectangle.png'),
     video: require('../../assets/images/GroupVideo.png'),
