@@ -80,6 +80,7 @@ const InterviewModal = ({
           url: 'https://minio.mars-port.duckdns.org/mars-data/' + uniqueUrl,
         };
         console.log('uploadFile: ', JSON.stringify(fileInfo));
+        setChangeData(fileInfo.url);
       })
       .catch((e) => {
         console.log(e);
@@ -149,7 +150,7 @@ const InterviewModal = ({
         // console.log('fileName -> ', asset.fileName);
         console.log(asset);
         setPrevFile(filePath);  // 수정 시 수정 전 내용 저장
-        setChangeData(asset.uri);
+        // setChangeData(asset.uri);
         setFilePath(asset.uri);
         setIsEditing(true);
         try {

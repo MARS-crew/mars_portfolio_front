@@ -25,13 +25,30 @@ const InterviewSavePop = ({
   token,
   interviewId,
 }) => {
-  const handleSave = () => {
-    const source = axios.CancelToken.source();
 
-    axios({
-      method: 'put',
-      url: 'https://api.writeyoume.com/api/vi/interview'
+  const saveInterview = async () => {
+    console.log(changeData)
+    fetch('https://api.writeyoume.com/api/vi/interview/' + interviewId, {
+      method: 'PUT',
+      headers: {
+        Authorization: token,
+      },
+      data: {
+        file_url: changeData
+      }
     })
+      .then((response) => {
+        console.log("성공")
+        console.log(response);
+      })
+      .catch((e) => {
+        console.log("실패");
+        console.log(e);
+      });
+  }
+
+  const handleSave = () => {
+    saveInterview();
 
     setIsEditing(false);
     setModalOpen(false);
