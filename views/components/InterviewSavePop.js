@@ -30,9 +30,9 @@ const InterviewSavePop = ({
 
     axios({
       method: 'put',
-      url: 'http://api.mars-port.duckdns.org/api/vi/interview'
+      url: 'https://api.writeyoume.com/api/vi/interview'
     })
-    
+
     setIsEditing(false);
     setModalOpen(false);
     setIsPlaying(true);

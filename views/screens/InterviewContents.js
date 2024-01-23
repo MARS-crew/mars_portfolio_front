@@ -63,7 +63,7 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
     try {
       const response = await axios({
         method: 'post',
-        url: 'http://api.mars-port.duckdns.org/api/v1/interview/heart/' + id,
+        url: 'https://api.writeyoume.com/api/v1/interview/heart/' + id,
         headers: {
           Authorization: token,
         },

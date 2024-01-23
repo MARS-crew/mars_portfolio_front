@@ -107,7 +107,7 @@ const Interview = ({ token }) => {
       const source = axios.CancelToken.source();
       axios({
         method: 'get',
-        url: 'http://api.mars-port.duckdns.org/api/v1/interview/',
+        url: 'https://api.writeyoume.com/api/v1/interview/',
         // url: 'http://localhost:3000/api/v1/interview/',
         headers: {
           Authorization: token,
@@ -130,6 +130,7 @@ const Interview = ({ token }) => {
 
           setData(Object.values(sortedAndGroupedData));
           console.log(sortedAndGroupedData);
+          console.log();
         })
         .catch(function (error) {
           console.log(error);

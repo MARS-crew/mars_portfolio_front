@@ -43,7 +43,7 @@ const InterviewModal = ({
 
   const retrieveNewUrl = async (file) => {
     await fetch(
-      `http://api.mars-port.duckdns.org/api/v1/presignedUrl?name=${file.uri}}`
+      `https://api.writeyoume.com/api/v1/presignedUrl?name=${file.uri}`
     )
       .then((response) => {
         response.json().then((jsonData) => {
@@ -65,9 +65,15 @@ const InterviewModal = ({
 
     fetch(presignedUrl, {
       method: 'PUT',
-      body: file,
+      body: {
+        uri: file.uri,
+        type: 'multipart/form-data',
+        name: file.fileName,
+      },
+      headers: { 'content-type': file.type }
     })
-      .then(() => {
+      .then((reso) => {
+        console.log(reso);
         const fileInfo = {
           name: file.fileName,
           ext: file.type,
@@ -141,7 +147,7 @@ const InterviewModal = ({
         // console.log('fileSize -> ', asset.fileSize);
         // console.log('type -> ', asset.type);
         // console.log('fileName -> ', asset.fileName);
-        console.log(asset.base64);
+        console.log(asset);
         setPrevFile(filePath);  // 수정 시 수정 전 내용 저장
         setChangeData(asset.uri);
         setFilePath(asset.uri);
@@ -150,7 +156,7 @@ const InterviewModal = ({
           console.log("retrieveNewUrl 실행");
           retrieveNewUrl(asset);
           // const presignedUrlResponse = await fetch(
-          //   'http://api.mars-port.duckdns.org/api/v1/presignedUrl?name=' + asset.fileName
+          //   'https://api.writeyoume.com/api/v1/presignedUrl?name=' + asset.fileName
           // );
           // const presignedUrlData = await presignedUrlResponse.json();
           // console.log("presignedUrlData.presignedUrl: ", presignedUrlData.presignedUrl, "| presignedUrlData.uniqueFileName: ", presignedUrlData.uniqueFileName)
