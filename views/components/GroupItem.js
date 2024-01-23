@@ -13,29 +13,22 @@ import LoginItem from './LoginItem';
 import FAB from './FloatingMenu';
 
 const GroupItem = ({id, src, token}) => {
-
   return (
     <View>
       <View style={styles.itemArea}>
-        <ImageBackground source={{ uri: src }} style={styles.image}>
+        <ImageBackground source={{uri: src}} style={styles.image}>
           <GroupLogo />
           <Text style={styles.text}>{id}기</Text>
           <LoginItem token={token} />
         </ImageBackground>
       </View>
-      {/* <FAB /> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  itemArea: {
-    flex: 1,
-  },
-
   image: {
-    left: -5,
-    width: Dimensions.get('window').width * 1.03,
+    width: Dimensions.get('window').width / 1,
     height: Dimensions.get('window').height / 1,
   },
   text: {

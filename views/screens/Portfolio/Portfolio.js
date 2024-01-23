@@ -117,7 +117,7 @@ const Portfolio = ({ token }) => {
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: `http://api.mars-port.duckdns.org/api/v1/portfolio/`,
+      url: `https://api.writeyoume.com/api/v1/portfolio/`,
       headers: {
         Authorization: token,
       },
@@ -135,10 +135,7 @@ const Portfolio = ({ token }) => {
           kind: item.kind,
           file_id: item.file_id,
           ext: item.ext,
-          url: `http://10.0.2.2:3000/${item.url.replace(
-            'http://172.20.10.4:3000/',
-            '',
-          )}`,
+          url: item.url,
           del_yn: item.del_yn,
         }));
         const sortedAndGroupedData = _.chain(extractedData)

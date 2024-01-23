@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -8,11 +8,11 @@ import {
 } from 'react-native';
 
 import Video from 'react-native-video';
-import {Shadow} from 'react-native-shadow-2';
+import { Shadow } from 'react-native-shadow-2';
 import EditMode from '../../components/commonComponent/EditMode';
 import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
 import DetailPop from './DetailPop';
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.4;
 
 const styles = StyleSheet.create({
@@ -58,7 +58,7 @@ const PortfolioItem = ({
   //   const source = axios.CancelToken.source();
   //   axios({
   //     method: 'get',
-  //     url: `http://api.mars-port.duckdns.org/api/v1/portfolio`,
+  //     url: `https://api.writeyoume.com/api/v1/portfolio`,
   //     headers: {
   //       Authorization: token,
   //     },
@@ -127,7 +127,7 @@ const PortfolioItem = ({
           {(code === 1 || code === 3) && (
             <View>
               <Image
-                source={{uri: src}}
+                source={{ uri: src }}
                 style={[styles.content, styles.image]}
               />
             </View>
@@ -136,7 +136,7 @@ const PortfolioItem = ({
             <View>
               <Video
                 ref={useRef(null)}
-                source={{uri: src}}
+                source={{ uri: src }}
                 style={styles.content}
                 repeat={true}
                 resizeMode="contain"

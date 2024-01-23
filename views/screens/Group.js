@@ -19,8 +19,8 @@ const Item = ({id, src, medal, token}) => (
   </View>
 );
 
-const Group = ({ data, token, fileData }) => {
-  const { currentIndex, changeIndex } = useIndexContext();
+const Group = ({data, token, fileData}) => {
+  const {currentIndex, changeIndex} = useIndexContext();
   const swiperRef = useRef(null);
 
   useEffect(() => {
@@ -40,7 +40,11 @@ const Group = ({ data, token, fileData }) => {
   };
 
   if (!fileData || fileData.length === 0) {
-    return <View><Text>Loading...</Text></View>;
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 
   return (
@@ -49,7 +53,7 @@ const Group = ({ data, token, fileData }) => {
         ref={swiperRef}
         vertical={true}
         data={fileData}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <Item id={item.group_id} src={item.url} token={token} />
         )}
         index={currentIndex}

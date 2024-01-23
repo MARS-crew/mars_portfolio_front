@@ -1,5 +1,12 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, TouchableOpacity, Text, Image} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Image,
+  Dimensions,
+} from 'react-native';
 import {useNavigation, CommonActions} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -11,7 +18,7 @@ const LoginItem = ({token}) => {
   }, [token]);
 
   return (
-    <View>
+    <View style={styles.container}>
       {token ? (
         <TouchableOpacity
           style={styles.button}
@@ -49,6 +56,11 @@ const LoginItem = ({token}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+
+    width: Dimensions.get('window').width,
+  },
   itemArea: {
     flex: 1,
   },

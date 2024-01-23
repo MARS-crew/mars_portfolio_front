@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import {useIndexContext} from '../../../IndexContext';
+import { useIndexContext } from '../../../IndexContext';
 import ReviewItem from '../Review/ReviewItem';
 import FloatingMenu from '../../components/FloatingMenu';
 
@@ -75,8 +75,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Review = ({token, currentUserId}) => {
-  const {selectedMemId} = useIndexContext();
+const Review = ({ token, currentUserId }) => {
+  const { selectedMemId } = useIndexContext();
   const [data, setData] = useState([]);
   const [review, isReview] = useState(true);
   const [showReviewInput, setShowReviewInput] = useState(false);
@@ -90,8 +90,6 @@ const Review = ({token, currentUserId}) => {
     setShowReviewInput(true);
   };
 
-  //todo id랑 member_id도 이렇게 받아와야 하지 않을까...
-
   useEffect(() => {
     console.log('currentReviewContent: ', reviewContent);
   }, [reviewContent]);
@@ -101,45 +99,48 @@ const Review = ({token, currentUserId}) => {
   }, [reviewId]);
 
   useEffect(() => {
-    if (token) {
-      const source = axios.CancelToken.source();
+    if (!token) return;
 
-      axios({
-        method: 'get',
-        url: `http://api.mars-port.duckdns.org/api/v1/review/${selectedMemId}`,
-        headers: {
-          Authorization: token,
-        },
-        cancelToken: source.token,
+    const source = axios.CancelToken.source();
+
+    axios({
+      method: 'get',
+      url: `https://api.writeyoume.com/api/v1/review/${selectedMemId}`,
+      headers: {
+        Authorization: token,
+      },
+      cancelToken: source.token,
+    })
+      .then(response => {
+        console.log('Success:', response.status);
+
+        const extractedData = response.data.data.map(item => ({
+          review_id: item.review_id,
+          name: item.name,
+          member_id: item.member_id,
+          content: item.content,
+          reg_date: item.reg_date,
+          is_liked: item.is_liked,
+        }));
+        setData(extractedData);
       })
-        .then(response => {
-          console.log('Success:', response.status);
+      .catch(error => {
+        console.log('Error Response:', error.response);
+        setData([]);
+      });
 
-          const extractedData = response.data.data.map(item => ({
-            review_id: item.review_id,
-            name: item.name,
-            member_id: item.member_id,
-            content: item.content,
-            reg_date: item.reg_date,
-          }));
-          setData(extractedData);
-        })
-        .catch(error => {
-          console.log('Error Response:', error.response);
-          setData([]);
-        });
-
-      return () => {
-        source.cancel('API 호출이 취소되었습니다.');
-      };
-    }
+    return () => {
+      source.cancel('API 호출이 취소되었습니다.');
+    };
   }, [token, selectedMemId]);
 
   const postReview = async reviewText => {
+    if (reviewText == '' || !token) return;
+
     try {
       const response = await axios({
         method: 'post',
-        url: 'http://api.mars-port.duckdns.org/api/v1/review',
+        url: 'https://api.writeyoume.com/api/v1/review',
         data: {
           ref_member_id: selectedMemId,
           content: reviewText,
@@ -148,26 +149,97 @@ const Review = ({token, currentUserId}) => {
           Authorization: token,
         },
       });
-      console.log('Response', response.data);
+      const newReview = response.data.data;
+      newReview.name = '나';
+      setData(currentData => [newReview, ...currentData]);
+      setReviewContent('');
     } catch (error) {
       console.error('Error', error);
     }
   };
 
   const updateReview = async (reviewId, member_id, reviewContent) => {
+    if (reviewContent == '' || !token) return;
+
     try {
       const response = await axios({
         method: 'put',
-        url: `http://api.mars-port.duckdns.org/api/v1/review/${reviewId}`,
+        url: `https://api.writeyoume.com/api/v1/review/${reviewId}`,
         data: {
           member_id: member_id,
           content: reviewContent,
+          ref_member_id: selectedMemId,
         },
         headers: {
           Authorization: token,
         },
       });
-      console.log('Response', response.data);
+      setData([]);
+      const extractedData = Array.isArray(response.data.data)
+        ? response.data.data.map(item => ({
+          review_id: item.review_id,
+          name: item.name,
+          member_id: item.member_id,
+          content: item.content,
+          reg_date: item.reg_date,
+          is_liked: item.is_liked,
+        }))
+        : [];
+      setData(extractedData);
+      setReviewContent('');
+    } catch (error) {
+      console.error('Error', error);
+    }
+  };
+
+  const deleteReview = async (reviewId, memberId) => {
+    if (!token) return;
+    try {
+      const response = await axios({
+        method: 'delete',
+        url: `https://api.writeyoume.com/api/v1/review/${reviewId}`,
+        data: {
+          member_id: memberId,
+          ref_member_id: selectedMemId,
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
+      });
+      setData([]);
+      const extractedData = Array.isArray(response.data.data)
+        ? response.data.data.map(item => ({
+          review_id: item.review_id,
+          name: item.name,
+          member_id: item.member_id,
+          content: item.content,
+          reg_date: item.reg_date,
+          is_liked: item.is_liked,
+        }))
+        : [];
+      setData(extractedData);
+    } catch (error) {
+      console.error('Error', error);
+    }
+  };
+
+  const setReviewLike = async ref_review_id => {
+    if (!token) return;
+
+    try {
+      const response = await axios({
+        method: 'post',
+        url: 'https://api.writeyoume.com/api/v1/review/like',
+        data: {
+          member_id: currentUserId,
+          ref_review_id: ref_review_id,
+        },
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log('성공', response.status);
     } catch (error) {
       console.error('Error', error);
     }
@@ -180,7 +252,10 @@ const Review = ({token, currentUserId}) => {
           {data.length > 0 ? (
             <FlatList
               data={data}
-              renderItem={({item}) => (
+              initialNumToRender={10}
+              maxToRenderPerBatch={5}
+              windowSize={5}
+              renderItem={({ item }) => (
                 <ReviewItem
                   review={review}
                   id={item.review_id}
@@ -188,14 +263,18 @@ const Review = ({token, currentUserId}) => {
                   date={item.reg_date}
                   content={item.content}
                   imageType={item.imageType}
-                  isLiked={item.isLiked}
+                  isLiked={item.is_liked}
                   onEdit={onEdit}
                   currentReviewId={setReviewId}
                   currentReviewContent={setReviewContent}
                   token={token}
+                  setReviewLike={setReviewLike}
+                  memberId={item.member_id}
+                  currentUserId={currentUserId}
+                  deleteReview={deleteReview}
                 />
               )}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={item => item.review_id.toString()}
             />
           ) : null}
         </View>
@@ -227,35 +306,6 @@ const Review = ({token, currentUserId}) => {
             <Text style={styles.text}>{isEditMode ? '수정' : '등록'}</Text>
           </TouchableOpacity>
         </View>
-
-        // <View style={styles.inputReviewContainer}>
-        // {showReviewInput ? (
-        // <View style={styles.inputTextContainer}>
-        // <TextInput
-        // style={styles.inputTextArea}
-        // ref={newReviewInputRef}
-        // multiline={true}
-        // onChangeText={text => setReviewContent(text)}
-        // placeholder="멤버의 리뷰를 입력해주세요."
-        // returnKeyType="done"
-        // />
-        // <TouchableOpacity
-        // style={styles.inputReviewButton}
-        // onPress={() => {
-        // postReview(reviewContent);
-        // setShowReviewInput(false);
-        // }}>
-        // <Text style={styles.text}>등록</Text>
-        // </TouchableOpacity>
-        // </View>
-        // ) : (
-        // <TouchableOpacity
-        // style={styles.reviewInputButton}
-        // onPress={() => setShowReviewInput(true)}>
-        // <Text style={styles.text}>리뷰 등록하기</Text>
-        // </TouchableOpacity>
-        // )}
-        // </View>
       }
       <FloatingMenu />
     </View>

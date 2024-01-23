@@ -58,7 +58,7 @@ const EditMode = ({
   inputRef,
   currentReviewId,
   currentReviewContent,
-  token,
+  deleteReview,
 }) => {
   //공통 스테이트
 
@@ -71,10 +71,6 @@ const EditMode = ({
   // EditMode Button onPress 용 Props 컴포넌트 start------------------------------------------------------------------------------------------------------------------------
 
   const editButton = (reviewId, reviewContent) => {
-    //수정 섹션을 클릭한 경우
-    // onEdit();
-    console.log('reviewContent', reviewContent);
-    console.log('reviewId', reviewId);
     onEdit();
     currentReviewId(reviewId);
     currentReviewContent(reviewContent);
@@ -87,27 +83,6 @@ const EditMode = ({
     if (review === true) {
       onEdit();
       setTogleButton(false);
-    }
-  };
-
-  const deletedButton = async (reviewId, memberId) => {
-    try {
-      const response = await axios({
-        method: 'delete',
-        url: `http://api.mars-port.duckdns.org/api/v1/review/${reviewId}`,
-        data: {
-          // DELETE 요청의 본문에 member_id를 포함 (이 방식은 API 설계에 따라 달라질 수 있음)
-          member_id: memberId,
-        },
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
-      });
-      console.log('Delete response', response.data);
-      console.log('review deleted: ', token);
-    } catch (error) {
-      console.error('Error', error);
     }
   };
 
@@ -170,7 +145,7 @@ const EditMode = ({
             title={'삭제'}
             source={deletedIcon}
             onPress={() => {
-              deletedButton(id, writer);
+              deleteReview(id, writer);
             }}
           />
           <EditModeSectionChooseBtn

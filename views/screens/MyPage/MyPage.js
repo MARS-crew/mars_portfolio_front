@@ -131,7 +131,7 @@ const MyPage = ({ token }) => {
     try {
       const response = await axios({
         method: 'get',
-        url: 'http://api.mars-port.duckdns.org/api/v1/mypage/' + user, // 로그인할때 로그인 멤버아이디값가져오기
+        url: 'https://api.writeyoume.com/api/v1/mypage/' + user, // 로그인할때 로그인 멤버아이디값가져오기
         headers: {
           Authorization: token,
         },
