@@ -20,6 +20,7 @@ import { Shadow } from 'react-native-shadow-2';
 import addBtn from '../../../assets/images/add.png';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import { useIndexContext } from '../../../IndexContext';
+import { useUser } from '../../../LoginUserContext';
 import GroupItem from '../../components/GroupItem';
 
 const { width, height } = Dimensions.get('window');
@@ -61,6 +62,8 @@ const styles = StyleSheet.create({
 const Portfolio = ({ token }) => {
   const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId, selectedGroupId, changeSelectedGroupId } = useIndexContext();
   const swiperRef = useRef(null);
+  const { user, storeUser } = useUser();
+
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
       swiperRef.current.scrollToIndex({
@@ -147,6 +150,7 @@ const Portfolio = ({ token }) => {
         const groups = Object.values(sortedAndGroupedData);
         const transformedData = transformDataForSwiper(groups);
         setData(transformedData);
+        console.log();
       })
       .catch(function (error) {
         console.log(error);
@@ -215,6 +219,7 @@ const Portfolio = ({ token }) => {
               setDetailPopVisible={setDetailPopVisible}
               detailPopVisible={detailPopVisible}
               token={token}
+              memberId={user}
             />
           </View>
         </ScrollView>
