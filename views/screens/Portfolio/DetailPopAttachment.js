@@ -7,7 +7,6 @@ import {
   Image,
 } from 'react-native';
 
-import DocumentPicker from 'react-native-document-picker';
 import Attachment from '../../../assets/images/Attachment.png';
 import emptyImg from '../../../assets/images/emptyImg.png';
 import { launchImageLibrary } from 'react-native-image-picker';

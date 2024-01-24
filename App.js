@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Animated,
   Dimensions,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -31,8 +32,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MyProvider } from './MyContext';
 import { IndexProvider, useIndexContext } from './IndexContext';
 import { UserInfoProvider, useUserInfo } from './UserInfoContext';
+import { LoadingProvider, useLoadingContext } from './LoadingContext';
 import Logout from './views/screens/Logout';
 import LoginGo from './views/screens/LoginGo';
+import Loading from './views/screens/Loading';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
@@ -151,6 +154,11 @@ const HomeScreen = () => {
   const [oldIndex, setOldIndex] = useState(horizontalIndex);
   const horizontalScrollRef = useRef(null);
 
+
+  const { loading, changeLoading } = useLoadingContext();
+
+
+
   useEffect(() => {
     if (horizontalScrollRef.current) {
       horizontalScrollRef.current.scrollTo({
@@ -206,61 +214,79 @@ const HomeScreen = () => {
   return (
     <UserInfoProvider>
       <MyProvider>
-        <AnimatedScrollView
-          ref={horizontalScrollRef}
-          scrollEventThrottle={16}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: xOffset } } }],
+        <LoadingProvider>
+          <AnimatedScrollView
+            ref={horizontalScrollRef}
+            scrollEventThrottle={16}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: xOffset } } }],
+              {
+                useNativeDriver: true,
+                listener: handleScroll,
+              },
+            )}
+            horizontal
+            pagingEnabled
+            style={styles.scrollView}>
+            {token ? ( // 로그인 전이면 그룹 페이지만, 로그인 후면 전체 페이지
+              <>
+                {isSplashVisible === false ? (
+                  <Screen text="Screen 1" index={0}>
+                    <WhichGroup token={token} />
+                  </Screen>
+                ) : null}
+                <Screen text="Screen 2" index={1}>
+                  <GroupVideo token={token} />
+                </Screen>
+                <Screen text="Screen 3" index={2}>
+                  <Interview token={token} />
+                </Screen>
+                <Screen text="Screen 4" index={3}>
+                  <Portfolio token={token} options={{ headerShown: false }} />
+                </Screen>
+                <Screen text="Screen 5" index={4}>
+                  <Resume token={token} />
+                </Screen>
+                <Screen text="Screen 6" index={5}>
+                  <Review token={token} currentUserId={id} />
+                </Screen>
+                <Screen text="Screen 7" index={6}>
+                  <MyPage token={token} options={{ headerShown: false }} />
+                </Screen>
+              </>
+            ) : (
+              <>
+                {isSplashVisible === false ? (
+                  <Screen text="Screen 0" index={0}>
+                    <LoginGo token={token} />
+                  </Screen>
+                ) : null}
+              </>
+            )}
             {
-              useNativeDriver: true,
-              listener: handleScroll,
-            },
-          )}
-          horizontal
-          pagingEnabled
-          style={styles.scrollView}>
-          {token ? ( // 로그인 전이면 그룹 페이지만, 로그인 후면 전체 페이지
-            <>
-              {isSplashVisible === false ? (
-                <Screen text="Screen 1" index={0}>
-                  <WhichGroup token={token} />
-                </Screen>
-              ) : null}
-              <Screen text="Screen 2" index={1}>
-                <GroupVideo token={token} />
-              </Screen>
-              <Screen text="Screen 3" index={2}>
-                <Interview token={token} />
-              </Screen>
-              <Screen text="Screen 4" index={3}>
-                <Portfolio token={token} options={{ headerShown: false }} />
-              </Screen>
-              <Screen text="Screen 5" index={4}>
-                <Resume token={token} />
-              </Screen>
-              <Screen text="Screen 6" index={5}>
-                <Review token={token} currentUserId={id} />
-              </Screen>
-              <Screen text="Screen 7" index={6}>
-                <MyPage token={token} options={{ headerShown: false }} />
-              </Screen>
-            </>
-          ) : (
-            <>
-              {isSplashVisible === false ? (
-                <Screen text="Screen 0" index={0}>
-                  <LoginGo token={token} />
-                </Screen>
-              ) : null}
-            </>
-          )}
-        </AnimatedScrollView>
+              loading ? (
+                <Modal transparent={true} visible={loading} onRequestClose={() => hideLoading()}>
+                  <View style={styles.loading}>
+                    <Loading />
+                  </View>
+                </Modal>
+              ) : null
+            }
+          </AnimatedScrollView>
+
+        </LoadingProvider>
       </MyProvider>
-    </UserInfoProvider>
+    </UserInfoProvider >
   );
 };
 
 const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // 투명도가 있는 검은색 배경0
+  },
   scrollView: {
     flexDirection: 'row',
     backgroundColor: 'black',

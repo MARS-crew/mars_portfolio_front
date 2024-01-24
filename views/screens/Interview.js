@@ -14,6 +14,7 @@ import _ from 'lodash'; // lodash 라이브러리 사용
 import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
 import { useIndexContext } from '../../IndexContext';
 import { UserInfoProvider, useUserInfo } from '../../UserInfoContext';
+import { useLoadingContext } from '../../LoadingContext';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -36,6 +37,9 @@ const Interview = ({ token }) => {
     selectedMember,
     changeSelectedMember,
   } = useIndexContext();
+
+  const { loading, changeLoading } = useLoadingContext();
+
   const [data, setData] = useState([]);
   const [prevSelectedGroupId, setPrevSelectedGroupId] =
     useState(selectedGroupId);
@@ -102,7 +106,11 @@ const Interview = ({ token }) => {
   }, [selectedMember]);
 
   useEffect(() => {
+    setData();
     if (token) {
+      if (!loading) {
+        changeLoading();
+      }
       console.log(`Token 인터뷰 : ${token}`);
       const source = axios.CancelToken.source();
       axios({
@@ -131,6 +139,10 @@ const Interview = ({ token }) => {
           setData(Object.values(sortedAndGroupedData));
           console.log(sortedAndGroupedData);
           console.log();
+
+          if (loading) { changeLoading(); }
+
+
         })
         .catch(function (error) {
           console.log(error);

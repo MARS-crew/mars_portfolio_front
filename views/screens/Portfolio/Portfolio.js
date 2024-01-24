@@ -22,6 +22,7 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 import { useIndexContext } from '../../../IndexContext';
 import { useUser } from '../../../LoginUserContext';
 import GroupItem from '../../components/GroupItem';
+import { useLoadingContext } from '../../../LoadingContext';
 
 const { width, height } = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.4;
@@ -60,7 +61,14 @@ const styles = StyleSheet.create({
 });
 
 const Portfolio = ({ token }) => {
-  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId, selectedGroupId, changeSelectedGroupId } = useIndexContext();
+  const { currentIndex, changeIndex,
+    horizontalIndex, changeHorizontalIndex,
+    dataIndex, changeDataIndex,
+    selectedMemId, changeSelectedMemId,
+    selectedGroupId, changeSelectedGroupId
+  } = useIndexContext();
+
+  const { loading, changeLoading } = useLoadingContext();
   const swiperRef = useRef(null);
   const { user, storeUser } = useUser();
 
@@ -116,7 +124,9 @@ const Portfolio = ({ token }) => {
   };
 
   useEffect(() => {
-    console.log(`Token 포트폴리오: ${token}`);
+    setData();
+    // if (!loading) { changeLoading(); }
+    // console.log(`Token 포트폴리오: ${token}`);
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
