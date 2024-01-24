@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const DetailPopAttachment = (code, id) => {
+const DetailPopAttachment = (code, setChooseData) => {
   const [temporaryUrl, setTemporaryUrl] = useState(null);
 
   const { title, setTitle } = useContext(MyContext);
@@ -65,62 +65,50 @@ const DetailPopAttachment = (code, id) => {
 
   const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
 
-  // 갤러리에서 video나 photo 파일 선택
-  // const chooseFile = type => {
-  //   console.log(code);
-  //   let options;
-  //   if (code.code == 1 || code.code == 3) {
-  //     options = {
-  //       mediaType: 'photo',
-  //       maxWidth: 300,
-  //       maxHeight: 550,
-  //       quality: 1,
-  //     };
-  //   } else {
-  //     options = {
-  //       mediaType: 'video',
-  //       maxWidth: 300,
-  //       maxHeight: 550,
-  //       videoQuality: 'low',
-  //     };
-  //   }
+  const retrieveNewUrl = async (file) => {
+    await fetch(
+      `https://api.writeyoume.com/api/v1/presignedUrl?name=${file.uri}`
+    )
+      .then((response) => {
+        response.json().then((jsonData) => {
+          const presignedUrl = jsonData.presignedUrl;
+          const uniqueFileName = jsonData.uniqueFileName;
+          console.log("presignedUrl: ", presignedUrl);
+          console.log("uniqueFileName: ", uniqueFileName);
 
-  //   launchImageLibrary(options, response => {
-  //     if (response === false) {
-  //       // 선택한 이미지가 없는 경우
-  //       console.log('User did not select an image');
-  //       return;
-  //     }
+          console.log("uploadFileToServer 실행");
+          uploadFileToServer(file, presignedUrl, uniqueFileName);
+        });
+      })
+      .catch((e) => {
+        console.error(e);
+      })
+  };
 
-  //     //console.log('Response = ', response);
+  const uploadFileToServer = async (file, presignedUrl, uniqueUrl) => {
 
-  //     if (response.assets && response.assets.length > 0) {
-  //       const asset = response['assets'][0];
-  //       // console.log('base64 -> ', asset.base64);
-  //       // console.log('uri -> ', asset.uri);
-  //       // console.log('width -> ', asset.width);
-  //       // console.log('height -> ', asset.height);
-  //       // console.log('fileSize -> ', asset.fileSize);
-  //       // console.log('type -> ', asset.type);
-  //       // console.log('fileName -> ', asset.fileName);
-  //       console.log('asset.uri:', asset.uri);
-  //       setPortfolioUrl(
-  //         // `http://localhost:3000/uploads/file/${asset.uri.substring(
-  //         //   asset.uri.lastIndexOf('/') + 1,
-  //         // )}`,
-  //         asset.uri,
-  //       );
-
-  //       //setExt(asset.uri.slice(-3));
-  //       setExt(asset.type);
-  //       //setUrl(temporaryUrl);
-
-  //       //setTemporaryUrl('');
-  //       //setIsEditing(true);
-  //     }
-  //   });
-  //   console.log('portfolioUrl:', portfolioUrl);
-  // };
+    fetch(presignedUrl, {
+      method: 'PUT',
+      body: {
+        uri: file.uri,
+        type: 'multipart/form-data',
+        name: file.fileName,
+      },
+      headers: { 'content-type': file.type }
+    })
+      .then(() => {
+        const fileInfo = {
+          name: file.fileName,
+          ext: file.type,
+          url: 'https://minio.mars-port.duckdns.org/mars-data/' + uniqueUrl,
+        };
+        console.log('uploadFile: ', JSON.stringify(fileInfo));
+        setChooseData(fileInfo.url);
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+  }
 
   const chooseFile = type => {
     let options;
@@ -163,16 +151,19 @@ const DetailPopAttachment = (code, id) => {
 
         // 이제 formdata를 사용하여 업로드 등의 작업을 수행할 수 있습니다.
 
-        console.log('asset.uri:', asset.uri);
+        // console.log('asset.uri:', asset.uri);
 
-        console.log('asset.uri:', asset.type);
+        // console.log('asset.uri:', asset.type);
 
-        console.log('asset.uri:', asset.fileName);
+        // console.log('asset.uri:', asset.fileName);
 
         setPortfolioUrl(formdata);
 
         setExt(asset.type);
         console.log('formdata:', portfolioUrl._parts);
+
+        console.log("retrieveNewUrl 실행");
+        retrieveNewUrl(asset);
         // if (Array.isArray(formdata)) {
         //   console.log(' 배열입니다.');
         // } else {

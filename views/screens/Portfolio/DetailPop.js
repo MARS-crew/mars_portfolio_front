@@ -126,6 +126,8 @@ const DetailPop = ({
   const [temporaryTitle, setTemporaryTitle] = useState(null);
   const [temporaryContent, setTemporaryContent] = useState(null);
 
+  const [chooseData, setChooseData] = useState();
+
   const handleTitleChange = text => {
     setTemporaryTitle(text);
   };
@@ -258,10 +260,10 @@ const DetailPop = ({
           {selectedButton !== 'Link' && (
             <View style={styles.TextInputContainer}>
               {selectedButton === 'Photo' && (
-                <DetailPopAttachment code={1}></DetailPopAttachment>
+                <DetailPopAttachment code={1} setChooseData={setChooseData}></DetailPopAttachment>
               )}
               {selectedButton === 'Video' && (
-                <DetailPopAttachment code={2}></DetailPopAttachment>
+                <DetailPopAttachment code={2} setChooseData={setChooseData}></DetailPopAttachment>
               )}
 
               <DetailInput
@@ -328,6 +330,8 @@ const DetailPop = ({
         choosePopVisible={choosePopVisible}
         setChoosePopVisible={setChoosePopVisible}
         setDetailPopVisible={setDetailPopVisible}
+        chooseData={chooseData}
+        setChooseData={setChooseData}
         token={token}></ChoosePop>
     </PublicModal>
   );
