@@ -1,14 +1,14 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const LoadingContext = createContext({
-    loading: true,
+    loading: false,
     changeLoading: () => { }
 });
 
 export const useLoadingContext = () => useContext(LoadingContext);
 
 export const LoadingProvider = ({ children }) => {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const changeLoading = () => {
         setLoading(!loading);

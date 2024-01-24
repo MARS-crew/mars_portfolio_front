@@ -9,7 +9,7 @@ const Loading = () => {
     <>
       <Image
         style={styles.image}
-        source={require('../../assets/loading.gif')}
+        source={require('../../assets/loading2.gif')}
       />
       {/* <View style={styles.overlay} /> */}
     </>
