@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
 
     const storeUser = async token => {
         try {
-            const response = await axios.get('http://api.mars-port.duckdns.org/api/v1/userbytoken', {
+            const response = await axios.get('https://api.writeyoume.com/api/v1/userbytoken', {
                 headers: {
                     Authorization: token,
                 },

@@ -1,21 +1,21 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {StyleSheet, View, FlatList, Image, Dimensions} from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { StyleSheet, View, FlatList, Image, Dimensions } from 'react-native';
 import ResumeBox from '../components/ResumeBox';
 import ResumeBoxMD from '../components/ResumeBoxMD';
 import FAB from '../components/FloatingMenu';
 import ResumeEditMode from '../components/ResumeEditMode';
 import _ from 'lodash'; // lodash 라이브러리 사용
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
-import {useIndexContext} from '../../IndexContext';
+import { useIndexContext } from '../../IndexContext';
 import axios from 'axios';
 
-const fetchResume = async ({token}) => {
+const fetchResume = async ({ token }) => {
   try {
     const response = await axios({
       method: 'get',
-      url: 'http://api.mars-port.duckdns.org/api/v1/resume',
+      url: 'https://api.writeyoume.com/api/v1/resume',
       headers: {
         Authorization: token,
       },
@@ -51,7 +51,7 @@ const fetchResume = async ({token}) => {
   }
 };
 
-const Resume = ({token}) => {
+const Resume = ({ token }) => {
   const {
     currentIndex,
     changeIndex,
@@ -102,7 +102,7 @@ const Resume = ({token}) => {
   useEffect(() => {
     console.log(`Token 이력서: ${token}`);
     const fetchData = async () => {
-      const data = await fetchResume({token});
+      const data = await fetchResume({ token });
       const sortedAndGroupedData = _.chain(data['data'])
         .sortBy(['group_id', 'member_id'])
         .value();
@@ -124,7 +124,7 @@ const Resume = ({token}) => {
     }
   }, [dataIndex, swiperRef]);
 
-  const Item = ({item, index}) => {
+  const Item = ({ item, index }) => {
     return (
       <TouchableOpacity onLongPress={toggleModal} activeOpacity={100}>
         {modalOpen ? (
@@ -147,7 +147,7 @@ const Resume = ({token}) => {
         ref={swiperRef}
         vertical={true}
         data={resumeData}
-        renderItem={({item, index, token}) => (
+        renderItem={({ item, index, token }) => (
           <Item item={item} index={index} token={token} />
         )}
         // keyExtractor={keyExtractor}

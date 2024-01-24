@@ -1,7 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Animated,
   Dimensions,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -23,16 +24,18 @@ import Share from './views/screens/Share';
 
 import GroupVideo from './views/screens/GroupVideo';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {useNavigation} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import AppContext from './AppContext`';
-import {MyProvider} from './MyContext';
-import {IndexProvider, useIndexContext} from './IndexContext';
-import {UserInfoProvider, useUserInfo} from './UserInfoContext';
+import { MyProvider } from './MyContext';
+import { IndexProvider, useIndexContext } from './IndexContext';
+import { UserInfoProvider, useUserInfo } from './UserInfoContext';
+import { LoadingProvider, useLoadingContext } from './LoadingContext';
 import Logout from './views/screens/Logout';
 import LoginGo from './views/screens/LoginGo';
+import Loading from './views/screens/Loading';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
@@ -55,7 +58,7 @@ const Stack = createStackNavigator();
 const transitionAnimation = index => {
   return {
     transform: [
-      {perspective: 800},
+      { perspective: 800 },
       {
         scale: xOffset.interpolate({
           inputRange: [
@@ -99,32 +102,32 @@ const App = () => {
             <Stack.Screen
               name="Home"
               component={HomeScreen}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Help"
               component={Help}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Share"
               component={Share}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Album"
               component={Album}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Login"
               component={Login}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Logout"
               component={Logout}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
           </Stack.Navigator>
         </NavigationContainer>
@@ -134,7 +137,7 @@ const App = () => {
 };
 
 const HomeScreen = () => {
-  const {token, id, name, email} = useUserInfo();
+  const { token, id, name, email } = useUserInfo();
   const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
   const {
@@ -150,6 +153,11 @@ const HomeScreen = () => {
   } = useIndexContext();
   const [oldIndex, setOldIndex] = useState(horizontalIndex);
   const horizontalScrollRef = useRef(null);
+
+
+  const { loading, changeLoading } = useLoadingContext();
+
+
 
   useEffect(() => {
     if (horizontalScrollRef.current) {
@@ -203,67 +211,82 @@ const HomeScreen = () => {
       // console.log("newIndex: ", newIndex, ", oldIndex: ", oldIndex, ", horizontalIndex: ", horizontalIndex);
     }
   };
-
   return (
     <UserInfoProvider>
       <MyProvider>
-        <AnimatedScrollView
-          ref={horizontalScrollRef}
-          scrollEventThrottle={16}
-          onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {x: xOffset}}}],
-            {
-              useNativeDriver: true,
-              listener: handleScroll,
-            },
-          )}
-          horizontal
-          pagingEnabled
-          style={styles.scrollView}>
-          {token ? ( // 로그인 전이면 그룹 페이지만, 로그인 후면 전체 페이지
-            <>
-              {isSplashVisible === false ? (
-                <Screen text="Screen 1" index={0}>
-                  <WhichGroup token={token} />
+        <LoadingProvider>
+          <AnimatedScrollView
+            ref={horizontalScrollRef}
+            scrollEventThrottle={16}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: xOffset } } }],
+              {
+                useNativeDriver: true,
+                listener: handleScroll,
+              },
+            )}
+            horizontal
+            pagingEnabled
+            style={styles.scrollView}>
+            {token ? ( // 로그인 전이면 그룹 페이지만, 로그인 후면 전체 페이지
+              <>
+                {isSplashVisible === false ? (
+                  <Screen text="Screen 1" index={0}>
+                    <WhichGroup token={token} />
+                  </Screen>
+                ) : null}
+                <Screen text="Screen 2" index={1}>
+                  <GroupVideo token={token} />
                 </Screen>
-              ) : null}
-              <Screen text="Screen 2" index={1}>
-                <GroupVideo token={token} />
-              </Screen>
-              <Screen text="Screen 3" index={2}>
-                <Interview token={token} />
-              </Screen>
-              <Screen text="Screen 4" index={3}>
-                <Portfolio token={token} options={{headerShown: false}} />
-              </Screen>
-              <Screen text="Screen 5" index={4}>
-                <Resume token={token} />
-              </Screen>
-              <Screen text="Screen 6" index={5}>
-                <Review token={token} currentUserId={id} />
-              </Screen>
-              {id === selectedMemId ? (
+                <Screen text="Screen 3" index={2}>
+                  <Interview token={token} />
+                </Screen>
+                <Screen text="Screen 4" index={3}>
+                  <Portfolio token={token} options={{ headerShown: false }} />
+                </Screen>
+                <Screen text="Screen 5" index={4}>
+                  <Resume token={token} />
+                </Screen>
+                <Screen text="Screen 6" index={5}>
+                  <Review token={token} currentUserId={id} />
+                </Screen>
                 <Screen text="Screen 7" index={6}>
-                  <MyPage token={token} options={{headerShown: false}} />
+                  <MyPage token={token} options={{ headerShown: false }} />
                 </Screen>
-              ) : null}
-            </>
-          ) : (
-            <>
-              {isSplashVisible === false ? (
-                <Screen text="Screen 0" index={0}>
-                  <LoginGo token={token} />
-                </Screen>
-              ) : null}
-            </>
-          )}
-        </AnimatedScrollView>
+              </>
+            ) : (
+              <>
+                {isSplashVisible === false ? (
+                  <Screen text="Screen 0" index={0}>
+                    <LoginGo token={token} />
+                  </Screen>
+                ) : null}
+              </>
+            )}
+            {
+              loading ? (
+                <Modal transparent={true} visible={loading} onRequestClose={() => hideLoading()}>
+                  <View style={styles.loading}>
+                    <Loading />
+                  </View>
+                </Modal>
+              ) : null
+            }
+          </AnimatedScrollView>
+
+        </LoadingProvider>
       </MyProvider>
-    </UserInfoProvider>
+    </UserInfoProvider >
   );
 };
 
 const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // 투명도가 있는 검은색 배경0
+  },
   scrollView: {
     flexDirection: 'row',
     backgroundColor: 'black',

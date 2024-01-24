@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useContext} from 'react';
-import {StyleSheet, Pressable, Text, View} from 'react-native';
-import {MyContext} from '../../../MyContext';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, Pressable, Text, View } from 'react-native';
+import { MyContext } from '../../../MyContext';
 import PublicModal from './PublicModal';
 import ChooseButton from './ChooseButton';
 
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
   },
-  chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 10},
+  chooseOkBtn: { backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 10 },
 });
 
 const choosePop = ({
@@ -73,10 +73,10 @@ const choosePop = ({
   temporaryContent,
   setTemporaryContent,
 }) => {
-  const {title, setTitle} = useContext(MyContext);
-  const {content, setContent} = useContext(MyContext);
-  const {portfolioUrl, setPortfolioUrl} = useContext(MyContext);
-  const {ext, setExt} = useContext(MyContext);
+  const { title, setTitle } = useContext(MyContext);
+  const { content, setContent } = useContext(MyContext);
+  const { portfolioUrl, setPortfolioUrl } = useContext(MyContext);
+  const { ext, setExt } = useContext(MyContext);
 
   useEffect(() => {
     console.log(`editToken ${token}`);
@@ -89,7 +89,7 @@ const choosePop = ({
     console.log(portfolioUrl);
     try {
       const response = await fetch(
-        'http://api.mars-port.duckdns.org/api/v1/portfolio',
+        'https://api.writeyoume.com/api/v1/portfolio',
         {
           method: 'POST',
           headers: {
@@ -122,7 +122,7 @@ const choosePop = ({
     console.log('수정', portfolioUrl);
     try {
       const response = await fetch(
-        `http://api.mars-port.duckdns.org/api/v1/portfolio/${id}`,
+        `https://api.writeyoume.com/api/v1/portfolio/${id}`,
         {
           method: 'PUT',
           headers: {
@@ -149,7 +149,7 @@ const choosePop = ({
   };
 
   const deleteData = async () => {
-    fetch(`http://api.mars-port.duckdns.org/api/v1/portfolio/${id}`, {
+    fetch(`https://api.writeyoume.com/api/v1/portfolio/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import axios from 'axios';
 
 const InterviewSavePop = ({
   savePopVisible,
@@ -21,8 +22,34 @@ const InterviewSavePop = ({
   changeHeart,
   setPrevFile,
   prevFile,
+  token,
+  interviewId,
 }) => {
+
+  const saveInterview = async () => {
+    console.log(changeData)
+    fetch('https://api.writeyoume.com/api/vi/interview/' + interviewId, {
+      method: 'PUT',
+      headers: {
+        Authorization: token,
+      },
+      data: {
+        file_url: changeData
+      }
+    })
+      .then((response) => {
+        console.log("성공")
+        console.log(response);
+      })
+      .catch((e) => {
+        console.log("실패");
+        console.log(e);
+      });
+  }
+
   const handleSave = () => {
+    saveInterview();
+
     setIsEditing(false);
     setModalOpen(false);
     setIsPlaying(true);

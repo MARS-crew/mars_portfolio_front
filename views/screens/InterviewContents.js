@@ -21,7 +21,7 @@ import InterviewAlert from '../components/InterviewAlert';
 import { useFocusEffect } from '@react-navigation/native';
 import { getVideoThumbnail } from 'react-native-video-thumbnails';
 
-const InterviewContents = ({ id, path, token }) => {
+const InterviewContents = ({ interviewId, id, path, token }) => {
   const player = useRef(null);
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
 
@@ -63,7 +63,7 @@ const InterviewContents = ({ id, path, token }) => {
     try {
       const response = await axios({
         method: 'post',
-        url: 'http://api.mars-port.duckdns.org/api/v1/interview/heart/' + id,
+        url: 'https://api.writeyoume.com/api/v1/interview/heart/' + id,
         headers: {
           Authorization: token,
         },
@@ -73,15 +73,19 @@ const InterviewContents = ({ id, path, token }) => {
     }
   };
 
-  //찜 기능
+  // 찜 기능
   const toggleHeart = () => {
-    //video 데이터가 없을 땐 찜 기능 안되도록
-    if (filePath !== undefined) {
-      setHeart(previousState => !previousState);
-      fillHeart();
-      fetchHeart();
+    // video 데이터가 없을 땐 찜 기능 안되도록
+    if (filePath) {
+      const isVideo = filePath.endsWith('.mp4');
+      if (isVideo) {
+        setHeart((previousState) => !previousState);
+        fillHeart();
+        fetchHeart();
+      } else {
+        setShowAlert(true);
+      }
     } else {
-      // Alert.alert('데이터가 없습니다.');
       setShowAlert(true);
     }
   };
@@ -134,21 +138,29 @@ const InterviewContents = ({ id, path, token }) => {
           }}
           onLongPress={() => setModalOpen(true)}>
           {/* 저장된 video가 있으w면 video 출력. 없으면  마스외전 로고 출력*/}
-          <Video
-            ref={player}
-            source={{ uri: filePath }}
-            style={[styles.content]}
-            controls={false}
-            resizeMode="cover"
-            repeat={true}
-            paused={!isPlaying} // isPlaying 상태에 따라 재생/일시정지 제어
-            onEnd={() => {
-              setIsPlaying(false);
-            }}
-            onLoad={() => {
-              player.current.seek(0); // 로드가 완료되었을떄 첫 프레임이 썸네일처럼 보임
-            }}
-          />
+          {filePath && filePath.endsWith('.mp4') ? (
+            <Video
+              ref={player}
+              source={{ uri: filePath }}
+              style={[styles.content]}
+              controls={false}
+              resizeMode="cover"
+              repeat={true}
+              paused={!isPlaying}
+              onEnd={() => {
+                setIsPlaying(false);
+              }}
+              onLoad={() => {
+                player.current.seek(0);
+              }}
+            />
+          ) : (
+            <Image
+              source={{ uri: filePath }}
+              style={[styles.content]}
+              resizeMode="cover"
+            />
+          )}
         </TouchableWithoutFeedback>
         {/* Animated로 변경, opacity 값 */}
 
@@ -161,8 +173,10 @@ const InterviewContents = ({ id, path, token }) => {
         </Animated.View>
       </View>
       <InterviewModal
+        token={token}
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
+        interviewId={interviewId}
         filePath={filePath}
         setFilePath={setFilePath}
         heart={heart}

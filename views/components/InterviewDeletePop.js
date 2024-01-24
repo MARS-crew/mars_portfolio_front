@@ -19,11 +19,13 @@ const InterviewDeletePop = ({
   filePath,
   setPrevFile,
 }) => {
+
+  const del_url = 'https://minio.mars-port.duckdns.org/mars-data/20240112T101044858Z.png';
   // const [deleteImg, setDeleteImg] = useState(interviewImg);
   const deleteUrl = () => {
-    setChangeData();
+    setChangeData(del_url);
     setPrevFile(filePath);
-    setFilePath();
+    setFilePath(del_url);
     setDeletePopVisible(false);
     setChangeHeart(false);
     setIsEditing(true);

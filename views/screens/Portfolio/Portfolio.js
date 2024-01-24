@@ -20,7 +20,9 @@ import { Shadow } from 'react-native-shadow-2';
 import addBtn from '../../../assets/images/add.png';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import { useIndexContext } from '../../../IndexContext';
+import { useUser } from '../../../LoginUserContext';
 import GroupItem from '../../components/GroupItem';
+import { useLoadingContext } from '../../../LoadingContext';
 
 const { width, height } = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.4;
@@ -59,8 +61,17 @@ const styles = StyleSheet.create({
 });
 
 const Portfolio = ({ token }) => {
-  const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId, selectedGroupId, changeSelectedGroupId } = useIndexContext();
+  const { currentIndex, changeIndex,
+    horizontalIndex, changeHorizontalIndex,
+    dataIndex, changeDataIndex,
+    selectedMemId, changeSelectedMemId,
+    selectedGroupId, changeSelectedGroupId
+  } = useIndexContext();
+
+  const { loading, changeLoading } = useLoadingContext();
   const swiperRef = useRef(null);
+  const { user, storeUser } = useUser();
+
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
       swiperRef.current.scrollToIndex({
@@ -113,11 +124,13 @@ const Portfolio = ({ token }) => {
   };
 
   useEffect(() => {
-    console.log(`Token 포트폴리오: ${token}`);
+    setData();
+    // if (!loading) { changeLoading(); }
+    // console.log(`Token 포트폴리오: ${token}`);
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: `http://api.mars-port.duckdns.org/api/v1/portfolio/`,
+      url: `https://api.writeyoume.com/api/v1/portfolio/`,
       headers: {
         Authorization: token,
       },
@@ -135,10 +148,7 @@ const Portfolio = ({ token }) => {
           kind: item.kind,
           file_id: item.file_id,
           ext: item.ext,
-          url: `http://10.0.2.2:3000/${item.url.replace(
-            'http://172.20.10.4:3000/',
-            '',
-          )}`,
+          url: item.url,
           del_yn: item.del_yn,
         }));
         const sortedAndGroupedData = _.chain(extractedData)
@@ -150,6 +160,7 @@ const Portfolio = ({ token }) => {
         const groups = Object.values(sortedAndGroupedData);
         const transformedData = transformDataForSwiper(groups);
         setData(transformedData);
+        console.log();
       })
       .catch(function (error) {
         console.log(error);
@@ -218,6 +229,7 @@ const Portfolio = ({ token }) => {
               setDetailPopVisible={setDetailPopVisible}
               detailPopVisible={detailPopVisible}
               token={token}
+              memberId={user}
             />
           </View>
         </ScrollView>

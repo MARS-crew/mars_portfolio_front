@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import {useIndexContext} from '../../../IndexContext';
+import { useIndexContext } from '../../../IndexContext';
 import ReviewItem from '../Review/ReviewItem';
 import FloatingMenu from '../../components/FloatingMenu';
 
@@ -75,8 +75,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Review = ({token, currentUserId}) => {
-  const {selectedMemId} = useIndexContext();
+const Review = ({ token, currentUserId }) => {
+  const { selectedMemId } = useIndexContext();
   const [data, setData] = useState([]);
   const [review, isReview] = useState(true);
   const [showReviewInput, setShowReviewInput] = useState(false);
@@ -105,7 +105,7 @@ const Review = ({token, currentUserId}) => {
 
     axios({
       method: 'get',
-      url: `http://api.mars-port.duckdns.org/api/v1/review/${selectedMemId}`,
+      url: `https://api.writeyoume.com/api/v1/review/${selectedMemId}`,
       headers: {
         Authorization: token,
       },
@@ -140,7 +140,7 @@ const Review = ({token, currentUserId}) => {
     try {
       const response = await axios({
         method: 'post',
-        url: 'http://api.mars-port.duckdns.org/api/v1/review',
+        url: 'https://api.writeyoume.com/api/v1/review',
         data: {
           ref_member_id: selectedMemId,
           content: reviewText,
@@ -164,7 +164,7 @@ const Review = ({token, currentUserId}) => {
     try {
       const response = await axios({
         method: 'put',
-        url: `http://api.mars-port.duckdns.org/api/v1/review/${reviewId}`,
+        url: `https://api.writeyoume.com/api/v1/review/${reviewId}`,
         data: {
           member_id: member_id,
           content: reviewContent,
@@ -177,13 +177,13 @@ const Review = ({token, currentUserId}) => {
       setData([]);
       const extractedData = Array.isArray(response.data.data)
         ? response.data.data.map(item => ({
-            review_id: item.review_id,
-            name: item.name,
-            member_id: item.member_id,
-            content: item.content,
-            reg_date: item.reg_date,
-            is_liked: item.is_liked,
-          }))
+          review_id: item.review_id,
+          name: item.name,
+          member_id: item.member_id,
+          content: item.content,
+          reg_date: item.reg_date,
+          is_liked: item.is_liked,
+        }))
         : [];
       setData(extractedData);
       setReviewContent('');
@@ -197,7 +197,7 @@ const Review = ({token, currentUserId}) => {
     try {
       const response = await axios({
         method: 'delete',
-        url: `http://api.mars-port.duckdns.org/api/v1/review/${reviewId}`,
+        url: `https://api.writeyoume.com/api/v1/review/${reviewId}`,
         data: {
           member_id: memberId,
           ref_member_id: selectedMemId,
@@ -210,13 +210,13 @@ const Review = ({token, currentUserId}) => {
       setData([]);
       const extractedData = Array.isArray(response.data.data)
         ? response.data.data.map(item => ({
-            review_id: item.review_id,
-            name: item.name,
-            member_id: item.member_id,
-            content: item.content,
-            reg_date: item.reg_date,
-            is_liked: item.is_liked,
-          }))
+          review_id: item.review_id,
+          name: item.name,
+          member_id: item.member_id,
+          content: item.content,
+          reg_date: item.reg_date,
+          is_liked: item.is_liked,
+        }))
         : [];
       setData(extractedData);
     } catch (error) {
@@ -230,7 +230,7 @@ const Review = ({token, currentUserId}) => {
     try {
       const response = await axios({
         method: 'post',
-        url: 'http://api.mars-port.duckdns.org/api/v1/review/like',
+        url: 'https://api.writeyoume.com/api/v1/review/like',
         data: {
           member_id: currentUserId,
           ref_review_id: ref_review_id,
@@ -255,7 +255,7 @@ const Review = ({token, currentUserId}) => {
               initialNumToRender={10}
               maxToRenderPerBatch={5}
               windowSize={5}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <ReviewItem
                   review={review}
                   id={item.review_id}

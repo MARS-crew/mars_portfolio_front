@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import {SafeAreaView, StyleSheet, View, Image, Dimensions} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, StyleSheet, View, Image, Dimensions } from 'react-native';
 import WebView from 'react-native-webview';
 import LoginButton from '../components/LoginButton';
-import {useNavigation, CommonActions} from '@react-navigation/native';
-import {useUserInfo} from '../../UserInfoContext';
+import { useNavigation, CommonActions } from '@react-navigation/native';
+import { useUserInfo } from '../../UserInfoContext';
 import axios from 'axios';
 
 // 디바이스 크기
@@ -15,14 +15,14 @@ const Login = () => {
   const [loginUrl, setLoginUrl] = useState(''); // 접속 url 설정을 위한 변수
   const navigation = useNavigation(); // 로그인 성공 후 로그인 페이지를 호출하기 이전 페이지(그룹)로 넘기기 위한 네비게이션 객체
   const [userInfoData, setUserInfoData] = useState('');
-  const {token, storeToken} = useUserInfo();
-  const {name, storeName} = useUserInfo();
-  const {id, storeId} = useUserInfo();
-  const {email, storeEmail} = useUserInfo();
+  const { token, storeToken } = useUserInfo();
+  const { name, storeName } = useUserInfo();
+  const { id, storeId } = useUserInfo();
+  const { email, storeEmail } = useUserInfo();
 
   // 로그인 버튼 클릭 핸들러 - 각 버튼 유형에 대응하여 url 할당
   const handleLoginPress = type => {
-    let url = 'http://api.mars-port.duckdns.org/auth/'; // base url
+    let url = 'https://api.writeyoume.com/auth/'; // base url
 
     // 넘어온 매개변수 값에 대응
     switch (type) {
@@ -63,18 +63,18 @@ const Login = () => {
   }, [userInfoData]);
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       {showWebView ? ( // 웹뷰 표시 상태일 경우
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={{ flex: 1 }}>
           <WebView
-            source={{uri: loginUrl}}
-            style={{width: width, height: height}}
+            source={{ uri: loginUrl }}
+            style={{ width: width, height: height }}
             onNavigationStateChange={event => {
               // 백단의 응답 url에 따라 이후 이벤트 대응(백에서 성공 시 /main으로 넘기고 실패할 경우에는 /login으로 넘김)
-              if (event.url === 'http://api.mars-port.duckdns.org/main') {
+              if (event.url === 'https://api.writeyoume.com/main') {
                 // 로그인 성공 후 리디렉션되는 URL을 확인하고 처리
                 // 백에서 토큰을 /main에 저장하고 있기 때문에 해당 Url에서 로그인 후 생성된 토큰을 불러옴
-                fetch('http://api.mars-port.duckdns.org/main')
+                fetch('https://api.writeyoume.com/main')
                   .then(response => {
                     // 토큰 가져오기
                     const cookie = response.headers.get('set-cookie');
@@ -88,7 +88,7 @@ const Login = () => {
 
                     axios({
                       method: 'get',
-                      url: `http://api.mars-port.duckdns.org/api/v1/userbytoken`,
+                      url: `https://api.writeyoume.com/api/v1/userbytoken`,
                       headers: {
                         Authorization: token,
                       },

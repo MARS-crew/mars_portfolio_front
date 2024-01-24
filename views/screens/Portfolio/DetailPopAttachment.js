@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useContext} from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -7,12 +7,11 @@ import {
   Image,
 } from 'react-native';
 
-import DocumentPicker from 'react-native-document-picker';
 import Attachment from '../../../assets/images/Attachment.png';
 import emptyImg from '../../../assets/images/emptyImg.png';
-import {launchImageLibrary} from 'react-native-image-picker';
-import {MyContext} from '../../../MyContext';
-import {Video} from 'react-native-video';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { MyContext } from '../../../MyContext';
+import { Video } from 'react-native-video';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -52,10 +51,10 @@ const styles = StyleSheet.create({
 const DetailPopAttachment = (code, id) => {
   const [temporaryUrl, setTemporaryUrl] = useState(null);
 
-  const {title, setTitle} = useContext(MyContext);
-  const {content, setContent} = useContext(MyContext);
-  const {portfolioUrl, setPortfolioUrl} = useContext(MyContext);
-  const {ext, setExt} = useContext(MyContext);
+  const { title, setTitle } = useContext(MyContext);
+  const { content, setContent } = useContext(MyContext);
+  const { portfolioUrl, setPortfolioUrl } = useContext(MyContext);
+  const { ext, setExt } = useContext(MyContext);
 
   //const videoRef = useRef(null);
   //const [pickUri, setPickUri] = useState(null);

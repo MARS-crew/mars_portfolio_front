@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Animated,
   Dimensions,
@@ -12,14 +12,15 @@ import axios from 'axios';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import _ from 'lodash'; // lodash 라이브러리 사용
 import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
-import {useIndexContext} from '../../IndexContext';
-import {UserInfoProvider, useUserInfo} from '../../UserInfoContext';
+import { useIndexContext } from '../../IndexContext';
+import { UserInfoProvider, useUserInfo } from '../../UserInfoContext';
+import { useLoadingContext } from '../../LoadingContext';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const yOffset = new Animated.Value(0);
 
-const Interview = ({token}) => {
+const Interview = ({ token }) => {
   const swiperRef = useRef(null);
   // const { token } = useUserInfo();
   const {
@@ -36,6 +37,9 @@ const Interview = ({token}) => {
     selectedMember,
     changeSelectedMember,
   } = useIndexContext();
+
+  const { loading, changeLoading } = useLoadingContext();
+
   const [data, setData] = useState([]);
   const [prevSelectedGroupId, setPrevSelectedGroupId] =
     useState(selectedGroupId);
@@ -102,12 +106,17 @@ const Interview = ({token}) => {
   }, [selectedMember]);
 
   useEffect(() => {
+    setData();
     if (token) {
+      if (!loading) {
+        changeLoading();
+      }
       console.log(`Token 인터뷰 : ${token}`);
       const source = axios.CancelToken.source();
       axios({
         method: 'get',
-        url: 'http://api.mars-port.duckdns.org/api/v1/interview/',
+        url: 'https://api.writeyoume.com/api/v1/interview/',
+        // url: 'http://localhost:3000/api/v1/interview/',
         headers: {
           Authorization: token,
         },
@@ -115,12 +124,10 @@ const Interview = ({token}) => {
       })
         .then(function (response) {
           const extractedData = response.data.data.map(item => ({
+            interviewId: item.interview_id,
             groupId: item.group_id,
             memberId: item.member_id, //사용자 아이디
-            url: `http://10.0.2.2:3000/${item.url.replace(
-              'http://172.20.10.4:3000/',
-              '',
-            )}`, //인터뷰 url
+            url: item.url, //인터뷰 url
             heart: item.heart, //찜하기 여부
           }));
           // setData(extractedData);
@@ -130,6 +137,12 @@ const Interview = ({token}) => {
             .value();
 
           setData(Object.values(sortedAndGroupedData));
+          console.log(sortedAndGroupedData);
+          console.log();
+
+          if (loading) { changeLoading(); }
+
+
         })
         .catch(function (error) {
           console.log(error);
@@ -148,8 +161,13 @@ const Interview = ({token}) => {
         ref={swiperRef}
         vertical={true}
         data={data}
-        renderItem={({item}) => (
-          <InterviewContents id={item.memberId} path={item.url} token={token} />
+        renderItem={({ item }) => (
+          <InterviewContents
+            interviewId={item.interviewId}
+            id={item.memberId}
+            path={item.url}
+            token={token}
+          />
         )}
         index={dataIndex}
         onScroll={handleVerticalScroll}
