@@ -149,12 +149,13 @@ const choosePop = ({
   };
 
   const deleteData = async () => {
-    fetch(`https://api.writeyoume.com/api/v1/portfolio/${id}`, {
+    const source = axios.CancleToken.source();
+    axios({
       method: 'DELETE',
+      url: `https://api.writeyoume.com/api/v1/portfolio/${id}`,
       headers: {
-        'Content-Type': 'application/json',
         Authorization: token,
-      },
+      }
     })
       .then(response => {
         if (!response.ok) {
