@@ -78,7 +78,7 @@ const DATA = [
     medal: 'n',
   },
   {
-    id: 39,
+    id: 86,
     group: 5,
     src: require('../../assets/images/Rectangle5_1.png'),
     video: require('../../assets/images/GroupVideo.png'),

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Animated,
   Dimensions,
@@ -24,15 +24,15 @@ import Share from './views/screens/Share';
 
 import GroupVideo from './views/screens/GroupVideo';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useNavigation } from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import AppContext from './AppContext`';
-import { MyProvider } from './MyContext';
-import { IndexProvider, useIndexContext } from './IndexContext';
-import { UserInfoProvider, useUserInfo } from './UserInfoContext';
-import { LoadingProvider, useLoadingContext } from './LoadingContext';
+import {MyProvider} from './MyContext';
+import {IndexProvider, useIndexContext} from './IndexContext';
+import {UserInfoProvider, useUserInfo} from './UserInfoContext';
+import {LoadingProvider, useLoadingContext} from './LoadingContext';
 import Logout from './views/screens/Logout';
 import LoginGo from './views/screens/LoginGo';
 import Loading from './views/screens/Loading';
@@ -58,7 +58,7 @@ const Stack = createStackNavigator();
 const transitionAnimation = index => {
   return {
     transform: [
-      { perspective: 800 },
+      {perspective: 800},
       {
         scale: xOffset.interpolate({
           inputRange: [
@@ -102,32 +102,32 @@ const App = () => {
             <Stack.Screen
               name="Home"
               component={HomeScreen}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
             />
             <Stack.Screen
               name="Help"
               component={Help}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
             />
             <Stack.Screen
               name="Share"
               component={Share}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
             />
             <Stack.Screen
               name="Album"
               component={Album}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
             />
             <Stack.Screen
               name="Login"
               component={Login}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
             />
             <Stack.Screen
               name="Logout"
               component={Logout}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
             />
           </Stack.Navigator>
         </NavigationContainer>
@@ -137,7 +137,7 @@ const App = () => {
 };
 
 const HomeScreen = () => {
-  const { token, id, name, email } = useUserInfo();
+  const {token, id, name, email} = useUserInfo();
   const [modalOpen, setModalOpen] = useState(false);
   const [isSplashVisible, setIsSplashVisible] = useState(true);
   const {
@@ -154,10 +154,7 @@ const HomeScreen = () => {
   const [oldIndex, setOldIndex] = useState(horizontalIndex);
   const horizontalScrollRef = useRef(null);
 
-
-  const { loading, changeLoading } = useLoadingContext();
-
-
+  const {loading, changeLoading} = useLoadingContext();
 
   useEffect(() => {
     if (horizontalScrollRef.current) {
@@ -219,7 +216,7 @@ const HomeScreen = () => {
             ref={horizontalScrollRef}
             scrollEventThrottle={16}
             onScroll={Animated.event(
-              [{ nativeEvent: { contentOffset: { x: xOffset } } }],
+              [{nativeEvent: {contentOffset: {x: xOffset}}}],
               {
                 useNativeDriver: true,
                 listener: handleScroll,
@@ -242,7 +239,7 @@ const HomeScreen = () => {
                   <Interview token={token} />
                 </Screen>
                 <Screen text="Screen 4" index={3}>
-                  <Portfolio token={token} options={{ headerShown: false }} />
+                  <Portfolio token={token} options={{headerShown: false}} />
                 </Screen>
                 <Screen text="Screen 5" index={4}>
                   <Resume token={token} />
@@ -251,7 +248,7 @@ const HomeScreen = () => {
                   <Review token={token} currentUserId={id} />
                 </Screen>
                 <Screen text="Screen 7" index={6}>
-                  <MyPage token={token} options={{ headerShown: false }} />
+                  <MyPage token={token} options={{headerShown: false}} />
                 </Screen>
               </>
             ) : (
@@ -263,20 +260,20 @@ const HomeScreen = () => {
                 ) : null}
               </>
             )}
-            {
-              loading ? (
-                <Modal transparent={true} visible={loading} onRequestClose={() => hideLoading()}>
-                  <View style={styles.loading}>
-                    <Loading />
-                  </View>
-                </Modal>
-              ) : null
-            }
+            {loading ? (
+              <Modal
+                transparent={true}
+                visible={loading}
+                onRequestClose={() => hideLoading()}>
+                <View style={styles.loading}>
+                  <Loading />
+                </View>
+              </Modal>
+            ) : null}
           </AnimatedScrollView>
-
         </LoadingProvider>
       </MyProvider>
-    </UserInfoProvider >
+    </UserInfoProvider>
   );
 };
 
