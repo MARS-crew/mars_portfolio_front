@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
   Modal,
 } from 'react-native';
 import PortfolioModal from '../components/PortfolioModal';
+import { useUser } from '../../LoginUserContext';
 const styles = StyleSheet.create({
   image: {
     width: 60,
@@ -45,8 +46,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const Portfolio = ({id, src}) => {
+const Portfolio = ({ member_id, src }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { user, storeUser } = useUser();
+
+  const checkUser = (member_id) => {
+    if (member_id == user) {
+      setIsModalVisible(!isModalVisible);
+    }
+  }
+
 
   return (
     <View
@@ -61,7 +70,9 @@ const Portfolio = ({id, src}) => {
       }}>
       <TouchableOpacity
         onPress={() => alert('포트폴리오 생성 및 등록')}
-        onLongPress={() => setIsModalVisible(!isModalVisible)}>
+        onLongPress={() => {
+          checkUser();
+        }}>
         <View>
           <Image source={src} style={styles.image} />
         </View>
