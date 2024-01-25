@@ -32,10 +32,10 @@ const LoginItem = ({token}) => {
             }
           }}>
           <Text style={styles.text}>로그아웃</Text>
-          <Image
-            source={require('../../assets/images/LoginNextItem.png')}
-            style={styles.image}
-          />
+          {/*<Image*/}
+          {/*  source={require('../../assets/images/LoginNextItem.png')}*/}
+          {/*  style={styles.image}*/}
+          {/*/>*/}
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   },
   itemArea: {
     flex: 1,
+    height: 'auto'
   },
   button: {
     width: 104,

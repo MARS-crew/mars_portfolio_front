@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
+import {Dimensions, SafeAreaView, StyleSheet} from "react-native";
 import SwiperFlatList from "react-native-swiper-flatlist";
 
 const SwiperFlatListComponent = ({ data, renderItem }) => {
   const ITEM_HEIGHT = 100;
   const [pageIndex, setPageIndex] = useState(0);
 
+  const height = Dimensions.get('screen').height;
+
   const handleScroll = event => {
     const offsetY = event.nativeEvent.contentOffset.y;
-    const newIndex = Math.floor(offsetY / ITEM_HEIGHT);
+    const newIndex = Math.floor(offsetY / height);
     setPageIndex(newIndex);
   };
 

@@ -34,17 +34,17 @@ const FloatingActionMenu = () => {
       // style={styles.floatingActionMain}
       position="right"
       offsetX={40}
-      offsetY={100}
+      offsetY={30}
       hideShadow={false}
       buttonColor="#072AC8">
-      <ActionButton.Item
-        buttonColor="#F5F5F5"
-        onPress={() => handleItemPress('bt_help')}>
-        <Image
-          source={require('../../assets/images/help.png')}
-          style={styles.actionButtonIcon}
-        />
-      </ActionButton.Item>
+      {/*<ActionButton.Item*/}
+      {/*  buttonColor="#F5F5F5"*/}
+      {/*  onPress={() => handleItemPress('bt_help')}>*/}
+      {/*  <Image*/}
+      {/*    source={require('../../assets/images/help.png')}*/}
+      {/*    style={styles.actionButtonIcon}*/}
+      {/*  />*/}
+      {/*</ActionButton.Item>*/}
       <ActionButton.Item
         buttonColor="#F5F5F5"
         onPress={() => handleItemPress('bt_home')}>
@@ -61,14 +61,14 @@ const FloatingActionMenu = () => {
           style={styles.actionButtonIcon}
         />
       </ActionButton.Item>
-      <ActionButton.Item
-        buttonColor="#F5F5F5"
-        onPress={() => handleItemPress('bt_share')}>
-        <Image
-          source={require('../../assets/images/share.png')}
-          style={styles.actionButtonIcon}
-        />
-      </ActionButton.Item>
+      {/*<ActionButton.Item*/}
+      {/*  buttonColor="#F5F5F5"*/}
+      {/*  onPress={() => handleItemPress('bt_share')}>*/}
+      {/*  <Image*/}
+      {/*    source={require('../../assets/images/share.png')}*/}
+      {/*    style={styles.actionButtonIcon}*/}
+      {/*  />*/}
+      {/*</ActionButton.Item>*/}
     </ActionButton>
   );
 };

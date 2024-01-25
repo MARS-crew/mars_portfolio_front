@@ -172,15 +172,17 @@ const HomeScreen = () => {
       }
     });
 
+    // setIsSplashVisible(true);
+
     let timer = setTimeout(() => {
       setIsSplashVisible(false);
       console.log('Splash:' + isSplashVisible);
-    }, 2000);
+    }, 5000);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    AsyncStorage.setItem('isSplashVisible', JSON.stringify(isSplashVisible));
+    AsyncStorage.setItem('isSplashVisible', JSON.stringify(!isSplashVisible));
   }, [isSplashVisible]);
 
   // 토큰값 수신 확인 및 반영
@@ -205,7 +207,7 @@ const HomeScreen = () => {
     if (oldIndex !== newIndex) {
       changeHorizontalIndex(newIndex);
       setOldIndex(newIndex);
-      // console.log("newIndex: ", newIndex, ", oldIndex: ", oldIndex, ", horizontalIndex: ", horizontalIndex);
+      console.log("newIndex: ", newIndex, ", oldIndex: ", oldIndex, ", horizontalIndex: ", horizontalIndex);
     }
   };
   return (
@@ -214,7 +216,7 @@ const HomeScreen = () => {
         <LoadingProvider>
           <AnimatedScrollView
             ref={horizontalScrollRef}
-            scrollEventThrottle={16}
+            // scrollEventThrottle={300}
             onScroll={Animated.event(
               [{nativeEvent: {contentOffset: {x: xOffset}}}],
               {
@@ -231,7 +233,7 @@ const HomeScreen = () => {
                   <Screen text="Screen 1" index={0}>
                     <WhichGroup token={token} />
                   </Screen>
-                ) : null}
+                ) : <Splash isSplashVisible={isSplashVisible}></Splash>}
                 <Screen text="Screen 2" index={1}>
                   <GroupVideo token={token} />
                 </Screen>
@@ -257,7 +259,7 @@ const HomeScreen = () => {
                   <Screen text="Screen 0" index={0}>
                     <LoginGo token={token} />
                   </Screen>
-                ) : null}
+                ) : <Splash isSplashVisible={isSplashVisible}></Splash>}
               </>
             )}
             {loading ? (

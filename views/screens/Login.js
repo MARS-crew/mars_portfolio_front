@@ -134,6 +134,7 @@ const Login = () => {
           <View style={styles.marginView}>
             <LoginButton
               background={'white'}
+              color={'gray'}
               title={'구글로 로그인'}
               src={require('../../assets/images/google.png')}
               handleLoginPress={() => handleLoginPress('google')} // 각각의 로그인 형식으로 매개변수 전달
@@ -141,6 +142,7 @@ const Login = () => {
             <LoginButton
               background={'#FFCD00'}
               title={'카카오로 로그인'}
+              color={'gray'}
               src={require('../../assets/images/kakao.png')}
               handleLoginPress={() => handleLoginPress('kakao')} // 각각의 로그인 형식으로 매개변수 전달
             />

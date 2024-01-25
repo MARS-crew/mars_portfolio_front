@@ -106,19 +106,19 @@ const PortfolioItem = ({
   const [detailPopVisible, setDetailPopVisible] = useState(false);
   const { user, storeUser } = useUser();
 
-  const shadowColor = 'rgba(151, 151, 151, 0.36)';
+  const shadowColor = 'rgba(151, 151, 151, 0.16)';
 
-  const checkUser = (member_id) => {
+  const checkUser = member_id => {
     if (member_id == user) {
-      console.log("나");
+      console.log('나');
       setIsModalVisible(!isModalVisible);
     } else {
       console.log(user);
-      console.log("나 아니야");
+      console.log('나 아니야');
     }
-  }
+  };
   return (
-    <Shadow distance="12" startColor={shadowColor} offset={[15, 15]}>
+    <Shadow distance="10" startColor={shadowColor} offset={[15, 15]}>
       <View style={[styles.gridItem]}>
         <TouchableOpacity
           onPress={() =>
@@ -129,9 +129,7 @@ const PortfolioItem = ({
           }
           onLongPress={() => {
             checkUser(member_id);
-          }
-
-          }>
+          }}>
           {(code === 1 || code === 3) && (
             <View>
               <Image

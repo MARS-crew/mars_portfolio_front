@@ -1,7 +1,5 @@
 // MyContext.js
 import React, {createContext, useState} from 'react';
-import Attachment from '../mars_portfolio_front/assets/images/Attachment.png';
-import emptyImg from '../mars_portfolio_front/assets/images/emptyImg.png';
 const MyContext = createContext();
 
 const MyProvider = ({children}) => {
