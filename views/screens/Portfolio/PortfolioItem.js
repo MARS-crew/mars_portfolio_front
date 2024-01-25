@@ -106,10 +106,10 @@ const PortfolioItem = ({
   const [detailPopVisible, setDetailPopVisible] = useState(false);
   const { user, storeUser } = useUser();
 
-  const shadowColor = 'rgba(151, 151, 151, 0.36)';
+  const shadowColor = 'rgba(151, 151, 151, 0.16)';
 
   return (
-    <Shadow distance="12" startColor={shadowColor} offset={[15, 15]}>
+    <Shadow distance="10" startColor={shadowColor} offset={[15, 15]}>
       <View style={[styles.gridItem]}>
         <TouchableOpacity
           onPress={() =>
@@ -124,7 +124,7 @@ const PortfolioItem = ({
             //   : setIsModalVisible(!isModalVisible)
             [
               console.log(member_id),
-              
+
               // member_id == user ? setIsModalVisible(true) : '',
               setIsModalVisible(true)
             ]

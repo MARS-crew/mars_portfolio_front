@@ -27,9 +27,9 @@ const LoginButton = props => {
           width: 335,
           height: 50,
           marginBottom: 18,
-          borderRadius: 25,
+          borderRadius: 15,
         }}
-        distance={10}
+        distance={3}
         Color={shadowColor}
         offset={[1, 1]}>
         <TouchableOpacity
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 25,
+    borderRadius: 15,
     paddingVertical: 15,
     flexDirection: 'row',
   },

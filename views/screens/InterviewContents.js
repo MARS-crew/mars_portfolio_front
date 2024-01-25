@@ -124,11 +124,11 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
             <Icon name="heart" size={30} color={'#E4E3E8'} />
           )}
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => Alert.alert('공유')}
-          style={styles.icon}>
-          <Icon name="sharealt" size={30} color={'#3D3D3D'} />
-        </TouchableOpacity>
+        {/*<TouchableOpacity*/}
+        {/*  onPress={() => Alert.alert('공유')}*/}
+        {/*  style={styles.icon}>*/}
+        {/*  <Icon name="sharealt" size={30} color={'#3D3D3D'} />*/}
+        {/*</TouchableOpacity>*/}
       </View>
       <View style={styles.section}>
         <TouchableWithoutFeedback

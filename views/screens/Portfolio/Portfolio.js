@@ -29,8 +29,8 @@ const squareSize = Math.min(width, height) * 0.4;
 
 const styles = StyleSheet.create({
   content: {
-    width: 54,
-    height: 54,
+    width: 64,
+    height: 64,
     borderWidth: 1,
     borderRadius: 10,
   },
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
-    margin: 9,
+    //  margin: 9,
   },
   gridItem: {
     width: squareSize,
@@ -185,7 +185,7 @@ const Portfolio = ({ token }) => {
     );
   };
 
-  const shadowColor = 'rgba(151, 151, 151, 0.36)';
+  const shadowColor = 'rgba(151, 151, 151, 0.16)';
 
   const renderItem = ({ item: groupItems }) => (
     <View style={styles.container}>
@@ -213,7 +213,7 @@ const Portfolio = ({ token }) => {
                 />
               </View>
             ))}
-            <Shadow distance="12" startColor={shadowColor} offset={[15, 15]}>
+            <Shadow distance="10" startColor={shadowColor} offset={[15, 15]}>
               <TouchableOpacity
                 style={styles.gridItem}
                 onPress={() => setDetailPopVisible(!detailPopVisible)}>

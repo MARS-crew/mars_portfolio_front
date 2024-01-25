@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import {View, StyleSheet, Dimensions, Image} from 'react-native';
 import LottieView from 'lottie-react-native';
 
 const Splash = ({ isSplashVisible }) => {
@@ -8,8 +8,10 @@ const Splash = ({ isSplashVisible }) => {
   return (
     <View>
       <LottieView
-        source={require('../../assets/lottie/Splash.json')}
-        style={styles.lottie}
+          autoPlay
+          loop={false}
+          source={require('../../assets/lottie/Splash.json')}
+          style={styles.lottie}
       />
     </View>
   );
@@ -22,8 +24,9 @@ const height = Dimensions.get('screen').height;
 const styles = StyleSheet.create({
   // view lottie animation
   lottie: {
-    width: width * 0.5,
-    height: height * 0.5,
+    width: width,
+    height: height,
+      // justifyContent: 'center'
   },
 });
 

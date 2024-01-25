@@ -26,10 +26,7 @@ const LoginGo = ({token}) => {
           navigation.navigate('Login');
         }}>
         <Text style={styles.text}>로그인</Text>
-        <Image
-          source={require('../../assets/images/LoginNextItem.png')}
-          style={styles.image}
-        />
+
       </TouchableOpacity>
     </ImageBackground>
   );
@@ -50,7 +47,6 @@ const styles = StyleSheet.create({
     bottom: 25,
     right: 20,
     borderRadius: 24,
-    borderColor: 'black',
     border: 2,
     position: 'absolute',
     flexDirection: 'row',
@@ -58,7 +54,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 16
   },
 });
 export default LoginGo;

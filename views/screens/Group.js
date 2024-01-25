@@ -27,7 +27,7 @@ const Group = ({data, token, fileData}) => {
     if (swiperRef.current && fileData && fileData.length > 0) {
       swiperRef.current.scrollToIndex({
         index: currentIndex,
-        animated: true,
+      //  animated: true,
       });
     }
   }, [currentIndex, fileData]);
