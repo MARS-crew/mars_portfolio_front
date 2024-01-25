@@ -108,6 +108,15 @@ const PortfolioItem = ({
 
   const shadowColor = 'rgba(151, 151, 151, 0.16)';
 
+  const checkUser = member_id => {
+    if (member_id == user) {
+      console.log('나');
+      setIsModalVisible(!isModalVisible);
+    } else {
+      console.log(user);
+      console.log('나 아니야');
+    }
+  };
   return (
     <Shadow distance="10" startColor={shadowColor} offset={[15, 15]}>
       <View style={[styles.gridItem]}>
@@ -118,17 +127,9 @@ const PortfolioItem = ({
             //   : setContentsViewPopVisible(!contentsViewPopVisible)
             setContentsViewPopVisible(!contentsViewPopVisible)
           }
-          onLongPress={() =>
-            // id === '6'
-            //   ? setDetailPopVisible(!detailPopVisible)
-            //   : setIsModalVisible(!isModalVisible)
-            [
-              console.log(member_id),
-
-              // member_id == user ? setIsModalVisible(true) : '',
-              setIsModalVisible(true)
-            ]
-          }>
+          onLongPress={() => {
+            checkUser(member_id);
+          }}>
           {(code === 1 || code === 3) && (
             <View>
               <Image
