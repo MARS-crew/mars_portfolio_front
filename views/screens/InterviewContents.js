@@ -20,8 +20,11 @@ import Video from 'react-native-video';
 import InterviewAlert from '../components/InterviewAlert';
 import { useFocusEffect } from '@react-navigation/native';
 import { getVideoThumbnail } from 'react-native-video-thumbnails';
+import { useUser } from '../../LoginUserContext';
 
 const InterviewContents = ({ interviewId, id, path, token }) => {
+  const { user, storeUser } = useUser();
+
   const player = useRef(null);
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
 
@@ -114,6 +117,13 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
       };
     }, []),
   );
+  const checkUser = (id) => {
+    if (user == id) {
+      setModalOpen(true);
+    } else {
+      setModalOpen(false);
+    }
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.iconBar}>
@@ -136,7 +146,8 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
             doubleTap();
             console.log(filePath);
           }}
-          onLongPress={() => setModalOpen(true)}>
+          onLongPress={() =>
+            checkUser(id)}>
           {/* 저장된 video가 있으w면 video 출력. 없으면  마스외전 로고 출력*/}
           {filePath && filePath.endsWith('.mp4') ? (
             <Video
