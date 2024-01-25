@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import axios from 'axios';
+import InterviewAlert from '../../components/InterviewAlert';
 
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import { useIndexContext } from '../../../IndexContext';
@@ -83,6 +84,8 @@ const Review = ({ token, currentUserId }) => {
   const [reviewContent, setReviewContent] = useState('');
   const [reviewId, setReviewId] = useState(0);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [alertVisible, setAlertVisible] = useState(false);
+
   const newReviewInputRef = useRef(null);
 
   const onEdit = () => {
@@ -293,20 +296,27 @@ const Review = ({ token, currentUserId }) => {
           <TouchableOpacity
             style={styles.inputReviewButton}
             onPress={() => {
-              if (isEditMode) {
-                // 편집 모드일 경우 업데이트 로직 실행
-                updateReview(reviewId, currentUserId, reviewContent);
-              } else {
-                // 새 리뷰 등록 로직 실행
-                postReview(reviewContent);
-              }
-              setShowReviewInput(false);
-              setIsEditMode(false); // 편집 모드 종료
+              if (reviewContent != '') {
+                if (isEditMode) {
+                  // 편집 모드일 경우 업데이트 로직 실행
+                  updateReview(reviewId, currentUserId, reviewContent);
+                } else {
+                  // 새 리뷰 등록 로직 실행
+                  postReview(reviewContent);
+                }
+                setShowReviewInput(false);
+                setIsEditMode(false); // 편집 모드 종료
+              } else { setAlertVisible(true); }
             }}>
             <Text style={styles.text}>{isEditMode ? '수정' : '등록'}</Text>
           </TouchableOpacity>
         </View>
       }
+      <InterviewAlert
+        title={'내용을 입력해주세요'}
+        alertVisible={alertVisible}
+        setAlertVisible={setAlertVisible}
+      />
       <FloatingMenu />
     </View>
   );

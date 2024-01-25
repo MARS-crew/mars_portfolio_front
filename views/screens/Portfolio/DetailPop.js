@@ -8,6 +8,7 @@ import {
   Pressable,
 } from 'react-native';
 
+import InterviewAlert from '../../components/InterviewAlert';
 const styles = StyleSheet.create({
   modalView: {
     width: 325,
@@ -101,7 +102,7 @@ const DetailPop = ({
   code,
   register,
   token,
-  memberId
+  memberId,
 }) => {
   useEffect(() => {
     //setTemporaryTitle('');
@@ -127,6 +128,22 @@ const DetailPop = ({
   const [temporaryContent, setTemporaryContent] = useState(null);
 
   const [chooseData, setChooseData] = useState(null);
+
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+
+  const showAlert = () => {
+    let t = '';
+    if (title == '') {
+      t = '제목을 입력해주세요.';
+    } else if (content == '') {
+      t = '내용을 입력해주세요.';
+    } else {
+      t = '파일을 입력해주세요.'
+    }
+    setAlertTitle(t);
+    setAlertVisible(true);
+  }
 
   const handleTitleChange = text => {
     setTemporaryTitle(text);
@@ -260,10 +277,14 @@ const DetailPop = ({
           {selectedButton !== 'Link' && (
             <View style={styles.TextInputContainer}>
               {selectedButton === 'Photo' && (
-                <DetailPopAttachment code={1} setChooseData={setChooseData}></DetailPopAttachment>
+                <DetailPopAttachment
+                  code={1}
+                  setChooseData={setChooseData}></DetailPopAttachment>
               )}
               {selectedButton === 'Video' && (
-                <DetailPopAttachment code={2} setChooseData={setChooseData}></DetailPopAttachment>
+                <DetailPopAttachment
+                  code={2}
+                  setChooseData={setChooseData}></DetailPopAttachment>
               )}
 
               <DetailInput
@@ -301,13 +322,17 @@ const DetailPop = ({
               size="M"
               background={'blue'}
               onPress={() => {
-                register ? setChoosePopVisible(true) : DetailPopCheck();
-                setTitle(temporaryTitle);
-                setContent(temporaryContent);
+                if ((title == null) | (content == null) | (chooseData == null)) {
+                  showAlert();
+                } else {
+                  register ? setChoosePopVisible(true) : DetailPopCheck();
+                  setTitle(temporaryTitle);
+                  setContent(temporaryContent);
 
-                console.log('title', title);
-                console.log('description', content);
-                console.log(portfolioUrl);
+                  console.log('title', title);
+                  console.log('description', content);
+                  console.log(portfolioUrl);
+                }
                 //setTemporaryTitle('');
                 //setTemporaryContent('');
               }}>
@@ -332,7 +357,14 @@ const DetailPop = ({
         setDetailPopVisible={setDetailPopVisible}
         chooseData={chooseData}
         setChooseData={setChooseData}
-        token={token}></ChoosePop>
+        token={token}
+      />
+
+      <InterviewAlert
+        title={alertTitle}
+        alertVisible={alertVisible}
+        setAlertVisible={setAlertVisible}
+      />
     </PublicModal>
   );
 };
