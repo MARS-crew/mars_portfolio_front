@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, Pressable, Text, View } from 'react-native';
-import { MyContext } from '../../../MyContext';
+import React, {useState, useEffect, useContext} from 'react';
+import {StyleSheet, Pressable, Text, View} from 'react-native';
+import {MyContext} from '../../../MyContext';
 import PublicModal from './PublicModal';
 import ChooseButton from './ChooseButton';
+import axios from 'axios';
 
 const styles = StyleSheet.create({
   modalView: {
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
   },
-  chooseOkBtn: { backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 10 },
+  chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 10},
 });
 
 const choosePop = ({
@@ -68,37 +69,49 @@ const choosePop = ({
   setCheckChoosePopOkButton,
   addPressedIf,
 
+  chooseData,
+  setChooseData,
+
   temporaryTitle,
   setTemporaryTitle,
   temporaryContent,
   setTemporaryContent,
 }) => {
-  const { title, setTitle } = useContext(MyContext);
-  const { content, setContent } = useContext(MyContext);
-  const { portfolioUrl, setPortfolioUrl } = useContext(MyContext);
-  const { ext, setExt } = useContext(MyContext);
+  const {title, setTitle} = useContext(MyContext);
+  const {content, setContent} = useContext(MyContext);
+  const {portfolioUrl, setPortfolioUrl} = useContext(MyContext);
+  const {ext, setExt} = useContext(MyContext);
 
-  useEffect(() => {
-    console.log(`editToken ${token}`);
-  }, [token]);
 
   const sendDataToServer = async () => {
-    portfolioUrl.append('title', title);
-    portfolioUrl.append('description', content);
-    portfolioUrl.append('kind', 1);
     console.log(portfolioUrl);
+    const source = axios.CancelToken.source();
     try {
-      const response = await fetch(
-        'https://api.writeyoume.com/api/v1/portfolio',
-        {
-          method: 'POST',
-          headers: {
-            // 'Content-Type': 'multipart/form-data',
-            Authorization: token,
-            body: portfolioUrl,
-          },
+      axios({
+        method: 'POST',
+        url: 'https://api.writeyoume.com/api/v1/portfolio',
+        headers: {
+          Authorization: token
         },
-      );
+        data : {
+          title: "포폴",
+          kind: 1,
+          description: "contents",
+          file_url: chooseData,
+        },
+        cancelToken: source.token
+      })
+        .then((response) => {
+          console.log("성공")
+          console.log(response);
+        })
+        .catch((e) => {
+          console.log("실패");
+          console.log(e);
+        });
+      return () => {
+        source.cancel('API 호출이 취소되었습니다.');
+      }
 
       // console.log('POST kind', id);
       console.log('POST url', portfolioUrl._parts);

@@ -257,7 +257,7 @@ const Album = () => {
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: 'http://10.0.2.2:3000/api/v1/img/album',
+      url: 'https://api.writeyoume.com/api/v1/img/album',
 
       headers: {
         Authorization:

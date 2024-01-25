@@ -126,7 +126,7 @@ const DetailPop = ({
   const [temporaryTitle, setTemporaryTitle] = useState(null);
   const [temporaryContent, setTemporaryContent] = useState(null);
 
-  const [chooseData, setChooseData] = useState();
+  const [chooseData, setChooseData] = useState(null);
 
   const handleTitleChange = text => {
     setTemporaryTitle(text);

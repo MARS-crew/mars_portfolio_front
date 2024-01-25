@@ -156,10 +156,10 @@ const HomeScreen = () => {
         <Interview />
       </Screen>
       <Screen text="Screen 4" index={3}>
-        <Resume modalOpen={modalOpen} />
+        <Portfolio options={{headerShown: false}} />
       </Screen>
       <Screen text="Screen 5" index={4}>
-        <Portfolio options={{headerShown: false}} />
+        <Resume modalOpen={modalOpen} />
       </Screen>
       <Screen text="Screen 6" index={5}>
         <Review />
