@@ -8,6 +8,8 @@ import {
   View,
 } from 'react-native';
 import axios from 'axios';
+import { useEffect } from 'react';
+import { sortBy } from 'lodash';
 
 const InterviewSavePop = ({
   savePopVisible,
@@ -25,17 +27,20 @@ const InterviewSavePop = ({
   token,
   interviewId,
 }) => {
-
   const saveInterview = async () => {
     console.log(changeData)
-    fetch('https://api.writeyoume.com/api/vi/interview/' + interviewId, {
+    const source = axios.CancelToken.source();
+
+    axios({
       method: 'PUT',
+      url: 'https://api.writeyoume.com/api/v1/interview/' + interviewId,
       headers: {
-        Authorization: token,
+        Authorization: token
       },
-      data: {
-        file_url: changeData
-      }
+      data : {
+        file_url : changeData
+      },
+      cancelToken: source.token
     })
       .then((response) => {
         console.log("성공")
@@ -45,6 +50,9 @@ const InterviewSavePop = ({
         console.log("실패");
         console.log(e);
       });
+    return () => {
+      source.cancel('API 호출이 취소되었습니다.');
+    }
   }
 
   const handleSave = () => {

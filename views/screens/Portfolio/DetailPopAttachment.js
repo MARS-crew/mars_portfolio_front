@@ -103,6 +103,7 @@ const DetailPopAttachment = (code, setChooseData) => {
           url: 'https://minio.mars-port.duckdns.org/mars-data/' + uniqueUrl,
         };
         console.log('uploadFile: ', JSON.stringify(fileInfo));
+        console.log(fileInfo.url);
         setChooseData(fileInfo.url);
       })
       .catch((e) => {

@@ -12,6 +12,8 @@ import { Shadow } from 'react-native-shadow-2';
 import EditMode from '../../components/commonComponent/EditMode';
 import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
 import DetailPop from './DetailPop';
+import { useUser } from '../../../LoginUserContext';
+
 const { width, height } = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.4;
 
@@ -102,6 +104,7 @@ const PortfolioItem = ({
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [detailPopVisible, setDetailPopVisible] = useState(false);
+  const { user, storeUser } = useUser();
 
   const shadowColor = 'rgba(151, 151, 151, 0.36)';
 
@@ -121,7 +124,9 @@ const PortfolioItem = ({
             //   : setIsModalVisible(!isModalVisible)
             [
               console.log(member_id),
-              member_id == '46' ? setIsModalVisible(!isModalVisible) : '',
+              
+              // member_id == user ? setIsModalVisible(true) : '',
+              setIsModalVisible(true)
             ]
           }>
           {(code === 1 || code === 3) && (
