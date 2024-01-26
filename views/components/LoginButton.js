@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 15,
-    paddingVertical: 15,
+    paddingVertical: 12,
     flexDirection: 'row',
   },
   image: {

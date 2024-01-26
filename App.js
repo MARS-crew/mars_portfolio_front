@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
-
+import { LogBox } from 'react-native';
 import Splash from './views/screens/splash';
 import Login from './views/screens/Login';
 import Resume from './views/screens/ResumeContents';
@@ -155,6 +155,10 @@ const HomeScreen = () => {
   const horizontalScrollRef = useRef(null);
 
   const {loading, changeLoading} = useLoadingContext();
+
+
+  LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+  LogBox.ignoreAllLogs();//Ignore all log notifications
 
   useEffect(() => {
     if (horizontalScrollRef.current) {

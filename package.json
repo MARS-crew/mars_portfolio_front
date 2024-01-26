@@ -1,5 +1,5 @@
 {
-  "name": "마스외전 프로필",
+  "name": "mars-sq-portfolio",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -33,7 +33,6 @@
     "react-native-floating-action-menu": "^1.2.4",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-image-picker": "^5.4.2",
-    "react-native-lottie-splash-screen": "^1.1.2",
     "react-native-progress": "^5.0.0",
     "react-native-reanimated": "^2.17.0",
     "react-native-safe-area-context": "^3.3.2",

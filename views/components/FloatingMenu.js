@@ -33,8 +33,8 @@ const FloatingActionMenu = () => {
     <ActionButton
       // style={styles.floatingActionMain}
       position="right"
-      offsetX={40}
-      offsetY={30}
+      offsetX={30}
+      offsetY={60}
       hideShadow={false}
       buttonColor="#072AC8">
       {/*<ActionButton.Item*/}
