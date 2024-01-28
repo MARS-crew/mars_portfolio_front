@@ -9,6 +9,8 @@ import {
   Image,
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
+import axios from 'axios';
+import {useIndexContext} from '../../../IndexContext';
 
 import DetailPop from '../../screens/Portfolio/DetailPop';
 import ChoosePop from './ChoosePop';
@@ -52,6 +54,8 @@ const EditMode = ({
   portfolio,
   id,
   code,
+  title,
+  message,
   onModify,
   onDelete,
   //인터뷰 프롭스
@@ -63,11 +67,11 @@ const EditMode = ({
   setIsPlaying,
   token,
 }) => {
+  const {selectedMemId} = useIndexContext();
   //공통 스테이트
   const [detailPopVisible, setDetailPopVisible] = useState(false);
   const [removeChoosePopVisible, setRemoveChoosePopVisible] = useState(false);
   const [saveChoosePopVisible, setSaveChoosePopVisible] = useState(false);
-  const [togleButton, setTogleButton] = useState(false);
   const [checkDeletePopOkButton, setCheckDeletePopOkButton] = useState(false); //삭제 츄즈 팝업에서 확인을 눌렀는지 감지하여 네비바의 저장을 눌렀을 시 ChoosePop이 뜨도록 함
   const [checkChoosePopOkButton, setCheckChoosePopOkButton] = useState(false); //디테일 팝업에서 확인을 눌렀는지 감지하여 네비바의 저장을 눌렀을 시 ChoosePop이 뜨도록 함
   //인터뷰 스테이트
@@ -99,7 +103,6 @@ const EditMode = ({
         const asset = response['assets'][0];
 
         if (checkDeletePopOkButton == false) setChangeData(asset.uri);
-        setTogleButton(true);
       }
     });
   };
@@ -132,7 +135,6 @@ const EditMode = ({
     else if (portfolio == true) {
       setCheckChoosePopOkButton(false); //수정 누를 때 디테일 팝 확인버튼 클릭 여부 스테이트 초기화
       setDetailPopVisible(true);
-      setTogleButton(true);
     }
   };
 
@@ -162,18 +164,46 @@ const EditMode = ({
       }
     }
   };
-  const deletedButton = () => {
+  const deletedButton = (portfolio_id, member_id) => {
     //인터뷰: interview 스테이트를 통해 인터뷰 페이지에서 진입했다면 하단 파일 탐색기 실행
     if (interview == true) {
       setRemoveChoosePopVisible(true);
-      setTogleButton(true);
     }
     //포트폴리오 portfolio 스테이트를 통해 포트폴리오 페이지에서 진입했다면 하단 디테일 팝 실행
     else if (portfolio == true) {
       setRemoveChoosePopVisible(true);
-      setTogleButton(true);
     }
     // modalView: 모달 영역 안 (Modify, Delete 기능이 담긴 Bottom Nav(Modal) 생성)
+  };
+
+  const deletePortfolio = async (portfolio_id, selectedMemId) => {
+    const source = axios.CancelToken.source();
+    try {
+      axios({
+        method: 'DELETE',
+        url: `https://api.writeyoume.com/api/v1/portfolio/${portfolio_id}`,
+        headers: {
+          Authorization: token,
+        },
+        data: {
+          member_id: selectedMemId,
+        },
+        cancelToken: source.token,
+      })
+        .then(response => {
+          console.log('성공');
+          console.log(response);
+        })
+        .catch(e => {
+          console.log('실패');
+          console.log(e);
+        });
+      return () => {
+        source.cancel('API 호출이 취소되었습니다.');
+      };
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
   };
 
   // EditMode Button onPress 용 Props 컴포넌트 end------------------------------------------------------------------------------------------------------------------------
@@ -200,7 +230,6 @@ const EditMode = ({
       <TouchableOpacity
         onPress={() => {
           setIsModalVisible(false);
-          setTogleButton(false);
         }} // modalBackdropPress: 모달 영역 밖 클릭 시 Bottom Nav(Modal) 닫힘 구현을 위해 TouchableOpacity로 modalView를 감싸서 적용
         style={styles.modalBackdropPress}>
         <Pressable
@@ -208,26 +237,23 @@ const EditMode = ({
             setIsModalVisible(true);
           }} // Pressable: 모달 영역 안 클릭 시 Bottom Nav(Modal) 유지 구현을 위해 Pressable로 감싸서 적용
           style={[styles.modalView, styles.shadow]}>
-          {togleButton === false && (
-            <EditModeSectionChooseBtn
-              title={'수정'}
-              source={editingIcon}
-              onPress={() => {
-                editingButton();
-              }}></EditModeSectionChooseBtn>
-          )}
-          {togleButton === true && (
-            <EditModeSectionChooseBtn
+          <EditModeSectionChooseBtn
+            title={'수정'}
+            source={editingIcon}
+            onPress={() => {
+              editingButton();
+            }}></EditModeSectionChooseBtn>
+          {/* <EditModeSectionChooseBtn
               title={'저장'}
               source={saveIcon}
               onPress={() => {
                 saveButton();
-              }}></EditModeSectionChooseBtn>
-          )}
+              }}></EditModeSectionChooseBtn> */}
           <EditModeSectionChooseBtn
             title={'삭제'}
             source={deletedIcon}
             onPress={() => {
+              deletePortfolio(id, selectedMemId);
               deletedButton();
             }}></EditModeSectionChooseBtn>
           <EditModeSectionChooseBtn
@@ -235,20 +261,21 @@ const EditMode = ({
             source={cancelIcon}
             onPress={() => {
               setIsModalVisible(!isModalVisible);
-              setTogleButton(false);
             }}></EditModeSectionChooseBtn>
 
           <DetailPop
-            id={id}
+            register={false}
+            portfolio_id={id}
             code={code}
+            currentFileTitle={title}
+            currentFileMessage={message}
             onModify={onModify}
             checkChoosePopOkButton={checkChoosePopOkButton}
             setCheckChoosePopOkButton={setCheckChoosePopOkButton}
             detailPopVisible={detailPopVisible}
-            setTogleButton={setTogleButton}
             setDetailPopVisible={setDetailPopVisible}
             token={token}></DetailPop>
-          <ChoosePop
+          {/* <ChoosePop
             //공통
             popTitle="수정된 내용을 저장하시겠습니까?"
             setTogleButton={setTogleButton}
@@ -286,7 +313,7 @@ const EditMode = ({
             portfolio={portfolio}
             id={id}
             code={code}
-            token={token}></ChoosePop>
+            token={token}></ChoosePop> */}
         </Pressable>
       </TouchableOpacity>
     </Modal>

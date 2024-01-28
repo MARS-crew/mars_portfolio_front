@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -8,13 +8,13 @@ import {
 } from 'react-native';
 
 import Video from 'react-native-video';
-import { Shadow } from 'react-native-shadow-2';
+import {Shadow} from 'react-native-shadow-2';
 import EditMode from '../../components/commonComponent/EditMode';
 import ContentsViewPop from '../../components/commonComponent/ContentsViewPop';
 import DetailPop from './DetailPop';
-import { useUser } from '../../../LoginUserContext';
+import {useUser} from '../../../LoginUserContext';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.4;
 
 const styles = StyleSheet.create({
@@ -104,36 +104,49 @@ const PortfolioItem = ({
   const [contentsViewPopVisible, setContentsViewPopVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [detailPopVisible, setDetailPopVisible] = useState(false);
-  const { user, storeUser } = useUser();
+  const {user, storeUser} = useUser();
 
   const shadowColor = 'rgba(151, 151, 151, 0.16)';
 
-  const checkUser = member_id => {
-    if (member_id == user) {
-      console.log('나');
+  const checkUser = (member_id, type) => {
+    if (type == 'onPress') {
+      console.log('onp');
+      setContentsViewPopVisible(!contentsViewPopVisible);
+    } else if (type == 'onLongPress') {
+      console.log('onLongp');
       setIsModalVisible(!isModalVisible);
     } else {
-      console.log(user);
-      console.log('나 아니야');
+      return;
     }
+
+    // if (member_id == user) {
+    //   console.log('나');
+    //   setIsModalVisible(!isModalVisible);
+    // } else {
+    //   console.log(user);
+    //   console.log('나 아니야');
+    // }
   };
+
   return (
     <Shadow distance="10" startColor={shadowColor} offset={[15, 15]}>
       <View style={[styles.gridItem]}>
         <TouchableOpacity
-          onPress={() =>
-            // id === '6'
-            //   ? setDetailPopVisible(!detailPopVisible)
-            //   : setContentsViewPopVisible(!contentsViewPopVisible)
-            setContentsViewPopVisible(!contentsViewPopVisible)
+          onPress={
+            () =>
+              // id === '6'
+              //   ? setDetailPopVisible(!detailPopVisible)
+              //   : setContentsViewPopVisible(!contentsViewPopVisible)
+              checkUser(member_id, 'onPress')
+            // setContentsViewPopVisible(!contentsViewPopVisible)
           }
           onLongPress={() => {
-            checkUser(member_id);
+            checkUser(member_id, 'onLongPress');
           }}>
           {(code === 1 || code === 3) && (
             <View>
               <Image
-                source={{ uri: src }}
+                source={{uri: src}}
                 style={[styles.content, styles.image]}
               />
             </View>
@@ -142,7 +155,7 @@ const PortfolioItem = ({
             <View>
               <Video
                 ref={useRef(null)}
-                source={{ uri: src }}
+                source={{uri: src}}
                 style={styles.content}
                 repeat={true}
                 resizeMode="contain"
@@ -167,18 +180,21 @@ const PortfolioItem = ({
           portfolio={portfolio}
           id={id}
           code={code}
+          title={title}
+          message={message}
           onModify={onModify}
           onDelete={onDelete}
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           token={token}></EditMode>
 
-        <DetailPop
-          id={id}
+        {/* <DetailPop
+          register={true}
+          memberId={member_id}
           onModify={onModify}
           token={token}
           setDetailPopVisible={setDetailPopVisible}
-          detailPopVisible={detailPopVisible}></DetailPop>
+          detailPopVisible={detailPopVisible}></DetailPop> */}
       </View>
     </Shadow>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, {useState, useEffect, useContext, useCallback} from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -7,6 +7,7 @@ import {
   Image,
   Pressable,
 } from 'react-native';
+import axios from 'axios';
 
 import InterviewAlert from '../../components/InterviewAlert';
 const styles = StyleSheet.create({
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
   },
-  chooseOkBtn: { backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 22 },
+  chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0, marginLeft: 22},
   inputRightMargin: {
     marginRight: 5,
     marginBottom: 0,
@@ -78,7 +79,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: 'row',
   },
-  PressedBtn: { borderBottomWidth: 2, borderColor: '#072AC8' },
+  PressedBtn: {borderBottomWidth: 2, borderColor: '#072AC8'},
+  descriptionStyleForTitle: {
+    height: 45,
+    textAlignVertical: 'top',
+  },
+  descriptionStyleForDescription: {
+    height: 100,
+    textAlignVertical: 'top',
+  },
 });
 
 import PublicModal from '../../components/commonComponent/PublicModal';
@@ -88,29 +97,26 @@ import SectionChooseBtn from '../../components/commonComponent/SectionChooseBtn'
 import ChoosePop from '../../components/commonComponent/ChoosePop';
 import ChooseButton from '../../components/commonComponent/ChooseButton';
 import closeblack from '../../../assets/images/closeblack.png';
-import { MyContext } from '../../../MyContext';
+import {MyContext} from '../../../MyContext';
+import {globalStyles} from 'react-native-floating-action-menu';
+import {useIndexContext} from '../../../IndexContext';
 
 const DetailPop = ({
-  id,
+  portfolio_id,
   portfolio,
+  currentFileTitle,
+  currentFileMessage,
   onModify,
   detailPopVisible,
   setDetailPopVisible,
   checkChoosePopOkButton,
   setCheckChoosePopOkButton,
-  setTogleButton,
   code,
   register,
   token,
   memberId,
 }) => {
-  useEffect(() => {
-    //setTemporaryTitle('');
-    //setTemporaryContent('');
-    //setPortfolioUrl('');
-
-    return () => { };
-  }, [detailPopVisible]);
+  const {selectedMemId} = useIndexContext();
 
   const [selectedButton, setSelectedButton] = useState(selectedValue());
   const [button1Pressed, setButton1Pressed] = useState(selected1Pressed());
@@ -120,30 +126,44 @@ const DetailPop = ({
   const [addPressedIf, SetAddPressedIf] = useState(true);
   // 포트폴리오 아이템에서 Add 버튼 클릭 시 등장하는 디테일 팝업 적용 후 확인을 눌렀는지 확인하는 스테이트
   const [selectKind, setSelectKind] = useState('1');
-  const { title, setTitle } = useContext(MyContext);
-  const { content, setContent } = useContext(MyContext);
-  const { portfolioUrl, setPortfolioUrl } = useContext(MyContext);
+  const {title, setTitle} = useContext(MyContext); // 삭제 예정
+  const {content, setContent} = useContext(MyContext); // 삭제 예정
+  const {portfolioUrl, setPortfolioUrl} = useContext(MyContext); // 삭제 예정
+
+  const [portfolioTitle, setPortfolioTitle] = useState(
+    register ? '' : currentFileTitle,
+  ); // todo 이후 수정을 위해 PortfolioItem에서 값 가져와야함
+  const [portfolioDescription, setPortfolioDescription] = useState(
+    register ? '' : currentFileMessage,
+  ); // todo 이후 수정을 위해 PortfolioItem에서 값 가져와야함
+  // const [portfolioFileUrl, setPortfolioFileUrl] = useState(null); // todo 이후 수정을 위해 PortfolioItem에서 값 가져와야함
 
   const [temporaryTitle, setTemporaryTitle] = useState(null);
   const [temporaryContent, setTemporaryContent] = useState(null);
 
-  const [chooseData, setChooseData] = useState(null);
+  const [chooseData, setChooseData] = useState('');
 
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
 
-  const showAlert = () => {
-    let t = '';
-    if (title == '') {
-      t = '제목을 입력해주세요.';
-    } else if (content == '') {
-      t = '내용을 입력해주세요.';
-    } else {
-      t = '파일을 입력해주세요.'
-    }
-    setAlertTitle(t);
-    setAlertVisible(true);
-  }
+  console.log(`title ${currentFileTitle}, message: ${currentFileMessage}`);
+
+  // const showAlert = () => {
+  //   let t = '';
+  //   if (title == '') {
+  //     t = '제목을 입력해주세요.';
+  //   } else if (content == '') {
+  //     t = '내용을 입력해주세요.';
+  //   } else {
+  //     t = '파일을 입력해주세요.'
+  //   }
+  //   setAlertTitle(t);
+  //   setAlertVisible(true);
+  // }
+
+  // useEffect(() => {
+  //   console.log('file url is changed!!!!!!!!!!!!!!!!! : ', portfolioFileUrl);
+  // }, [portfolioFileUrl]);
 
   const handleTitleChange = text => {
     setTemporaryTitle(text);
@@ -207,7 +227,7 @@ const DetailPop = ({
   };
   // DetailPop Button onPress 용 Props 컴포넌트 end------------------------------------------------------------------------------------------------------------------------
 
-  const DetailInput = ({ description, placeholder, value, onChangeText }) => {
+  const DetailInput = ({description, placeholder, value, onChangeText}) => {
     // 디테일 팝 섹션(이미지, 영상, 링크)별 페이지 속 인풋 구성요소 공통 컴포넌트
     const descriptionStyle = {
       height: description == true ? 100 : 45,
@@ -225,13 +245,97 @@ const DetailPop = ({
     );
   };
 
+  const postPortfolio = async (
+    member_id,
+    title,
+    description,
+    file_url,
+    selectKind,
+  ) => {
+    const source = axios.CancelToken.source();
+    try {
+      axios({
+        method: 'POST',
+        url: `https://api.writeyoume.com/api/v1/portfolio`,
+        headers: {
+          Authorization: token,
+        },
+        data: {
+          member_id: member_id,
+          title: title,
+          description: description,
+          kind: selectKind,
+          file_url: file_url,
+        },
+        cancelToken: source.token,
+      })
+        .then(response => {
+          console.log('성공');
+          console.log(response);
+        })
+        .catch(e => {
+          console.log('실패');
+          console.log(e);
+        });
+      return () => {
+        source.cancel('API 호출이 취소되었습니다.');
+      };
+    } catch (error) {
+      setPortfolioUrl('');
+      console.error('에러 발생:', error);
+    }
+  };
+
+  const editPortfolio = async (
+    member_id,
+    title,
+    description,
+    file_url,
+    portfolio_id,
+    selectKind,
+  ) => {
+    const source = axios.CancelToken.source();
+    try {
+      axios({
+        method: 'PUT',
+        url: `https://api.writeyoume.com/api/v1/portfolio/${portfolio_id}`,
+        headers: {
+          Authorization: token,
+        },
+        data: {
+          member_id: member_id,
+          title: title,
+          description: description,
+          kind: selectKind,
+          file_url: file_url,
+        },
+        cancelToken: source.token,
+      })
+        .then(response => {
+          console.log('성공');
+          console.log(response);
+        })
+        .catch(e => {
+          console.log('실패');
+          console.log(e);
+        });
+      return () => {
+        source.cancel('API 호출이 취소되었습니다.');
+      };
+    } catch (error) {
+      setPortfolioUrl('');
+      console.error('에러 발생:', error);
+    }
+  };
+
   return (
     <PublicModal
       onModify={onModify}
       isModalVisible={detailPopVisible}
       setIsModalVisible={setDetailPopVisible}
-      setTemporaryTitle={setTemporaryTitle}
-      setTemporaryContent={setTemporaryContent}>
+      // setTemporaryTitle={setTemporaryTitle}
+      // setTemporaryContent={setTemporaryContent}
+    >
       <Pressable
         onPress={() => {
           setDetailPopVisible(true);
@@ -287,7 +391,7 @@ const DetailPop = ({
                   setChooseData={setChooseData}></DetailPopAttachment>
               )}
 
-              <DetailInput
+              {/* <DetailInput
                 value={temporaryTitle}
                 onChangeText={handleTitleChange}
                 placeholder="제목"></DetailInput>
@@ -295,17 +399,39 @@ const DetailPop = ({
                 value={temporaryContent}
                 onChangeText={handleContentChange}
                 placeholder="내용"
-                description={true}></DetailInput>
+                description={true}></DetailInput> */}
+
+              <TextInput
+                style={[styles.input, styles.descriptionStyleForTitle]}
+                value={portfolioTitle === null ? '' : portfolioTitle}
+                onChangeText={text => setPortfolioTitle(text)}
+                placeholder={'제목'}
+                placeholderTextColor="#D8D8D8"></TextInput>
+              <TextInput
+                style={[styles.input, styles.descriptionStyleForDescription]}
+                value={portfolioDescription}
+                onChangeText={text => setPortfolioDescription(text)}
+                multiline={true}
+                placeholder={'내용'}
+                placeholderTextColor="#D8D8D8"></TextInput>
             </View>
           )}
 
           {selectedButton === 'Link' && (
             <View style={styles.TextInputContainer}>
-              <DetailPopAttachment code={3}></DetailPopAttachment>
-              <DetailInput
+              <DetailPopAttachment
+                code={3}
+                setChooseData={setChooseData}></DetailPopAttachment>
+              {/* <DetailInput
                 value={temporaryContent}
                 onChangeText={handleContentChange}
-                placeholder="링크"></DetailInput>
+                placeholder="링크"></DetailInput> */}
+              <TextInput
+                style={[styles.input, styles.descriptionStyleForTitle]}
+                value={portfolioTitle}
+                onChangeText={text => setPortfolioTitle(text)}
+                placeholder={'링크'}
+                placeholderTextColor="#D8D8D8"></TextInput>
             </View>
           )}
 
@@ -322,16 +448,39 @@ const DetailPop = ({
               size="M"
               background={'blue'}
               onPress={() => {
-                if ((title == null) | (content == null) | (chooseData == null)) {
-                  showAlert();
+                if (
+                  (title == null) |
+                  (content == null) |
+                  (chooseData == null)
+                ) {
+                  // showAlert();
                 } else {
-                  register ? setChoosePopVisible(true) : DetailPopCheck();
-                  setTitle(temporaryTitle);
-                  setContent(temporaryContent);
+                  // register ? setChoosePopVisible(true) : DetailPopCheck();
+                  // setTitle(temporaryTitle);
+                  // setContent(temporaryContent);
+                  console.log(`register: ${register}`);
+                  console.log('id', selectedMemId);
+                  console.log('title', portfolioTitle);
+                  console.log('description', portfolioDescription);
+                  console.log(chooseData);
 
-                  console.log('title', title);
-                  console.log('description', content);
-                  console.log(portfolioUrl);
+                  // todo 여기서 등록 및 수정
+                  register
+                    ? postPortfolio(
+                        selectedMemId,
+                        portfolioTitle,
+                        portfolioDescription,
+                        chooseData,
+                        selectKind,
+                      )
+                    : editPortfolio(
+                        selectedMemId,
+                        portfolioTitle,
+                        portfolioDescription,
+                        chooseData,
+                        portfolio_id,
+                        selectKind,
+                      );
                 }
                 //setTemporaryTitle('');
                 //setTemporaryContent('');
@@ -342,7 +491,7 @@ const DetailPop = ({
         </View>
       </Pressable>
 
-      <ChoosePop
+      {/* <ChoosePop
         temporaryTitle={temporaryTitle}
         setTemporaryTitle={setTemporaryTitle}
         temporaryContent={temporaryContent}
@@ -358,7 +507,7 @@ const DetailPop = ({
         chooseData={chooseData}
         setChooseData={setChooseData}
         token={token}
-      />
+      /> */}
 
       <InterviewAlert
         title={alertTitle}

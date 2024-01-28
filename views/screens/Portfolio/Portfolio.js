@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   SafeAreaView,
@@ -11,20 +11,20 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import _, { iteratee } from 'lodash';  // lodash 라이브러리 사용
+import _, {iteratee} from 'lodash'; // lodash 라이브러리 사용
 import FAB from '../../components/FloatingMenu';
 import PortfolioItem from '../Portfolio/PortfolioItem';
 import DetailPop from './DetailPop';
 import axios from 'axios'; // axios import 합니다.
-import { Shadow } from 'react-native-shadow-2';
+import {Shadow} from 'react-native-shadow-2';
 import addBtn from '../../../assets/images/add.png';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import { useIndexContext } from '../../../IndexContext';
-import { useUser } from '../../../LoginUserContext';
+import {useIndexContext} from '../../../IndexContext';
+import {useUser} from '../../../LoginUserContext';
 import GroupItem from '../../components/GroupItem';
-import { useLoadingContext } from '../../../LoadingContext';
+import {useLoadingContext} from '../../../LoadingContext';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.4;
 
 const styles = StyleSheet.create({
@@ -60,17 +60,22 @@ const styles = StyleSheet.create({
   },
 });
 
-const Portfolio = ({ token }) => {
-  const { currentIndex, changeIndex,
-    horizontalIndex, changeHorizontalIndex,
-    dataIndex, changeDataIndex,
-    selectedMemId, changeSelectedMemId,
-    selectedGroupId, changeSelectedGroupId
+const Portfolio = ({token}) => {
+  const {
+    currentIndex,
+    changeIndex,
+    horizontalIndex,
+    changeHorizontalIndex,
+    dataIndex,
+    changeDataIndex,
+    selectedMemId,
+    changeSelectedMemId,
+    selectedGroupId,
+    changeSelectedGroupId,
   } = useIndexContext();
 
-  const { loading, changeLoading } = useLoadingContext();
   const swiperRef = useRef(null);
-  const { user, storeUser } = useUser();
+  const {user, storeUser} = useUser();
 
   useEffect(() => {
     if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
@@ -118,7 +123,7 @@ const Portfolio = ({ token }) => {
         ext: singleItem.ext,
         url: singleItem.url,
         del_yn: singleItem.del_yn,
-      }))
+      })),
     );
     return transformedData;
   };
@@ -130,7 +135,8 @@ const Portfolio = ({ token }) => {
     const source = axios.CancelToken.source();
     axios({
       method: 'get',
-      url: `https://api.writeyoume.com/api/v1/portfolio/`,
+      // url: `https://api.writeyoume.com/api/v1/portfolio/${selectedMemId}`,
+      url: `https://api.writeyoume.com/api/v1/portfolio`,
       headers: {
         Authorization: token,
       },
@@ -187,13 +193,15 @@ const Portfolio = ({ token }) => {
 
   const shadowColor = 'rgba(151, 151, 151, 0.16)';
 
-  const renderItem = ({ item: groupItems }) => (
+  const renderItem = ({item: groupItems}) => (
     <View style={styles.container}>
       <SafeAreaView>
         <ScrollView>
           <View style={styles.gridView}>
             {groupItems.map(singleItem => (
-              <View style={styles.gridItem} key={singleItem.portfolio_id.toString()}>
+              <View
+                style={styles.gridItem}
+                key={singleItem.portfolio_id.toString()}>
                 <PortfolioItem
                   portfolio={portfolio}
                   onModify={onModify}
@@ -223,9 +231,11 @@ const Portfolio = ({ token }) => {
               </TouchableOpacity>
             </Shadow>
             <DetailPop
-              code={1}
+              // code={1}
               register={true}
               onModify={onModify}
+              currentFileTitle={''}
+              currentFileMessage={''}
               setDetailPopVisible={setDetailPopVisible}
               detailPopVisible={detailPopVisible}
               token={token}
@@ -247,7 +257,9 @@ const Portfolio = ({ token }) => {
         index={dataIndex}
         onScroll={handleVerticalScroll}
         hideShadow
-        listKey={(item, index) => `swiperFlatList_${index}_${item[0].member_id}`}
+        listKey={(item, index) =>
+          `swiperFlatList_${index}_${item[0].member_id}`
+        }
       />
       <FAB />
     </SafeAreaView>

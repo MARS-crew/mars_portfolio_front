@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, {useEffect, useState, useRef, useContext} from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -9,9 +9,9 @@ import {
 
 import Attachment from '../../../assets/images/Attachment.png';
 import emptyImg from '../../../assets/images/emptyImg.png';
-import { launchImageLibrary } from 'react-native-image-picker';
-import { MyContext } from '../../../MyContext';
-import { Video } from 'react-native-video';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {MyContext} from '../../../MyContext';
+import {Video} from 'react-native-video';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -48,13 +48,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const DetailPopAttachment = (code, setChooseData) => {
+const DetailPopAttachment = ({code, setChooseData}) => {
   const [temporaryUrl, setTemporaryUrl] = useState(null);
 
-  const { title, setTitle } = useContext(MyContext);
-  const { content, setContent } = useContext(MyContext);
-  const { portfolioUrl, setPortfolioUrl } = useContext(MyContext);
-  const { ext, setExt } = useContext(MyContext);
+  const {title, setTitle} = useContext(MyContext);
+  const {content, setContent} = useContext(MyContext);
+  const {portfolioUrl, setPortfolioUrl} = useContext(MyContext);
+  const {ext, setExt} = useContext(MyContext);
 
   //const videoRef = useRef(null);
   //const [pickUri, setPickUri] = useState(null);
@@ -65,28 +65,27 @@ const DetailPopAttachment = (code, setChooseData) => {
 
   const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
 
-  const retrieveNewUrl = async (file) => {
+  const retrieveNewUrl = async file => {
     await fetch(
-      `https://api.writeyoume.com/api/v1/presignedUrl?name=${file.uri}`
+      `https://api.writeyoume.com/api/v1/presignedUrl?name=${file.uri}`,
     )
-      .then((response) => {
-        response.json().then((jsonData) => {
+      .then(response => {
+        response.json().then(jsonData => {
           const presignedUrl = jsonData.presignedUrl;
           const uniqueFileName = jsonData.uniqueFileName;
-          console.log("presignedUrl: ", presignedUrl);
-          console.log("uniqueFileName: ", uniqueFileName);
+          console.log('presignedUrl: ', presignedUrl);
+          console.log('uniqueFileName: ', uniqueFileName);
 
-          console.log("uploadFileToServer 실행");
+          console.log('uploadFileToServer 실행');
           uploadFileToServer(file, presignedUrl, uniqueFileName);
         });
       })
-      .catch((e) => {
+      .catch(e => {
         console.error(e);
-      })
+      });
   };
 
   const uploadFileToServer = async (file, presignedUrl, uniqueUrl) => {
-
     fetch(presignedUrl, {
       method: 'PUT',
       body: {
@@ -94,7 +93,7 @@ const DetailPopAttachment = (code, setChooseData) => {
         type: 'multipart/form-data',
         name: file.fileName,
       },
-      headers: { 'content-type': file.type }
+      headers: {'content-type': file.type},
     })
       .then(() => {
         const fileInfo = {
@@ -106,14 +105,14 @@ const DetailPopAttachment = (code, setChooseData) => {
         console.log(fileInfo.url);
         setChooseData(fileInfo.url);
       })
-      .catch((e) => {
+      .catch(e => {
         console.log(e);
-      })
-  }
+      });
+  };
 
   const chooseFile = type => {
     let options;
-    if (code.code == 1 || code.code == 3) {
+    if (code == 1 || code == 3) {
       options = {
         mediaType: 'photo',
         maxWidth: 300,
@@ -163,7 +162,7 @@ const DetailPopAttachment = (code, setChooseData) => {
         setExt(asset.type);
         console.log('formdata:', portfolioUrl._parts);
 
-        console.log("retrieveNewUrl 실행");
+        console.log('retrieveNewUrl 실행');
         retrieveNewUrl(asset);
         // if (Array.isArray(formdata)) {
         //   console.log(' 배열입니다.');
