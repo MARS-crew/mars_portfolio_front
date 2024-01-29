@@ -16,6 +16,7 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 import { useIndexContext } from '../../../IndexContext';
 import ReviewItem from '../Review/ReviewItem';
 import FloatingMenu from '../../components/FloatingMenu';
+import {deleteReviewAjax, getReviews, regReview, toggleReviewLike, updateReviewAjax} from "../../../api/v1/review";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -106,14 +107,19 @@ const Review = ({ token, currentUserId }) => {
 
     const source = axios.CancelToken.source();
 
-    axios({
-      method: 'get',
-      url: `https://api.writeyoume.com/api/v1/review/${selectedMemId}`,
-      headers: {
-        Authorization: token,
-      },
-      cancelToken: source.token,
+    getReviews(token, {
+      selectedMemId: selectedMemId
+    }, {
+      cancelToken: source.token
     })
+    // axios({
+    //   method: 'get',
+    //   url: `https://api.writeyoume.com/api/v1/review/${selectedMemId}`,
+    //   headers: {
+    //     Authorization: token,
+    //   },
+    //   cancelToken: source.token,
+    // })
       .then(response => {
         console.log('Success:', response.status);
 
@@ -141,21 +147,35 @@ const Review = ({ token, currentUserId }) => {
     if (reviewText == '' || !token) return;
 
     try {
-      const response = await axios({
-        method: 'post',
-        url: 'https://api.writeyoume.com/api/v1/review',
-        data: {
-          ref_member_id: selectedMemId,
-          content: reviewText,
-        },
-        headers: {
-          Authorization: token,
-        },
-      });
-      const newReview = response.data.data;
-      newReview.name = '나';
-      setData(currentData => [newReview, ...currentData]);
-      setReviewContent('');
+      regReview(token, {
+        ref_member_id: selectedMemId,
+        content: reviewText,
+      })
+      .then(function (response) {
+        const newReview = response.data.data;
+        newReview.name = '나';
+        setData(currentData => [newReview, ...currentData]);
+        setReviewContent('');
+      }).catch(function (error) {
+        console.error('Error', error);
+      })
+
+
+    //   const response = await axios({
+    //     method: 'post',
+    //     url: 'https://api.writeyoume.com/api/v1/review',
+    //     data: {
+    //       ref_member_id: selectedMemId,
+    //       content: reviewText,
+    //     },
+    //     headers: {
+    //       Authorization: token,
+    //     },
+    //   });
+    //   const newReview = response.data.data;
+    //   newReview.name = '나';
+    //   setData(currentData => [newReview, ...currentData]);
+    //   setReviewContent('');
     } catch (error) {
       console.error('Error', error);
     }
@@ -165,31 +185,55 @@ const Review = ({ token, currentUserId }) => {
     if (reviewContent == '' || !token) return;
 
     try {
-      const response = await axios({
-        method: 'put',
-        url: `https://api.writeyoume.com/api/v1/review/${reviewId}`,
-        data: {
-          member_id: member_id,
-          content: reviewContent,
-          ref_member_id: selectedMemId,
-        },
-        headers: {
-          Authorization: token,
-        },
-      });
-      setData([]);
-      const extractedData = Array.isArray(response.data.data)
-        ? response.data.data.map(item => ({
-          review_id: item.review_id,
-          name: item.name,
-          member_id: item.member_id,
-          content: item.content,
-          reg_date: item.reg_date,
-          is_liked: item.is_liked,
-        }))
-        : [];
-      setData(extractedData);
-      setReviewContent('');
+      updateReviewAjax(token, {
+        reviewId: reviewId,
+        member_id: member_id,
+        content: reviewContent,
+        ref_member_id: selectedMemId,
+      })
+      .then(function (response) {
+        setData([]);
+        const extractedData = Array.isArray(response.data.data)
+            ? response.data.data.map(item => ({
+              review_id: item.review_id,
+              name: item.name,
+              member_id: item.member_id,
+              content: item.content,
+              reg_date: item.reg_date,
+              is_liked: item.is_liked,
+            }))
+            : [];
+        setData(extractedData);
+        setReviewContent('');
+      })
+      .catch(function (error){
+        console.error('Error', error);
+      })
+      // const response = await axios({
+      //   method: 'put',
+      //   url: `https://api.writeyoume.com/api/v1/review/${reviewId}`,
+      //   data: {
+      //     member_id: member_id,
+      //     content: reviewContent,
+      //     ref_member_id: selectedMemId,
+      //   },
+      //   headers: {
+      //     Authorization: token,
+      //   },
+      // });
+      // setData([]);
+      // const extractedData = Array.isArray(response.data.data)
+      //   ? response.data.data.map(item => ({
+      //     review_id: item.review_id,
+      //     name: item.name,
+      //     member_id: item.member_id,
+      //     content: item.content,
+      //     reg_date: item.reg_date,
+      //     is_liked: item.is_liked,
+      //   }))
+      //   : [];
+      // setData(extractedData);
+      // setReviewContent('');
     } catch (error) {
       console.error('Error', error);
     }
@@ -198,30 +242,59 @@ const Review = ({ token, currentUserId }) => {
   const deleteReview = async (reviewId, memberId) => {
     if (!token) return;
     try {
-      const response = await axios({
-        method: 'delete',
-        url: `https://api.writeyoume.com/api/v1/review/${reviewId}`,
-        data: {
-          member_id: memberId,
-          ref_member_id: selectedMemId,
-        },
+      deleteReviewAjax(token, {
+        reviewId: reviewId,
+        member_id: memberId,
+        ref_member_id: selectedMemId,
+      }, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: token,
-        },
-      });
-      setData([]);
-      const extractedData = Array.isArray(response.data.data)
-        ? response.data.data.map(item => ({
-          review_id: item.review_id,
-          name: item.name,
-          member_id: item.member_id,
-          content: item.content,
-          reg_date: item.reg_date,
-          is_liked: item.is_liked,
-        }))
-        : [];
-      setData(extractedData);
+        }
+      })
+      .then(function (response) {
+        setData([]);
+        const extractedData = Array.isArray(response.data.data)
+            ? response.data.data.map(item => ({
+              review_id: item.review_id,
+              name: item.name,
+              member_id: item.member_id,
+              content: item.content,
+              reg_date: item.reg_date,
+              is_liked: item.is_liked,
+            }))
+            : [];
+        setData(extractedData);
+      })
+      .catch(function (error){
+        console.error('Error', error);
+      })
+
+
+      // const response = await axios({
+      //   method: 'delete',
+      //   url: `https://api.writeyoume.com/api/v1/review/${reviewId}`,
+      //   data: {
+      //     member_id: memberId,
+      //     ref_member_id: selectedMemId,
+      //   },
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: token,
+      //   },
+      // });
+      // setData([]);
+      // const extractedData = Array.isArray(response.data.data)
+      //   ? response.data.data.map(item => ({
+      //     review_id: item.review_id,
+      //     name: item.name,
+      //     member_id: item.member_id,
+      //     content: item.content,
+      //     reg_date: item.reg_date,
+      //     is_liked: item.is_liked,
+      //   }))
+      //   : [];
+      // setData(extractedData);
     } catch (error) {
       console.error('Error', error);
     }
@@ -231,18 +304,28 @@ const Review = ({ token, currentUserId }) => {
     if (!token) return;
 
     try {
-      const response = await axios({
-        method: 'post',
-        url: 'https://api.writeyoume.com/api/v1/review/like',
-        data: {
-          member_id: currentUserId,
-          ref_review_id: ref_review_id,
-        },
-        headers: {
-          Authorization: token,
-        },
-      });
-      console.log('성공', response.status);
+      toggleReviewLike(token, {
+        member_id: currentUserId,
+        ref_review_id: ref_review_id,
+      })
+      .then(function (response) {
+        console.log('성공', response.status);
+      })
+      .catch(function (error){
+        console.error('Error', error);
+      })
+      // const response = await axios({
+      //   method: 'post',
+      //   url: 'https://api.writeyoume.com/api/v1/review/like',
+      //   data: {
+      //     member_id: currentUserId,
+      //     ref_review_id: ref_review_id,
+      //   },
+      //   headers: {
+      //     Authorization: token,
+      //   },
+      // });
+      // console.log('성공', response.status);
     } catch (error) {
       console.error('Error', error);
     }

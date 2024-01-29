@@ -300,19 +300,19 @@ const ResumeBox = ({ item, data, index }) => {
                     addr={item.addr}
                     email={item.email}
                 />
-                <CareerContent
-                    item={item}
-                    carreer={item.career}
-                />
-                {/* <AwardContent 
-                item={item} 
+                {/*<CareerContent*/}
+                {/*    item={item}*/}
+                {/*    carreer={item.career}*/}
+                {/*/>*/}
+                {/* <AwardContent
+                item={item}
                 award_name={item.award_name}
                 date={item.date}
                 issuer={item.issuer}
                  /> */}
                 {/* <InterestContent item={item} data={data} /> */}
-                <SpecialityContent item={item} specialities={item.specialities} />
-                <SkillContent item={item} technology={item.technology} />
+                {/*<SpecialityContent item={item} specialities={item.specialities} />*/}
+                {/*<SkillContent item={item} technology={item.technology} />*/}
             </View>
         </View>
     );

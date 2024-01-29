@@ -21,6 +21,7 @@ import InterviewAlert from '../components/InterviewAlert';
 import { useFocusEffect } from '@react-navigation/native';
 import { getVideoThumbnail } from 'react-native-video-thumbnails';
 import { useUser } from '../../LoginUserContext';
+import {toggleInterviewHeart} from "../../api/v1/interview";
 
 const InterviewContents = ({ interviewId, id, path, token }) => {
   const { user, storeUser } = useUser();
@@ -62,18 +63,14 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
     }
   };
   //하트 상태 변경
-  const fetchHeart = async () => {
-    try {
-      const response = await axios({
-        method: 'post',
-        url: 'https://api.writeyoume.com/api/v1/interview/heart/' + id,
-        headers: {
-          Authorization: token,
-        },
-      });
-    } catch (error) {
+  const fetchHeart = () => {
+    toggleInterviewHeart(token, {id: id})
+    .then(function (res) {
+      console.error(res);
+    })
+    .catch(function (error){
       console.error(error);
-    }
+    })
   };
 
   // 찜 기능
@@ -146,8 +143,7 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
             doubleTap();
             console.log(filePath);
           }}
-          onLongPress={() =>
-            checkUser(id)}>
+          onLongPress={() => checkUser(id)}>
           {/* 저장된 video가 있으w면 video 출력. 없으면  마스외전 로고 출력*/}
           {filePath && filePath.endsWith('.mp4') ? (
             <Video
@@ -162,6 +158,7 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
                 setIsPlaying(false);
               }}
               onLoad={() => {
+                console.log('동영상로드 완료')
                 player.current.seek(0);
               }}
             />
@@ -212,7 +209,6 @@ const styles = StyleSheet.create({
   },
   iconBar: {
     height: 60,
-    justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-end',

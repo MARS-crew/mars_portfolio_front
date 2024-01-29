@@ -18,6 +18,7 @@ import axios from 'axios';
 import { log } from 'react-native-reanimated';
 import { useIndexContext } from '../../../IndexContext';
 import { useUser } from '../../../LoginUserContext';
+import {getMyPageInfo} from "../../../api/v1/user";
 
 const styles = StyleSheet.create({
   container: {
@@ -129,13 +130,14 @@ const MyPage = ({ token }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios({
-        method: 'get',
-        url: 'https://api.writeyoume.com/api/v1/mypage/' + user, // 로그인할때 로그인 멤버아이디값가져오기
-        headers: {
-          Authorization: token,
-        },
-      });
+      // const response = await axios({
+      //   method: 'get',
+      //   url: 'https://api.writeyoume.com/api/v1/mypage/' + user, // 로그인할때 로그인 멤버아이디값가져오기
+      //   headers: {
+      //     Authorization: token,
+      //   },
+      // });
+      const response = await getMyPageInfo(token, user);
 
       const extractedData = {
         Reviewlike: response.data.data.Reviewlike,

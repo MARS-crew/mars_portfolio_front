@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useState, useContext } from 'react';
 import axios from 'axios';
+import {getUserInfoByToken} from "./api/v1/user";
+import portfolio from "./views/screens/Portfolio/Portfolio";
 
 
 const UserContext = createContext({
@@ -14,12 +16,8 @@ export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
     const storeUser = async token => {
-        try {
-            const response = await axios.get('https://api.writeyoume.com/api/v1/userbytoken', {
-                headers: {
-                    Authorization: token,
-                },
-            });
+        getUserInfoByToken(token)
+        .then(async function (response) {
             const extractedData = response.data.data.map(item => ({
                 member_id: item.member_id,
             }));
@@ -27,9 +25,10 @@ export const UserProvider = ({ children }) => {
             setUser(extractedData[0].member_id);
             await AsyncStorage.setItem('loginUser', extractedData[0].member_id.toString());
 
-        } catch (e) {
-            console.log("login user 저장 중 에러 발생", e);
-        }
+        })
+        .catch(function (e) {
+            throw e;
+        });
     };
 
     return (
@@ -38,3 +37,8 @@ export const UserProvider = ({ children }) => {
         </UserContext.Provider>
     );
 };
+
+
+
+
+

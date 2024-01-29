@@ -13,9 +13,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const LoginItem = ({token}) => {
   const navigation = useNavigation(); // 로그인 페이지로 넘기기 위한 네비게이션 객체
 
-  useEffect(() => {
-    console.log(`loginItem token ${token}`);
-  }, [token]);
+  // useEffect(() => {
+    // console.log(`loginItem token ${token}`);
+  // }, [token]);
 
   return (
     <View style={styles.container}>

@@ -1,38 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'; // axios를 import 하세요.
 import Group from './Group';
+import {getGroupImage} from "../../api/v1/img";
+import {useDispatch, useSelector} from "react-redux";
+import {getGroupImgSelector, setGroupImgList} from "../../redux/slice/GroupImgSlice";
+import GroupItem from "../components/GroupItem";
+import {View} from "react-native";
+import {userTokenSelector} from "../../redux/slice/UserInfoSlice";
 
-const WhichGroup = ({ token }) => {
-  const [data, setData] = useState();
+const WhichGroup = ({ idx }) => {
+  const [token, setToken] = useState();
   const [fileData, setFileData] = useState(null);
+  const dispatch = useDispatch();
 
-
-  const fetchGroup = async () => {
-    console.log('fetchGroup 실행');
-    if (!token) {
-      setFileData([]);
-      return;
-    }
-
-    try {
-      const response = await axios({
-        method: 'get',
-        url: 'https://api.writeyoume.com/api/v1/img/group',
-        headers: { Authorization: token },
-      });
-      console.log('데이터:', response.data);
-      setFileData(response.data.data);
-    } catch (error) {
-      console.error('에러:', error);
-      setFileData([]);
-    }
-  };
-
+  const groupImgList = useSelector(getGroupImgSelector);
   useEffect(() => {
-    fetchGroup();
-  }, [token]);
+    setFileData(groupImgList)
+  }, [groupImgList]);
 
-  return <Group token={token} fileData={fileData} />;
+  const userToken = useSelector(userTokenSelector);
+  useEffect(() => {
+    setToken(userToken)
+  }, [userToken]);
+
+  return <View>
+    {(fileData != null && fileData.length > 0 ? <GroupItem id={fileData[idx].group_id} src={fileData[idx].url} token={token} /> : null)}
+  </View>;
 };
 
 export default WhichGroup;

@@ -10,16 +10,19 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
 import { useIndexContext } from '../../IndexContext';
 import axios from 'axios';
+import {getResumes} from "../../api/v1/resume";
 
 const fetchResume = async ({ token }) => {
   try {
-    const response = await axios({
-      method: 'get',
-      url: 'https://api.writeyoume.com/api/v1/resume',
-      headers: {
-        Authorization: token,
-      },
-    });
+    const response = await getResumes(token);
+
+    // const response = await axios({
+    //   method: 'get',
+    //   url: 'https://api.writeyoume.com/api/v1/resume',
+    //   headers: {
+    //     Authorization: token,
+    //   },
+    // });
 
     const extractedData = {
       // ***** 아래 데이터 지우지 말아주세요 *****

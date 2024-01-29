@@ -15,12 +15,18 @@ import InterviewContents from './InterviewContents'; // Interview 컴포넌트�
 import { useIndexContext } from '../../IndexContext';
 import { UserInfoProvider, useUserInfo } from '../../UserInfoContext';
 import { useLoadingContext } from '../../LoadingContext';
+import {getInterview} from "../../api/v1/interview";
+import {getInterviewListSelector, setInterviewList} from "../../redux/slice/InterviewSlice";
+import {useDispatch, useSelector} from "react-redux";
+import type {RootState} from "../../redux/RootReducer";
+import {getGroupImgSelector} from "../../redux/slice/GroupImgSlice";
+import {userTokenSelector} from "../../redux/slice/UserInfoSlice";
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const yOffset = new Animated.Value(0);
 
-const Interview = ({ token }) => {
+const Interview = ({ token, idx }) => {
   const swiperRef = useRef(null);
   // const { token } = useUserInfo();
   const {
@@ -39,140 +45,37 @@ const Interview = ({ token }) => {
   } = useIndexContext();
 
   const { loading, changeLoading } = useLoadingContext();
-
   const [data, setData] = useState([]);
-  const [prevSelectedGroupId, setPrevSelectedGroupId] =
-    useState(selectedGroupId);
+  const [prevSelectedGroupId, setPrevSelectedGroupId] = useState(selectedGroupId);
   const [prevSelectedMemId, setPrevSelectedMemId] = useState(selectedMemId);
   const [check, setCheck] = useState(!selectedMember);
 
-  useEffect(() => {
-    if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
-      swiperRef.current.scrollToIndex({
-        index: dataIndex,
-        animated: true,
-      });
-    }
-  }, [dataIndex, swiperRef]);
+  const dispatch = useDispatch()
+  // const [token, setToken] = useState();
 
   const height = Dimensions.get('window').height;
 
-  // 스와이프 진행시 인덱스 변경
-  const handleVerticalScroll = event => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const newIndex = Math.round(offsetY / height);
-    const selectedData = data[newIndex];
-
-    if (horizontalIndex == 2 && !selectedMember) {
-      if (selectedData) {
-        changeSelectedMemId(selectedData.memberId);
-        if (selectedData.groupId !== selectedGroupId) {
-          changeSelectedGroupId(selectedData.groupId);
-        }
-      }
-      changeDataIndex(newIndex);
-    }
-  };
-
+  const _interviewList = useSelector(getInterviewListSelector);
+  const [interviewList, setInterviewList] = useState(_interviewList);
   useEffect(() => {
-    const findFirstMemberIndexInGroup = groupId => {
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].groupId === groupId) {
-          return i;
-        }
-      }
-      return -1;
-    };
-
-    if (horizontalIndex == 1 && !selectedMember) {
-      const firstMemberIndex = findFirstMemberIndexInGroup(selectedGroupId);
-      changeSelectedMemId(
-        firstMemberIndex !== -1 ? data[firstMemberIndex].memberId : 1,
-      );
-      changeDataIndex(firstMemberIndex !== -1 ? firstMemberIndex : 0);
-      setPrevSelectedMemId(selectedMemId);
-      setPrevSelectedGroupId(selectedGroupId);
-    }
-  }, [horizontalIndex, currentIndex]);
-
-  useEffect(() => {
-    if (selectedMember) {
-      const memberIndex = data.findIndex(
-        member => member.memberId === selectedMemId,
-      );
-      changeDataIndex(memberIndex);
-      changeSelectedMember(false);
-    }
-  }, [selectedMember]);
-
-  useEffect(() => {
-    setData();
-    if (token) {
-      if (!loading) {
-        changeLoading();
-      }
-      console.log(`Token 인터뷰 : ${token}`);
-      const source = axios.CancelToken.source();
-      axios({
-        method: 'get',
-        url: 'https://api.writeyoume.com/api/v1/interview/',
-        // url: 'http://localhost:3000/api/v1/interview/',
-        headers: {
-          Authorization: token,
-        },
-        cancelToken: source.token,
-      })
-        .then(function (response) {
-          const extractedData = response.data.data.map(item => ({
-            interviewId: item.interview_id,
-            groupId: item.group_id,
-            memberId: item.member_id, //사용자 아이디
-            url: item.url, //인터뷰 url
-            heart: item.heart, //찜하기 여부
-          }));
-          // setData(extractedData);
-          const sortedAndGroupedData = _.chain(extractedData)
-            .sortBy('groupId', 'memberId')
-            .uniqBy('memberId')
-            .value();
-
-          setData(Object.values(sortedAndGroupedData));
-          console.log(sortedAndGroupedData);
-          console.log();
-
-          if (loading) { changeLoading(); }
+    setInterviewList(_interviewList)
+  }, [_interviewList]);
 
 
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-
-      return () => {
-        isMounted = false;
-        source.cancel('API 호출이 취소되었습니다.');
-      };
-    }
-  }, [token]);
+  // const userToken = useSelector(userTokenSelector);
+  // useEffect(() => {
+  //   setToken(userToken)
+  // }, [userToken]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <SwiperFlatList
-        ref={swiperRef}
-        vertical={true}
-        data={data}
-        renderItem={({ item }) => (
-          <InterviewContents
-            interviewId={item.interviewId}
-            id={item.memberId}
-            path={item.url}
-            token={token}
-          />
-        )}
-        index={dataIndex}
-        onScroll={handleVerticalScroll}
-        hideShadow={true}
-      />
+      {(interviewList != null && interviewList.length > 0 ?
+      <InterviewContents
+          interviewId={interviewList[idx].interviewId}
+          id={interviewList[idx].memberId}
+          path={interviewList[idx].url}
+          token={token}
+      /> : null )}
     </SafeAreaView>
   );
 };

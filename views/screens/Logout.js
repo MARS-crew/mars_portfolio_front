@@ -4,6 +4,8 @@ import WebView from 'react-native-webview';
 import LoginButton from '../components/LoginButton';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useUserInfo } from '../../UserInfoContext';
+import {useDispatch} from "react-redux";
+import {setLogout} from "../../redux/slice/UserInfoSlice";
 
 // 디바이스 크기
 const width = Dimensions.get('window').width;
@@ -15,6 +17,8 @@ const Logout = () => {
   const { reset, clearToken } = useUserInfo();
   const url = 'https://api.writeyoume.com/logout'; // base url
 
+  const dispatch = useDispatch();
+
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView style={{ flex: 1 }}>
@@ -24,7 +28,7 @@ const Logout = () => {
           onNavigationStateChange={event => {
             if (event.url === 'https://api.writeyoume.com/login') {
               // 로그아웃 성공 후 리디렉션되는 URL을 확인하고 처리
-
+              dispatch(setLogout());
               clearToken(); // 토큰 초기화
               setShowWebView(false); // 로그아웃 성공 후 WebView 숨기기
               if (navigation.canGoBack()) {

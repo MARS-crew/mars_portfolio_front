@@ -12,6 +12,7 @@ import emptyImg from '../../../assets/images/emptyImg.png';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { MyContext } from '../../../MyContext';
 import { Video } from 'react-native-video';
+import {getRetrieveUrl} from "../../../api/v1/file";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -66,9 +67,10 @@ const DetailPopAttachment = (code, setChooseData) => {
   const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
 
   const retrieveNewUrl = async (file) => {
-    await fetch(
-      `https://api.writeyoume.com/api/v1/presignedUrl?name=${file.uri}`
-    )
+    getRetrieveUrl(file)
+    // await fetch(
+    //   `https://api.writeyoume.com/api/v1/presignedUrl?name=${file.uri}`
+    // )
       .then((response) => {
         response.json().then((jsonData) => {
           const presignedUrl = jsonData.presignedUrl;

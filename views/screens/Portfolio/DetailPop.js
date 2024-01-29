@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     marginTop: 20,
-    flexDirection: 'row',
   },
   PressedBtn: { borderBottomWidth: 2, borderColor: '#072AC8' },
 });

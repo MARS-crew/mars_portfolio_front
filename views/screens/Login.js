@@ -5,6 +5,9 @@ import LoginButton from '../components/LoginButton';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useUserInfo } from '../../UserInfoContext';
 import axios from 'axios';
+import {getUserInfoByToken, getUserTokenInCookie} from "../../api/v1/user";
+import {useDispatch} from "react-redux";
+import {setLogout, setUserInfo, setUserInfoAsync} from "../../redux/slice/UserInfoSlice";
 
 // 디바이스 크기
 const width = Dimensions.get('window').width;
@@ -62,6 +65,15 @@ const Login = () => {
     }
   }, [userInfoData]);
 
+
+  // const dispatch = useDispatch()
+  // dispatch(setLogout());
+
+  const dispatch = useDispatch()
+  /**
+   * Redux 공간에 사용자 정보를 세팅합니다.
+   */
+
   return (
     <View style={{ flex: 1 }}>
       {showWebView ? ( // 웹뷰 표시 상태일 경우
@@ -74,34 +86,36 @@ const Login = () => {
               if (event.url === 'https://api.writeyoume.com/main') {
                 // 로그인 성공 후 리디렉션되는 URL을 확인하고 처리
                 // 백에서 토큰을 /main에 저장하고 있기 때문에 해당 Url에서 로그인 후 생성된 토큰을 불러옴
-                fetch('https://api.writeyoume.com/main')
-                  .then(response => {
-                    // 토큰 가져오기
-                    const cookie = response.headers.get('set-cookie');
-
-                    // 순수 토큰값을 가져오기 위한 전처리, 넘어오는 토큰 데이터의 형식이 'token={순수 토큰값}; Path' 형식으로 들어옴
-                    const token = cookie.split('token=')[1].split(';')[0];
-                    // 토큰 저장
+                getUserTokenInCookie()
+                  .then(token => {
                     storeToken(token);
+                    return token;
+                  })
+                    .then(async function (token) {
 
-                    const source = axios.CancelToken.source();
+                      const source = axios.CancelToken.source();
 
-                    axios({
-                      method: 'get',
-                      url: `https://api.writeyoume.com/api/v1/userbytoken`,
-                      headers: {
-                        Authorization: token,
-                      },
-                      cancelToken: source.token,
-                    })
-                      .then(response => {
+                      getUserInfoByToken(token, {
+                        cancelToken: source.token,
+                      })
+                      .then(async response => {
                         console.log('Success:', response.status);
+                        console.log('user data:', JSON.stringify(response.data.data));
                         //todo
                         const extractedData = response.data.data.map(item => ({
                           member_id: item.member_id,
                           email: item.email,
                           name: item.name,
                         }));
+
+                        const _loginedUser = response.data.data[0];
+                        dispatch(setUserInfo({
+                          userToken : token,
+                          userId : _loginedUser.member_id,
+                          userEmail : _loginedUser.email,
+                          userName : _loginedUser.name,
+                        }))
+
 
                         setUserInfoData(extractedData);
                       })
@@ -111,13 +125,59 @@ const Login = () => {
                         console.log('Error Request(getuser):', error.request);
                       });
 
-                    return () => {
-                      source.cancel('API 호출이 취소되었습니다.');
-                    };
-                  })
-                  .catch(error => {
-                    console.error('Error:', error);
-                  });
+                      return () => {
+                        source.cancel('API 호출이 취소되었습니다.');
+                      };
+                    })
+
+
+                // fetch('https://api.writeyoume.com/main')
+                //   .then(response => {
+                //     // 토큰 가져오기
+                //     const cookie = response.headers.get('set-cookie');
+                //
+                //     // 순수 토큰값을 가져오기 위한 전처리, 넘어오는 토큰 데이터의 형식이 'token={순수 토큰값}; Path' 형식으로 들어옴
+                //     const token = cookie.split('token=')[1].split(';')[0];
+                //     // 토큰 저장
+                //     storeToken(token);
+                //
+                //     const source = axios.CancelToken.source();
+                //
+                //     getUserInfoByToken(token, {
+                //       cancelToken: source.token,
+                //     })
+                //     // axios({
+                //     //   method: 'get',
+                //     //   url: `https://api.writeyoume.com/api/v1/userbytoken`,
+                //     //   headers: {
+                //     //     Authorization: token,
+                //     //   },
+                //     //   cancelToken: source.token,
+                //     // })
+                //       .then(response => {
+                //         console.log('Success:', response.status);
+                //         //todo
+                //         const extractedData = response.data.data.map(item => ({
+                //           member_id: item.member_id,
+                //           email: item.email,
+                //           name: item.name,
+                //         }));
+                //
+                //         setUserInfoData(extractedData);
+                //       })
+                //       .catch(error => {
+                //         console.log('Error Message(getuser):', error.message);
+                //         console.log('Error Response(getuser):', error.response);
+                //         console.log('Error Request(getuser):', error.request);
+                //       });
+                //
+                //     return () => {
+                //       source.cancel('API 호출이 취소되었습니다.');
+                //     };
+                //   })
+                //   .catch(error => {
+                //     console.error('Error:', error);
+                //   });
 
                 setShowWebView(false); // 로그인 성공 후 WebView 숨기기
                 navigation.dispatch(CommonActions.goBack()); // 로그인 페이지를 호출하기 이전 페이지로 이동

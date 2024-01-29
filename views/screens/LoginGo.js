@@ -14,9 +14,9 @@ import GroupLogo from '../components/GroupLogo';
 const LoginGo = ({token}) => {
   const navigation = useNavigation(); // 로그인 페이지로 넘기기 위한 네비게이션 객체
   const image = `../../assets/images/main_group_Image.png`;
-  useEffect(() => {
-    console.log(`loginItem token ${token}`);
-  }, [token]);
+  // useEffect(() => {
+    // console.log(`loginItem token ${token}`);
+  // }, [token]);
   return (
     <ImageBackground source={require(image)} style={styles.container}>
       <GroupLogo />

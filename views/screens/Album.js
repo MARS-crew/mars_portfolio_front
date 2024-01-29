@@ -217,6 +217,7 @@ import {
 import axios from 'axios';
 import {Shadow} from 'react-native-shadow-2';
 import FAB from '../components/FloatingMenu';
+import {getAlbumImage} from "../../api/v1/img";
 
 const albumImages = [
   {
@@ -255,16 +256,23 @@ const Album = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
     const source = axios.CancelToken.source();
-    axios({
-      method: 'get',
-      url: 'https://api.writeyoume.com/api/v1/img/album',
 
-      headers: {
-        Authorization:
-          'eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXRlIjoiMjAyMy0xMS0xNVQyMzo1NjowOS4wMDBaIn0sImlhdCI6MTcwMDEyNDk3MCwiZXhwIjoxNzAwMTI4NTcwfQ',
-      },
+    const token = `eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXRlIjoiMjAyMy0xMS0xNVQyMzo1NjowOS4wMDBaIn0sImlhdCI6MTcwMDEyNDk3MCwiZXhwIjoxNzAwMTI4NTcwfQ`;
+
+    getAlbumImage(token, {
       cancelToken: source.token,
     })
+
+    // axios({
+    //   method: 'get',
+    //   url: 'https://api.writeyoume.com/api/v1/img/album',
+    //
+    //   headers: {
+    //     Authorization:
+    //       `eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXRlIjoiMjAyMy0xMS0xNVQyMzo1NjowOS4wMDBaIn0sImlhdCI6MTcwMDEyNDk3MCwiZXhwIjoxNzAwMTI4NTcwfQ`,
+    //   },
+    //   cancelToken: source.token,
+    // })
       .then(function (response) {
         const extractedData = response.data.data.map(item => ({
           album_id: item.album_id,

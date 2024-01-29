@@ -10,6 +10,7 @@ import {
 import axios from 'axios';
 import { useEffect } from 'react';
 import { sortBy } from 'lodash';
+import {updateInterview} from "../../api/v1/interview";
 
 const InterviewSavePop = ({
   savePopVisible,
@@ -31,17 +32,23 @@ const InterviewSavePop = ({
     console.log(changeData)
     const source = axios.CancelToken.source();
 
-    axios({
-      method: 'PUT',
-      url: 'https://api.writeyoume.com/api/v1/interview/' + interviewId,
-      headers: {
-        Authorization: token
-      },
-      data : {
-        file_url : changeData
-      },
+    updateInterview(token, {
+      interviewId: interviewId,
+      file_url: changeData
+    }, {
       cancelToken: source.token
     })
+    // axios({
+    //   method: 'PUT',
+    //   url: 'https://api.writeyoume.com/api/v1/interview/' + interviewId,
+    //   headers: {
+    //     Authorization: token
+    //   },
+    //   data : {
+    //     file_url : changeData
+    //   },
+    //   cancelToken: source.token
+    // })
       .then((response) => {
         console.log("성공")
         console.log(response);

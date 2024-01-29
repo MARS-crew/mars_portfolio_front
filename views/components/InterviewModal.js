@@ -19,6 +19,8 @@ import deletedIcon from '../../assets/images/deletedIcon.png';
 import editingIcon from '../../assets/images/editingIcon.png';
 import axios from 'axios';
 import { method } from 'lodash';
+import {getRetrieveUrl} from "../../api/v1/file";
+import {reqPut} from "../../api/common";
 
 const InterviewModal = ({
   token,
@@ -42,11 +44,11 @@ const InterviewModal = ({
 
 
   const retrieveNewUrl = async (file) => {
-    await fetch(
-      `https://api.writeyoume.com/api/v1/presignedUrl?name=${file.uri}`
-    )
+    await getRetrieveUrl(null, file)
       .then((response) => {
-        response.json().then((jsonData) => {
+        return response.json();
+      })
+        .then(function (jsonData) {
           const presignedUrl = jsonData.presignedUrl;
           const uniqueFileName = jsonData.uniqueFileName;
           console.log("presignedUrl: ", presignedUrl);
@@ -54,15 +56,13 @@ const InterviewModal = ({
 
           console.log("uploadFileToServer 실행");
           uploadFileToServer(file, presignedUrl, uniqueFileName);
-        });
-      })
+        })
       .catch((e) => {
         console.error(e);
       })
   };
 
   const uploadFileToServer = async (file, presignedUrl, uniqueUrl) => {
-
     fetch(presignedUrl, {
       method: 'PUT',
       body: {

@@ -104,9 +104,8 @@ const VideoItem = ({ id, group, src, medal }) => (
   </View>
 );
 
-const GroupVideo = ({ token }) => {
+const GroupVideo = ({ token, idx }) => {
   const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId, selectedGroupId, changeSelectedGroupId } = useIndexContext();
-  const swiperRef = useRef(null);
 
   // id를 오름차순으로 정렬하고 그룹화
   const sortedAndGroupedData = _.chain(DATA)
@@ -117,74 +116,18 @@ const GroupVideo = ({ token }) => {
 
   const groups = Object.values(sortedAndGroupedData);
 
-  useEffect(() => {
-    if (swiperRef.current) {
-      swiperRef.current.scrollToIndex({
-        index: currentIndex,
-        animated: true,
-      });
-    }
-  }, [currentIndex, swiperRef]);
 
-  const height = Dimensions.get('window').height;
-
-  const handleScroll = event => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const newIndex = Math.round(offsetY / height);
-    if (newIndex !== currentIndex) {
-      if (newIndex < groups.length) {
-        const newGroup = groups[newIndex][0].group;
-        if (newGroup !== selectedGroupId) {
-          changeSelectedGroupId(newGroup);
-        }
-      }
-    }
-  };
-  // useEffect(() => {
-  //   if (selectedMemId !== -1) {
-  //     const selectedGroupIndex = groups.findIndex(group => group[0].group == selectedGroupId);
-  //     if (selectedGroupIndex !== -1 && currentIndex !== selectedGroupIndex) {
-  //       changeIndex(selectedGroupIndex);
-  //     }
-  //   }
-  // }, [selectedGroupId, groups]);
-
-  const selectedGroupFechData = async () => {
-    if (selectedMemId !== -1) {
-      const selectedGroupIndex = groups.findIndex(group => group[0].group == selectedGroupId);
-      if (selectedGroupIndex !== -1 && currentIndex !== selectedGroupIndex) {
-        changeIndex(selectedGroupIndex);
-      }
-    }
-  };
-
-  useEffect(() => {
-    selectedGroupFechData();
-  }, [selectedGroupId, groups]);
-
-  const renderGroup = ({ item: groupItems }) => (
-    <FlatList
-      data={groupItems}
-      renderItem={({ item }) => (
-        <VideoItem id={item.id} group={item.group} src={item.src} medal={item.medal} />
-      )}
-      keyExtractor={item => item.id.toString()}
-      numColumns={2}
-      listKey={`group_${groupItems[0].group}`}
-    />
-  );
 
   return (
     <SafeAreaView style={styles.containbox}>
-      <SwiperFlatList
-        ref={swiperRef}
-        vertical={true}
-        data={groups}
-        renderItem={renderGroup}
-        index={currentIndex}
-        hideShadow={true}
-        onScroll={handleScroll}
-        listKey="root"
+      <FlatList
+          data={groups[idx]}
+          renderItem={({ item }) => (
+              <VideoItem id={item.id} group={item.group} src={item.src} medal={item.medal} />
+          )}
+          keyExtractor={item => item.id.toString()}
+          numColumns={2}
+          listKey={`group_${groups[idx][0].id}_${idx}_${new Date().getMilliseconds()}`}
       />
       <FAB />
     </SafeAreaView>

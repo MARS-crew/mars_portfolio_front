@@ -4,6 +4,7 @@ import {MyContext} from '../../../MyContext';
 import PublicModal from './PublicModal';
 import ChooseButton from './ChooseButton';
 import axios from 'axios';
+import {deletePortfolio, regPortfolio, updatePortfolio} from "../../../api/v1/portfolio";
 
 const styles = StyleSheet.create({
   modalView: {
@@ -87,20 +88,29 @@ const choosePop = ({
     console.log(portfolioUrl);
     const source = axios.CancelToken.source();
     try {
-      axios({
-        method: 'POST',
-        url: 'https://api.writeyoume.com/api/v1/portfolio',
-        headers: {
-          Authorization: token
-        },
-        data : {
-          title: "포폴",
-          kind: 1,
-          description: "contents",
-          file_url: chooseData,
-        },
+      regPortfolio(token, {
+        title: "포폴",
+        kind: 1,
+        description: "contents",
+        file_url: chooseData,
+      }, {
         cancelToken: source.token
       })
+
+      // axios({
+      //   method: 'POST',
+      //   url: 'https://api.writeyoume.com/api/v1/portfolio',
+      //   headers: {
+      //     Authorization: token
+      //   },
+      //   data : {
+      //     title: "포폴",
+      //     kind: 1,
+      //     description: "contents",
+      //     file_url: chooseData,
+      //   },
+      //   cancelToken: source.token
+      // })
         .then((response) => {
           console.log("성공")
           console.log(response);
@@ -134,27 +144,45 @@ const choosePop = ({
     portfolioUrl.append('kind', 1);
     console.log('수정', portfolioUrl);
     try {
-      const response = await fetch(
-        `https://api.writeyoume.com/api/v1/portfolio/${id}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: token,
-          },
-          body: portfolioUrl,
-        },
-      );
+      updatePortfolio(token, {
+        id: id,
+        ...portfolioUrl
+      })
+          .then(async function (response) {
+            console.log('POST url', portfolioUrl);
+            //console.log('POST title', title);
+            // console.log('POST description', content);
+            //console.log('POST ext', ext);
 
-      // console.log('POST kind', id);
-      console.log('POST url', portfolioUrl);
-      //console.log('POST title', title);
-      // console.log('POST description', content);
-      //console.log('POST ext', ext);
-
-      const data = await response.json();
-      setPortfolioUrl('');
-      console.log('서버 응답:', data);
+            const data = await response.json();
+            setPortfolioUrl('');
+            console.log('서버 응답:', data);
+          })
+          .catch(function (error) {
+            setPortfolioUrl('');
+            console.error('에러 발생:', error);
+          })
+      // const response = await fetch(
+      //   `https://api.writeyoume.com/api/v1/portfolio/${id}`,
+      //   {
+      //     method: 'PUT',
+      //     headers: {
+      //       'Content-Type': 'multipart/form-data',
+      //       Authorization: token,
+      //     },
+      //     body: portfolioUrl,
+      //   },
+      // );
+      //
+      // // console.log('POST kind', id);
+      // console.log('POST url', portfolioUrl);
+      // //console.log('POST title', title);
+      // // console.log('POST description', content);
+      // //console.log('POST ext', ext);
+      //
+      // const data = await response.json();
+      // setPortfolioUrl('');
+      // console.log('서버 응답:', data);
     } catch (error) {
       setPortfolioUrl('');
       console.error('에러 발생:', error);
@@ -163,13 +191,15 @@ const choosePop = ({
 
   const deleteData = async () => {
     const source = axios.CancleToken.source();
-    axios({
-      method: 'DELETE',
-      url: `https://api.writeyoume.com/api/v1/portfolio/${id}`,
-      headers: {
-        Authorization: token,
-      }
-    })
+
+    deletePortfolio(token, {id: id})
+    // axios({
+    //   method: 'DELETE',
+    //   url: `https://api.writeyoume.com/api/v1/portfolio/${id}`,
+    //   headers: {
+    //     Authorization: token,
+    //   }
+    // })
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
