@@ -17,6 +17,10 @@ import { useIndexContext } from '../../../IndexContext';
 import ReviewItem from '../Review/ReviewItem';
 import FloatingMenu from '../../components/FloatingMenu';
 import {deleteReviewAjax, getReviews, regReview, toggleReviewLike, updateReviewAjax} from "../../../api/v1/review";
+import {useDispatch, useSelector} from "react-redux";
+import {getReviewListSelector, getReviewsAsync} from "../../../redux/slice/ReviewSlice";
+import {getCurrentMemberIdSelector, getScreenTypeSelector} from "../../../redux/slice/UiRenderSlice";
+import {SCREEN_6} from "../../../AppConst";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -89,59 +93,75 @@ const Review = ({ token, currentUserId }) => {
 
   const newReviewInputRef = useRef(null);
 
+  const dispatch = useDispatch();
+  const _screenType = useSelector(getScreenTypeSelector);
+  const _memberId = useSelector(getCurrentMemberIdSelector);
+  const _reviewList = useSelector(getReviewListSelector);
+
+  useEffect(() => {
+    if(_screenType == SCREEN_6) {
+      dispatch(getReviewsAsync({token, memberId: _memberId}))
+    }
+  }, [_memberId, _screenType]);
+
+  useEffect(() => {
+    console.log(`_reviewList = ${JSON.stringify(_reviewList)}`)
+  }, [_reviewList]);
+
+
   const onEdit = () => {
     setIsEditMode(true);
     setShowReviewInput(true);
   };
 
-  useEffect(() => {
-    console.log('currentReviewContent: ', reviewContent);
-  }, [reviewContent]);
+  // useEffect(() => {
+  //   console.log('currentReviewContent: ', reviewContent);
+  // }, [reviewContent]);
+  //
+  // useEffect(() => {
+  //   console.log('currentReviewId: ', reviewId);
+  // }, [reviewId]);
 
-  useEffect(() => {
-    console.log('currentReviewId: ', reviewId);
-  }, [reviewId]);
-
-  useEffect(() => {
-    if (!token) return;
-
-    const source = axios.CancelToken.source();
-
-    getReviews(token, {
-      selectedMemId: selectedMemId
-    }, {
-      cancelToken: source.token
-    })
-    // axios({
-    //   method: 'get',
-    //   url: `https://api.writeyoume.com/api/v1/review/${selectedMemId}`,
-    //   headers: {
-    //     Authorization: token,
-    //   },
-    //   cancelToken: source.token,
-    // })
-      .then(response => {
-        console.log('Success:', response.status);
-
-        const extractedData = response.data.data.map(item => ({
-          review_id: item.review_id,
-          name: item.name,
-          member_id: item.member_id,
-          content: item.content,
-          reg_date: item.reg_date,
-          is_liked: item.is_liked,
-        }));
-        setData(extractedData);
-      })
-      .catch(error => {
-        console.log('Error Response:', error.response);
-        setData([]);
-      });
-
-    return () => {
-      source.cancel('API 호출이 취소되었습니다.');
-    };
-  }, [token, selectedMemId]);
+  // useEffect(() => {
+  //   if (!token) return;
+  //
+  //   const source = axios.CancelToken.source();
+  //
+  //   getReviews(token, {
+  //     selectedMemId: selectedMemId
+  //   }, {
+  //     cancelToken: source.token
+  //   })
+  //   // axios({
+  //   //   method: 'get',
+  //   //   url: `https://api.writeyoume.com/api/v1/review/${selectedMemId}`,
+  //   //   headers: {
+  //   //     Authorization: token,
+  //   //   },
+  //   //   cancelToken: source.token,
+  //   // })
+  //     .then(response => {
+  //       console.log('Success:', response.status);
+  //
+  //       const extractedData = response.data.data.map(item => ({
+  //         review_id: item.review_id,
+  //         name: item.name,
+  //         member_id: item.member_id,
+  //         content: item.content,
+  //         reg_date: item.reg_date,
+  //         is_liked: item.is_liked,
+  //       }));
+  //       setData(extractedData);
+  //     })
+  //     .catch(error => {
+  //       console.log('Error Response:', error.response);
+  //       setData([]);
+  //     });
+  //
+  //   return () => {
+  //     source.cancel('API 호출이 취소되었습니다.');
+  //   };
+  // }, [token, selectedMemId]);
 
   const postReview = async reviewText => {
     if (reviewText == '' || !token) return;
@@ -335,7 +355,7 @@ const Review = ({ token, currentUserId }) => {
     <View style={styles.container}>
       <SafeAreaView>
         <View style={styles.itemView}>
-          {data.length > 0 ? (
+          { _reviewList != null && _reviewList.length > 0 ? (
             <FlatList
               data={data}
               initialNumToRender={10}

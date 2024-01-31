@@ -20,7 +20,7 @@ import { help } from "yargs";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
-const SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_HEIGHT = Dimensions.get('screen').height;
 
 // const IntroContent = ({ item, data }) => {
 //     const containerStyles = { ...styles.container, marginTop: 20 }
@@ -91,6 +91,7 @@ const InfoContent = ({ item, name, tel, addr, email }) => {
 }
 
 const CareerItem = ({ career }) => {
+    console.log('career item')
     return (
         <View>
             <Text style={styles.title}>경력</Text>
@@ -108,9 +109,9 @@ const CareerItem = ({ career }) => {
     );
 };
 
-const CareerContent = ({ item, carreer }) => {
+const CareerContent = ({ item, career }) => {
     const containerStyles = { ...styles.container };
-    const careerData = JSON.parse(carreer);
+    const careerData = JSON.parse(career);
 
     return (
         <Shadow
@@ -283,11 +284,11 @@ const ResumeBox = ({ item, data, index }) => {
     // }
 
     // const resumeItem = data.data[index];
-
+    console.log(`hihi`)
 
     return (
         <View style={styles.boxFrame}>
-            <View style={styles.resumeBoxContainer}>
+            {item && <View style={styles.resumeBoxContainer}>
                 {/* <IntroContent item={item} data={resumeItem.introduce} /> */}
                 <InfoContent
                     item={item}
@@ -295,25 +296,25 @@ const ResumeBox = ({ item, data, index }) => {
                     // tel={item.tel}
                     // addr={item.addr}
                     // email={item.email}
-                    name={item.name}
+                    name={ (typeof item.name == 'undefined') ? "이름없음" : item.name }
                     tel={item.tel}
                     addr={item.addr}
                     email={item.email}
                 />
-                {/*<CareerContent*/}
-                {/*    item={item}*/}
-                {/*    carreer={item.career}*/}
-                {/*/>*/}
+                <CareerContent
+                    item={item}
+                    career={item.career}
+                />
                 {/* <AwardContent
                 item={item}
                 award_name={item.award_name}
                 date={item.date}
                 issuer={item.issuer}
                  /> */}
-                {/* <InterestContent item={item} data={data} /> */}
-                {/*<SpecialityContent item={item} specialities={item.specialities} />*/}
-                {/*<SkillContent item={item} technology={item.technology} />*/}
-            </View>
+                {/*<InterestContent item={item} data={data} /> */}
+                <SpecialityContent item={item} specialities={item.specialities} />
+                <SkillContent item={item} technology={item.technology} />
+            </View>}
         </View>
     );
 };
@@ -321,7 +322,7 @@ const ResumeBox = ({ item, data, index }) => {
 const styles = StyleSheet.create({
     boxFrame: {
         flex: 1,
-        height: SCREEN_HEIGHT,
+        height: '100%',
 
     },
     resumeBoxContainer: {

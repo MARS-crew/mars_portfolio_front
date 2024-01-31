@@ -290,6 +290,8 @@ PODS:
     - React-Core
   - react-native-image-picker (5.7.0):
     - React-Core
+  - react-native-pager-view (6.2.3):
+    - React-Core
   - react-native-safe-area-context (3.4.1):
     - React-Core
   - react-native-slider (4.5.0):
@@ -457,6 +459,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-video (from `../node_modules/react-native-video`)
@@ -544,6 +547,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-document-picker"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-pager-view:
+    :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
@@ -629,6 +634,7 @@ SPEC CHECKSUMS:
   React-logger: a0833912d93b36b791b7a521672d8ee89107aff1
   react-native-document-picker: b4f4a23b73f864ce17965b284c0757648993805b
   react-native-image-picker: 3269f75c251cdcd61ab51b911dd30d6fff8c6169
+  react-native-pager-view: c29d484f19c49ff19525a94105e4ab2c4d4ae273
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-slider: 323128c304ef8282671d185a09928d62415b400d
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
@@ -656,6 +662,6 @@ SPEC CHECKSUMS:
   Yoga: 99652481fcd320aefa4a7ef90095b95acd181952
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 3b80355fede54b02e0e9d880d468bec476297ea8
+PODFILE CHECKSUM: e72d9588bdd1460f02c83e78c6852b03062c1b7a
 
 COCOAPODS: 1.14.3

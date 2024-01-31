@@ -3,9 +3,9 @@ import axios from "axios";
 
 const SUB_DIR = '/api/v1/review';
 
-const getReviews = async function (token, data, config){
+const getReviews = async function (token, id, config){
     // https://api.writeyoume.com/api/v1/review/${selectedMemId}
-    return reqGet(`${SUB_DIR}/${data.selectedMemId}`, token, null, config);
+    return reqGet(`${SUB_DIR}/${id}`, token, null, config);
 }
 
 

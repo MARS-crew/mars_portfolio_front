@@ -8,75 +8,76 @@ import {
   Text,
   View,
 } from 'react-native';
-import axios from 'axios';
-import SwiperFlatList from 'react-native-swiper-flatlist';
-import _ from 'lodash'; // lodash 라이브러리 사용
+// lodash 라이브러리 사용
 import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
-import { useIndexContext } from '../../IndexContext';
-import { UserInfoProvider, useUserInfo } from '../../UserInfoContext';
-import { useLoadingContext } from '../../LoadingContext';
-import {getInterview} from "../../api/v1/interview";
-import {getInterviewListSelector, setInterviewList} from "../../redux/slice/InterviewSlice";
+import {
+  getInterviewListSelector,
+  getInterviewOneAsync,
+  getInterviewOneSelector
+} from "../../redux/slice/InterviewSlice";
 import {useDispatch, useSelector} from "react-redux";
-import type {RootState} from "../../redux/RootReducer";
-import {getGroupImgSelector} from "../../redux/slice/GroupImgSlice";
-import {userTokenSelector} from "../../redux/slice/UserInfoSlice";
+import _ from "lodash";
+import {
+  getCurrentGroupIdSelector,
+  getCurrentMemberIdSelector,
+  getScreenTypeSelector, setCurrentMemberIdRx,
+  setIsNoChangeGroupIdRx
+} from "../../redux/slice/UiRenderSlice";
+import {SCREEN_3} from "../../AppConst";
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const yOffset = new Animated.Value(0);
 
-const Interview = ({ token, idx }) => {
-  const swiperRef = useRef(null);
-  // const { token } = useUserInfo();
-  const {
-    currentIndex,
-    changeIndex,
-    horizontalIndex,
-    changeHorizontalIndex,
-    dataIndex,
-    changeDataIndex,
-    selectedGroupId,
-    changeSelectedGroupId,
-    selectedMemId,
-    changeSelectedMemId,
-    selectedMember,
-    changeSelectedMember,
-  } = useIndexContext();
-
-  const { loading, changeLoading } = useLoadingContext();
-  const [data, setData] = useState([]);
-  const [prevSelectedGroupId, setPrevSelectedGroupId] = useState(selectedGroupId);
-  const [prevSelectedMemId, setPrevSelectedMemId] = useState(selectedMemId);
-  const [check, setCheck] = useState(!selectedMember);
-
+const Interview = ({ token, idx, id }) => {
   const dispatch = useDispatch()
-  // const [token, setToken] = useState();
 
-  const height = Dimensions.get('window').height;
-
+  const _screenType = useSelector(getScreenTypeSelector);
+  const _currentGroupId = useSelector(getCurrentGroupIdSelector);
   const _interviewList = useSelector(getInterviewListSelector);
-  const [interviewList, setInterviewList] = useState(_interviewList);
+  // const _interviewOne = useSelector(getInterviewOneSelector);
+  const _memberId = useSelector(getCurrentMemberIdSelector);
+  // const [interviewList, setInterviewList] = useState(_interviewList);
+  const [interviewOne, setInterviewOne] = useState(null);
+
+
   useEffect(() => {
-    setInterviewList(_interviewList)
-  }, [_interviewList]);
+    if(_interviewList != null && _interviewList.length > 0) {
+      console.log(`InterviewContents`)
+      const sortedAndGroupedData = _.chain(_interviewList)
+          .sortBy('memberId')
+          .groupBy('groupId')
+          .values()
+          .value();
+
+      if (typeof (_memberId) == 'undefined' || _memberId == null) {
+        const viewData = sortedAndGroupedData[0][_currentGroupId][0];
+        setInterviewOne(viewData) // 첫번째꺼
+        dispatch(setCurrentMemberIdRx(viewData.memberId))
+      } else {
+        const viewData = sortedAndGroupedData[0][_currentGroupId]
+            .filter((item)=>(item.memberId===_memberId))[0]
+        setInterviewOne(viewData)
+      }
+    }
+
+  }, [_interviewList, _currentGroupId, _memberId]);
 
 
-  // const userToken = useSelector(userTokenSelector);
-  // useEffect(() => {
-  //   setToken(userToken)
-  // }, [userToken]);
+
+
+
 
   return (
-    <SafeAreaView style={styles.container}>
-      {(interviewList != null && interviewList.length > 0 ?
-      <InterviewContents
-          interviewId={interviewList[idx].interviewId}
-          id={interviewList[idx].memberId}
-          path={interviewList[idx].url}
-          token={token}
-      /> : null )}
-    </SafeAreaView>
+      <>
+        {((interviewOne) &&
+            <InterviewContents
+                interviewId={interviewOne.interviewId}
+                id={interviewOne.memberId}
+                path={interviewOne.url}
+                token={token}
+            />  )}
+      </>
   );
 };
 

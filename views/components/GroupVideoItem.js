@@ -10,6 +10,9 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import MedalItem from './MedalItem';
 import { useIndexContext } from '../../IndexContext';
+import {useDispatch} from "react-redux";
+import {setCurrentMemberIdRx, setIsReloadViewDataRx, setScreenTypeRx} from "../../redux/slice/UiRenderSlice";
+import {SCREEN_3, SCREEN_4} from "../../AppConst";
 
 const { width, height } = Dimensions.get('window');
 const widthCol = width / 2;
@@ -24,13 +27,21 @@ const GroupVideoItem = ({ id, medal, src }) => {
     selectedGroupId, changeSelectedGroupId,
     selectedMember, changeSelectedMember } = useIndexContext();
 
-  const handlePress = () => {
-    if (selectedMemId !== id && !selectedMember) {
-      changeSelectedMemId(id);
-      changeHorizontalIndex(2);
-      changeSelectedMember(true);
+  const dispatch = useDispatch();
 
-    }
+  const handlePress = () => {
+
+    dispatch(setScreenTypeRx(SCREEN_3))
+    dispatch(setCurrentMemberIdRx(id))
+    // dispatch(setIsReloadViewDataRx(true))
+    // if (selectedMemId !== id && !selectedMember) {
+    //
+    //
+    //   changeSelectedMemId(id);
+    //   changeHorizontalIndex(2);
+    //   changeSelectedMember(true);
+    //
+    // }
   }
 
   return (
@@ -54,8 +65,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   midLine: {
-    width: widthCol,
-    height: heightCol,
+    // width: widthCol,
+    // height: heightCol,
     width: width / 2,
     height: height / 2,
     justifyContent: 'center',

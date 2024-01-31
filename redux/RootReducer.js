@@ -4,6 +4,8 @@ import InterviewSlice from "./slice/InterviewSlice";
 import UiRenderSlice from "./slice/UiRenderSlice";
 import GroupImgSlice from "./slice/GroupImgSlice";
 import PortfolioSlice from "./slice/PortfolioSlice";
+import ResumeSlice from "./slice/ResumeSlice";
+import ReviewSlice from "./slice/ReviewSlice";
 
 /**
  * 애플리케이션에서 목적에 따라 리듀서를 분리하여 관리 합니다.
@@ -11,6 +13,8 @@ import PortfolioSlice from "./slice/PortfolioSlice";
 const RootReducer = combineReducers({
     userInfo: userInfoSlice,
     interviews: InterviewSlice,
+    resumes: ResumeSlice,
+    reviews: ReviewSlice,
     portfolios: PortfolioSlice,
     groupImg: GroupImgSlice,
     uiRender: UiRenderSlice,

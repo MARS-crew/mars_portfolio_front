@@ -8,6 +8,11 @@ import axios from 'axios';
 import {getUserInfoByToken, getUserTokenInCookie} from "../../api/v1/user";
 import {useDispatch} from "react-redux";
 import {setLogout, setUserInfo, setUserInfoAsync} from "../../redux/slice/UserInfoSlice";
+import {getGroupImagesAsync} from "../../redux/slice/GroupImgSlice";
+import {getInterviewsAsync} from "../../redux/slice/InterviewSlice";
+import {getPortfoliosAsync} from "../../redux/slice/PortfolioSlice";
+import {getResumesAsync} from "../../redux/slice/ResumeSlice";
+import {getReviewsAsync} from "../../redux/slice/ReviewSlice";
 
 // 디바이스 크기
 const width = Dimensions.get('window').width;
@@ -73,12 +78,13 @@ const Login = () => {
   /**
    * Redux 공간에 사용자 정보를 세팅합니다.
    */
-
+  const customUserAgent = 'CUSTOM_AGENT'
   return (
     <View style={{ flex: 1 }}>
       {showWebView ? ( // 웹뷰 표시 상태일 경우
         <SafeAreaView style={{ flex: 1 }}>
           <WebView
+              userAgent={customUserAgent}
             source={{ uri: loginUrl }}
             style={{ width: width, height: height }}
             onNavigationStateChange={event => {
@@ -92,12 +98,22 @@ const Login = () => {
                     return token;
                   })
                     .then(async function (token) {
-
+                      console.log(`token=${token}, and req user info`)
                       const source = axios.CancelToken.source();
 
-                      getUserInfoByToken(token, {
-                        cancelToken: source.token,
-                      })
+                      // dispatch(setUserInfo({
+                      //   userToken : token,
+                      //   userId : "",
+                      //   userEmail : "",
+                      //   userName : "",
+                      // }))
+                      //
+                      // dispatch(getGroupImagesAsync(token));
+                      // dispatch(getInterviewsAsync(token));
+                      // dispatch(getPortfoliosAsync(token));
+                      // dispatch(getResumesAsync(token));
+
+                      getUserInfoByToken(token)
                       .then(async response => {
                         console.log('Success:', response.status);
                         console.log('user data:', JSON.stringify(response.data.data));
@@ -115,6 +131,12 @@ const Login = () => {
                           userEmail : _loginedUser.email,
                           userName : _loginedUser.name,
                         }))
+
+                        dispatch(getGroupImagesAsync(token));
+                        dispatch(getInterviewsAsync(token));
+                        dispatch(getPortfoliosAsync(token));
+                        dispatch(getResumesAsync(token));
+                        // dispatch(getReviewsAsync(token));
 
 
                         setUserInfoData(extractedData);

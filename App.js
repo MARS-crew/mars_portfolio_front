@@ -21,6 +21,7 @@ import 'react-native-gesture-handler';
 import WhichGroup from './views/screens/WhichGroup';
 import Help from './views/screens/Help';
 import Share from './views/screens/Share';
+import { CubeNavigationHorizontal } from 'react-native-3dcube-navigation'
 
 import GroupVideo from './views/screens/GroupVideo';
 
@@ -36,32 +37,36 @@ import {LoadingProvider, useLoadingContext} from './LoadingContext';
 import Logout from './views/screens/Logout';
 import LoginGo from './views/screens/LoginGo';
 import Loading from './views/screens/Loading';
+
+const { width, height } = Dimensions.get("window");
+
+
 import {Provider, useDispatch, useSelector} from "react-redux";
 import {Store} from "./redux/Store";
-import type {RootState} from "./redux/RootReducer";
 import {
   getCurrentGroupIdSelector,
-  getScreenTypeSelector,
+  getScreenTypeSelector, IsNoChangeGroupIdSelector,
+  IsReloadViewDataSelector,
   isSplashSelector,
-  setCurrentGroupId, setCurrentGroupIdRx,
-  setScreenType, setScreenTypeRx,
-  setSplashOnOff, setSplashOnOffRx
+  setCurrentGroupIdRx,
+  setCurrentMemberIdRx,
+  setIsReloadViewDataRx,
+  setScreenTypeRx,
+  setSplashOnOffRx
 } from "./redux/slice/UiRenderSlice";
 import SwiperFlatList from "react-native-swiper-flatlist";
 import {userTokenSelector} from "./redux/slice/UserInfoSlice";
-import {getGroupImagesAsync} from "./redux/slice/GroupImgSlice";
 import {SCREEN_1, SCREEN_2, SCREEN_3, SCREEN_4, SCREEN_5, SCREEN_6, SCREEN_7, SCREEN_TYPES} from "./AppConst";
-import {getInterviewsAsync} from "./redux/slice/InterviewSlice";
-import {getPortfoliosAsync} from "./redux/slice/PortfolioSlice";
+import PagerView from "react-native-pager-view";
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_WIDTH = Dimensions.get('screen').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const xOffset = new Animated.Value(0);
-
-
+let verticalViewpager = null;
+let verticalViewpager2 = null;
 
 const Screen = props => {
   return (
@@ -159,154 +164,10 @@ const App = () => {
 };
 
 
-
-
-
-const HomeScreenOld = () => {
-  const {token, id, name, email} = useUserInfo();
-  const [modalOpen, setModalOpen] = useState(false);
-  const {
-    currentIndex,
-    changeIndex,
-    horizontalIndex,
-    changeHorizontalIndex,
-    dataIndex,
-    changeDataIndex,
-    selectedMemId,
-    changeSelectedMemId,
-    selectedGroupId,
-  } = useIndexContext();
-
-  const [oldIndex, setOldIndex] = useState(horizontalIndex);
-  const horizontalScrollRef = useRef(null);
-
-  const {loading, changeLoading} = useLoadingContext();
-
-  const dispatch = useDispatch()
-  const isSplash = useSelector(isSplashSelector);
-  const [isSplashVisible, setIsSplashVisible] = useState(isSplash);
-
-  useEffect(() => {
-    setIsSplashVisible(isSplash)
-  }, [isSplash]);
-
-  useEffect(() => {
-    let timer = setTimeout(() => {
-      dispatch(setSplashOnOff(false));
-      // setIsSplashVisible(false);
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, []);
-
-
-  LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-  LogBox.ignoreAllLogs();//Ignore all log notifications
-
-  useEffect(() => {
-    if (horizontalScrollRef.current) {
-      horizontalScrollRef.current.scrollTo({
-        x: horizontalIndex * SCREEN_WIDTH,
-        animated: true,
-      });
-    }
-  }, [horizontalIndex, horizontalScrollRef]);
-
-  const handleScroll = event => {
-    const offsetX = event.nativeEvent.contentOffset.x;
-
-    const newIndex = Math.round(offsetX / SCREEN_WIDTH);
-    // 변경된 인덱스를 처리하는 함수 호출
-    if (oldIndex !== newIndex) {
-      changeHorizontalIndex(newIndex);
-      setOldIndex(newIndex);
-      console.log("newIndex: ", newIndex, ", oldIndex: ", oldIndex, ", horizontalIndex: ", horizontalIndex);
-    }
-  };
-  return (
-    <UserInfoProvider>
-      <MyProvider>
-        <LoadingProvider>
-          <AnimatedScrollView
-            ref={horizontalScrollRef}
-            // scrollEventThrottle={300}
-            onScroll={Animated.event(
-              [{nativeEvent: {contentOffset: {x: xOffset}}}],
-              {
-                useNativeDriver: true,
-                listener: handleScroll,
-              },
-            )}
-            horizontal
-            pagingEnabled
-            style={styles.scrollView}>
-            {token ? ( // 로그인 전이면 그룹 페이지만, 로그인 후면 전체 페이지
-              <>
-                {isSplashVisible === false ? (
-                  <Screen text="Screen 1" index={0}>
-                    <WhichGroup token={token} />
-                  </Screen>
-                ) : <Splash isSplashVisible={isSplashVisible}></Splash>}
-                <Screen text="Screen 2" index={1}>
-                  <GroupVideo token={token} />
-                </Screen>
-                <Screen text="Screen 3" index={2}>
-                  <Interview token={token} />
-                </Screen>
-                <Screen text="Screen 4" index={3}>
-                  <Portfolio token={token} options={{headerShown: false}} />
-                </Screen>
-                <Screen text="Screen 5" index={4}>
-                  <Resume token={token} />
-                </Screen>
-                <Screen text="Screen 6" index={5}>
-                  <Review token={token} currentUserId={id} />
-                </Screen>
-                <Screen text="Screen 7" index={6}>
-                  <MyPage token={token} options={{headerShown: false}} />
-                </Screen>
-              </>
-            ) : (
-              <>
-                {isSplashVisible === false ? (
-                  <Screen text="Screen 0" index={0}>
-                    <LoginGo token={token} />
-                  </Screen>
-                ) : <Splash isSplashVisible={isSplashVisible}></Splash>}
-              </>
-            )}
-            {loading ? (
-              <Modal
-                transparent={true}
-                visible={loading}
-                onRequestClose={() => hideLoading()}>
-                <View style={styles.loading}>
-                  <Loading />
-                </View>
-              </Modal>
-            ) : null}
-          </AnimatedScrollView>
-        </LoadingProvider>
-      </MyProvider>
-    </UserInfoProvider>
-  );
-};
-
-
-
-
 const HomeScreen = () => {
-  // const {token, id, name, email} = useUserInfo();
   const [modalOpen, setModalOpen] = useState(false);
   const {
-    currentIndex,
-    changeIndex,
     horizontalIndex,
-    changeHorizontalIndex,
-    dataIndex,
-    changeDataIndex,
-    selectedMemId,
-    changeSelectedMemId,
-    selectedGroupId,
   } = useIndexContext();
 
   const [oldIndex, setOldIndex] = useState(horizontalIndex);
@@ -319,6 +180,7 @@ const HomeScreen = () => {
   const _token = useSelector(userTokenSelector);
   const _screenType = useSelector(getScreenTypeSelector);
   const _currentGroupId = useSelector(getCurrentGroupIdSelector);
+  const _isReloadVIewData = useSelector(IsReloadViewDataSelector);
 
   const [isSplashVisible, setIsSplashVisible] = useState(isSplash);
   const [token, setToken] = useState(_token);
@@ -329,8 +191,9 @@ const HomeScreen = () => {
   const [mainView, setMainView] = useState(null);
 
   const [currentGroupId, setCurrentGroupId] = useState(_currentGroupId);
+  const [currentTypeId, setCurrentTypeId] = useState(0);
   const [screenType, setScreenType] = useState(_screenType);
-
+  const [isApplyView, setIsApplyView] = useState(false);
 
   const swiperRef = useRef(null);
 
@@ -344,18 +207,38 @@ const HomeScreen = () => {
   }, [_token]);
 
   useEffect(() => {
-    setCurrentGroupId(_currentGroupId)
-    setScreenType(_screenType)
-    reloadViewData(_currentGroupId, _screenType)
-        .then(res=>{
 
-        })
+
+  }, [isApplyView]);
+
+  useEffect(() => {
+    // setCurrentGroupId(_currentGroupId)
+    // setScreenType(_screenType)
+    // reloadViewData(_currentGroupId, _screenType)
   }, [_currentGroupId, _screenType]);
 
-  // useEffect(() => {
-  //   setScreenType(_screenType)
-  //   reloadViewData(_currentGroupId, _screenType)
-  // }, [_screenType]);
+  useEffect(() => {
+    if(verticalViewpager != null){
+      console.log('screenType effect')
+      if(_screenType == 'GROUP_IMG'){
+        dispatch(setCurrentMemberIdRx(-1))
+        // verticalViewpager.setPageWithoutAnimation(0)
+      }else if(_screenType == 'GROUP_VIDEO'){
+        dispatch(setCurrentMemberIdRx(-1))
+        verticalViewpager.setPageWithoutAnimation(1)
+      }else if(_screenType == 'INTERVIEW'){
+        verticalViewpager.setPageWithoutAnimation(2)
+      }else if(_screenType == SCREEN_4){
+        // verticalViewpager.setPageWithoutAnimation(3)
+      }else if(_screenType == SCREEN_5){
+        // verticalViewpager.setPageWithoutAnimation(4)
+      }else if(_screenType == SCREEN_6){
+        // verticalViewpager.setPageWithoutAnimation(5)
+      }
+    }
+
+
+  }, [_screenType]);
 
   useEffect(() => {
     let timer = setTimeout(() => {
@@ -365,34 +248,30 @@ const HomeScreen = () => {
   }, []);
 
 
+
+
+
   LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
   LogBox.ignoreAllLogs();//Ignore all log notifications
 
-  useEffect(() => {
-    if (horizontalScrollRef.current) {
-      horizontalScrollRef.current.scrollTo({
-        x: horizontalIndex * SCREEN_WIDTH,
-        animated: true,
-      });
-    }
-  }, [horizontalIndex, horizontalScrollRef]);
 
-  useEffect(() => {
-    dispatch(getGroupImagesAsync(token));
-    dispatch(getInterviewsAsync(token));
-    dispatch(getPortfoliosAsync(token));
-  }, [token]);
+  // useEffect(() => {
+  //   if(_isReloadVIewData){
+  //     console.log("RELOAD VIEW DATA")
+  //     reloadViewData(_currentGroupId, _screenType)
+  //     dispatch(setIsReloadViewDataRx(false))
+  //   }
+  // }, [_isReloadVIewData]);
 
+  const verticalViewRenderer = function({ item, index}){
 
-  const verticalViewRenderer = function({ item, index }){
-
-    console.log(`IDX=${index}, VIEW_TYPE : ${item.type}, POS: ${item.pos}`);
+    // console.log(`IDX=${index}, VIEW_TYPE : ${item.type}, POS: ${item.pos}`);
     if(item.type === SCREEN_1){
       return (<WhichGroup token={item.token} idx={item.index} />);
     }else if(item.type === SCREEN_2){
       return (<GroupVideo token={item.token} idx={item.index} />);
     }else if(item.type === SCREEN_3){
-      return (<Interview token={item.token} idx={item.index} />);
+      return (<Interview token={item.token} idx={item.index} id={item.id}/>);
     }else if(item.type === SCREEN_4){
       return (<Portfolio token={item.token} idx={item.index} />);
     }else if(item.type === SCREEN_5){
@@ -405,475 +284,187 @@ const HomeScreen = () => {
   };
 
 
-  const reloadViewData = async function (idx, type) {
-    console.log(`reloadView ${idx} : ${type}`);
-    let main = (<></>)
-    if(type === SCREEN_1) {
-      setPrevView(null)
+  const handleScroll = event => {
+    console.log(`event : ${event.nativeEvent.position}`)
+    const newIndex = event.nativeEvent.position;
 
-      let mainDataList = []
-      if(idx === 0){
-        mainDataList.push({
-          token: token,
-          type: SCREEN_1,
-          index: idx,
-          pos: 'MAIN'
-        });
-        mainDataList.push({
-          token: token,
-          type: SCREEN_1,
-          pos: 'BOTTOM',
-          index: idx+1 > 2 ? 2 : idx+1,
-        });
-      }else if(idx > 0 && idx <2) {
-        mainDataList.push({
-          token: token,
-          type: SCREEN_1,
-          pos: 'TOP',
-          index: idx-1 < 0 ? 0 : idx-1,
-        });
-        mainDataList.push({
-          token: token,
-          type: SCREEN_1,
-          pos: 'MAIN',
-          index: idx,
-        });
-        mainDataList.push({
-          token: token,
-          type: SCREEN_1,
-          pos: 'BOTTOM',
-          index: idx+1 > 2 ? 2 : idx+1,
-        });
+    if (_screenType != SCREEN_TYPES[newIndex]) {
+      console.log(`currentType=${_screenType}, newType=${SCREEN_TYPES[newIndex]}`)
+      setCurrentTypeId(newIndex)
+      if(currentTypeId > 1 && currentTypeId > newIndex){
+        // verticalViewpager.setPageWithoutAnimation(1);
+        dispatch(setScreenTypeRx(SCREEN_2))
       }else{
-        /** START - idx 맞추기 위한 더미 */
-        mainDataList.push({
-          token: token,
-          type: SCREEN_1,
-          pos: 'TOP',
-          index: 0,
-        });
-
-        mainDataList.push({
-          token: token,
-          type: SCREEN_1,
-          pos: 'TOP',
-          index: idx-1,
-        });
-        mainDataList.push({
-          token: token,
-          type: SCREEN_1,
-          pos: 'MAIN',
-          index: idx,
-        });
+        dispatch(setScreenTypeRx(SCREEN_TYPES[newIndex]))
       }
-
-      main = (<SwiperFlatList
-          ref={swiperRef}
-          vertical={true}
-          data={mainDataList}
-          renderItem={verticalViewRenderer}
-          renderAll={true}
-
-          // keyExtractor={keyExtractor}
-          index={idx}
-          onScroll={handleVerticalScroll}
-          listKey={(item, index) => `swiperFlatList_${item.type}_${item.index}`}
-      />)
-      setMainView(main)
-      setNextView(verticalViewRenderer({
-        item: {
-          type: SCREEN_2,
-          token: token,
-          index: idx,
-          pos: 'NEXT'
-        },
-        index: idx,
-      }))
     }
-    else if(type === SCREEN_2) {
-      setPrevView(verticalViewRenderer({
+  };
+
+  const verticalScrollEndHandle = function (event) {
+    const newIndex = event.nativeEvent.position;
+    if(_currentGroupId != newIndex){
+      console.log(`curIdx=${_currentGroupId}, newIdx=${newIndex}`)
+        dispatch(setCurrentGroupIdRx(newIndex))
+    }
+  }
+
+  const verticalView =  (<PagerView
+      ref={(viewpager) => {verticalViewpager = viewpager}}
+      orientation={'horizontal'}
+      // requestAnimationFrame={()=> verticalViewpager.setPage(index)}
+      style={styles.pagerView}
+      initialPage={0}
+      scrollEnabled={true}
+      onPageSelected={handleScroll}>
+    <View key="1">
+
+    <PagerView key="p1"
+               ref={(viewpager) => {verticalViewpager2 = viewpager}}
+    style={styles.pagerView2}
+               initialPage={_currentGroupId}
+               orientation='vertical'
+               onPageSelected={verticalScrollEndHandle}>
+      <View key="v1">
+        {verticalViewRenderer({
+          item: {
+            type: SCREEN_1,
+            token: token,
+            pos: 'MAIN',
+            index: 0
+          },
+          index: 0
+        })}
+      </View>
+      <View key="v2">
+        {verticalViewRenderer({
+          item: {
+            type: SCREEN_1,
+            token: token,
+            pos: 'MAIN',
+            index: 1
+          },
+          index: 1
+        })}
+      </View>
+      <View key="v3">
+        {verticalViewRenderer({
+          item: {
+            type: SCREEN_1,
+            token: token,
+            pos: 'MAIN',
+            index: 2
+          },
+          index: 2
+        })}
+      </View>
+    </PagerView>
+    </View>
+    {/*<View key="2">*/}
+    {/*<PagerView key="2" style={styles.pagerView} initialPage={_currentGroupId} orientation={"vertical"}*/}
+    {/*           onPageSelected={verticalScrollEndHandle} overScrollMode={"never"}>*/}
+    {/*  <View key="1">*/}
+    {/*    {verticalViewRenderer({*/}
+    {/*      item: {*/}
+    {/*        type: SCREEN_2,*/}
+    {/*        token: token,*/}
+    {/*        pos: 'MAIN',*/}
+    {/*        index: _currentGroupId*/}
+    {/*      },*/}
+    {/*      index: _currentGroupId*/}
+    {/*    })}*/}
+    {/*  </View>*/}
+    {/*  <View key="2">*/}
+    {/*    {verticalViewRenderer({*/}
+    {/*      item: {*/}
+    {/*        type: SCREEN_2,*/}
+    {/*        token: token,*/}
+    {/*        pos: 'MAIN',*/}
+    {/*        index: _currentGroupId*/}
+    {/*      },*/}
+    {/*      index: _currentGroupId*/}
+    {/*    })}*/}
+    {/*  </View>*/}
+    {/*  <View key="3">*/}
+    {/*    {verticalViewRenderer({*/}
+    {/*      item: {*/}
+    {/*        type: SCREEN_2,*/}
+    {/*        token: token,*/}
+    {/*        pos: 'MAIN',*/}
+    {/*        index: 2*/}
+    {/*      },*/}
+    {/*      index: 2*/}
+    {/*    })}*/}
+    {/*  </View>*/}
+    {/*</PagerView>*/}
+    <View key="2">
+      {verticalViewRenderer({
         item: {
-          type: SCREEN_1,
+          type: SCREEN_2,
           token: token,
-          index: idx,
-          pos: 'PREV'
+          pos: 'MAIN',
+          index: _currentGroupId
         },
-        index: idx,
-      }))
-
-      let mainDataList = []
-      if(idx === 0){
-        mainDataList.push({
-          token: token,
-          type: SCREEN_2,
-          index: idx,
-          pos: 'MAIN'
-        });
-        mainDataList.push({
-          token: token,
-          type: SCREEN_2,
-          pos: 'BOTTOM',
-          index: idx+1 > 2 ? 2 : idx+1,
-        });
-      }else if(idx > 0 && idx <2) {
-        mainDataList.push({
-          token: token,
-          type: SCREEN_2,
-          pos: 'TOP',
-          index: idx-1 < 0 ? 0 : idx-1,
-        });
-        mainDataList.push({
-          token: token,
-          type: SCREEN_2,
-          pos: 'MAIN',
-          index: idx,
-        });
-        mainDataList.push({
-          token: token,
-          type: SCREEN_2,
-          pos: 'BOTTOM',
-          index: idx+1 > 2 ? 2 : idx+1,
-        });
-      }else{
-        /** START - idx 맞추기 위한 더미 */
-        mainDataList.push({
-          token: token,
-          type: SCREEN_2,
-          pos: 'TOP',
-          index: 0,
-        });
-
-        mainDataList.push({
-          token: token,
-          type: SCREEN_2,
-          pos: 'TOP',
-          index: idx-1,
-        });
-        mainDataList.push({
-          token: token,
-          type: SCREEN_2,
-          pos: 'MAIN',
-          index: idx,
-        });
-      }
-
-      main = (<SwiperFlatList
-          ref={swiperRef}
-          vertical={true}
-          data={mainDataList}
-          renderItem={verticalViewRenderer}
-          // keyExtractor={keyExtractor}
-          index={idx}
-          onScroll={handleVerticalScroll}
-          listKey={(item, index) => `swiperFlatList_${item.type}_${item.index}`}
-      />)
-      setMainView(main)
-      setNextView(verticalViewRenderer({
+        index: _currentGroupId
+      })}
+    </View>
+    {/*</View>*/}
+    <View key="3">
+      {verticalViewRenderer({
         item: {
           type: SCREEN_3,
+          token: token,
+          pos: 'NEXT',
+          index: currentGroupId,
+          id: -1
+        },
+        index: currentGroupId
+      })}
+    </View>
+    <View key="4">
+      {verticalViewRenderer({
+        item: {
+          type: SCREEN_4,
+          token: token,
+          pos: 'NEXT',
+          index: currentGroupId
+        },
+        index: currentGroupId
+      })}
+    </View>
+    <View key="5">
+      {verticalViewRenderer({
+        item: {
+          type: SCREEN_5,
           token: token,
           pos: 'NEXT',
           index: 0
         },
-        index: idx
-      }))
-      // setNextView(null)
-    }
-    else if(type === SCREEN_3) {
-      setPrevView(verticalViewRenderer({
-        item: {
-          type: SCREEN_2,
-          token: token,
-          pos: 'PREV',
-          index: idx
-        },
-        index: idx
-      }))
-
-
-      let mainDataList = []
-      if(idx === 0){
-        mainDataList.push({
-          token: token,
-          type: SCREEN_3,
-          index: idx,
-          pos: 'MAIN'
-        });
-        mainDataList.push({
-          token: token,
-          type: SCREEN_3,
-          pos: 'BOTTOM',
-          index: idx+1 > 2 ? 2 : idx+1,
-        });
-      }else if(idx > 0 && idx <2) {
-        mainDataList.push({
-          token: token,
-          type: SCREEN_3,
-          pos: 'TOP',
-          index: idx-1 < 0 ? 0 : idx-1,
-        });
-        mainDataList.push({
-          token: token,
-          type: SCREEN_3,
-          pos: 'MAIN',
-          index: idx,
-        });
-        mainDataList.push({
-          token: token,
-          type: SCREEN_3,
-          pos: 'BOTTOM',
-          index: idx+1 > 2 ? 2 : idx+1,
-        });
-      }else{
-        /** START - idx 맞추기 위한 더미 */
-        mainDataList.push({
-          token: token,
-          type: SCREEN_3,
-          pos: 'TOP',
-          index: 0,
-        });
-
-        mainDataList.push({
-          token: token,
-          type: SCREEN_3,
-          pos: 'TOP',
-          index: idx-1,
-        });
-        mainDataList.push({
-          token: token,
-          type: SCREEN_3,
-          pos: 'MAIN',
-          index: idx,
-        });
-      }
-
-
-      main = (<SwiperFlatList
-          // ref={swiperRef}
-          vertical={true}
-          data={mainDataList}
-          renderItem={verticalViewRenderer}
-          // keyExtractor={(item, index) => index.toString()}
-          index={idx}
-          onScroll={handleVerticalScroll}
-          listKey={(item, index) => `swiperFlatList_${item.type}_${item.index}`}
-      />)
-      setMainView(main)
-      setNextView(verticalViewRenderer({
-        item: {
-          type: SCREEN_4,
-          token: token,
-          pos: 'NEXT',
-          index: 1
-        },
-        index: idx
-      }))
-    }
-    else if(type === SCREEN_4) {
-      setPrevView(verticalViewRenderer({
-        item: {
-          type: SCREEN_3,
-          token: token,
-          pos: 'PREV',
-          index: idx
-        },
-        index: idx
-      }))
-      main = (<SwiperFlatList
-          // ref={swiperRef}
-          vertical={true}
-          data={[{
-            type: SCREEN_4,
-            index: 0,
-            pos: 'TOP',
-          },
-            {
-              type: SCREEN_4,
-              index: 1,
-              pos: 'MAIN',
-            },
-            {
-              type: SCREEN_4,
-              index: 2,
-              pos: 'BOTTOM',
-            },
-          ]}
-          renderItem={verticalViewRenderer}
-          // keyExtractor={keyExtractor}
-          index={1}
-          onScroll={handleVerticalScroll}
-          listKey={(item, index) => `swiperFlatList_${item.type}_${item.index}`}
-      />)
-      setMainView(main)
-      setNextView(verticalViewRenderer({
-        item: {
-          type: SCREEN_5,
-          token: token,
-          pos: 'NEXT',
-          index: idx
-        },
-        index: idx
-      }))
-    }
-    else if(type === SCREEN_5) {
-      setPrevView(verticalViewRenderer({
-        item: {
-          type: SCREEN_4,
-          token: token,
-          pos: 'PREV',
-          index: idx
-        },
-        index: idx
-      }))
-      main = (<SwiperFlatList
-          // ref={swiperRef}
-          vertical={true}
-          data={[{
-            type: SCREEN_5,
-            index: idx-1,
-            pos: 'TOP',
-          },
-            {
-              type: SCREEN_5,
-              index: idx,
-              pos: 'MAIN',
-            },
-            {
-              type: SCREEN_5,
-              index: idx+1,
-              pos: 'BOTTOM',
-            },
-          ]}
-          renderItem={verticalViewRenderer}
-          // keyExtractor={keyExtractor}
-          index={1}
-          onScroll={handleVerticalScroll}
-          listKey={(item, index) => `swiperFlatList_${item.type}_${index}`}
-      />)
-      setMainView(main)
-      setNextView(verticalViewRenderer({
+        index: 0
+      })}
+    </View>
+    <View key="6">
+      {verticalViewRenderer({
         item: {
           type: SCREEN_6,
           token: token,
           pos: 'NEXT',
-          index: idx
+          index: 0
         },
-        index: idx
-      }))
-    }
-    else if(type === SCREEN_6) {
-      setPrevView(verticalViewRenderer({
-        item: {
-          type: SCREEN_5,
-          token: token,
-          pos: 'PREV',
-          index: idx
-        },
-        index: idx
-      }))
-      main = (<SwiperFlatList
-          // ref={swiperRef}
-          vertical={true}
-          data={[{
-            type: SCREEN_6,
-            index: idx-1,
-            pos: 'TOP',
-          },
-            {
-              type: SCREEN_6,
-              index: idx,
-              pos: 'MAIN',
-            },
-            {
-              type: SCREEN_6,
-              index: idx+1,
-              pos: 'BOTTOM',
-            },
-          ]}
-          renderItem={verticalViewRenderer}
-          // keyExtractor={keyExtractor}
-          index={1}
-          onScroll={handleVerticalScroll}
-          listKey={(item, index) => `swiperFlatList_${item.type}_${index}`}
-      />)
-      setMainView(main)
-      setNextView(verticalViewRenderer({
+        index: 0
+      })}
+    </View>
+    <View key="7">
+      {verticalViewRenderer({
         item: {
           type: SCREEN_7,
           token: token,
           pos: 'NEXT',
-          index: idx
+          index: 0
         },
-        index: idx
-      }))
-    }
-    else if(type === SCREEN_7) {
-      setPrevView(verticalViewRenderer({
-        item: {
-          type: SCREEN_6,
-          token: token,
-          pos: 'PREV',
-          index: idx
-        },
-        index: idx
-      }))
-      main = (<SwiperFlatList
-          // ref={swiperRef}
-          vertical={true}
-          data={[{
-            type: SCREEN_7,
-            index: idx-1,
-            pos: 'TOP',
-          },
-            {
-              type: SCREEN_7,
-              index: idx,
-              pos: 'MAIN',
-            },
-            {
-              type: SCREEN_7,
-              index: idx+1,
-              pos: 'BOTTOM',
-            },
-          ]}
-          renderItem={verticalViewRenderer}
-          // keyExtractor={keyExtractor}
-          index={1}
-          onScroll={handleVerticalScroll}
-          listKey={(item, index) => `swiperFlatList_${item.type}_${index}`}
-      />)
-      setMainView(main)
-      setNextView(null)
-    }
-  }
-
-  const handleScroll = event => {
-    const offsetX = event.nativeEvent.contentOffset.x;
-
-    const newIndex = Math.round(offsetX / SCREEN_WIDTH);
-
-
-    // 변경된 인덱스를 처리하는 함수 호출
-    if (screenType != SCREEN_TYPES[newIndex]) {
-      // changeHorizontalIndex(newIndex);
-      // setOldIndex(newIndex);
-      dispatch(setScreenTypeRx(SCREEN_TYPES[newIndex]))
-    }
-  };
-  const handleVerticalScroll = event => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const newIndex = Math.round(offsetY / SCREEN_HEIGHT);
-    console.log(`curIdx=${currentGroupId}, newIdx=${newIndex}`)
-    if(currentGroupId != newIndex){
-      dispatch(setCurrentGroupIdRx(newIndex))
-      //return false;
-    }else{
-      //return false;
-    }
-
-  };
-
-
+        index: 0
+      })}
+    </View>
+  </PagerView>);
 
 
 
@@ -883,23 +474,7 @@ const HomeScreen = () => {
         <MyProvider>
           <LoadingProvider>
             {(token ?
-                <AnimatedScrollView
-                    ref={horizontalScrollRef}
-                    scrollEventThrottle={300}
-                    onScroll={Animated.event(
-                        [{nativeEvent: {contentOffset: {x: xOffset}}}],
-                        {
-                          useNativeDriver: true,
-                          listener: handleScroll,
-                        },
-                    )}
-                    horizontal
-                    pagingEnabled
-                    style={styles.scrollView}>
-                  {prevView != null ? (<Screen text="Prev Screen" index={0}>{prevView}</Screen>) : null}
-                  {mainView}
-                  {nextView != null ? (<Screen text="Next Screen" index={2}>{nextView}</Screen>) : null}
-                </AnimatedScrollView>
+                (verticalView)
                 : (<>
                     {isSplashVisible === false ?
                       (<Screen text="Screen 0" index={0}><LoginGo token={token} /></Screen>)
@@ -913,6 +488,12 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  pagerView: {
+    flex: 1
+  },
+  pagerView2: {
+    width: '100%', height: '100%'
+  },
   loading: {
     flex: 1,
     justifyContent: 'center',

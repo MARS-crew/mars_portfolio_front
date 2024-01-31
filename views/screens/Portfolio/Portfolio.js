@@ -28,6 +28,7 @@ import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../../redux/RootReducer";
 import {getPortfolioListSelector, setPortfolioList} from "../../../redux/slice/PortfolioSlice";
 import {getInterviewListSelector} from "../../../redux/slice/InterviewSlice";
+import {getCurrentMemberIdSelector} from "../../../redux/slice/UiRenderSlice";
 
 const { width, height } = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.4;
@@ -77,121 +78,57 @@ const Portfolio = ({ token, idx }) => {
   const swiperRef = useRef(null);
   const { user, storeUser } = useUser();
 
-  useEffect(() => {
-    if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
-      swiperRef.current.scrollToIndex({
-        index: dataIndex,
-        animated: true,
-      });
-    }
-  }, [dataIndex, swiperRef]);
+  // useEffect(() => {
+  //   if (swiperRef.current && data.length > 0 && currentIndex !== undefined) {
+  //     swiperRef.current.scrollToIndex({
+  //       index: dataIndex,
+  //       animated: true,
+  //     });
+  //   }
+  // }, [dataIndex, swiperRef]);
 
-  const handleVerticalScroll = event => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const newIndex = Math.round(offsetY / height);
-    const selectedData = data[newIndex];
-
-    if (horizontalIndex == 3) {
-      if (selectedData) {
-        changeSelectedMemId(selectedData[0].member_id);
-        if (selectedData[0].group_id !== selectedGroupId) {
-          changeSelectedGroupId(selectedData[0].group_id);
-        }
-      }
-      changeDataIndex(newIndex);
-    }
-  };
+  // const handleVerticalScroll = event => {
+  //   const offsetY = event.nativeEvent.contentOffset.y;
+  //   const newIndex = Math.round(offsetY / height);
+  //   const selectedData = data[newIndex];
+  //
+  //   if (horizontalIndex == 3) {
+  //     if (selectedData) {
+  //       changeSelectedMemId(selectedData[0].member_id);
+  //       if (selectedData[0].group_id !== selectedGroupId) {
+  //         changeSelectedGroupId(selectedData[0].group_id);
+  //       }
+  //     }
+  //     changeDataIndex(newIndex);
+  //   }
+  // };
 
   const [detailPopVisible, setDetailPopVisible] = useState(false);
-  const [data, setData] = useState([]);
-
+  // const [data, setData] = useState([]);
+  //
   const dispatch = useDispatch()
-  const [fileIdLength, setFileIdLength] = useState(null);
-  const [portfolio, setPortfolio] = useState(true); //포트폴리오 페이지인지 확인하는 스테이트
+  // const [fileIdLength, setFileIdLength] = useState(null);
+  // const [portfolio, setPortfolio] = useState(true); //포트폴리오 페이지인지 확인하는 스테이트
+  //
 
-
-
+  const _memberId = useSelector(getCurrentMemberIdSelector);
   const _portfolioList = useSelector(getPortfolioListSelector);
   const [portfolioList, setPortfolioList] = useState(_portfolioList); //포트폴리오 페이지인지 확인하는 스테이트
+  const [selectedPortfolio, setSelectedPortfolio] = useState([]); //포트폴리오 페이지인지 확인하는 스테이트
 
   useEffect(() => {
     setPortfolioList(_portfolioList)
+
   }, [_portfolioList]);
 
-  // const transformDataForSwiper = data => {
-  //   const transformedData = data.map(groupItems =>
-  //     groupItems.map(singleItem => ({
-  //       group_id: singleItem.group_id,
-  //       member_id: singleItem.member_id,
-  //       portfolio_id: singleItem.portfolio_id,
-  //       title: singleItem.title,
-  //       description: singleItem.description,
-  //       reg_date: singleItem.reg_date,
-  //       mod_date: singleItem.mod_date,
-  //       kind: singleItem.kind,
-  //       file_id: singleItem.file_id,
-  //       ext: singleItem.ext,
-  //       url: singleItem.url,
-  //       del_yn: singleItem.del_yn,
-  //     }))
-  //   );
-  //   return transformedData;
-  // };
+
+  useEffect(() => {
+    if(_portfolioList != null){
+      setSelectedPortfolio(_portfolioList.flatMap(item=>item).filter(item=>item.member_id == _memberId))
+    }
+  }, [_memberId]);
 
 
-
-
-  // useEffect(() => {
-  //   setData();
-  //   // if (!loading) { changeLoading(); }
-  //   // console.log(`Token 포트폴리오: ${token}`);
-  //   const source = axios.CancelToken.source();
-  //   getPortfolios(token, null, {
-  //     cancelToken: source.token,
-  //   })
-  //   // axios({
-  //   //   method: 'get',
-  //   //   url: `https://api.writeyoume.com/api/v1/portfolio/`,
-  //   //   headers: {
-  //   //     Authorization: token,
-  //   //   },
-  //   //   cancelToken: source.token,
-  //   // })
-  //     .then(function (response) {
-  //       const extractedData = response.data.data.map(item => ({
-  //         group_id: item.group_id,
-  //         member_id: item.member_id,
-  //         portfolio_id: item.portfolio_id,
-  //         title: item.title,
-  //         description: item.description,
-  //         reg_date: item.reg_date,
-  //         mod_date: item.mod_date,
-  //         kind: item.kind,
-  //         file_id: item.file_id,
-  //         ext: item.ext,
-  //         url: item.url,
-  //         del_yn: item.del_yn,
-  //       }));
-  //       const sortedAndGroupedData = _.chain(extractedData)
-  //         .sortBy('group_id, member_id')
-  //         .groupBy('member_id')
-  //         .values()
-  //         .value();
-  //
-  //       const groups = Object.values(sortedAndGroupedData);
-  //       const transformedData = transformDataForSwiper(groups);
-  //       setData(transformedData);
-  //       dispatch(setPortfolioList(transformedData));
-  //       console.log();
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  //
-  //   return () => {
-  //     source.cancel('API 호출이 취소되었습니다.');
-  //   };
-  // }, [token]);
 
   const onModify = id => {
     Alert.alert(
@@ -214,23 +151,23 @@ const Portfolio = ({ token, idx }) => {
     <View style={styles.container}>
       <ScrollView>
             <View style={styles.gridView}>
-              {portfolioList && portfolioList.map(singleItem => (
-                  <View style={styles.gridItem} key={singleItem[0].portfolio_id.toString()}>
+              {selectedPortfolio && selectedPortfolio.map(singleItem => (
+                  <View style={styles.gridItem} key={singleItem.portfolio_id.toString()}>
                     <PortfolioItem
-                        portfolio={portfolio}
+                        portfolio={selectedPortfolio}
                         onModify={onModify}
                         onDelete={onDelete}
-                        member_id={singleItem[0].member_id}
-                        id={singleItem[0].portfolio_id}
-                        title={singleItem[0].title}
-                        message={singleItem[0].description}
-                        reg_date={singleItem[0].reg_date}
-                        mod_date={singleItem[0].mod_date}
-                        code={singleItem[0].kind}
-                        file_id={singleItem[0].file_id}
-                        src={singleItem[0].url}
-                        ext={singleItem[0].ext}
-                        del_yn={singleItem[0].del_yn}
+                        member_id={singleItem.member_id}
+                        id={singleItem.portfolio_id}
+                        title={singleItem.title}
+                        message={singleItem.description}
+                        reg_date={singleItem.reg_date}
+                        mod_date={singleItem.mod_date}
+                        code={singleItem.kind}
+                        file_id={singleItem.file_id}
+                        src={singleItem.url}
+                        ext={singleItem.ext}
+                        del_yn={singleItem.del_yn}
                         token={token}
                     />
                   </View>

@@ -21,6 +21,8 @@ target 'mars_portfolio_react' do
 
 
 
+  pod 'react-native-pager-view', :path => '../node_modules/react-native-pager-view'
+
   target 'mars_portfolio_reactTests' do
     inherit! :complete
     # Pods for testing

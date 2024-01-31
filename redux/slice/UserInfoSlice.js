@@ -62,6 +62,7 @@ export const UserInfoSlice = createSlice({
 export const { setUserInfo,  setLogout } = UserInfoSlice.actions
 
 export const userTokenSelector = (state: RootState) => state.userInfo.userToken;
+export const userIdSelector = (state: RootState) => state.userInfo.userId;
 export const isLoginSelector = (state: RootState) => state.userInfo.isLogin;
 
 

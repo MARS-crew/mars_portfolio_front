@@ -22,6 +22,9 @@ import { useFocusEffect } from '@react-navigation/native';
 import { getVideoThumbnail } from 'react-native-video-thumbnails';
 import { useUser } from '../../LoginUserContext';
 import {toggleInterviewHeart} from "../../api/v1/interview";
+import {useSelector} from "react-redux";
+import {getReviewListSelector} from "../../redux/slice/ReviewSlice";
+import {userIdSelector} from "../../redux/slice/UserInfoSlice";
 
 const InterviewContents = ({ interviewId, id, path, token }) => {
   const { user, storeUser } = useUser();
@@ -32,6 +35,7 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
   const [heart, setHeart] = useState(false); // 하트 상태
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [filePath, setFilePath] = useState(path); // video 주소
+  const _userId = useSelector(userIdSelector);
 
   //video 재생
   const [isPlaying, setIsPlaying] = useState(true);
@@ -115,7 +119,7 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
     }, []),
   );
   const checkUser = (id) => {
-    if (user == id) {
+    if (_userId == id) {
       setModalOpen(true);
     } else {
       setModalOpen(false);
@@ -158,7 +162,7 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
                 setIsPlaying(false);
               }}
               onLoad={() => {
-                console.log('동영상로드 완료')
+               console.log('동영상로드 완료')
                 player.current.seek(0);
               }}
             />
@@ -209,9 +213,11 @@ const styles = StyleSheet.create({
   },
   iconBar: {
     height: 60,
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1000,
     alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
     paddingRight: 20,
     paddingTop: 20,
     paddingBottom: 10,
@@ -222,14 +228,14 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   section: {
-    height: 623,
+    height: '95%',
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 0.8,
-    marginTop: 10,
-    marginLeft: 20,
-    marginRight: 20,
-    borderRadius: 10,
+    flex: 1,
+    // marginTop: 10,
+    // marginLeft: 5,
+    // marginRight: 5,
+    // borderRadius: 10,
   },
   animate: {
     position: 'absolute',
@@ -237,7 +243,7 @@ const styles = StyleSheet.create({
   content: {
     width: '100%',
     height: '100%',
-    borderRadius: 10,
+    // borderRadius: 10,
   },
 });
 

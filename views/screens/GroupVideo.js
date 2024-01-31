@@ -15,6 +15,9 @@ import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 // import AppContext from '../../AppContext';
 import { IndexProvider, useIndexContext } from '../../IndexContext';
+import {useDispatch, useSelector} from "react-redux";
+import {getCurrentGroupIdSelector, getScreenTypeSelector, setCurrentMemberIdRx} from "../../redux/slice/UiRenderSlice";
+import {SCREEN_2, SCREEN_3} from "../../AppConst";
 
 const DATA = [
   {
@@ -106,6 +109,9 @@ const VideoItem = ({ id, group, src, medal }) => (
 
 const GroupVideo = ({ token, idx }) => {
   const { currentIndex, changeIndex, horizontalIndex, changeHorizontalIndex, dataIndex, changeDataIndex, selectedMemId, changeSelectedMemId, selectedGroupId, changeSelectedGroupId } = useIndexContext();
+  const swiperRef = useRef(null);
+  const _screenType = useSelector(getScreenTypeSelector);
+  const _currentGroupId = useSelector(getCurrentGroupIdSelector);
 
   // id를 오름차순으로 정렬하고 그룹화
   const sortedAndGroupedData = _.chain(DATA)
@@ -116,18 +122,27 @@ const GroupVideo = ({ token, idx }) => {
 
   const groups = Object.values(sortedAndGroupedData);
 
+  const dispatch = useDispatch();
+
+
+  // useEffect(() => {
+  //   if(_screenType == SCREEN_2) {
+  //     const mem_id = groups[_currentGroupId][0].id
+  //     dispatch(setCurrentMemberIdRx(mem_id))
+  //   }
+  // }, [_screenType]);
 
 
   return (
     <SafeAreaView style={styles.containbox}>
       <FlatList
-          data={groups[idx]}
+          data={groups[_currentGroupId]}
           renderItem={({ item }) => (
               <VideoItem id={item.id} group={item.group} src={item.src} medal={item.medal} />
           )}
           keyExtractor={item => item.id.toString()}
           numColumns={2}
-          listKey={`group_${groups[idx][0].id}_${idx}_${new Date().getMilliseconds()}`}
+          listKey={`group_${groups[_currentGroupId][0].id}`}
       />
       <FAB />
     </SafeAreaView>

@@ -11,6 +11,9 @@ import SwiperFlatListComponent from '../components/SwiperFlatListComponent';
 import { useIndexContext } from '../../IndexContext';
 import axios from 'axios';
 import {getResumes} from "../../api/v1/resume";
+import {useDispatch, useSelector} from "react-redux";
+import {getResumeListSelector} from "../../redux/slice/ResumeSlice";
+import {getCurrentMemberIdSelector} from "../../redux/slice/UiRenderSlice";
 
 const fetchResume = async ({ token }) => {
   try {
@@ -55,40 +58,9 @@ const fetchResume = async ({ token }) => {
 };
 
 const Resume = ({ token }) => {
-  const {
-    currentIndex,
-    changeIndex,
-    horizontalIndex,
-    changeHorizontalIndex,
-    dataIndex,
-    changeDataIndex,
-    selectedGroupId,
-    changeSelectedGroupId,
-    selectedMemId,
-    changeSelectedMemId,
-    selectedMember,
-    changeSelectedMember,
-  } = useIndexContext();
-  const swiperRef = useRef(null);
-  const [resumeData, setResumeData] = useState([]);
-  const height = Dimensions.get('window').height;
+  const height = Dimensions.get('screen').height;
 
-  // 스와이프 진행시 인덱스 변경
-  const handleVerticalScroll = event => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const newIndex = Math.round(offsetY / height);
-    const selectedData = resumeData[newIndex];
 
-    if (horizontalIndex == 4) {
-      if (selectedData) {
-        changeSelectedMemId(selectedData.member_id);
-        if (selectedData.group_id !== selectedGroupId) {
-          changeSelectedGroupId(selectedData.group_id);
-        }
-      }
-      changeDataIndex(newIndex);
-    }
-  };
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
   const [resume, setResume] = useState(true); // 인터뷰 페이지인지 확인하는 스테이트
   const toggleModal = () => {
@@ -102,69 +74,79 @@ const Resume = ({ token }) => {
     });
   };
 
-  useEffect(() => {
-    console.log(`Token 이력서: ${token}`);
-    const fetchData = async () => {
-      const data = await fetchResume({ token });
-      const sortedAndGroupedData = _.chain(data['data'])
-        .sortBy(['group_id', 'member_id'])
-        .value();
-      setResumeData(sortedAndGroupedData);
-    };
-    fetchData();
-  }, [token]);
+
+  const dispatch = useDispatch();
+  const _resumeList = useSelector(getResumeListSelector);
+  const [resumeList, setResumeList] = useState(_resumeList);
+  const _memberId = useSelector(getCurrentMemberIdSelector);
 
   useEffect(() => {
-    if (
-      swiperRef.current &&
-      resumeData.length > 0 &&
-      currentIndex !== undefined
-    ) {
-      swiperRef.current.scrollToIndex({
-        index: dataIndex,
-        animated: true,
-      });
-    }
-  }, [dataIndex, swiperRef]);
+    setResumeList(_resumeList)
+  }, [_resumeList]);
+
+
+
+  const sortedAndGroupedData = _.chain(resumeList)
+      .sortBy('member_id')
+      .groupBy('group_id')
+      .values()
+      .value();
+
+  console.log(`resume data`)
+
+  const viewData = _.chain(sortedAndGroupedData[0])
+      .find({ "member_id": _memberId})
+      .value()
+
 
   const Item = ({ item, index }) => {
     return (
-      <TouchableOpacity onLongPress={toggleModal} activeOpacity={100}>
-        {modalOpen ? (
-          <ResumeBoxMD item={item} token={token} />
-        ) : (
-          <ResumeBox
-            item={item}
-            token={token}
-            index={index}
-            data={resumeData}
-          />
-        )}
-      </TouchableOpacity>
+        <TouchableOpacity onLongPress={toggleModal} activeOpacity={100}>
+          <ScrollView>
+          {modalOpen ? (
+              <ResumeBoxMD item={item} token={token} />
+          ) :
+              (
+              <ResumeBox
+                  item={item}
+                  token={token}
+                  index={index}
+                  data={item}
+              />
+          )}
+          </ScrollView>
+        </TouchableOpacity>
     );
   };
 
   return (
-    <View style={styles.container}>
-      <SwiperFlatList
-        ref={swiperRef}
-        vertical={true}
-        data={resumeData}
-        renderItem={({ item, index, token }) => (
-          <Item item={item} index={index} token={token} />
-        )}
-        // keyExtractor={keyExtractor}
-        index={dataIndex}
-        onScroll={handleVerticalScroll}
-        listKey={(item, index) => `swiperFlatList_${index}_${item.resume_id}`}
-      />
-      <FAB />
-      <ResumeEditMode
-        resume={resume}
-        isModalVisible={modalOpen}
-        setIsModalVisible={setModalOpen}
-      />
-    </View>
+      <View style={styles.container}>
+
+          {/*{resumeList && resumeList.map((singleItem, index) => (*/}
+          {/*    <Item item={singleItem} index={index} token={token} />*/}
+          {/*))}*/}
+        {/*<ScrollView>*/}
+        {/*<Item item={viewData} index={0} token={token} />*/}
+        {/*</ScrollView>*/}
+        <SwiperFlatList
+            // ref={swiperRef}
+            vertical={true}
+            data={[viewData]}
+            renderItem={({ item, index, token }) => (
+                <Item item={item} index={index} token={token} />
+            )}
+            // keyExtractor={keyExtractor}
+            index={0}
+            // onScroll={handleVerticalScroll}
+            listKey={(item, index) => `swiperFlatList_${index}_${item.resume_id}`}
+        />
+        <FAB />
+        <ResumeEditMode
+            resume={resume}
+            isModalVisible={modalOpen}
+            setIsModalVisible={setModalOpen}
+        />
+      </View>
   );
 };
 

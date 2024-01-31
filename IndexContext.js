@@ -30,7 +30,7 @@ const IndexProvider = ({ children }) => {
     setSelectedMember(bool);
   }
   useEffect(() => {
-    console.log("수직 인덱스 : ", currentIndex, " | 수평 인덱스 : ", horizontalIndex, " | 선택된 그룹 : ", selectedGroupId, " | 선택된 멤버 : ", selectedMemId, " | 데이터인덱스 : ", dataIndex);
+   // console.log("수직 인덱스 : ", currentIndex, " | 수평 인덱스 : ", horizontalIndex, " | 선택된 그룹 : ", selectedGroupId, " | 선택된 멤버 : ", selectedMemId, " | 데이터인덱스 : ", dataIndex);
   }, [currentIndex, horizontalIndex, selectedGroupId, selectedMemId, dataIndex]);
 
   return (

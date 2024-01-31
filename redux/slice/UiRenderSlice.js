@@ -4,8 +4,10 @@ import {SCREEN_1} from "../../AppConst";
 
 // User에서 관리해야하는 Slice
 const initialState = {
-    isSplashVisible: true,
+    isSplashVisible: false,
     currentGroupId: 0,
+    currentMemberId: null,
+    isReloadViewData: false,
     screenType: SCREEN_1,
     main : {
         type: null,
@@ -37,6 +39,12 @@ export const UiRenderSlice = createSlice({
         setCurrentGroupIdRx(state, action) {
             state.currentGroupId = action.payload;
         },
+        setCurrentMemberIdRx(state, action) {
+            state.currentMemberId = action.payload;
+        },
+        setIsReloadViewDataRx(state, action) {
+            state.isReloadViewData = action.payload;
+        },
         setScreenTypeRx(state, action) {
             state.screenType = action.payload;
         },
@@ -66,7 +74,9 @@ export const UiRenderSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
     setSplashOnOffRx,
+    setIsReloadViewDataRx,
     setCurrentGroupIdRx,
+    setCurrentMemberIdRx,
     setScreenTypeRx,
     setTopScreenRx,
     setBottomScreenRx,
@@ -78,5 +88,7 @@ export const {
 export const isSplashSelector = (state: RootState) => state.uiRender.isSplashVisible;
 export const getScreenTypeSelector = (state: RootState) => state.uiRender.screenType;
 export const getCurrentGroupIdSelector = (state: RootState) => state.uiRender.currentGroupId;
+export const getCurrentMemberIdSelector = (state: RootState) => state.uiRender.currentMemberId;
+export const IsReloadViewDataSelector = (state: RootState) => state.uiRender.isReloadViewData;
 
 export default UiRenderSlice.reducer
