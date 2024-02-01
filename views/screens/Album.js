@@ -35,7 +35,6 @@ const Album = () => {
     axios({
       method: 'get',
       url: 'https://api.writeyoume.com/api/v1/img/album',
-
       headers: {
         Authorization: token,
       },
