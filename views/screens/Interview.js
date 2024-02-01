@@ -75,7 +75,7 @@ const Interview = ({ token, idx, id }) => {
       }
     }
 
-  }, [_interviewList, _currentGroupId, _memberId]);
+  }, [_interviewList, _currentGroupId, _screenType, _memberId]);
 
   return (
       <>

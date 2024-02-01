@@ -125,12 +125,12 @@ const GroupVideo = ({ token, idx }) => {
   const dispatch = useDispatch();
 
 
-  // useEffect(() => {
-  //   if(_screenType == SCREEN_2) {
-  //     const mem_id = groups[_currentGroupId][0].id
-  //     dispatch(setCurrentMemberIdRx(mem_id))
-  //   }
-  // }, [_screenType]);
+  useEffect(() => {
+    if(_screenType == SCREEN_2) {
+      const mem_id = groups[_currentGroupId][0].id
+      dispatch(setCurrentMemberIdRx(mem_id))
+    }
+  }, [_screenType]);
 
 
   return (
