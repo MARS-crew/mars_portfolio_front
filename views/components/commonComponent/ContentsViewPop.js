@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -14,7 +14,7 @@ import PublicModal from './PublicModal';
 import closeblack from '../../../assets/images/closeblack.png';
 import Title from './Title';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.9;
 
 const styles = StyleSheet.create({
@@ -62,7 +62,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 20,
   },
-  chooseOkBtn: {backgroundColor: '#072AC8', borderWidth: 0},
+  input: {
+    color: '#303030',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  chooseOkBtn: { backgroundColor: '#072AC8', borderWidth: 0 },
 });
 
 const ContentsViewPop = ({
@@ -115,7 +120,7 @@ const ContentsViewPop = ({
             {code === 1 && (
               <View>
                 <Image
-                  source={{uri: src}}
+                  source={{ uri: src }}
                   style={[styles.content, styles.image]}
                 />
               </View>
@@ -123,7 +128,7 @@ const ContentsViewPop = ({
             {code === 2 && (
               <View>
                 <Video
-                  source={{uri: src}}
+                  source={{ uri: src }}
                   style={styles.content}
                   controls={true}
                   repeat={true}
@@ -137,14 +142,14 @@ const ContentsViewPop = ({
                   style={[styles.input, styles.linkView]}
                   onPress={() => handleLinkPress()}>
                   <Image
-                    source={{uri: src}}
+                    source={{ uri: src }}
                     style={[styles.content, styles.image]}
                   />
                 </TouchableOpacity>
               </View>
             )}
           </View>
-          <Title style={styles.input}>{message}</Title>
+          <Text style={styles.input}>{message}</Text>
         </View>
 
         <TouchableOpacity
