@@ -21,10 +21,10 @@ import InterviewAlert from '../components/InterviewAlert';
 import { useFocusEffect } from '@react-navigation/native';
 import { getVideoThumbnail } from 'react-native-video-thumbnails';
 import { useUser } from '../../LoginUserContext';
-import {toggleInterviewHeart} from "../../api/v1/interview";
-import {useSelector} from "react-redux";
-import {getReviewListSelector} from "../../redux/slice/ReviewSlice";
-import {userIdSelector} from "../../redux/slice/UserInfoSlice";
+import { toggleInterviewHeart } from "../../api/v1/interview";
+import { useSelector } from "react-redux";
+import { getReviewListSelector } from "../../redux/slice/ReviewSlice";
+import { userIdSelector } from "../../redux/slice/UserInfoSlice";
 
 const InterviewContents = ({ interviewId, id, path, token }) => {
   const { user, storeUser } = useUser();
@@ -52,8 +52,8 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
   let timer = false;
   var delay = 200;
 
-  useEffect(()=>{
-    if(isReadyVideo) {
+  useEffect(() => {
+    if (isReadyVideo) {
       Animated.sequence([
         Animated.timing(opacityDummyImg, {
           toValue: 1,
@@ -68,7 +68,7 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
           useNativeDriver: true,
         }),
       ]).start();
-    }else{
+    } else {
       Animated.sequence([
         Animated.timing(opacityDummyImg, {
           toValue: 0,
@@ -84,7 +84,7 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
         }),
       ]).start();
     }
-  },[isReadyVideo])
+  }, [isReadyVideo])
 
   const doubleTap = () => {
     const now = new Date().getTime();
@@ -107,13 +107,13 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
   };
   //하트 상태 변경
   const fetchHeart = () => {
-    toggleInterviewHeart(token, {id: id})
-    .then(function (res) {
-      console.error(res);
-    })
-    .catch(function (error){
-      console.error(error);
-    })
+    toggleInterviewHeart(token, { id: id })
+      .then(function (res) {
+        console.error(res);
+      })
+      .catch(function (error) {
+        console.error(error);
+      })
   };
 
   // 찜 기능
@@ -159,7 +159,7 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
   );
   const checkUser = (id) => {
     // if (_userId == id) {
-      setModalOpen(true);
+    setModalOpen(true);
     // } else {
     //   setModalOpen(false);
     // }
@@ -189,30 +189,30 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
           onLongPress={() => checkUser(id)}>
           {/* 저장된 video가 있으w면 video 출력. 없으면  마스외전 로고 출력*/}
           {filePath && filePath.endsWith('.mp4') ? (
-              <>
-                { <Image
-                  source={require('../../assets/images/Rectangle.png')}
-                  style={[styles.animate, dummyImgStyle(opacity).heart]}
-                  resizeMode="cover"
+            <>
+              {<Image
+                source={require('../../assets/images/Rectangle.png')}
+                style={[styles.animate, dummyImgStyle(opacity).heart]}
+                resizeMode="cover"
               />}
-            <Video
-              ref={player}
-              source={{ uri: filePath }}
-              style={[styles.content]}
-              controls={false}
-              resizeMode="cover"
-              repeat={true}
-              paused={!isPlaying}
-              onEnd={() => {
-                setIsPlaying(false);
-              }}
-              onLoad={() => {
-               console.log('동영상로드 완료')
-                setIsReadyVideo(true);
-                player.current.seek(0);
-              }}
-            />
-              </>
+              <Video
+                ref={player}
+                source={{ uri: filePath }}
+                style={[styles.content]}
+                controls={false}
+                resizeMode="cover"
+                repeat={true}
+                paused={false}
+                onEnd={() => {
+                  setIsPlaying(false);
+                }}
+                onLoad={() => {
+                  console.log('동영상로드 완료')
+                  setIsReadyVideo(true);
+                  player.current.seek(0);
+                }}
+              />
+            </>
           ) : (
             <Image
               source={{ uri: filePath }}
@@ -310,13 +310,13 @@ const heartStyle = opacity =>
   });
 
 const dummyImgStyle = opacity =>
-    StyleSheet.create({
-      dummy: {
-        width: '100%',
-        height: '100%',
-        flex: 10000,
-        opacity: opacity,
-      },
-    });
+  StyleSheet.create({
+    dummy: {
+      width: '100%',
+      height: '100%',
+      flex: 10000,
+      opacity: opacity,
+    },
+  });
 
 export default InterviewContents;
