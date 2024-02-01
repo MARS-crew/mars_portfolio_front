@@ -1,207 +1,4 @@
-// import React, {useState, useEffect, useRef} from 'react';
-// import {
-//   View,
-//   Text,
-//   StyleSheet,
-//   Image,
-//   TouchableOpacity,
-//   SafeAreaView,
-//   ScrollView,
-//   Modal,
-//   TouchableWithoutFeedback,
-//   Dimensions,
-// } from 'react-native';
-
-// const {width} = Dimensions.get('window');
-
-// const Item = ({image, onPress}) => {
-//   return (
-//     <TouchableOpacity style={styles.imageContainer} onPress={onPress}>
-//       <Image
-//         source={{uri: image.url}}
-//         style={styles.loadedImage}
-//         resizeMode="contain"
-//       />
-//     </TouchableOpacity>
-//   );
-// };
-
-// const Album = () => {
-//   const [selectedImage, setSelectedImage] = useState(null);
-//   const [imageData, setImageData] = useState([]);
-
-//   useEffect(() => {
-//     fetchDummyImageData(); // Fetch dummy image data when the component mounts
-//   }, []);
-
-//   const fetchDummyImageData = async () => {
-//     try {
-//       const response = await fetch(
-//         'https://jsonplaceholder.typicode.com/photos?_limit=10',
-//       );
-//       const data = await response.json();
-//       setImageData(data);
-//     } catch (error) {
-//       console.error('Error fetching image data:', error);
-//     }
-//   };
-
-//   const handleImagePress = image => {
-//     setSelectedImage(image);
-//   };
-
-//   const handleCloseModal = () => {
-//     setSelectedImage(null);
-//   };
-
-//   const closeButtonRef = useRef(null);
-
-//   const handleModalPress = event => {
-//     const {target} = event.nativeEvent;
-
-//     // Check if the target element matches the close button
-//     const isCloseButton = target === closeButtonRef.current;
-
-//     if (!isCloseButton) {
-//       return; // Do nothing if clicked outside the button area
-//     }
-
-//     handleCloseModal();
-//   };
-
-//   return (
-//     <SafeAreaView style={styles.container}>
-//       <ScrollView
-//         contentContainerStyle={styles.scrollContentContainer}
-//         showsVerticalScrollIndicator={false}>
-//         <Text style={styles.title}>2023</Text>
-//         <Text style={styles.subtitle}>{imageData.length} photos</Text>
-//         <View style={styles.flatContainer}>
-//           {imageData.map(item => (
-//             <Item
-//               key={item.id}
-//               image={item}
-//               onPress={() => handleImagePress(item)}
-//             />
-//           ))}
-//         </View>
-//         <View style={styles.space} />
-//         <Text style={styles.title}>2022</Text>
-//         <Text style={styles.subtitle}>{imageData.length} photos</Text>
-//         <View style={styles.flatContainer}>
-//           {imageData.map(item => (
-//             <Item
-//               key={item.id}
-//               image={item}
-//               onPress={() => handleImagePress(item)}
-//             />
-//           ))}
-//         </View>
-//       </ScrollView>
-
-//       <Modal visible={!!selectedImage} transparent={true}>
-//         {selectedImage && (
-//           <TouchableWithoutFeedback onPress={handleModalPress}>
-//             <View style={styles.modalContainer}>
-//               <Image
-//                 source={{uri: selectedImage.url}}
-//                 style={styles.selectedImage}
-//                 resizeMode="contain"
-//               />
-//               <TouchableOpacity
-//                 ref={closeButtonRef}
-//                 style={styles.closeButton}
-//                 onPress={handleCloseModal}>
-//                 <Text style={styles.closeButtonText}>X</Text>
-//               </TouchableOpacity>
-//             </View>
-//           </TouchableWithoutFeedback>
-//         )}
-//       </Modal>
-//     </SafeAreaView>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: 'white',
-//   },
-//   scrollContentContainer: {
-//     alignItems: 'center',
-//   },
-//   imageContainer: {
-//     width: width * 0.2,
-//     aspectRatio: 3 / 4,
-//     marginHorizontal: width * 0.025,
-//     marginVertical: width * 0.05,
-//   },
-//   flatContainer: {
-//     width: '100%',
-//     flexDirection: 'row',
-//     flexWrap: 'wrap',
-//     justifyContent: 'flex-start', // Align images to the left
-//   },
-//   loadedImage: {
-//     width: '100%',
-//     height: '100%',
-//     backgroundColor: 'blue',
-//   },
-//   title: {
-//     fontSize: 18,
-//     marginVertical: 10,
-//     fontWeight: 'bold',
-//     // animationName: 'fadeIn',
-//     // animationDuration: '0.5s',
-//     // animationDelay: '0s',
-//     // animationTimingFunction: 'ease-in',
-//     // animationFillMode: 'forwards',
-//     color: '#000',
-//   },
-//   subtitle: {
-//     color: '#888',
-//     fontWeight: '300',
-//     fontSize: 14,
-//     marginBottom: 20,
-//     // animationName: 'fadeIn',
-//     // animationDuration: '0.5s',
-//     // animationDelay: '0.4s',
-//     // animationTimingFunction: 'ease-in',
-//     // animationFillMode: 'forwards',
-//   },
-//   modalContainer: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: 'rgba(0, 0, 0, 0.7)',
-//   },
-//   selectedImage: {
-//     width: '50%',
-//     height: '50%',
-//     aspectRatio: 1,
-//   },
-//   closeButton: {
-//     position: 'absolute',
-//     top: 20,
-//     right: 20,
-//     backgroundColor: '#fff',
-//     borderRadius: 15,
-//     width: 30,
-//     height: 30,
-//     marginTop: 20,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   closeButtonText: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     color: 'black',
-//   },
-// });
-
-// export default Album;
-
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -215,79 +12,47 @@ import {
   Dimensions,
 } from 'react-native';
 import axios from 'axios';
-import {Shadow} from 'react-native-shadow-2';
+import { Shadow } from 'react-native-shadow-2';
 import FAB from '../components/FloatingMenu';
-import {getAlbumImage} from "../../api/v1/img";
+import { getAlbumImage } from "../../api/v1/img";
+import { useUserInfo } from '../../UserInfoContext';
 
-const albumImages = [
-  {
-    id: 1,
-    url: require('../../assets/images/album1.jpeg'),
-  },
-  {
-    id: 2,
-    url: require('../../assets/images/album2.jpeg'),
-  },
-  {
-    id: 3,
-    url: require('../../assets/images/album3.jpeg'),
-  },
-];
-
-const albumImages2 = [
-  {
-    id: 4,
-    url: require('../../assets/images/album4.jpeg'),
-  },
-  {
-    id: 5,
-    url: require('../../assets/images/album5.jpeg'),
-  },
-  {
-    id: 6,
-    url: require('../../assets/images/album6.jpeg'),
-  },
-];
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const squareSize = Math.min(width, height) * 0.27;
 
-const shadowColor = 'rgba(151, 151, 151, 0.36)';
 const Album = () => {
+  const { token } = useUserInfo();
   const [data, setData] = useState([]);
+  const [years, setYears] = useState([]);
+
   useEffect(() => {
     const source = axios.CancelToken.source();
-
-    const token = `eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXRlIjoiMjAyMy0xMS0xNVQyMzo1NjowOS4wMDBaIn0sImlhdCI6MTcwMDEyNDk3MCwiZXhwIjoxNzAwMTI4NTcwfQ`;
 
     getAlbumImage(token, {
       cancelToken: source.token,
     })
 
-    // axios({
-    //   method: 'get',
-    //   url: 'https://api.writeyoume.com/api/v1/img/album',
-    //
-    //   headers: {
-    //     Authorization:
-    //       `eyJ1c2VyIjp7Im1lbWJlcl9pZCI6NDksImVtYWlsIjoibm5ubm5ubmlhbTFAZ21haWwuY29tIiwibmFtZSI6IuydkeyeiSIsInRlbCI6bnVsbCwiYmlydGgiOm51bGwsImZpbGVfaWQiOm51bGwsImRlbF95biI6Ik4iLCJyZWdfZGF0ZSI6IjIwMjMtMTEtMTVUMjM6NTY6MDkuMDAwWiIsIm1vZF9kYXRlIjoiMjAyMy0xMS0xNVQyMzo1NjowOS4wMDBaIn0sImlhdCI6MTcwMDEyNDk3MCwiZXhwIjoxNzAwMTI4NTcwfQ`,
-    //   },
-    //   cancelToken: source.token,
-    // })
+    axios({
+      method: 'get',
+      url: 'https://api.writeyoume.com/api/v1/img/album',
+
+      headers: {
+        Authorization: token,
+      },
+      cancelToken: source.token,
+    })
       .then(function (response) {
         const extractedData = response.data.data.map(item => ({
           album_id: item.album_id,
           year: item.year,
-          url: `http://10.0.2.2:3000/${item.url}`,
+          url: item.url,
         }));
         setData(extractedData);
+        let yearsList = extractedData.map(item => item.year);
 
+        setYears(yearsList.filter((value, index, self) => self.indexOf(value) === index));
         console.log('앨범', data);
-        console.log(
-          response.data.data.map(item => ({
-            //url: item.url,
-            url: `http://10.0.2.2:3000/${item.url}`,
-          })),
-        );
+        console.log(years);
       })
       .catch(function (error) {
         console.log(error);
@@ -311,7 +76,7 @@ const Album = () => {
   const closeButtonRef = useRef(null);
 
   const handleModalPress = event => {
-    const {target} = event.nativeEvent;
+    const { target } = event.nativeEvent;
 
     const isCloseButton = target === closeButtonRef.current;
 
@@ -322,88 +87,49 @@ const Album = () => {
     handleCloseModal();
   };
 
-  console.log(data.filter(album => album.year === 2022));
-  console.log(data.filter(album => album.year === 2023));
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>마스외전 2023년</Text>
-          <Text style={styles.headerSubTitle}>
-            {data.filter(album => album.year === 2023).length} 개
-          </Text>
-        </View>
-        <View style={styles.divider} />
-
-        <View style={styles.body}>
-          <View style={styles.bodyContent}>
-            <View style={styles.imageRowContainer}>
-              {data
-                .filter(album => album.year === 2023)
-                .map(image => (
-                  <Shadow
-                    distance="12"
-                    startColor={shadowColor}
-                    offset={[1, 1]}
-                    key={image.album_id}>
-                    <TouchableOpacity
-                      style={styles.imageContainer}
-                      onPress={() => {
-                        handleImagePress({
-                          uri: image.url,
-                        });
-                      }}>
-                      <Image
-                        style={styles.imageContent}
-                        source={{uri: image.url}}
-                        resizeMode="cover"
-                      />
-                    </TouchableOpacity>
-                  </Shadow>
-                ))}
+        {years.map((year) => (
+          <>
+            <View style={styles.header}>
+              <Text style={styles.headerTitle}>마스외전 {year}년</Text>
+              <Text style={styles.headerSubTitle}>
+                {data.filter(item => item.year === year).length} 개
+              </Text>
             </View>
-          </View>
-        </View>
-
-        <View style={[styles.header, styles.secondHeader]}>
-          <Text style={styles.headerTitle}>마스외전 2022년</Text>
-          <Text style={styles.headerSubTitle}>
-            {data.filter(album => album.year === 2022).length} 개
-          </Text>
-        </View>
-        <View style={styles.divider} />
-        <View style={styles.body}>
-          <View style={styles.bodyContent}>
-            <View style={styles.imageRowContainer}>
-              {data
-                .filter(album => album.year === 2022)
-                .map(image => (
-                  <Shadow
-                    distance="12"
-                    startColor={shadowColor}
-                    offset={[1, 1]}
-                    key={image.album_id}>
-                    <TouchableOpacity
-                      style={styles.imageContainer}
-                      onPress={() => {
-                        [
-                          handleImagePress({
-                            uri: image.url,
-                          }),
-                        ];
-                      }}>
-                      <Image
-                        style={styles.imageContent}
-                        source={{uri: image.url}}
-                        resizeMode="cover"
-                      />
-                    </TouchableOpacity>
-                  </Shadow>
-                ))}
+            <View style={styles.divider} />
+            <View style={styles.body}>
+              <View style={styles.bodyContent}>
+                <View style={styles.imageRowContainer}>
+                  {data
+                    .filter(item => item.year === year)
+                    .map(album => (
+                      <Shadow
+                        distance="12"
+                        startColor={shadowColor}
+                        offset={[1, 1]}
+                        key={album.album_id}
+                      >
+                        <TouchableOpacity style={styles.imageContainer}
+                          onPress={() => {
+                            handleImagePress({ uri: album.url, });
+                          }}
+                        >
+                          <Image
+                            style={styles.imageContainer}
+                            source={{ uri: album.url }}
+                            resizeMode='cover'
+                          />
+                        </TouchableOpacity>
+                      </Shadow>
+                    ))}
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
+          </>
+        ))}
       </ScrollView>
       <FAB />
       <Modal visible={!!selectedImage} transparent={true}>
@@ -428,7 +154,9 @@ const Album = () => {
           </TouchableWithoutFeedback>
         )}
       </Modal>
-    </SafeAreaView>
+    </SafeAreaView >
+
+
   );
 };
 
