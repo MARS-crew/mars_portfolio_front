@@ -26,7 +26,7 @@ const SectionChooseBtn = ({title, buttonPressed, onPress}) => {
       <Title
         fontSize={16}
         fontWeight={'700'}
-        color={buttonPressed ? 'blue' : null}>
+        color={buttonPressed ? 'blue' : 'gray'}>
         {title}
       </Title>
     </TouchableOpacity>

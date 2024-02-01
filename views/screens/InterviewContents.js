@@ -31,6 +31,9 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
 
   const player = useRef(null);
   const opacity = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
+  const opacityDummyImg = useRef(new Animated.Value(0)).current; //하트 이미지 보일 때 사용
+
+
 
   const [heart, setHeart] = useState(false); // 하트 상태
   const [modalOpen, setModalOpen] = useState(false); // 수정 모달 상태
@@ -42,11 +45,47 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
 
   // 데이터 없을 때 alert
   const [showAlert, setShowAlert] = useState(false);
+  const [isReadyVideo, setIsReadyVideo] = useState(false);
 
   let firstPress = true;
   let lastTime = new Date().getTime();
   let timer = false;
   var delay = 200;
+
+  useEffect(()=>{
+    if(isReadyVideo) {
+      Animated.sequence([
+        Animated.timing(opacityDummyImg, {
+          toValue: 1,
+          duration: 700,
+          easing: Easing.quad,
+          useNativeDriver: true,
+        }),
+        Animated.delay(1000),
+        Animated.timing(opacityDummyImg, {
+          toValue: 0,
+          duration: 700,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }else{
+      Animated.sequence([
+        Animated.timing(opacityDummyImg, {
+          toValue: 0,
+          duration: 700,
+          easing: Easing.quad,
+          useNativeDriver: true,
+        }),
+        Animated.delay(1000),
+        Animated.timing(opacityDummyImg, {
+          toValue: 1,
+          duration: 700,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  },[isReadyVideo])
+
   const doubleTap = () => {
     const now = new Date().getTime();
     if (firstPress) {
@@ -119,11 +158,11 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
     }, []),
   );
   const checkUser = (id) => {
-    if (_userId == id) {
+    // if (_userId == id) {
       setModalOpen(true);
-    } else {
-      setModalOpen(false);
-    }
+    // } else {
+    //   setModalOpen(false);
+    // }
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -150,6 +189,12 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
           onLongPress={() => checkUser(id)}>
           {/* 저장된 video가 있으w면 video 출력. 없으면  마스외전 로고 출력*/}
           {filePath && filePath.endsWith('.mp4') ? (
+              <>
+                { <Image
+                  source={require('../../assets/images/Rectangle.png')}
+                  style={[styles.animate, dummyImgStyle(opacity).heart]}
+                  resizeMode="cover"
+              />}
             <Video
               ref={player}
               source={{ uri: filePath }}
@@ -163,9 +208,11 @@ const InterviewContents = ({ interviewId, id, path, token }) => {
               }}
               onLoad={() => {
                console.log('동영상로드 완료')
+                setIsReadyVideo(true);
                 player.current.seek(0);
               }}
             />
+              </>
           ) : (
             <Image
               source={{ uri: filePath }}
@@ -232,6 +279,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
+    display: 'flex',
     // marginTop: 10,
     // marginLeft: 5,
     // marginRight: 5,
@@ -243,6 +291,13 @@ const styles = StyleSheet.create({
   content: {
     width: '100%',
     height: '100%',
+    flex: 1
+    // borderRadius: 10,
+  },
+  contentThumb: {
+    width: '100%',
+    height: '100%',
+    flex: 10000
     // borderRadius: 10,
   },
 });
@@ -253,5 +308,15 @@ const heartStyle = opacity =>
       opacity: opacity,
     },
   });
+
+const dummyImgStyle = opacity =>
+    StyleSheet.create({
+      dummy: {
+        width: '100%',
+        height: '100%',
+        flex: 10000,
+        opacity: opacity,
+      },
+    });
 
 export default InterviewContents;

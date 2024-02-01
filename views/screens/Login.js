@@ -13,6 +13,7 @@ import {getInterviewsAsync} from "../../redux/slice/InterviewSlice";
 import {getPortfoliosAsync} from "../../redux/slice/PortfolioSlice";
 import {getResumesAsync} from "../../redux/slice/ResumeSlice";
 import {getReviewsAsync} from "../../redux/slice/ReviewSlice";
+import InterviewAlert from "../components/InterviewAlert";
 
 // 디바이스 크기
 const width = Dimensions.get('window').width;
@@ -20,6 +21,7 @@ const height = Dimensions.get('window').height;
 
 const Login = () => {
   const [showWebView, setShowWebView] = useState(false); // WebView 표시 여부 상태
+  const [alertVisible, setAlertVisible] = useState(false); // WebView 표시 여부 상태
   const [loginUrl, setLoginUrl] = useState(''); // 접속 url 설정을 위한 변수
   const navigation = useNavigation(); // 로그인 성공 후 로그인 페이지를 호출하기 이전 페이지(그룹)로 넘기기 위한 네비게이션 객체
   const [userInfoData, setUserInfoData] = useState('');
@@ -35,8 +37,10 @@ const Login = () => {
     // 넘어온 매개변수 값에 대응
     switch (type) {
       case 'facebook':
-        url += 'facebook/callback';
-        break;
+        setAlertVisible(true);
+        return;
+        // url += 'facebook/callback';
+        // break;
       case 'google':
         url += 'google/callback';
         break;
@@ -44,8 +48,10 @@ const Login = () => {
         url += 'naver/callback';
         break;
       case 'kakao':
-        url += 'kakao/callback';
-        break;
+        setAlertVisible(true);
+        return;
+        // url += 'kakao/callback';
+        // break;
       default:
         console.log('타입 없음');
         return;
@@ -222,20 +228,21 @@ const Login = () => {
               handleLoginPress={() => handleLoginPress('google')} // 각각의 로그인 형식으로 매개변수 전달
             />
             <LoginButton
-              background={'#FFCD00'}
-              title={'카카오로 로그인'}
-              color={'gray'}
-              src={require('../../assets/images/kakao.png')}
-              handleLoginPress={() => handleLoginPress('kakao')} // 각각의 로그인 형식으로 매개변수 전달
-            />
-
-            <LoginButton
               background={'#00C35A'}
               title={'네이버로 로그인'}
               color={'white'}
               src={require('../../assets/images/naver.png')}
               handleLoginPress={() => handleLoginPress('naver')} // 각각의 로그인 형식으로 매개변수 전달
             />
+
+            <LoginButton
+                background={'#FFCD00'}
+                title={'카카오로 로그인'}
+                color={'gray'}
+                src={require('../../assets/images/kakao.png')}
+                handleLoginPress={() => handleLoginPress('kakao')} // 각각의 로그인 형식으로 매개변수 전달
+            />
+
             <LoginButton
               background={'#1877F2'}
               title={'페이스북으로 로그인'}
@@ -246,6 +253,11 @@ const Login = () => {
           </View>
         </View>
       )}
+      <InterviewAlert
+          title={'지원예정입니다.'}
+          alertVisible={alertVisible}
+          setAlertVisible={setAlertVisible}
+      />
     </View>
   );
 };

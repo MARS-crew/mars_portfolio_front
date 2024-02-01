@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 import type {RootState} from "../../redux/RootReducer";
 
 const Splash = ({ isSplashVisible }) => {
-  if (!isSplashVisible) return null;
+  // if (!isSplashVisible) return null;
   //   const uiRenderer = useSelector((state: RootState) => state.uiRender);
 
     // if (!uiRenderer.isSplashVisible) return null;

@@ -7,7 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
-  Dimensions,
+  Dimensions, Image,
 } from 'react-native';
 import axios from 'axios';
 import InterviewAlert from '../../components/InterviewAlert';
@@ -65,8 +65,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     borderRadius: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     marginRight: 10,
+    color: 'gray',
   },
   inputReviewButton: {
     flex: 0.3,
@@ -357,7 +358,8 @@ const Review = ({ token, currentUserId }) => {
         <View style={styles.itemView}>
           { _reviewList != null && _reviewList.length > 0 ? (
             <FlatList
-              data={data}
+                showsVerticalScrollIndicator={false}
+                data={_reviewList}
               initialNumToRender={10}
               maxToRenderPerBatch={5}
               windowSize={5}
@@ -382,7 +384,11 @@ const Review = ({ token, currentUserId }) => {
               )}
               keyExtractor={item => item.review_id.toString()}
             />
-          ) : null}
+          ) : <Image
+              source={require('../../../assets/images/Rectangle.png')}
+              style={{width: '100%', height: '100%'}}
+              resizeMode="cover"
+          />}
         </View>
       </SafeAreaView>
       {
@@ -420,7 +426,7 @@ const Review = ({ token, currentUserId }) => {
         alertVisible={alertVisible}
         setAlertVisible={setAlertVisible}
       />
-      <FloatingMenu />
+      {/*<FloatingMenu />*/}
     </View>
   );
 };

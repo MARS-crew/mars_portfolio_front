@@ -221,7 +221,7 @@ const HomeScreen = () => {
     if(verticalViewpager != null){
       console.log('screenType effect')
       if(_screenType == 'GROUP_IMG'){
-        dispatch(setCurrentMemberIdRx(-1))
+         dispatch(setCurrentMemberIdRx(-1))
         // verticalViewpager.setPageWithoutAnimation(0)
       }else if(_screenType == 'GROUP_VIDEO'){
         dispatch(setCurrentMemberIdRx(-1))
@@ -253,15 +253,6 @@ const HomeScreen = () => {
 
   LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
   LogBox.ignoreAllLogs();//Ignore all log notifications
-
-
-  // useEffect(() => {
-  //   if(_isReloadVIewData){
-  //     console.log("RELOAD VIEW DATA")
-  //     reloadViewData(_currentGroupId, _screenType)
-  //     dispatch(setIsReloadViewDataRx(false))
-  //   }
-  // }, [_isReloadVIewData]);
 
   const verticalViewRenderer = function({ item, index}){
 
@@ -361,7 +352,7 @@ const HomeScreen = () => {
     </View>
     {/*<View key="2">*/}
     {/*<PagerView key="2" style={styles.pagerView} initialPage={_currentGroupId} orientation={"vertical"}*/}
-    {/*           onPageSelected={verticalScrollEndHandle} overScrollMode={"never"}>*/}
+    {/*           onPageSelected={verticalScrollEndHandle}>*/}
     {/*  <View key="1">*/}
     {/*    {verticalViewRenderer({*/}
     {/*      item: {*/}
@@ -390,9 +381,9 @@ const HomeScreen = () => {
     {/*        type: SCREEN_2,*/}
     {/*        token: token,*/}
     {/*        pos: 'MAIN',*/}
-    {/*        index: 2*/}
+    {/*        index: _currentGroupId*/}
     {/*      },*/}
-    {/*      index: 2*/}
+    {/*      index: _currentGroupId*/}
     {/*    })}*/}
     {/*  </View>*/}
     {/*</PagerView>*/}
@@ -476,7 +467,7 @@ const HomeScreen = () => {
             {(token ?
                 (verticalView)
                 : (<>
-                    {isSplashVisible === false ?
+                    {isSplashVisible == false ?
                       (<Screen text="Screen 0" index={0}><LoginGo token={token} /></Screen>)
                       : <Splash isSplashVisible={isSplashVisible}></Splash>}
                 </>)

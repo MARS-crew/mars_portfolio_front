@@ -6,7 +6,7 @@ import {
   StyleSheet,
   SafeAreaView,
   Text,
-  View,
+  View, Image,
 } from 'react-native';
 // lodash 라이브러리 사용
 import InterviewContents from './InterviewContents'; // Interview 컴포넌트를 import
@@ -21,9 +21,9 @@ import {
   getCurrentGroupIdSelector,
   getCurrentMemberIdSelector,
   getScreenTypeSelector, setCurrentMemberIdRx,
-  setIsNoChangeGroupIdRx
+  setIsNoChangeGroupIdRx, setScreenTypeRx
 } from "../../redux/slice/UiRenderSlice";
-import {SCREEN_3} from "../../AppConst";
+import {SCREEN_1, SCREEN_3} from "../../AppConst";
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -50,6 +50,20 @@ const Interview = ({ token, idx, id }) => {
           .values()
           .value();
 
+      console.log(`interview load`);
+
+      // try{
+      //   const viewData = sortedAndGroupedData[0][_currentGroupId]
+      //       .filter((item)=>(item.memberId===_memberId))[0]
+      //   if(typeof(viewData) == 'undefined' || viewData == null){
+      //     throw 'NO_MEMBER_ID'
+      //   }
+      //   setInterviewOne(viewData)
+      // }catch (e) {
+      //
+      // }
+
+
       if (typeof (_memberId) == 'undefined' || _memberId == null) {
         const viewData = sortedAndGroupedData[0][_currentGroupId][0];
         setInterviewOne(viewData) // 첫번째꺼
@@ -61,22 +75,21 @@ const Interview = ({ token, idx, id }) => {
       }
     }
 
-  }, [_interviewList, _currentGroupId, _memberId]);
-
-
-
-
-
+  }, [_interviewList, _currentGroupId, _screenType, _memberId]);
 
   return (
       <>
-        {((interviewOne) &&
-            <InterviewContents
-                interviewId={interviewOne.interviewId}
-                id={interviewOne.memberId}
-                path={interviewOne.url}
-                token={token}
-            />  )}
+        {(interviewOne != null ? <InterviewContents
+            interviewId={interviewOne.interviewId}
+            id={interviewOne.memberId}
+            path={interviewOne.url}
+            token={token}
+        /> : <Image
+                source={require('../../assets/images/Rectangle.png')}
+                style={{width: '100%', height: '100%'}}
+                resizeMode="cover"
+            />
+        )}
       </>
   );
 };

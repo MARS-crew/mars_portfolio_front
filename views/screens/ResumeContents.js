@@ -121,7 +121,11 @@ const Resume = ({ token }) => {
 
   return (
       <View style={styles.container}>
-
+        { (typeof(viewData) == 'undefined' || viewData == null || viewData.loop === 0) && <Image
+            source={require('../../assets/images/Rectangle.png')}
+            style={{width: '100%', height: '100%', flex: 10000000}}
+            resizeMode="cover"
+        />}
           {/*{resumeList && resumeList.map((singleItem, index) => (*/}
           {/*    <Item item={singleItem} index={index} token={token} />*/}
           {/*))}*/}
@@ -152,7 +156,7 @@ const Resume = ({ token }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 400,
+    width: '100%',
     flex: 2,
     backgroundColor: '#F3F6FE',
   },
