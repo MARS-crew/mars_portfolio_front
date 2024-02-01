@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
 
   visitLogView: {
-    height: Dimensions.get('window').height * 0.75,
+    height: Dimensions.get('screen').height * 0.65,
     alignItems: 'center',
     flexDirection: 'row',
     paddingBottom: 10,
@@ -138,6 +138,7 @@ const MyPage = ({ token }) => {
       //   },
       // });
       const response = await getMyPageInfo(token, user);
+      console.log(`mypage info : ${JSON.stringify(response)}`)
 
       const extractedData = {
         Reviewlike: response.data.data.Reviewlike,

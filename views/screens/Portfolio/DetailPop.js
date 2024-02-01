@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     width: 285,
     height: 45,
+    color: 'gray'
   },
   description: {
     height: 100,
@@ -146,6 +147,7 @@ const DetailPop = ({
 
   const handleTitleChange = text => {
     setTemporaryTitle(text);
+    console.log(`set title  :${text}`)
   };
 
   const handleContentChange = text => {
@@ -212,11 +214,13 @@ const DetailPop = ({
       height: description == true ? 100 : 45,
       textAlignVertical: 'top',
     };
+    const [currentValue, setCurrentValue] = useState(`${value}`);
     return (
       <TextInput
         style={[styles.input, descriptionStyle]}
         value={value}
-        onChangeText={onChangeText}
+        onChangeText={v => setCurrentValue(v)}
+        onEndEditing={() => onChangeText(currentValue)}
         placeholder={placeholder}
         placeholderTextColor="#D8D8D8"
         autoCorrect={false}

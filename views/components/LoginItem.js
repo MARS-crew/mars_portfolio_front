@@ -45,10 +45,10 @@ const LoginItem = ({token}) => {
             navigation.navigate('Login');
           }}>
           <Text style={styles.text}>로그인</Text>
-          <Image
-            source={require('../../assets/images/LoginNextItem.png')}
-            style={styles.image}
-          />
+          {/*<Image*/}
+          {/*  source={require('../../assets/images/LoginNextItem.png')}*/}
+          {/*  style={styles.image}*/}
+          {/*/>*/}
         </TouchableOpacity>
       )}
     </View>
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 2,
     borderStyle: 'solid',
-    bottom: 25,
+    bottom: 45,
     right: 20,
     borderRadius: 24,
     borderColor: 'white',

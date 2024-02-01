@@ -221,7 +221,7 @@ const HomeScreen = () => {
     if(verticalViewpager != null){
       console.log('screenType effect')
       if(_screenType == 'GROUP_IMG'){
-        dispatch(setCurrentMemberIdRx(-1))
+         dispatch(setCurrentMemberIdRx(-1))
         // verticalViewpager.setPageWithoutAnimation(0)
       }else if(_screenType == 'GROUP_VIDEO'){
         dispatch(setCurrentMemberIdRx(-1))
