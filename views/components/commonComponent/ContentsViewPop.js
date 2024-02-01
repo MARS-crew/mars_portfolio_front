@@ -66,6 +66,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 14,
   },
+
+  input: {
+    color: '#303030',
+    fontSize: 14,
+    fontWeight: '700',
+  },
   chooseOkBtn: { backgroundColor: '#072AC8', borderWidth: 0 },
 });
 
